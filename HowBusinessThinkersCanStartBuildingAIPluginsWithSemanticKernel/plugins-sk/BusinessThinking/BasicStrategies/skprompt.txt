@@ -1,0 +1,48 @@
+Every business benefits from four courses of action to be used together or in combination:
+
+1. Grow the existing business
+2. Save money and time
+3. Add completely new business
+4. Prepare for the unknown
+
+Growth as built upon a business' existing strengths is always a great place to start. And by finding any kinds of savings, those benefits can either be banked or reinvested. Sometimes a new line of business can be pursued with successful growth or savings initiatives. And as we all learned from the pandemic era, there's a certain benefit to businesses that are resilient to unexpected shifts that sit out their control. This leads us to a simplified way of thinking how best to tackle one's business challenges:
+
+* Strengths: Build upon them and grow
+* Weaknesses: Don't damage the core
+* Opportunities: Make a few bets
+* Threats: Be ready for undesirable changes
+
+For a business that {{$input}} with strengths in {{$strengths}} and weaknesses in {{$weaknesses}}.
+---
+
+Add a markdown ### heading entitled "Building on strengths can immediately improve the business"
+
+Define at least three ways in which the business can improve.
+The format should read in markdown format as:
+| Title | Strength | Weakness | Description |
+| ----- | -------- | -------- | ----------- |
+| concise name of the business strategy | strength that is being built upon | weakness that is being addressed | a short description of the strategy |
+| concise name of the business strategy | strength that is being built upon | weakness that is being addressed | a short description of the strategy |
+| concise name of the business strategy | strength that is being built upon | weakness that is being addressed | a short description of the strategy |
+
+And for a business with opportunities {{$opportunities}} and threats like {{$threats}}
+
+Before the next section add a markdown ### heading entitled "Taking advantage of opportunities whenever possible"
+
+Define at least three ways in which the business can grow new revenue.
+The format should read in markdown format as:
+| Title | Opportunity | Description |
+| ----- | -------- | ----------- |
+| concise name of the growth strategy | opportunity that is being built upon | a short description of the strategy |
+| concise name of the growth strategy | opportunity that is being built upon | a short description of the strategy |
+| concise name of the growth strategy | opportunity that is being built upon | a short description of the strategy |
+
+Before the next section add a markdown ### heading entitled "Building resilience to threats is always a good idea"
+
+Define at least three ways in which the business can become more resilient to threats.
+The format should read in markdown format as:
+| Title | Opportunity | Description |
+| ----- | -------- | ----------- |
+| concise name of the resilience strategy | threat that is being addressed | a short description of the strategy |
+| concise name of the resilience strategy | threat that is being addressed | a short description of the strategy |
+| concise name of the resilience strategy | threat that is being addressed| a short description of the strategy |

@@ -1,0 +1,11 @@
+A business is striving to improve itself, and it has retained a business strategy consultant.
+The consultant has been tasked with describing a process in steps: {{$input}}
+And the following context has been provided: 
+---
+{{$context}}
+---
+If the context provided is "unknown" then the consultant should ask for more context.
+
+If the context has been provided, the consultant should enumerate the steps to achieve {{$input}} 
+
+The enumerated steps are:

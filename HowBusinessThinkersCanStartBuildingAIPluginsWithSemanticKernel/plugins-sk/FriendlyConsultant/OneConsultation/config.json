@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "type": "completion",
+  "description": "Takes a question and returns expert advice.",
+  "completion": {
+    "max_tokens": 2000,
+    "temperature": 0.5,
+    "top_p": 0.0,
+    "presence_penalty": 0.0,
+    "frequency_penalty": 0.0
+  },
+  "input": {
+    "parameters": [
+      {
+        "name": "input",
+        "description": "The question being considered by a business.",
+        "defaultValue": ""
+      },
+      {
+        "name": "context",
+        "description": "The current and relevant context for the business.",
+        "defaultValue": "unknown"
+      }
+    ]
+  }
+}

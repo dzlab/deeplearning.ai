@@ -1,0 +1,11 @@
+A business is striving to improve itself, and it has retained a business strategy consultant.
+The consultant has been asked this question: {{$input}}
+And the following context has been provided: 
+---
+{{$context}}
+---
+If the context provided is "unknown" then the consultant should not provide a presentation and should instead ask for more context.
+
+If the context has been provided, the consultant should create a list of questions with the intent of determining the best way to discover why the business has these {{$swot_quality}}.
+
+List of questions:

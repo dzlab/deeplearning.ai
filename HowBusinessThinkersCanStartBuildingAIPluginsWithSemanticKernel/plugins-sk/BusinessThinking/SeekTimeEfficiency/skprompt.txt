@@ -1,0 +1,11 @@
+For a business that {{$business}} with strengths in {{$strengths}} and weaknesses in {{$weaknesses}}.
+---
+Define at least three ways in which greater time efficiencies can be achieved for the business.
+The format should read in markdown format as:
+| Title | Strength | Weakness | Description |
+| ----- | -------- | -------- | ----------- |
+| concise name of the time efficiency strategy | strength that is being built upon | weakness that is being addressed | a short description of the strategy |
+| concise name of the time efficiency strategy | strength that is being built upon | weakness that is being addressed | a short description of the strategy |
+| concise name of the time efficiency strategy | strength that is being built upon | weakness that is being addressed | a short description of the strategy |
+
+The output table in markdown:

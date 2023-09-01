@@ -1,0 +1,31 @@
+{
+    "schema": 1,
+    "description": "Generate possible cost efficiency gains to be had.",
+    "type": "completion",
+    "completion": {
+      "max_tokens": 1000,
+      "temperature": 0.9,
+      "top_p": 0.5,
+      "presence_penalty": 0.0,
+      "frequency_penalty": 0.0
+    },
+    "input": {
+      "parameters": [
+        {
+              "name": "input",
+              "description": "The kind of business",
+              "defaultValue": ""
+        },
+        {
+              "name": "strengths",
+              "description": "Strengths of the business",
+              "defaultValue": ""
+        },
+        {
+              "name": "weaknesses",
+              "description": "Weaknesses of the business",
+              "defaultValue": ""
+        }
+    ]
+    }
+  }

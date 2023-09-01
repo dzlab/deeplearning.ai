@@ -1,0 +1,18 @@
+A business is striving to improve itself, and it has retained a business strategy consultant.
+The consultant has been tasked with building a training program: {{$input}}
+And the following context has been provided: 
+---
+{{$context}}
+---
+If the context provided is "unknown" then the consultant should ask for more context.
+
+If the context has been provided, the consultant should write a training program specifically for {{$input}} 
+with the learning objectives of:
+
+1. Understand why this training program matters
+2. Gain specific knowledge about processes and procedures.
+3. Encourage participants to ask questions and seek help when needed.
+
+The audience is at the high school level of education, and the training program should be 1 hour long.
+
+The training program:
