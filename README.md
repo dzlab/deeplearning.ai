@@ -6,3 +6,4 @@ https://www.deeplearning.ai/courses/
 - [Large Language Models with Semantic Search](LargeLanguageModelswithSemanticSearch)
 - [Finetuning Large Language Models](FinetuningLargeLanguageModels)
 - [How Business Thinkers Can Start Building AI Plugins With Semantic Kernel](HowBusinessThinkersCanStartBuildingAIPluginsWithSemanticKernel)
+- [Building Systems with the ChatGPT API](BuildingSystemswiththeChatGPTAPI)
