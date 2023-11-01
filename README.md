@@ -10,3 +10,4 @@ https://www.deeplearning.ai/courses/
 - [Pair Programming with a Large Language Model](PairProgrammingwithaLargeLanguageModel)
 - [Functions Tools and Agents with LangChain](FunctionsToolsandAgentswithLangChain)
 - [Understanding and Applying Text Embeddings](UnderstandingandApplyingTextEmbeddings)
+- [LangChain Chat with Your Data](LangChainChatwithYourData)
