@@ -1,6 +1,6 @@
  # DeepLearning.AI Courses
 
-https://www.deeplearning.ai/courses/
+Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 
 - [Evaluating and Debugging Generative AI](EvaluatingandDebuggingGenerativeAI)
 - [Large Language Models with Semantic Search](LargeLanguageModelswithSemanticSearch)
@@ -12,3 +12,4 @@ https://www.deeplearning.ai/courses/
 - [Understanding and Applying Text Embeddings](UnderstandingandApplyingTextEmbeddings)
 - [LangChain Chat with Your Data](LangChainChatwithYourData)
 - [Vector Databases: from Embeddings to Applications](VectorDatabasesfromEmbeddingstoApplications)
+- [Quality and Safety for LLM Applications](QualityandSafetyforLLMApplications)
