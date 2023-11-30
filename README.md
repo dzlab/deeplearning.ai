@@ -13,3 +13,4 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [LangChain Chat with Your Data](LangChainChatwithYourData)
 - [Vector Databases: from Embeddings to Applications](VectorDatabasesfromEmbeddingstoApplications)
 - [Quality and Safety for LLM Applications](QualityandSafetyforLLMApplications)
+- [Building and Evaluating Advanced RAG](BuildingandEvaluatingAdvancedRAG)
