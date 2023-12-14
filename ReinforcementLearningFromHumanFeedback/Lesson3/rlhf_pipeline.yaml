@@ -1,0 +1,3281 @@
+# PIPELINE DEFINITION
+# Name: rlhf-train-template
+# Description: Performs reinforcement learning from human feedback.
+# Inputs:
+#    deploy_model: bool [Default: True]
+#    eval_dataset: str
+#    instruction: str
+#    kl_coeff: float [Default: 0.1]
+#    large_model_reference: str
+#    location: str [Default: '{{$.pipeline_google_cloud_location}}']
+#    model_display_name: str
+#    preference_dataset: str
+#    project: str [Default: '{{$.pipeline_google_cloud_project_id}}']
+#    prompt_dataset: str
+#    prompt_sequence_length: int [Default: 512.0]
+#    reinforcement_learning_rate_multiplier: float [Default: 1.0]
+#    reinforcement_learning_train_steps: int [Default: 1000.0]
+#    reward_model_learning_rate_multiplier: float [Default: 1.0]
+#    reward_model_train_steps: int [Default: 1000.0]
+#    target_sequence_length: int [Default: 64.0]
+#    tensorboard_resource_id: str
+# Outputs:
+#    endpoint_resource_name: str
+#    model_resource_name: str
+components:
+  comp-bulkinferrer:
+    executorLabel: exec-bulkinferrer
+    inputDefinitions:
+      parameters:
+        accelerator_count:
+          description: Number of accelerators.
+          parameterType: NUMBER_INTEGER
+        accelerator_type:
+          description: Type of accelerator.
+          parameterType: STRING
+        dataset_split:
+          description: Perform inference on this split of the input dataset.
+          parameterType: STRING
+        image_uri:
+          parameterType: STRING
+        input_dataset_path:
+          description: Path to dataset to use for inference.
+          parameterType: STRING
+        input_model:
+          description: Model to use for inference.
+          parameterType: STRING
+        inputs_sequence_length:
+          description: 'Maximum encoder/prefix length. Inputs will be padded
+
+            or truncated to this length.'
+          parameterType: NUMBER_INTEGER
+        large_model_reference:
+          description: Predefined model used to create the ``input_model``.
+          parameterType: STRING
+        location:
+          description: Location used to run the job.
+          parameterType: STRING
+        machine_type:
+          description: Type of machine.
+          parameterType: STRING
+        project:
+          description: Project used to run the job.
+          parameterType: STRING
+        sampling_strategy:
+          defaultValue: greedy
+          description: The sampling strategy for inference.
+          isOptional: true
+          parameterType: STRING
+        targets_sequence_length:
+          description: 'Maximum decoder steps. Outputs will be at most this
+
+            length.'
+          parameterType: NUMBER_INTEGER
+    outputDefinitions:
+      parameters:
+        gcp_resources:
+          description: 'GCP resources that can be used to track the custom finetuning
+
+            job.'
+          parameterType: STRING
+        output_prediction:
+          description: Where to save the output prediction.
+          parameterType: STRING
+        output_prediction_gcs_path:
+          parameterType: STRING
+  comp-condition-1:
+    dag:
+      tasks:
+        upload-tensorboard-metrics:
+          cachingOptions:
+            enableCache: true
+          componentRef:
+            name: comp-upload-tensorboard-metrics
+          inputs:
+            artifacts:
+              metrics_directory:
+                componentInputArtifact: pipelinechannel--rewardmodeltrainer-tensorboard_metrics
+            parameters:
+              experiment_name:
+                runtimeValue:
+                  constant: reward-model-tuner-{{$.pipeline_job_uuid}}-{{$.pipeline_task_uuid}}
+              tensorboard_resource_id:
+                componentInputParameter: pipelinechannel--tensorboard_resource_id
+          taskInfo:
+            name: Reward Model Tensorboard Metrics Uploader
+    inputDefinitions:
+      artifacts:
+        pipelinechannel--rewardmodeltrainer-tensorboard_metrics:
+          artifactType:
+            schemaTitle: system.Artifact
+            schemaVersion: 0.0.1
+      parameters:
+        pipelinechannel--tensorboard_resource_id:
+          parameterType: STRING
+        pipelinechannel--value-exists-Output:
+          parameterType: BOOLEAN
+  comp-condition-2:
+    dag:
+      tasks:
+        upload-tensorboard-metrics-2:
+          cachingOptions:
+            enableCache: true
+          componentRef:
+            name: comp-upload-tensorboard-metrics-2
+          inputs:
+            artifacts:
+              metrics_directory:
+                componentInputArtifact: pipelinechannel--reinforcer-tensorboard_metrics
+            parameters:
+              experiment_name:
+                runtimeValue:
+                  constant: rl-model-tuner-{{$.pipeline_job_uuid}}-{{$.pipeline_task_uuid}}
+              tensorboard_resource_id:
+                componentInputParameter: pipelinechannel--tensorboard_resource_id
+          taskInfo:
+            name: Reinforcement Learning Tensorboard Metrics Uploader
+    inputDefinitions:
+      artifacts:
+        pipelinechannel--reinforcer-tensorboard_metrics:
+          artifactType:
+            schemaTitle: system.Artifact
+            schemaVersion: 0.0.1
+      parameters:
+        pipelinechannel--tensorboard_resource_id:
+          parameterType: STRING
+        pipelinechannel--value-exists-Output:
+          parameterType: BOOLEAN
+  comp-condition-3:
+    dag:
+      tasks:
+        infer-eval-template:
+          cachingOptions:
+            enableCache: true
+          componentRef:
+            name: comp-infer-eval-template
+          inputs:
+            parameters:
+              instruction:
+                componentInputParameter: pipelinechannel--instruction
+              large_model_reference:
+                componentInputParameter: pipelinechannel--large_model_reference
+              location:
+                componentInputParameter: pipelinechannel--location
+              model_checkpoint:
+                componentInputParameter: pipelinechannel--reinforcer-output_model_path
+              project:
+                componentInputParameter: pipelinechannel--project
+              prompt_dataset:
+                componentInputParameter: pipelinechannel--eval_dataset
+              prompt_sequence_length:
+                componentInputParameter: pipelinechannel--prompt_sequence_length
+              target_sequence_length:
+                componentInputParameter: pipelinechannel--target_sequence_length
+          taskInfo:
+            name: infer-eval-template
+    inputDefinitions:
+      parameters:
+        pipelinechannel--eval_dataset:
+          parameterType: STRING
+        pipelinechannel--instruction:
+          parameterType: STRING
+        pipelinechannel--large_model_reference:
+          parameterType: STRING
+        pipelinechannel--location:
+          parameterType: STRING
+        pipelinechannel--project:
+          parameterType: STRING
+        pipelinechannel--prompt_sequence_length:
+          parameterType: NUMBER_INTEGER
+        pipelinechannel--reinforcer-output_model_path:
+          parameterType: STRING
+        pipelinechannel--target_sequence_length:
+          parameterType: NUMBER_INTEGER
+        pipelinechannel--value-exists-2-Output:
+          parameterType: BOOLEAN
+  comp-convert-to-delimited-string:
+    executorLabel: exec-convert-to-delimited-string
+    inputDefinitions:
+      parameters:
+        delimiter:
+          defaultValue: ','
+          isOptional: true
+          parameterType: STRING
+        items:
+          parameterType: LIST
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: STRING
+  comp-create-endpoint-and-deploy-model:
+    executorLabel: exec-create-endpoint-and-deploy-model
+    inputDefinitions:
+      parameters:
+        deploy_model:
+          defaultValue: true
+          description: 'Whether to deploy the model to an endpoint. Default is
+
+            ``True``. If ``False``, the model will not be deployed and output
+
+            artifacts will contain empty strings.'
+          isOptional: true
+          parameterType: BOOLEAN
+        display_name:
+          description: Name of the model (shown in Model Registry).
+          parameterType: STRING
+        encryption_spec_key_name:
+          defaultValue: ''
+          description: Customer-managed encryption key.
+          isOptional: true
+          parameterType: STRING
+        location:
+          description: Location for model upload and deployment.
+          parameterType: STRING
+        model_resource_name:
+          description: Path to the created Model on Model Registry.
+          parameterType: STRING
+        project:
+          description: Name of the GCP project.
+          parameterType: STRING
+        regional_endpoint:
+          description: Regional API endpoint.
+          parameterType: STRING
+        service_account:
+          defaultValue: ''
+          description: If set, then a custom service account will be used.
+          isOptional: true
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        create_endpoint_gcp_resources:
+          description: 'Serialized JSON of GCP resources for
+
+            creating an endpoint.'
+          parameterType: STRING
+        deploy_model_gcp_resources:
+          description: 'Serialized JSON of GCP resources for deploying
+
+            the model.'
+          parameterType: STRING
+        endpoint_resource_name:
+          description: Path to the created endpoint on Online Prediction.
+          parameterType: STRING
+  comp-importer:
+    executorLabel: exec-importer
+    inputDefinitions:
+      parameters:
+        uri:
+          parameterType: STRING
+    outputDefinitions:
+      artifacts:
+        artifact:
+          artifactType:
+            schemaTitle: system.Artifact
+            schemaVersion: 0.0.1
+  comp-infer-eval-template:
+    dag:
+      outputs:
+        parameters:
+          output_prediction_gcs_path:
+            valueFromParameter:
+              outputParameterKey: output_prediction_gcs_path
+              producerSubtask: bulkinferrer
+      tasks:
+        bulkinferrer:
+          cachingOptions:
+            enableCache: true
+          componentRef:
+            name: comp-bulkinferrer
+          dependentTasks:
+          - privatetextimporter
+          - resolve-image-uri-2
+          - resolve-machine-spec
+          - resolve-reference-model-metadata
+          inputs:
+            parameters:
+              accelerator_count:
+                taskOutputParameter:
+                  outputParameterKey: accelerator_count
+                  producerTask: resolve-machine-spec
+              accelerator_type:
+                taskOutputParameter:
+                  outputParameterKey: accelerator_type
+                  producerTask: resolve-machine-spec
+              dataset_split:
+                runtimeValue:
+                  constant: train
+              image_uri:
+                taskOutputParameter:
+                  outputParameterKey: Output
+                  producerTask: resolve-image-uri-2
+              input_dataset_path:
+                taskOutputParameter:
+                  outputParameterKey: imported_data_path
+                  producerTask: privatetextimporter
+              input_model:
+                taskOutputParameter:
+                  outputParameterKey: reference_model_path
+                  producerTask: resolve-reference-model-metadata
+              inputs_sequence_length:
+                componentInputParameter: prompt_sequence_length
+              large_model_reference:
+                taskOutputParameter:
+                  outputParameterKey: large_model_reference
+                  producerTask: resolve-reference-model-metadata
+              location:
+                componentInputParameter: location
+              machine_type:
+                taskOutputParameter:
+                  outputParameterKey: machine_type
+                  producerTask: resolve-machine-spec
+              project:
+                componentInputParameter: project
+              sampling_strategy:
+                componentInputParameter: sampling_strategy
+              targets_sequence_length:
+                componentInputParameter: target_sequence_length
+          taskInfo:
+            name: Bulk Inferrer
+        privatetextimporter:
+          cachingOptions: {}
+          componentRef:
+            name: comp-privatetextimporter-2
+          dependentTasks:
+          - resolve-image-uri
+          - resolve-reference-model-metadata
+          inputs:
+            parameters:
+              image_uri:
+                taskOutputParameter:
+                  outputParameterKey: Output
+                  producerTask: resolve-image-uri
+              input_text:
+                componentInputParameter: prompt_dataset
+              inputs_field_name:
+                runtimeValue:
+                  constant: input_text
+              instruction:
+                componentInputParameter: instruction
+              large_model_reference:
+                taskOutputParameter:
+                  outputParameterKey: large_model_reference
+                  producerTask: resolve-reference-model-metadata
+              location:
+                componentInputParameter: location
+              output_split_name:
+                runtimeValue:
+                  constant: train
+              project:
+                componentInputParameter: project
+              targets_field_name:
+                runtimeValue:
+                  constant: ''
+          taskInfo:
+            name: Import Prompt Dataset
+        resolve-image-uri:
+          cachingOptions:
+            enableCache: true
+          componentRef:
+            name: comp-resolve-image-uri-5
+          inputs:
+            parameters:
+              artifact_registry:
+                runtimeValue:
+                  constant: rlhf
+              image_name:
+                runtimeValue:
+                  constant: text_importer
+              image_name_prefix:
+                runtimeValue:
+                  constant: rlhf_
+              location:
+                runtimeValue:
+                  constant: us
+              project:
+                runtimeValue:
+                  constant: vertex-ai-restricted
+              tag:
+                runtimeValue:
+                  constant: 20231010_1107_RC00
+          taskInfo:
+            name: Resolve Prompt Dataset Image URI
+        resolve-image-uri-2:
+          cachingOptions:
+            enableCache: true
+          componentRef:
+            name: comp-resolve-image-uri-2-2
+          dependentTasks:
+          - resolve-machine-spec
+          inputs:
+            parameters:
+              accelerator_count:
+                taskOutputParameter:
+                  outputParameterKey: accelerator_count
+                  producerTask: resolve-machine-spec
+              accelerator_type:
+                taskOutputParameter:
+                  outputParameterKey: accelerator_type
+                  producerTask: resolve-machine-spec
+              artifact_registry:
+                runtimeValue:
+                  constant: rlhf
+              image_name:
+                runtimeValue:
+                  constant: infer
+              image_name_prefix:
+                runtimeValue:
+                  constant: rlhf_
+              location:
+                runtimeValue:
+                  constant: us
+              project:
+                runtimeValue:
+                  constant: vertex-ai-restricted
+              tag:
+                runtimeValue:
+                  constant: 20231010_1107_RC00
+          taskInfo:
+            name: Resolve Bulk Inferrer Image URI
+        resolve-machine-spec:
+          cachingOptions:
+            enableCache: true
+          componentRef:
+            name: comp-resolve-machine-spec-2
+          inputs:
+            parameters:
+              location:
+                componentInputParameter: location
+              use_test_spec:
+                runtimeValue:
+                  constant: false
+          taskInfo:
+            name: Resolve Machine Spec
+        resolve-reference-model-metadata:
+          cachingOptions:
+            enableCache: true
+          componentRef:
+            name: comp-resolve-reference-model-metadata-2
+          inputs:
+            parameters:
+              large_model_reference:
+                componentInputParameter: large_model_reference
+              reference_model_path:
+                componentInputParameter: model_checkpoint
+          taskInfo:
+            name: Resolve Model Metadata
+    inputDefinitions:
+      parameters:
+        instruction:
+          description: This field lets the model know what task it needs to perform.
+            Base models have been trained over a large set of varied instructions.
+            You can give a simple and intuitive description of the task and the model
+            will follow it, e.g. "Classify this movie review as positive or negative"
+            or "Translate this sentence to Danish". Do not specify this if your dataset
+            already prepends the instruction to the inputs field.
+          isOptional: true
+          parameterType: STRING
+        large_model_reference:
+          description: Name of the base model. Supported values are `text-bison@001`,
+            `t5-small`, `t5-large`, `t5-xl` and `t5-xxl`. `text-bison@001` and `t5-small`
+            are supported in `us-central1` and `europe-west4`. `t5-large`, `t5-xl`
+            and `t5-xxl` are only supported in `europe-west4`.
+          parameterType: STRING
+        location:
+          defaultValue: '{{$.pipeline_google_cloud_location}}'
+          description: Location used to run custom jobs. If not specified the location
+            used to run the pipeline will be used.
+          isOptional: true
+          parameterType: STRING
+        model_checkpoint:
+          description: Optional Cloud storage path to the model checkpoint. If not
+            provided, the default checkpoint for the `large_model_reference` will
+            be used.
+          isOptional: true
+          parameterType: STRING
+        project:
+          defaultValue: '{{$.pipeline_google_cloud_project_id}}'
+          description: Project used to run custom jobs. If not specified the project
+            used to run the pipeline will be used.
+          isOptional: true
+          parameterType: STRING
+        prompt_dataset:
+          description: Cloud storage path to an unlabled prompt dataset used for reinforcement
+            learning. The dataset format is jsonl. Each example in the dataset must
+            have an `input_text` field that contains the prompt.
+          parameterType: STRING
+        prompt_sequence_length:
+          defaultValue: 512.0
+          description: Maximum tokenized sequence length for input text. Higher values
+            increase memory overhead. This value should be at most 8192. Default value
+            is 512.
+          isOptional: true
+          parameterType: NUMBER_INTEGER
+        sampling_strategy:
+          defaultValue: greedy
+          description: This field specifies the sampling strategy. The valid options
+            are 'greedy' and 'temperature_sampling'.
+          isOptional: true
+          parameterType: STRING
+        target_sequence_length:
+          defaultValue: 64.0
+          description: ' Maximum tokenized sequence length for target text. Higher
+            values increase memory overhead. This value should be at most 1024. Default
+            value is 64.'
+          isOptional: true
+          parameterType: NUMBER_INTEGER
+    outputDefinitions:
+      parameters:
+        output_prediction_gcs_path:
+          parameterType: STRING
+  comp-privatetextcomparisonimporter:
+    executorLabel: exec-privatetextcomparisonimporter
+    inputDefinitions:
+      parameters:
+        choice_field_name:
+          description: 'Name of field that specifies the index of the best
+
+            candidate.'
+          parameterType: STRING
+        comma_separated_candidates_field_names:
+          description: 'Comma separated list of fields that
+
+            contain candidate text, e.g. ``''field_1,field_2,field_3''``.'
+          parameterType: STRING
+        image_uri:
+          description: Location of the text comparison importer image.
+          parameterType: STRING
+        input_text:
+          description: Path to text data. Supports glob patterns.
+          parameterType: STRING
+        inputs_field_name:
+          description: Name of field that contains input text.
+          parameterType: STRING
+        instruction:
+          defaultValue: ''
+          description: Optional instruction to prepend to inputs field.
+          isOptional: true
+          parameterType: STRING
+        large_model_reference:
+          description: 'Predefined model used to create the model to be
+
+            trained. This paramerter is used for obtaining model vocabulary because
+
+            this component tokenizes and then caches the tokenized tasks.'
+          parameterType: STRING
+        location:
+          description: Location used to run the job.
+          parameterType: STRING
+        machine_type:
+          defaultValue: e2-highmem-8
+          description: The type of the machine to provision for the custom job.
+          isOptional: true
+          parameterType: STRING
+        project:
+          description: Project used to run the job.
+          parameterType: STRING
+        split:
+          description: 'The created seqio task has 1 split, its name is specified
+            by this
+
+            argument.'
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        gcp_resources:
+          description: GCP resources that can be used to track the custom job.
+          parameterType: STRING
+        output_dataset_path:
+          description: Path to cached SeqIO task created from input dataset.
+          parameterType: STRING
+  comp-privatetextimporter:
+    executorLabel: exec-privatetextimporter
+    inputDefinitions:
+      parameters:
+        image_uri:
+          defaultValue: us-docker.pkg.dev/vertex-ai-restricted/rlhf/rlhf_text_importer_backup:20231010_1107_RC00
+          description: Optional location of the text importer image.
+          isOptional: true
+          parameterType: STRING
+        input_text:
+          description: Path to text data. Supports glob patterns.
+          parameterType: STRING
+        inputs_field_name:
+          description: Name of field that contains input text.
+          parameterType: STRING
+        instruction:
+          defaultValue: ''
+          description: Optional instruction to prepend to inputs field.
+          isOptional: true
+          parameterType: STRING
+        large_model_reference:
+          description: 'Predefined model used to create the model to be
+
+            trained. This paramerter is used for obtaining model vocabulary because
+
+            this component tokenizes and then caches the tokenized tasks.'
+          parameterType: STRING
+        location:
+          description: Location used to run the job.
+          parameterType: STRING
+        machine_type:
+          defaultValue: e2-highmem-8
+          description: The type of the machine to provision for the custom job.
+          isOptional: true
+          parameterType: STRING
+        max_num_input_examples:
+          description: Maximum number of examples to import.
+          isOptional: true
+          parameterType: NUMBER_INTEGER
+        output_split_name:
+          defaultValue: all
+          description: 'The created seqio task has 1 split, its name is specified
+
+            by this argument.'
+          isOptional: true
+          parameterType: STRING
+        project:
+          description: Project used to run the job.
+          parameterType: STRING
+        targets_field_name:
+          description: Name of field that contains target text.
+          parameterType: STRING
+    outputDefinitions:
+      artifacts:
+        imported_data:
+          artifactType:
+            schemaTitle: system.Dataset
+            schemaVersion: 0.0.1
+          description: Artifact representing the imported data and cached Tasks.
+      parameters:
+        gcp_resources:
+          description: Tracker for GCP resources created by this component.
+          parameterType: STRING
+        imported_data_path:
+          description: Path to cached SeqIO task created from input dataset.
+          parameterType: STRING
+  comp-privatetextimporter-2:
+    executorLabel: exec-privatetextimporter-2
+    inputDefinitions:
+      parameters:
+        image_uri:
+          defaultValue: us-docker.pkg.dev/vertex-ai-restricted/rlhf/rlhf_text_importer_backup:20231010_1107_RC00
+          description: Optional location of the text importer image.
+          isOptional: true
+          parameterType: STRING
+        input_text:
+          description: Path to text data. Supports glob patterns.
+          parameterType: STRING
+        inputs_field_name:
+          description: Name of field that contains input text.
+          parameterType: STRING
+        instruction:
+          defaultValue: ''
+          description: Optional instruction to prepend to inputs field.
+          isOptional: true
+          parameterType: STRING
+        large_model_reference:
+          description: 'Predefined model used to create the model to be
+
+            trained. This paramerter is used for obtaining model vocabulary because
+
+            this component tokenizes and then caches the tokenized tasks.'
+          parameterType: STRING
+        location:
+          description: Location used to run the job.
+          parameterType: STRING
+        machine_type:
+          defaultValue: e2-highmem-8
+          description: The type of the machine to provision for the custom job.
+          isOptional: true
+          parameterType: STRING
+        max_num_input_examples:
+          description: Maximum number of examples to import.
+          isOptional: true
+          parameterType: NUMBER_INTEGER
+        output_split_name:
+          defaultValue: all
+          description: 'The created seqio task has 1 split, its name is specified
+
+            by this argument.'
+          isOptional: true
+          parameterType: STRING
+        project:
+          description: Project used to run the job.
+          parameterType: STRING
+        targets_field_name:
+          description: Name of field that contains target text.
+          parameterType: STRING
+    outputDefinitions:
+      artifacts:
+        imported_data:
+          artifactType:
+            schemaTitle: system.Dataset
+            schemaVersion: 0.0.1
+          description: Artifact representing the imported data and cached Tasks.
+      parameters:
+        gcp_resources:
+          description: Tracker for GCP resources created by this component.
+          parameterType: STRING
+        imported_data_path:
+          description: Path to cached SeqIO task created from input dataset.
+          parameterType: STRING
+  comp-reinforcer:
+    executorLabel: exec-reinforcer
+    inputDefinitions:
+      parameters:
+        accelerator_count:
+          description: Number of TPU accelerators.
+          parameterType: NUMBER_INTEGER
+        accelerator_type:
+          description: Type of TPU accelerator. Can be either TPU_V2 or TPU_V3.
+          parameterType: STRING
+        batch_size:
+          defaultValue: 64.0
+          description: Number of examples in each finetuning step. Default is 64.
+          isOptional: true
+          parameterType: NUMBER_INTEGER
+        image_uri:
+          description: Location of reinforcement learning Docker image.
+          parameterType: STRING
+        input_dataset_path:
+          description: Path to training dataset.
+          parameterType: STRING
+        input_reference_model_path:
+          description: Path to the base model to fine tune.
+          parameterType: STRING
+        input_reward_model_path:
+          description: 'Path to the reward model to use during
+
+            reinforcement learning.'
+          parameterType: STRING
+        inputs_sequence_length:
+          description: Maximum number of input tokens per row.
+          parameterType: NUMBER_INTEGER
+        kl_coeff:
+          defaultValue: 0.1
+          description: 'Coefficient for KL penalty. This regularizes the policy model
+            and
+
+            penalizes if it diverges from its initial distribution. If set to 0, then
+
+            the reference LM is not loaded into memory.'
+          isOptional: true
+          parameterType: NUMBER_DOUBLE
+        large_model_reference:
+          description: 'Predefined model used to create the
+
+            ``input_reference_model``.'
+          parameterType: STRING
+        learning_rate_multiplier:
+          defaultValue: 1.0
+          description: 'Constant multiplied by the base learning rate used
+
+            to adjust the learning rate during reinforcement learning.'
+          isOptional: true
+          parameterType: NUMBER_DOUBLE
+        location:
+          description: Location used to run the job.
+          parameterType: STRING
+        lora_dim:
+          defaultValue: 0.0
+          description: 'The rank of the LoRA adapter. If >0, then use LoRA-tuning.
+            If =0,
+
+            then use full-tuning.'
+          isOptional: true
+          parameterType: NUMBER_INTEGER
+        machine_type:
+          description: 'The type of the machine to provision for the custom job. Must
+
+            be a valid GCE instance type and compatible with the accelerator type.'
+          parameterType: STRING
+        project:
+          description: Project used to run the job.
+          parameterType: STRING
+        reward_model_reference:
+          parameterType: STRING
+        targets_sequence_length:
+          description: Maximum number of target tokens per row.
+          parameterType: NUMBER_INTEGER
+        train_split:
+          defaultValue: train
+          description: 'Name of the split in the input dataset that contains training
+
+            data. Default is ``''train''``.'
+          isOptional: true
+          parameterType: STRING
+        train_steps:
+          description: 'Number of training steps. These are the number of steps
+
+            on top of any steps used to train the base model.'
+          parameterType: NUMBER_INTEGER
+    outputDefinitions:
+      artifacts:
+        tensorboard_metrics:
+          artifactType:
+            schemaTitle: system.Artifact
+            schemaVersion: 0.0.1
+          description: Training stats (tensorboard) path.
+      parameters:
+        gcp_resources:
+          description: 'GCP resources that can be used to track the custom finetuning
+
+            job.'
+          parameterType: STRING
+        output_adapter_path:
+          description: 'Path to the trained model adapter if LoRA tuning was
+
+            used.'
+          parameterType: STRING
+        output_model_path:
+          description: Path to the trained model checkpoint.
+          parameterType: STRING
+  comp-resolve-deploy-model:
+    executorLabel: exec-resolve-deploy-model
+    inputDefinitions:
+      parameters:
+        deploy_model:
+          parameterType: BOOLEAN
+        large_model_reference:
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: BOOLEAN
+  comp-resolve-image-uri:
+    executorLabel: exec-resolve-image-uri
+    inputDefinitions:
+      parameters:
+        accelerator_count:
+          defaultValue: 0.0
+          description: Number of accelerators.
+          isOptional: true
+          parameterType: NUMBER_INTEGER
+        accelerator_type:
+          defaultValue: ''
+          description: One of the supported accelerator types, e.g. ``'TPU_V3'``.
+          isOptional: true
+          parameterType: STRING
+        artifact_registry:
+          description: Registry that contains Docker images.
+          parameterType: STRING
+        image_name:
+          description: Base image name, e.g. ``'sft'`` or ``'reward_model'``.
+          parameterType: STRING
+        image_name_prefix:
+          description: Text to prepend to the base image name.
+          parameterType: STRING
+        location:
+          description: Region that contains the artifact registry.
+          parameterType: STRING
+        project:
+          description: Project that contains the artifact registry.
+          parameterType: STRING
+        tag:
+          description: Image tag.
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: STRING
+  comp-resolve-image-uri-2:
+    executorLabel: exec-resolve-image-uri-2
+    inputDefinitions:
+      parameters:
+        accelerator_count:
+          defaultValue: 0.0
+          description: Number of accelerators.
+          isOptional: true
+          parameterType: NUMBER_INTEGER
+        accelerator_type:
+          defaultValue: ''
+          description: One of the supported accelerator types, e.g. ``'TPU_V3'``.
+          isOptional: true
+          parameterType: STRING
+        artifact_registry:
+          description: Registry that contains Docker images.
+          parameterType: STRING
+        image_name:
+          description: Base image name, e.g. ``'sft'`` or ``'reward_model'``.
+          parameterType: STRING
+        image_name_prefix:
+          description: Text to prepend to the base image name.
+          parameterType: STRING
+        location:
+          description: Region that contains the artifact registry.
+          parameterType: STRING
+        project:
+          description: Project that contains the artifact registry.
+          parameterType: STRING
+        tag:
+          description: Image tag.
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: STRING
+  comp-resolve-image-uri-2-2:
+    executorLabel: exec-resolve-image-uri-2-2
+    inputDefinitions:
+      parameters:
+        accelerator_count:
+          defaultValue: 0.0
+          description: Number of accelerators.
+          isOptional: true
+          parameterType: NUMBER_INTEGER
+        accelerator_type:
+          defaultValue: ''
+          description: One of the supported accelerator types, e.g. ``'TPU_V3'``.
+          isOptional: true
+          parameterType: STRING
+        artifact_registry:
+          description: Registry that contains Docker images.
+          parameterType: STRING
+        image_name:
+          description: Base image name, e.g. ``'sft'`` or ``'reward_model'``.
+          parameterType: STRING
+        image_name_prefix:
+          description: Text to prepend to the base image name.
+          parameterType: STRING
+        location:
+          description: Region that contains the artifact registry.
+          parameterType: STRING
+        project:
+          description: Project that contains the artifact registry.
+          parameterType: STRING
+        tag:
+          description: Image tag.
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: STRING
+  comp-resolve-image-uri-3:
+    executorLabel: exec-resolve-image-uri-3
+    inputDefinitions:
+      parameters:
+        accelerator_count:
+          defaultValue: 0.0
+          description: Number of accelerators.
+          isOptional: true
+          parameterType: NUMBER_INTEGER
+        accelerator_type:
+          defaultValue: ''
+          description: One of the supported accelerator types, e.g. ``'TPU_V3'``.
+          isOptional: true
+          parameterType: STRING
+        artifact_registry:
+          description: Registry that contains Docker images.
+          parameterType: STRING
+        image_name:
+          description: Base image name, e.g. ``'sft'`` or ``'reward_model'``.
+          parameterType: STRING
+        image_name_prefix:
+          description: Text to prepend to the base image name.
+          parameterType: STRING
+        location:
+          description: Region that contains the artifact registry.
+          parameterType: STRING
+        project:
+          description: Project that contains the artifact registry.
+          parameterType: STRING
+        tag:
+          description: Image tag.
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: STRING
+  comp-resolve-image-uri-4:
+    executorLabel: exec-resolve-image-uri-4
+    inputDefinitions:
+      parameters:
+        accelerator_count:
+          defaultValue: 0.0
+          description: Number of accelerators.
+          isOptional: true
+          parameterType: NUMBER_INTEGER
+        accelerator_type:
+          defaultValue: ''
+          description: One of the supported accelerator types, e.g. ``'TPU_V3'``.
+          isOptional: true
+          parameterType: STRING
+        artifact_registry:
+          description: Registry that contains Docker images.
+          parameterType: STRING
+        image_name:
+          description: Base image name, e.g. ``'sft'`` or ``'reward_model'``.
+          parameterType: STRING
+        image_name_prefix:
+          description: Text to prepend to the base image name.
+          parameterType: STRING
+        location:
+          description: Region that contains the artifact registry.
+          parameterType: STRING
+        project:
+          description: Project that contains the artifact registry.
+          parameterType: STRING
+        tag:
+          description: Image tag.
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: STRING
+  comp-resolve-image-uri-5:
+    executorLabel: exec-resolve-image-uri-5
+    inputDefinitions:
+      parameters:
+        accelerator_count:
+          defaultValue: 0.0
+          description: Number of accelerators.
+          isOptional: true
+          parameterType: NUMBER_INTEGER
+        accelerator_type:
+          defaultValue: ''
+          description: One of the supported accelerator types, e.g. ``'TPU_V3'``.
+          isOptional: true
+          parameterType: STRING
+        artifact_registry:
+          description: Registry that contains Docker images.
+          parameterType: STRING
+        image_name:
+          description: Base image name, e.g. ``'sft'`` or ``'reward_model'``.
+          parameterType: STRING
+        image_name_prefix:
+          description: Text to prepend to the base image name.
+          parameterType: STRING
+        location:
+          description: Region that contains the artifact registry.
+          parameterType: STRING
+        project:
+          description: Project that contains the artifact registry.
+          parameterType: STRING
+        tag:
+          description: Image tag.
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: STRING
+  comp-resolve-machine-spec:
+    executorLabel: exec-resolve-machine-spec
+    inputDefinitions:
+      parameters:
+        location:
+          description: Where the machine will run.
+          parameterType: STRING
+        use_test_spec:
+          defaultValue: false
+          description: Whether to use a lower resource machine for testing.
+          isOptional: true
+          parameterType: BOOLEAN
+    outputDefinitions:
+      parameters:
+        accelerator_count:
+          parameterType: NUMBER_INTEGER
+        accelerator_type:
+          parameterType: STRING
+        machine_type:
+          parameterType: STRING
+  comp-resolve-machine-spec-2:
+    executorLabel: exec-resolve-machine-spec-2
+    inputDefinitions:
+      parameters:
+        location:
+          description: Where the machine will run.
+          parameterType: STRING
+        use_test_spec:
+          defaultValue: false
+          description: Whether to use a lower resource machine for testing.
+          isOptional: true
+          parameterType: BOOLEAN
+    outputDefinitions:
+      parameters:
+        accelerator_count:
+          parameterType: NUMBER_INTEGER
+        accelerator_type:
+          parameterType: STRING
+        machine_type:
+          parameterType: STRING
+  comp-resolve-model-display-name:
+    executorLabel: exec-resolve-model-display-name
+    inputDefinitions:
+      parameters:
+        large_model_reference:
+          description: Base model tuned by the pipeline.
+          parameterType: STRING
+        model_display_name:
+          description: 'User-provided display name. If not provided, a default
+
+            display name will be created.'
+          isOptional: true
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: STRING
+  comp-resolve-reference-model-metadata:
+    executorLabel: exec-resolve-reference-model-metadata
+    inputDefinitions:
+      parameters:
+        large_model_reference:
+          description: User-provided reference model name.
+          parameterType: STRING
+        reference_model_path:
+          description: 'Optional path to a tuned based model to use in place
+
+            of the default base model. If specified, the model at this path must be
+            a
+
+            tuned version of the base model associated with ``large_model_reference``.'
+          isOptional: true
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        large_model_reference:
+          parameterType: STRING
+        reference_model_path:
+          parameterType: STRING
+        reward_model_path:
+          parameterType: STRING
+        reward_model_reference:
+          parameterType: STRING
+  comp-resolve-reference-model-metadata-2:
+    executorLabel: exec-resolve-reference-model-metadata-2
+    inputDefinitions:
+      parameters:
+        large_model_reference:
+          description: User-provided reference model name.
+          parameterType: STRING
+        reference_model_path:
+          description: 'Optional path to a tuned based model to use in place
+
+            of the default base model. If specified, the model at this path must be
+            a
+
+            tuned version of the base model associated with ``large_model_reference``.'
+          isOptional: true
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        large_model_reference:
+          parameterType: STRING
+        reference_model_path:
+          parameterType: STRING
+        reward_model_path:
+          parameterType: STRING
+        reward_model_reference:
+          parameterType: STRING
+  comp-resolve-regional-endpoint:
+    executorLabel: exec-resolve-regional-endpoint
+    inputDefinitions:
+      parameters:
+        upload_location:
+          description: Region where the model will be uploaded.
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: STRING
+  comp-resolve-upload-model:
+    executorLabel: exec-resolve-upload-model
+    inputDefinitions:
+      parameters:
+        large_model_reference:
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: BOOLEAN
+  comp-rewardmodeltrainer:
+    executorLabel: exec-rewardmodeltrainer
+    inputDefinitions:
+      parameters:
+        accelerator_count:
+          description: Number of TPU accelerators.
+          parameterType: NUMBER_INTEGER
+        accelerator_type:
+          description: Type of TPU accelerator. Can be either TPU_V2 or TPU_V3.
+          parameterType: STRING
+        batch_size:
+          defaultValue: 64.0
+          description: Number of examples in each finetuning step. Default is 64.
+          isOptional: true
+          parameterType: NUMBER_INTEGER
+        image_uri:
+          description: Location of reward model Docker image.
+          parameterType: STRING
+        input_dataset_path:
+          description: Path to dataset to use to train a reward model.
+          parameterType: STRING
+        input_model_path:
+          description: Path to the base model to fine tune.
+          parameterType: STRING
+        inputs_sequence_length:
+          description: Maximum number of input tokens per row.
+          parameterType: NUMBER_INTEGER
+        large_model_reference:
+          description: Predefined model used to create the ``input_model``.
+          parameterType: STRING
+        learning_rate_multiplier:
+          defaultValue: 1.0
+          description: 'Constant multiplied by the base learning rate used
+
+            to adjust the learning rate when training a reward model.'
+          isOptional: true
+          parameterType: NUMBER_DOUBLE
+        location:
+          description: Location used to run the job.
+          parameterType: STRING
+        lora_dim:
+          defaultValue: 0.0
+          description: 'The rank of the LoRA adapter. If >0, then use LoRA-tuning.
+            If =0,
+
+            then use full-tuning.'
+          isOptional: true
+          parameterType: NUMBER_INTEGER
+        machine_type:
+          description: 'The type of the machine to provision for the custom job. Must
+
+            be a valid GCE instance type and compatible with the accelerator type.'
+          parameterType: STRING
+        project:
+          description: Project used to run the job.
+          parameterType: STRING
+        targets_sequence_length:
+          description: Maximum number of target tokens per row.
+          parameterType: NUMBER_INTEGER
+        train_split:
+          defaultValue: train
+          description: 'Name of the split in the input dataset that contains training
+
+            data. Default is ``''train''``.'
+          isOptional: true
+          parameterType: STRING
+        train_steps:
+          description: 'Number of training steps. These are the number of steps
+
+            on top of any steps used to train the base model.'
+          parameterType: NUMBER_INTEGER
+    outputDefinitions:
+      artifacts:
+        tensorboard_metrics:
+          artifactType:
+            schemaTitle: system.Artifact
+            schemaVersion: 0.0.1
+          description: Training stats (tensorboard) path.
+      parameters:
+        gcp_resources:
+          description: 'GCP resources that can be used to track the custom finetuning
+
+            job.'
+          parameterType: STRING
+        output_model_path:
+          parameterType: STRING
+  comp-upload-llm-model:
+    executorLabel: exec-upload-llm-model
+    inputDefinitions:
+      artifacts:
+        artifact_uri:
+          artifactType:
+            schemaTitle: system.Artifact
+            schemaVersion: 0.0.1
+          description: KFP Artifact for adapter.
+      parameters:
+        encryption_spec_key_name:
+          defaultValue: ''
+          description: Customer-managed encryption key.
+          isOptional: true
+          parameterType: STRING
+        location:
+          description: Location for model upload and deployment.
+          parameterType: STRING
+        model_display_name:
+          description: Name of the model (shown in Model Registry).
+          parameterType: STRING
+        model_reference_name:
+          description: Large model reference name.
+          parameterType: STRING
+        project:
+          description: Name of the GCP project.
+          parameterType: STRING
+        regional_endpoint:
+          description: Regional API endpoint.
+          parameterType: STRING
+        upload_model:
+          defaultValue: true
+          description: 'Whether to upload the model to the Model Registry. Default
+
+            is ``True``. If ``False``, the model will not be uploaded and output
+
+            artifacts will contain empty strings.'
+          isOptional: true
+          parameterType: BOOLEAN
+    outputDefinitions:
+      parameters:
+        gcp_resources:
+          description: Serialized JSON of `gcp_resources`.
+          parameterType: STRING
+        model_resource_name:
+          description: Path to the created Model on Model Registry.
+          parameterType: STRING
+  comp-upload-tensorboard-metrics:
+    executorLabel: exec-upload-tensorboard-metrics
+    inputDefinitions:
+      artifacts:
+        metrics_directory:
+          artifactType:
+            schemaTitle: system.Artifact
+            schemaVersion: 0.0.1
+      parameters:
+        experiment_name:
+          description: Name of this tensorboard experiment. Must be unique to a given
+            `projects/{project_number}/locations/{location}/tensorboards/{tensorboard_id}`.
+          parameterType: STRING
+        tensorboard_resource_id:
+          description: TensorBoard resource ID in the form `projects/{project_number}/locations/{location}/tensorboards/{tensorboard_id}`.
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        tensorboard_uri:
+          description: URI of the uploaded tensorboard experiment.
+          parameterType: STRING
+  comp-upload-tensorboard-metrics-2:
+    executorLabel: exec-upload-tensorboard-metrics-2
+    inputDefinitions:
+      artifacts:
+        metrics_directory:
+          artifactType:
+            schemaTitle: system.Artifact
+            schemaVersion: 0.0.1
+      parameters:
+        experiment_name:
+          description: Name of this tensorboard experiment. Must be unique to a given
+            `projects/{project_number}/locations/{location}/tensorboards/{tensorboard_id}`.
+          parameterType: STRING
+        tensorboard_resource_id:
+          description: TensorBoard resource ID in the form `projects/{project_number}/locations/{location}/tensorboards/{tensorboard_id}`.
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        tensorboard_uri:
+          description: URI of the uploaded tensorboard experiment.
+          parameterType: STRING
+  comp-value-exists:
+    executorLabel: exec-value-exists
+    inputDefinitions:
+      parameters:
+        value:
+          description: That might have been provided.
+          isOptional: true
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: BOOLEAN
+  comp-value-exists-2:
+    executorLabel: exec-value-exists-2
+    inputDefinitions:
+      parameters:
+        value:
+          description: That might have been provided.
+          isOptional: true
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: BOOLEAN
+deploymentSpec:
+  executors:
+    exec-bulkinferrer:
+      container:
+        args:
+        - --type
+        - CustomJob
+        - --payload
+        - '{"display_name": "BulkInferrer", "job_spec": {"worker_pool_specs": [{"replica_count":
+          "1", "machine_spec": {"machine_type": "{{$.inputs.parameters[''machine_type'']}}",
+          "accelerator_type": "{{$.inputs.parameters[''accelerator_type'']}}", "accelerator_count":
+          {{$.inputs.parameters[''accelerator_count'']}}}, "container_spec": {"image_uri":
+          "{{$.inputs.parameters[''image_uri'']}}", "args": ["--input_model={{$.inputs.parameters[''input_model'']}}",
+          "--input_dataset={{$.inputs.parameters[''input_dataset_path'']}}", "--dataset_split={{$.inputs.parameters[''dataset_split'']}}",
+          "--large_model_reference={{$.inputs.parameters[''large_model_reference'']}}",
+          "--inputs_sequence_length={{$.inputs.parameters[''inputs_sequence_length'']}}",
+          "--targets_sequence_length={{$.inputs.parameters[''targets_sequence_length'']}}",
+          "--sampling_strategy={{$.inputs.parameters[''sampling_strategy'']}}", "--output_prediction={{$.outputs.parameters[''output_prediction''].output_file}}",
+          "--output_prediction_gcs_path={{$.outputs.parameters[''output_prediction_gcs_path''].output_file}}"]}}]}}'
+        - --project
+        - '{{$.inputs.parameters[''project'']}}'
+        - --location
+        - '{{$.inputs.parameters[''location'']}}'
+        - --gcp_resources
+        - '{{$.outputs.parameters[''gcp_resources''].output_file}}'
+        command:
+        - python3
+        - -u
+        - -m
+        - google_cloud_pipeline_components.container.v1.custom_job.launcher
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-convert-to-delimited-string:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - convert_to_delimited_string
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef convert_to_delimited_string(items: List[str], delimiter: str\
+          \ = ',') -> str:\n  \"\"\"Converts a list of strings to single string delimited\
+          \ by the specified character.\"\"\"\n  return delimiter.join(items)\n\n"
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-create-endpoint-and-deploy-model:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - create_endpoint_and_deploy_model
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef create_endpoint_and_deploy_model(\n    project: str,\n    location:\
+          \ str,\n    model_resource_name: str,\n    display_name: str,\n    regional_endpoint:\
+          \ str,\n    endpoint_resource_name: dsl.OutputPath(str),\n    create_endpoint_gcp_resources:\
+          \ dsl.OutputPath(str),\n    deploy_model_gcp_resources: dsl.OutputPath(str),\n\
+          \    encryption_spec_key_name: str = '',\n    service_account: str = '',\n\
+          \    deploy_model: bool = True,\n):\n  \"\"\"Creates a vertex endpoint and\
+          \ deploy the specified model.\n\n  Args:\n      project: Name of the GCP\
+          \ project.\n      location: Location for model upload and deployment.\n\
+          \      model_resource_name: Path to the created Model on Model Registry.\n\
+          \      display_name: Name of the model (shown in Model Registry).\n    \
+          \  regional_endpoint: Regional API endpoint.\n      encryption_spec_key_name:\
+          \ Customer-managed encryption key.\n      service_account: If set, then\
+          \ a custom service account will be used.\n      deploy_model: Whether to\
+          \ deploy the model to an endpoint. Default is\n        ``True``. If ``False``,\
+          \ the model will not be deployed and output\n        artifacts will contain\
+          \ empty strings.\n\n  Returns:\n      endpoint_resource_name: Path to the\
+          \ created endpoint on Online Prediction.\n      create_endpoint_gcp_resources:\
+          \ Serialized JSON of GCP resources for\n          creating an endpoint.\n\
+          \      deploy_model_gcp_resources: Serialized JSON of GCP resources for\
+          \ deploying\n          the model.\n  \"\"\"\n  import json\n  import logging\n\
+          \  import os\n  import sys\n  from typing import Any, Dict\n\n  try:\n \
+          \   from google_cloud_pipeline_components.container.v1.gcp_launcher import\
+          \ lro_remote_runner\n  except ImportError:\n    from google_cloud_pipeline_components.container.v1.gcp_launcher\
+          \ import lro_remote_runner\n\n  def run_lro_remote_runner(\n      url: str,\
+          \ payload: Dict[str, Any], gcp_resources: str\n  ) -> Any:\n    remote_runner\
+          \ = lro_remote_runner.LroRemoteRunner(location)\n    lro = remote_runner.create_lro(url,\
+          \ json.dumps(payload), gcp_resources)\n    return remote_runner.poll_lro(lro=lro)\n\
+          \n  try:\n    os.makedirs(os.path.dirname(endpoint_resource_name), exist_ok=True)\n\
+          \n    if not deploy_model:\n      with open(endpoint_resource_name, 'w')\
+          \ as fout:\n        fout.write('')\n      return\n\n    regional_endpoint\
+          \ = regional_endpoint.rstrip('/')\n\n    create_endpoint_payload = {\n \
+          \       'displayName': display_name,\n    }\n\n    pipeline_labels_str =\
+          \ os.getenv('VERTEX_AI_PIPELINES_RUN_LABELS')\n    if pipeline_labels_str:\n\
+          \      create_endpoint_payload['labels'] = json.loads(pipeline_labels_str)\n\
+          \n    if encryption_spec_key_name:\n      create_endpoint_payload['encryption_spec']\
+          \ = {\n          'kms_key_name': encryption_spec_key_name\n      }\n\n \
+          \   create_endpoint_lro = run_lro_remote_runner(\n        url=(\n      \
+          \      f'{regional_endpoint}/projects/{project}/locations/{location}'\n\
+          \            '/endpoints'\n        ),\n        payload=create_endpoint_payload,\n\
+          \        gcp_resources=create_endpoint_gcp_resources,\n    )\n\n    response_endpoint\
+          \ = create_endpoint_lro['response']['name']\n    with open(endpoint_resource_name,\
+          \ 'w') as fout:\n      fout.write(response_endpoint)\n\n    logging.info(\n\
+          \        'Endpoint created successfully. Deploying model %s to endpoint',\n\
+          \        model_resource_name,\n    )\n\n    deploy_model_payload = {\n \
+          \       'deployedModel': {\n            'model': model_resource_name,\n\
+          \            'displayName': display_name,\n            'automaticResources':\
+          \ {'minReplicaCount': 1, 'maxReplicaCount': 1},\n        }\n    }\n    if\
+          \ service_account:\n      deploy_model_payload['deployedModel']['service_account']\
+          \ = service_account\n\n    _ = run_lro_remote_runner(\n        url=f'{regional_endpoint}/{response_endpoint}:deployModel',\n\
+          \        payload=deploy_model_payload,\n        gcp_resources=deploy_model_gcp_resources,\n\
+          \    )\n\n    logging.info('Model deployed successfully!')\n  except Exception\
+          \ as e:  # pylint: disable=broad-exception-caught\n    if isinstance(e,\
+          \ ValueError):\n      raise\n    logging.exception(str(e))\n    sys.exit(13)\n\
+          \n"
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-importer:
+      importer:
+        artifactUri:
+          runtimeParameter: uri
+        typeSchema:
+          schemaTitle: system.Artifact
+          schemaVersion: 0.0.1
+    exec-privatetextcomparisonimporter:
+      container:
+        args:
+        - --type
+        - CustomJob
+        - --payload
+        - '{"display_name": "TfdsComparisonImporter", "job_spec": {"worker_pool_specs":
+          [{"replica_count": "1", "machine_spec": {"machine_type": "{{$.inputs.parameters[''machine_type'']}}"},
+          "container_spec": {"image_uri": "{{$.inputs.parameters[''image_uri'']}}",
+          "args": ["--input_text={{$.inputs.parameters[''input_text'']}}", "--inputs_field_name={{$.inputs.parameters[''inputs_field_name'']}}",
+          "--comma_separated_candidates_field_names={{$.inputs.parameters[''comma_separated_candidates_field_names'']}}",
+          "--choice_field_name={{$.inputs.parameters[''choice_field_name'']}}", "--split={{$.inputs.parameters[''split'']}}",
+          "--output_cache_dir={{$.outputs.parameters[''output_dataset_path''].output_file}}",
+          "--instruction={{$.inputs.parameters[''instruction'']}}", "--large_model_reference={{$.inputs.parameters[''large_model_reference'']}}",
+          "--private_bucket_subdir={{$.pipeline_task_name}}_{{$.pipeline_task_uuid}}"]}}]}}'
+        - --project
+        - '{{$.inputs.parameters[''project'']}}'
+        - --location
+        - '{{$.inputs.parameters[''location'']}}'
+        - --gcp_resources
+        - '{{$.outputs.parameters[''gcp_resources''].output_file}}'
+        command:
+        - python3
+        - -u
+        - -m
+        - google_cloud_pipeline_components.container.v1.custom_job.launcher
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-privatetextimporter:
+      container:
+        args:
+        - --type
+        - CustomJob
+        - --payload
+        - '{"display_name": "TextImporter", "job_spec": {"worker_pool_specs": [{"replica_count":
+          "1", "machine_spec": {"machine_type": "{{$.inputs.parameters[''machine_type'']}}"},
+          "container_spec": {"image_uri": "{{$.inputs.parameters[''image_uri'']}}",
+          "args": ["--input_text={{$.inputs.parameters[''input_text'']}}", "--inputs_field_name={{$.inputs.parameters[''inputs_field_name'']}}",
+          "--targets_field_name={{$.inputs.parameters[''targets_field_name'']}}",
+          "--output_split_name={{$.inputs.parameters[''output_split_name'']}}", "--instruction={{$.inputs.parameters[''instruction'']}}",
+          "--large_model_reference={{$.inputs.parameters[''large_model_reference'']}}",
+          "--private_bucket_subdir={{$.pipeline_task_name}}_{{$.pipeline_task_uuid}}",
+          "--output_dataset_path={{$.pipeline_root}}{{$.pipeline_task_name}}_{{$.pipeline_task_uuid}}",
+          "--imported_data_path={{$.outputs.parameters[''imported_data_path''].output_file}}",
+          "--max_num_input_examples={{$.inputs.parameters[''max_num_input_examples'']}}",
+          "--executor_input={{$.json_escape[1]}}"]}}]}}'
+        - --project
+        - '{{$.inputs.parameters[''project'']}}'
+        - --location
+        - '{{$.inputs.parameters[''location'']}}'
+        - --gcp_resources
+        - '{{$.outputs.parameters[''gcp_resources''].output_file}}'
+        command:
+        - python3
+        - -u
+        - -m
+        - google_cloud_pipeline_components.container.v1.custom_job.launcher
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-privatetextimporter-2:
+      container:
+        args:
+        - --type
+        - CustomJob
+        - --payload
+        - '{"display_name": "TextImporter", "job_spec": {"worker_pool_specs": [{"replica_count":
+          "1", "machine_spec": {"machine_type": "{{$.inputs.parameters[''machine_type'']}}"},
+          "container_spec": {"image_uri": "{{$.inputs.parameters[''image_uri'']}}",
+          "args": ["--input_text={{$.inputs.parameters[''input_text'']}}", "--inputs_field_name={{$.inputs.parameters[''inputs_field_name'']}}",
+          "--targets_field_name={{$.inputs.parameters[''targets_field_name'']}}",
+          "--output_split_name={{$.inputs.parameters[''output_split_name'']}}", "--instruction={{$.inputs.parameters[''instruction'']}}",
+          "--large_model_reference={{$.inputs.parameters[''large_model_reference'']}}",
+          "--private_bucket_subdir={{$.pipeline_task_name}}_{{$.pipeline_task_uuid}}",
+          "--output_dataset_path={{$.pipeline_root}}{{$.pipeline_task_name}}_{{$.pipeline_task_uuid}}",
+          "--imported_data_path={{$.outputs.parameters[''imported_data_path''].output_file}}",
+          "--max_num_input_examples={{$.inputs.parameters[''max_num_input_examples'']}}",
+          "--executor_input={{$.json_escape[1]}}"]}}]}}'
+        - --project
+        - '{{$.inputs.parameters[''project'']}}'
+        - --location
+        - '{{$.inputs.parameters[''location'']}}'
+        - --gcp_resources
+        - '{{$.outputs.parameters[''gcp_resources''].output_file}}'
+        command:
+        - python3
+        - -u
+        - -m
+        - google_cloud_pipeline_components.container.v1.custom_job.launcher
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-reinforcer:
+      container:
+        args:
+        - --type
+        - CustomJob
+        - --payload
+        - '{"display_name": "Reinforcer", "job_spec": {"worker_pool_specs": [{"replica_count":
+          "1", "machine_spec": {"machine_type": "{{$.inputs.parameters[''machine_type'']}}",
+          "accelerator_type": "{{$.inputs.parameters[''accelerator_type'']}}", "accelerator_count":
+          {{$.inputs.parameters[''accelerator_count'']}}}, "container_spec": {"image_uri":
+          "{{$.inputs.parameters[''image_uri'']}}", "args": ["--input_reference_model_path={{$.inputs.parameters[''input_reference_model_path'']}}",
+          "--input_reward_model_path={{$.inputs.parameters[''input_reward_model_path'']}}",
+          "--input_dataset_path={{$.inputs.parameters[''input_dataset_path'']}}",
+          "--train_steps={{$.inputs.parameters[''train_steps'']}}", "--output_model_path={{$.outputs.parameters[''output_model_path''].output_file}}",
+          "--output_adapter_path={{$.outputs.parameters[''output_adapter_path''].output_file}}",
+          "--tensorboard_metrics_path={{$.outputs.artifacts[''tensorboard_metrics''].path}}",
+          "--large_model_reference={{$.inputs.parameters[''large_model_reference'']}}",
+          "--reward_model_reference={{$.inputs.parameters[''reward_model_reference'']}}",
+          "--inputs_sequence_length={{$.inputs.parameters[''inputs_sequence_length'']}}",
+          "--targets_sequence_length={{$.inputs.parameters[''targets_sequence_length'']}}",
+          "--train_split={{$.inputs.parameters[''train_split'']}}", "--batch_size={{$.inputs.parameters[''batch_size'']}}",
+          "--learning_rate_multiplier={{$.inputs.parameters[''learning_rate_multiplier'']}}",
+          "--kl_coeff={{$.inputs.parameters[''kl_coeff'']}}", "--lora_dim={{$.inputs.parameters[''lora_dim'']}}"]}}]}}'
+        - --project
+        - '{{$.inputs.parameters[''project'']}}'
+        - --location
+        - '{{$.inputs.parameters[''location'']}}'
+        - --gcp_resources
+        - '{{$.outputs.parameters[''gcp_resources''].output_file}}'
+        command:
+        - python3
+        - -u
+        - -m
+        - google_cloud_pipeline_components.container.v1.custom_job.launcher
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-resolve-deploy-model:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - resolve_deploy_model
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef resolve_deploy_model(\n    deploy_model: bool, large_model_reference:\
+          \ str\n) -> bool:\n  \"\"\"Resolves runtime parameter that determines whether\
+          \ the tuned model should be deployed.\"\"\"\n  supported_models = {'BISON'}\n\
+          \  if deploy_model and large_model_reference in supported_models:\n    return\
+          \ True\n  return False\n\n"
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-resolve-image-uri:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - resolve_image_uri
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef resolve_image_uri(\n    image_name: str,\n    project: str,\n\
+          \    location: str,\n    artifact_registry: str,\n    image_name_prefix:\
+          \ str,\n    tag: str,\n    accelerator_type: str = '',\n    accelerator_count:\
+          \ int = 0,\n) -> str:\n  \"\"\"Generates image uri based on base image name\
+          \ and accelerator type.\n\n  Args:\n    image_name: Base image name, e.g.\
+          \ ``'sft'`` or ``'reward_model'``.\n    project: Project that contains the\
+          \ artifact registry.\n    location: Region that contains the artifact registry.\n\
+          \    artifact_registry: Registry that contains Docker images.\n    image_name_prefix:\
+          \ Text to prepend to the base image name.\n    tag: Image tag.\n    accelerator_type:\
+          \ One of the supported accelerator types, e.g. ``'TPU_V3'``.\n    accelerator_count:\
+          \ Number of accelerators.\n\n  Returns:\n    Docker image uri\n\n  Raises:\n\
+          \    ValueError: if an unsupported accelerator type is provided.\n  \"\"\
+          \"\n  cpu_only_images = {\n      'text_importer',\n      'text_comparison_importer',\n\
+          \  }\n\n  if image_name in cpu_only_images:\n    accelerator_postfix = ''\n\
+          \  elif accelerator_type == 'TPU_V3':\n    accelerator_postfix = '_tpu'\n\
+          \  elif accelerator_type == 'NVIDIA_A100_80GB' and accelerator_count ==\
+          \ 8:\n    accelerator_postfix = '_gpu_test'\n  else:\n    accelerator_postfix\
+          \ = '_gpu'\n\n  backup_images = {\n      'sft',\n      'reward_model',\n\
+          \      'reinforcer',\n      'infer',\n      'text_importer',\n      'text_comparison_importer',\n\
+          \  }\n  if image_name in backup_images and accelerator_postfix != '_gpu_test':\n\
+          \    accelerator_postfix += '_backup'\n  return f'{location}-docker.pkg.dev/{project}/{artifact_registry}/{image_name_prefix}{image_name}{accelerator_postfix}:{tag}'\n\
+          \n"
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-resolve-image-uri-2:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - resolve_image_uri
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef resolve_image_uri(\n    image_name: str,\n    project: str,\n\
+          \    location: str,\n    artifact_registry: str,\n    image_name_prefix:\
+          \ str,\n    tag: str,\n    accelerator_type: str = '',\n    accelerator_count:\
+          \ int = 0,\n) -> str:\n  \"\"\"Generates image uri based on base image name\
+          \ and accelerator type.\n\n  Args:\n    image_name: Base image name, e.g.\
+          \ ``'sft'`` or ``'reward_model'``.\n    project: Project that contains the\
+          \ artifact registry.\n    location: Region that contains the artifact registry.\n\
+          \    artifact_registry: Registry that contains Docker images.\n    image_name_prefix:\
+          \ Text to prepend to the base image name.\n    tag: Image tag.\n    accelerator_type:\
+          \ One of the supported accelerator types, e.g. ``'TPU_V3'``.\n    accelerator_count:\
+          \ Number of accelerators.\n\n  Returns:\n    Docker image uri\n\n  Raises:\n\
+          \    ValueError: if an unsupported accelerator type is provided.\n  \"\"\
+          \"\n  cpu_only_images = {\n      'text_importer',\n      'text_comparison_importer',\n\
+          \  }\n\n  if image_name in cpu_only_images:\n    accelerator_postfix = ''\n\
+          \  elif accelerator_type == 'TPU_V3':\n    accelerator_postfix = '_tpu'\n\
+          \  elif accelerator_type == 'NVIDIA_A100_80GB' and accelerator_count ==\
+          \ 8:\n    accelerator_postfix = '_gpu_test'\n  else:\n    accelerator_postfix\
+          \ = '_gpu'\n\n  backup_images = {\n      'sft',\n      'reward_model',\n\
+          \      'reinforcer',\n      'infer',\n      'text_importer',\n      'text_comparison_importer',\n\
+          \  }\n  if image_name in backup_images and accelerator_postfix != '_gpu_test':\n\
+          \    accelerator_postfix += '_backup'\n  return f'{location}-docker.pkg.dev/{project}/{artifact_registry}/{image_name_prefix}{image_name}{accelerator_postfix}:{tag}'\n\
+          \n"
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-resolve-image-uri-2-2:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - resolve_image_uri
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef resolve_image_uri(\n    image_name: str,\n    project: str,\n\
+          \    location: str,\n    artifact_registry: str,\n    image_name_prefix:\
+          \ str,\n    tag: str,\n    accelerator_type: str = '',\n    accelerator_count:\
+          \ int = 0,\n) -> str:\n  \"\"\"Generates image uri based on base image name\
+          \ and accelerator type.\n\n  Args:\n    image_name: Base image name, e.g.\
+          \ ``'sft'`` or ``'reward_model'``.\n    project: Project that contains the\
+          \ artifact registry.\n    location: Region that contains the artifact registry.\n\
+          \    artifact_registry: Registry that contains Docker images.\n    image_name_prefix:\
+          \ Text to prepend to the base image name.\n    tag: Image tag.\n    accelerator_type:\
+          \ One of the supported accelerator types, e.g. ``'TPU_V3'``.\n    accelerator_count:\
+          \ Number of accelerators.\n\n  Returns:\n    Docker image uri\n\n  Raises:\n\
+          \    ValueError: if an unsupported accelerator type is provided.\n  \"\"\
+          \"\n  cpu_only_images = {\n      'text_importer',\n      'text_comparison_importer',\n\
+          \  }\n\n  if image_name in cpu_only_images:\n    accelerator_postfix = ''\n\
+          \  elif accelerator_type == 'TPU_V3':\n    accelerator_postfix = '_tpu'\n\
+          \  elif accelerator_type == 'NVIDIA_A100_80GB' and accelerator_count ==\
+          \ 8:\n    accelerator_postfix = '_gpu_test'\n  else:\n    accelerator_postfix\
+          \ = '_gpu'\n\n  backup_images = {\n      'sft',\n      'reward_model',\n\
+          \      'reinforcer',\n      'infer',\n      'text_importer',\n      'text_comparison_importer',\n\
+          \  }\n  if image_name in backup_images and accelerator_postfix != '_gpu_test':\n\
+          \    accelerator_postfix += '_backup'\n  return f'{location}-docker.pkg.dev/{project}/{artifact_registry}/{image_name_prefix}{image_name}{accelerator_postfix}:{tag}'\n\
+          \n"
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-resolve-image-uri-3:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - resolve_image_uri
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef resolve_image_uri(\n    image_name: str,\n    project: str,\n\
+          \    location: str,\n    artifact_registry: str,\n    image_name_prefix:\
+          \ str,\n    tag: str,\n    accelerator_type: str = '',\n    accelerator_count:\
+          \ int = 0,\n) -> str:\n  \"\"\"Generates image uri based on base image name\
+          \ and accelerator type.\n\n  Args:\n    image_name: Base image name, e.g.\
+          \ ``'sft'`` or ``'reward_model'``.\n    project: Project that contains the\
+          \ artifact registry.\n    location: Region that contains the artifact registry.\n\
+          \    artifact_registry: Registry that contains Docker images.\n    image_name_prefix:\
+          \ Text to prepend to the base image name.\n    tag: Image tag.\n    accelerator_type:\
+          \ One of the supported accelerator types, e.g. ``'TPU_V3'``.\n    accelerator_count:\
+          \ Number of accelerators.\n\n  Returns:\n    Docker image uri\n\n  Raises:\n\
+          \    ValueError: if an unsupported accelerator type is provided.\n  \"\"\
+          \"\n  cpu_only_images = {\n      'text_importer',\n      'text_comparison_importer',\n\
+          \  }\n\n  if image_name in cpu_only_images:\n    accelerator_postfix = ''\n\
+          \  elif accelerator_type == 'TPU_V3':\n    accelerator_postfix = '_tpu'\n\
+          \  elif accelerator_type == 'NVIDIA_A100_80GB' and accelerator_count ==\
+          \ 8:\n    accelerator_postfix = '_gpu_test'\n  else:\n    accelerator_postfix\
+          \ = '_gpu'\n\n  backup_images = {\n      'sft',\n      'reward_model',\n\
+          \      'reinforcer',\n      'infer',\n      'text_importer',\n      'text_comparison_importer',\n\
+          \  }\n  if image_name in backup_images and accelerator_postfix != '_gpu_test':\n\
+          \    accelerator_postfix += '_backup'\n  return f'{location}-docker.pkg.dev/{project}/{artifact_registry}/{image_name_prefix}{image_name}{accelerator_postfix}:{tag}'\n\
+          \n"
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-resolve-image-uri-4:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - resolve_image_uri
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef resolve_image_uri(\n    image_name: str,\n    project: str,\n\
+          \    location: str,\n    artifact_registry: str,\n    image_name_prefix:\
+          \ str,\n    tag: str,\n    accelerator_type: str = '',\n    accelerator_count:\
+          \ int = 0,\n) -> str:\n  \"\"\"Generates image uri based on base image name\
+          \ and accelerator type.\n\n  Args:\n    image_name: Base image name, e.g.\
+          \ ``'sft'`` or ``'reward_model'``.\n    project: Project that contains the\
+          \ artifact registry.\n    location: Region that contains the artifact registry.\n\
+          \    artifact_registry: Registry that contains Docker images.\n    image_name_prefix:\
+          \ Text to prepend to the base image name.\n    tag: Image tag.\n    accelerator_type:\
+          \ One of the supported accelerator types, e.g. ``'TPU_V3'``.\n    accelerator_count:\
+          \ Number of accelerators.\n\n  Returns:\n    Docker image uri\n\n  Raises:\n\
+          \    ValueError: if an unsupported accelerator type is provided.\n  \"\"\
+          \"\n  cpu_only_images = {\n      'text_importer',\n      'text_comparison_importer',\n\
+          \  }\n\n  if image_name in cpu_only_images:\n    accelerator_postfix = ''\n\
+          \  elif accelerator_type == 'TPU_V3':\n    accelerator_postfix = '_tpu'\n\
+          \  elif accelerator_type == 'NVIDIA_A100_80GB' and accelerator_count ==\
+          \ 8:\n    accelerator_postfix = '_gpu_test'\n  else:\n    accelerator_postfix\
+          \ = '_gpu'\n\n  backup_images = {\n      'sft',\n      'reward_model',\n\
+          \      'reinforcer',\n      'infer',\n      'text_importer',\n      'text_comparison_importer',\n\
+          \  }\n  if image_name in backup_images and accelerator_postfix != '_gpu_test':\n\
+          \    accelerator_postfix += '_backup'\n  return f'{location}-docker.pkg.dev/{project}/{artifact_registry}/{image_name_prefix}{image_name}{accelerator_postfix}:{tag}'\n\
+          \n"
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-resolve-image-uri-5:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - resolve_image_uri
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef resolve_image_uri(\n    image_name: str,\n    project: str,\n\
+          \    location: str,\n    artifact_registry: str,\n    image_name_prefix:\
+          \ str,\n    tag: str,\n    accelerator_type: str = '',\n    accelerator_count:\
+          \ int = 0,\n) -> str:\n  \"\"\"Generates image uri based on base image name\
+          \ and accelerator type.\n\n  Args:\n    image_name: Base image name, e.g.\
+          \ ``'sft'`` or ``'reward_model'``.\n    project: Project that contains the\
+          \ artifact registry.\n    location: Region that contains the artifact registry.\n\
+          \    artifact_registry: Registry that contains Docker images.\n    image_name_prefix:\
+          \ Text to prepend to the base image name.\n    tag: Image tag.\n    accelerator_type:\
+          \ One of the supported accelerator types, e.g. ``'TPU_V3'``.\n    accelerator_count:\
+          \ Number of accelerators.\n\n  Returns:\n    Docker image uri\n\n  Raises:\n\
+          \    ValueError: if an unsupported accelerator type is provided.\n  \"\"\
+          \"\n  cpu_only_images = {\n      'text_importer',\n      'text_comparison_importer',\n\
+          \  }\n\n  if image_name in cpu_only_images:\n    accelerator_postfix = ''\n\
+          \  elif accelerator_type == 'TPU_V3':\n    accelerator_postfix = '_tpu'\n\
+          \  elif accelerator_type == 'NVIDIA_A100_80GB' and accelerator_count ==\
+          \ 8:\n    accelerator_postfix = '_gpu_test'\n  else:\n    accelerator_postfix\
+          \ = '_gpu'\n\n  backup_images = {\n      'sft',\n      'reward_model',\n\
+          \      'reinforcer',\n      'infer',\n      'text_importer',\n      'text_comparison_importer',\n\
+          \  }\n  if image_name in backup_images and accelerator_postfix != '_gpu_test':\n\
+          \    accelerator_postfix += '_backup'\n  return f'{location}-docker.pkg.dev/{project}/{artifact_registry}/{image_name_prefix}{image_name}{accelerator_postfix}:{tag}'\n\
+          \n"
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-resolve-machine-spec:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - resolve_machine_spec
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef resolve_machine_spec(\n    location: str,\n    use_test_spec:\
+          \ bool = False,\n) -> NamedTuple(\n    'MachineSpec', machine_type=str,\
+          \ accelerator_type=str, accelerator_count=int\n):\n  \"\"\"Returns machine\
+          \ spec to use for a given location.\n\n  Args:\n    location: Where the\
+          \ machine will run.\n    use_test_spec: Whether to use a lower resource\
+          \ machine for testing.\n\n  Returns:\n    Machine spec.\n\n  Raises:\n \
+          \   ValueError: If accelerators are requested in an unsupported location.\n\
+          \  \"\"\"\n  outputs = NamedTuple(\n      'MachineSpec',\n      machine_type=str,\n\
+          \      accelerator_type=str,\n      accelerator_count=int,\n  )\n  tpu_regions\
+          \ = {'europe-west4'}\n  gpu_regions = {'us-central1'}\n  if use_test_spec:\n\
+          \    return outputs(\n        machine_type='a2-highgpu-1g',\n        accelerator_type='NVIDIA_TESLA_A100',\n\
+          \        accelerator_count=1,\n    )\n  elif location in tpu_regions:\n\
+          \    return outputs(\n        machine_type='cloud-tpu',\n        accelerator_type='TPU_V3',\n\
+          \        accelerator_count=64,\n    )\n  elif location in gpu_regions:\n\
+          \    return outputs(\n        machine_type='a2-ultragpu-8g',\n        accelerator_type='NVIDIA_A100_80GB',\n\
+          \        accelerator_count=8,\n    )\n  raise ValueError(\n      f'Unsupported\
+          \ accelerator location {location}. Must be one of'\n      f' {tpu_regions\
+          \ | gpu_regions}.'\n  )\n\n"
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-resolve-machine-spec-2:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - resolve_machine_spec
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef resolve_machine_spec(\n    location: str,\n    use_test_spec:\
+          \ bool = False,\n) -> NamedTuple(\n    'MachineSpec', machine_type=str,\
+          \ accelerator_type=str, accelerator_count=int\n):\n  \"\"\"Returns machine\
+          \ spec to use for a given location.\n\n  Args:\n    location: Where the\
+          \ machine will run.\n    use_test_spec: Whether to use a lower resource\
+          \ machine for testing.\n\n  Returns:\n    Machine spec.\n\n  Raises:\n \
+          \   ValueError: If accelerators are requested in an unsupported location.\n\
+          \  \"\"\"\n  outputs = NamedTuple(\n      'MachineSpec',\n      machine_type=str,\n\
+          \      accelerator_type=str,\n      accelerator_count=int,\n  )\n  tpu_regions\
+          \ = {'europe-west4'}\n  gpu_regions = {'us-central1'}\n  if use_test_spec:\n\
+          \    return outputs(\n        machine_type='a2-highgpu-1g',\n        accelerator_type='NVIDIA_TESLA_A100',\n\
+          \        accelerator_count=1,\n    )\n  elif location in tpu_regions:\n\
+          \    return outputs(\n        machine_type='cloud-tpu',\n        accelerator_type='TPU_V3',\n\
+          \        accelerator_count=64,\n    )\n  elif location in gpu_regions:\n\
+          \    return outputs(\n        machine_type='a2-ultragpu-8g',\n        accelerator_type='NVIDIA_A100_80GB',\n\
+          \        accelerator_count=8,\n    )\n  raise ValueError(\n      f'Unsupported\
+          \ accelerator location {location}. Must be one of'\n      f' {tpu_regions\
+          \ | gpu_regions}.'\n  )\n\n"
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-resolve-model-display-name:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - resolve_model_display_name
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef resolve_model_display_name(\n    large_model_reference: str,\n\
+          \    model_display_name: Optional[str] = None,\n) -> str:\n  \"\"\"Gets\
+          \ the model display name shown in the registry and used for endpoints.\n\
+          \n  Args:\n    large_model_reference: Base model tuned by the pipeline.\n\
+          \    model_display_name: User-provided display name. If not provided, a\
+          \ default\n      display name will be created.\n\n  Returns:\n    Either\
+          \ the user-provided name or a default display name with the form\n    ``{large_model_reference}-{timestamp}``\n\
+          \  \"\"\"\n  # pylint: disable=g-import-not-at-top\n  import datetime\n\
+          \  # pylint: enable=g-import-not-at-top\n  now = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')\n\
+          \  return model_display_name or f'{large_model_reference.lower()}-{now}'\n\
+          \n"
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-resolve-reference-model-metadata:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - resolve_reference_model_metadata
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef resolve_reference_model_metadata(\n    large_model_reference:\
+          \ str,\n    reference_model_path: Optional[str] = None,\n) -> NamedTuple(\n\
+          \    'Outputs',\n    large_model_reference=str,\n    reference_model_path=str,\n\
+          \    reward_model_reference=str,\n    reward_model_path=str,\n):\n  \"\"\
+          \"Resolves reference model metadata needed by downstream components.\n\n\
+          \  Args:\n    large_model_reference: User-provided reference model name.\n\
+          \    reference_model_path: Optional path to a tuned based model to use in\
+          \ place\n      of the default base model. If specified, the model at this\
+          \ path must be a\n      tuned version of the base model associated with\
+          \ ``large_model_reference``.\n\n  Returns:\n    Base model name (used by\
+          \ downstream components to find gin configs and load\n    vocabularies)\
+          \ and the path to the base model checkpoint.\n\n  Raises:\n    ValueError:\
+          \ if no metadata exists for the given base model.\n  \"\"\"\n  reference_model_metadata\
+          \ = NamedTuple(\n      'ReferenceModelMetadata',\n      large_model_reference=str,\n\
+          \      reference_model_path=str,\n      reward_model_reference=str,\n  \
+          \    reward_model_path=str,\n      is_supported=bool,\n  )\n\n  reference_models\
+          \ = {\n      't5-small': reference_model_metadata(\n          large_model_reference='T5_SMALL',\n\
+          \          reference_model_path=(\n              'gs://t5-data/pretrained_models/t5x/flan_t5_small/'\n\
+          \          ),\n          reward_model_reference='T5_SMALL',\n          reward_model_path='gs://t5-data/pretrained_models/t5x/t5_1_1_small',\n\
+          \          is_supported=True,\n      ),\n      't5-large': reference_model_metadata(\n\
+          \          large_model_reference='T5_LARGE',\n          reference_model_path=(\n\
+          \              'gs://t5-data/pretrained_models/t5x/flan_t5_large/'\n   \
+          \       ),\n          reward_model_reference='T5_LARGE',\n          reward_model_path='gs://t5-data/pretrained_models/t5x/t5_1_1_large',\n\
+          \          is_supported=True,\n      ),\n      't5-xl': reference_model_metadata(\n\
+          \          large_model_reference='T5_XL',\n          reference_model_path='gs://t5-data/pretrained_models/t5x/flan_t5_xl/',\n\
+          \          reward_model_reference='T5_XL',\n          reward_model_path='gs://t5-data/pretrained_models/t5x/t5_1_1_xl',\n\
+          \          is_supported=True,\n      ),\n      't5-xxl': reference_model_metadata(\n\
+          \          large_model_reference='T5_XXL',\n          reference_model_path=(\n\
+          \              'gs://t5-data/pretrained_models/t5x/flan_t5_xxl/'\n     \
+          \     ),\n          reward_model_reference='T5_XL',\n          reward_model_path='gs://t5-data/pretrained_models/t5x/t5_1_1_xl',\n\
+          \          is_supported=True,\n      ),\n      'palm-tiny': reference_model_metadata(\n\
+          \          large_model_reference='PALM_TINY',\n          reference_model_path='gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_palm_tiny/',\n\
+          \          reward_model_reference='PALM_TINY',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_palm_tiny/',\n\
+          \          is_supported=False,\n      ),\n      'gecko': reference_model_metadata(\n\
+          \          large_model_reference='GECKO',\n          reference_model_path=(\n\
+          \              'gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_gecko/'\n\
+          \          ),\n          reward_model_reference='GECKO',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_gecko_pretrain/',\n\
+          \          is_supported=False,\n      ),\n      'otter': reference_model_metadata(\n\
+          \          large_model_reference='OTTER',\n          reference_model_path=(\n\
+          \              'gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_otter/'\n\
+          \          ),\n          reward_model_reference='OTTER',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_otter_pretrain/',\n\
+          \          is_supported=False,\n      ),\n      'bison': reference_model_metadata(\n\
+          \          large_model_reference='BISON',\n          reference_model_path=(\n\
+          \              'gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_bison/'\n\
+          \          ),\n          reward_model_reference='OTTER',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_otter_pretrain/',\n\
+          \          is_supported=False,  # Deprecated: Use text-bision@001 instead.\n\
+          \      ),\n      'text-bison@001': reference_model_metadata(\n         \
+          \ large_model_reference='BISON',\n          reference_model_path=(\n   \
+          \           'gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_bison/'\n\
+          \          ),\n          reward_model_reference='OTTER',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_otter_pretrain/',\n\
+          \          is_supported=True,\n      ),\n      'chat-bison@001': reference_model_metadata(\n\
+          \          large_model_reference='BISON',\n          reference_model_path=(\n\
+          \              'gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_bison/'\n\
+          \          ),\n          reward_model_reference='OTTER',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_otter_pretrain/',\n\
+          \          is_supported=True,\n      ),\n      'elephant': reference_model_metadata(\n\
+          \          large_model_reference='ELEPHANT',\n          reference_model_path=(\n\
+          \              'gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_elephant/'\n\
+          \          ),\n          reward_model_reference='OTTER',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_otter_pretrain/',\n\
+          \          is_supported=False,\n      ),\n      'llama-2-7b': reference_model_metadata(\n\
+          \          large_model_reference='LLAMA_2_7B',\n          reference_model_path='gs://vertex-rlhf-restricted/pretrained_models/llama/t5x_llama_2_7b/',\n\
+          \          reward_model_reference='LLAMA_2_7B',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/llama/t5x_llama_2_7b/',\n\
+          \          is_supported=True,\n      ),\n      'llama-2-13b': reference_model_metadata(\n\
+          \          large_model_reference='LLAMA_2_13B',\n          reference_model_path='gs://vertex-rlhf-restricted/pretrained_models/llama/t5x_llama_2_13b/',\n\
+          \          reward_model_reference='LLAMA_2_13B',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/llama/t5x_llama_2_13b/',\n\
+          \          is_supported=True,\n      ),\n      'llama-2-7b-chat': reference_model_metadata(\n\
+          \          large_model_reference='LLAMA_2_7B_CHAT',\n          reference_model_path='gs://vertex-rlhf-restricted/pretrained_models/llama/t5x_llama_2_7b_chat/',\n\
+          \          reward_model_reference='LLAMA_2_7B',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/llama/t5x_llama_2_7b/',\n\
+          \          is_supported=True,\n      ),\n      'llama-2-13b-chat': reference_model_metadata(\n\
+          \          large_model_reference='LLAMA_2_13B_CHAT',\n          reference_model_path='gs://vertex-rlhf-restricted/pretrained_models/llama/t5x_llama_2_13b_chat/',\n\
+          \          reward_model_reference='LLAMA_2_13B',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/llama/t5x_llama_2_13b/',\n\
+          \          is_supported=True,\n      ),\n  }\n\n  reference_model_key =\
+          \ large_model_reference.lower().replace('_', '-')\n  if reference_model_key\
+          \ not in reference_models:\n    supported_models = [\n        k for k, v\
+          \ in reference_models.items() if v.is_supported\n    ]\n    raise ValueError(\n\
+          \        f'Unknown reference model {large_model_reference}.'\n        '\
+          \ large_model_reference must be one of'\n        f' {sorted(supported_models)}.'\n\
+          \    )\n\n  reference_model = reference_models[reference_model_key]\n\n\
+          \  outputs = NamedTuple(\n      'Outputs',\n      large_model_reference=str,\n\
+          \      reference_model_path=str,\n      reward_model_reference=str,\n  \
+          \    reward_model_path=str,\n  )\n\n  return outputs(\n      large_model_reference=reference_model.large_model_reference,\n\
+          \      reference_model_path=(\n          reference_model_path or reference_model.reference_model_path\n\
+          \      ),\n      reward_model_reference=reference_model.reward_model_reference,\n\
+          \      reward_model_path=reference_model.reward_model_path,\n  )\n\n"
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-resolve-reference-model-metadata-2:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - resolve_reference_model_metadata
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef resolve_reference_model_metadata(\n    large_model_reference:\
+          \ str,\n    reference_model_path: Optional[str] = None,\n) -> NamedTuple(\n\
+          \    'Outputs',\n    large_model_reference=str,\n    reference_model_path=str,\n\
+          \    reward_model_reference=str,\n    reward_model_path=str,\n):\n  \"\"\
+          \"Resolves reference model metadata needed by downstream components.\n\n\
+          \  Args:\n    large_model_reference: User-provided reference model name.\n\
+          \    reference_model_path: Optional path to a tuned based model to use in\
+          \ place\n      of the default base model. If specified, the model at this\
+          \ path must be a\n      tuned version of the base model associated with\
+          \ ``large_model_reference``.\n\n  Returns:\n    Base model name (used by\
+          \ downstream components to find gin configs and load\n    vocabularies)\
+          \ and the path to the base model checkpoint.\n\n  Raises:\n    ValueError:\
+          \ if no metadata exists for the given base model.\n  \"\"\"\n  reference_model_metadata\
+          \ = NamedTuple(\n      'ReferenceModelMetadata',\n      large_model_reference=str,\n\
+          \      reference_model_path=str,\n      reward_model_reference=str,\n  \
+          \    reward_model_path=str,\n      is_supported=bool,\n  )\n\n  reference_models\
+          \ = {\n      't5-small': reference_model_metadata(\n          large_model_reference='T5_SMALL',\n\
+          \          reference_model_path=(\n              'gs://t5-data/pretrained_models/t5x/flan_t5_small/'\n\
+          \          ),\n          reward_model_reference='T5_SMALL',\n          reward_model_path='gs://t5-data/pretrained_models/t5x/t5_1_1_small',\n\
+          \          is_supported=True,\n      ),\n      't5-large': reference_model_metadata(\n\
+          \          large_model_reference='T5_LARGE',\n          reference_model_path=(\n\
+          \              'gs://t5-data/pretrained_models/t5x/flan_t5_large/'\n   \
+          \       ),\n          reward_model_reference='T5_LARGE',\n          reward_model_path='gs://t5-data/pretrained_models/t5x/t5_1_1_large',\n\
+          \          is_supported=True,\n      ),\n      't5-xl': reference_model_metadata(\n\
+          \          large_model_reference='T5_XL',\n          reference_model_path='gs://t5-data/pretrained_models/t5x/flan_t5_xl/',\n\
+          \          reward_model_reference='T5_XL',\n          reward_model_path='gs://t5-data/pretrained_models/t5x/t5_1_1_xl',\n\
+          \          is_supported=True,\n      ),\n      't5-xxl': reference_model_metadata(\n\
+          \          large_model_reference='T5_XXL',\n          reference_model_path=(\n\
+          \              'gs://t5-data/pretrained_models/t5x/flan_t5_xxl/'\n     \
+          \     ),\n          reward_model_reference='T5_XL',\n          reward_model_path='gs://t5-data/pretrained_models/t5x/t5_1_1_xl',\n\
+          \          is_supported=True,\n      ),\n      'palm-tiny': reference_model_metadata(\n\
+          \          large_model_reference='PALM_TINY',\n          reference_model_path='gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_palm_tiny/',\n\
+          \          reward_model_reference='PALM_TINY',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_palm_tiny/',\n\
+          \          is_supported=False,\n      ),\n      'gecko': reference_model_metadata(\n\
+          \          large_model_reference='GECKO',\n          reference_model_path=(\n\
+          \              'gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_gecko/'\n\
+          \          ),\n          reward_model_reference='GECKO',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_gecko_pretrain/',\n\
+          \          is_supported=False,\n      ),\n      'otter': reference_model_metadata(\n\
+          \          large_model_reference='OTTER',\n          reference_model_path=(\n\
+          \              'gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_otter/'\n\
+          \          ),\n          reward_model_reference='OTTER',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_otter_pretrain/',\n\
+          \          is_supported=False,\n      ),\n      'bison': reference_model_metadata(\n\
+          \          large_model_reference='BISON',\n          reference_model_path=(\n\
+          \              'gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_bison/'\n\
+          \          ),\n          reward_model_reference='OTTER',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_otter_pretrain/',\n\
+          \          is_supported=False,  # Deprecated: Use text-bision@001 instead.\n\
+          \      ),\n      'text-bison@001': reference_model_metadata(\n         \
+          \ large_model_reference='BISON',\n          reference_model_path=(\n   \
+          \           'gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_bison/'\n\
+          \          ),\n          reward_model_reference='OTTER',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_otter_pretrain/',\n\
+          \          is_supported=True,\n      ),\n      'chat-bison@001': reference_model_metadata(\n\
+          \          large_model_reference='BISON',\n          reference_model_path=(\n\
+          \              'gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_bison/'\n\
+          \          ),\n          reward_model_reference='OTTER',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_otter_pretrain/',\n\
+          \          is_supported=True,\n      ),\n      'elephant': reference_model_metadata(\n\
+          \          large_model_reference='ELEPHANT',\n          reference_model_path=(\n\
+          \              'gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_elephant/'\n\
+          \          ),\n          reward_model_reference='OTTER',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/palm/t5x_otter_pretrain/',\n\
+          \          is_supported=False,\n      ),\n      'llama-2-7b': reference_model_metadata(\n\
+          \          large_model_reference='LLAMA_2_7B',\n          reference_model_path='gs://vertex-rlhf-restricted/pretrained_models/llama/t5x_llama_2_7b/',\n\
+          \          reward_model_reference='LLAMA_2_7B',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/llama/t5x_llama_2_7b/',\n\
+          \          is_supported=True,\n      ),\n      'llama-2-13b': reference_model_metadata(\n\
+          \          large_model_reference='LLAMA_2_13B',\n          reference_model_path='gs://vertex-rlhf-restricted/pretrained_models/llama/t5x_llama_2_13b/',\n\
+          \          reward_model_reference='LLAMA_2_13B',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/llama/t5x_llama_2_13b/',\n\
+          \          is_supported=True,\n      ),\n      'llama-2-7b-chat': reference_model_metadata(\n\
+          \          large_model_reference='LLAMA_2_7B_CHAT',\n          reference_model_path='gs://vertex-rlhf-restricted/pretrained_models/llama/t5x_llama_2_7b_chat/',\n\
+          \          reward_model_reference='LLAMA_2_7B',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/llama/t5x_llama_2_7b/',\n\
+          \          is_supported=True,\n      ),\n      'llama-2-13b-chat': reference_model_metadata(\n\
+          \          large_model_reference='LLAMA_2_13B_CHAT',\n          reference_model_path='gs://vertex-rlhf-restricted/pretrained_models/llama/t5x_llama_2_13b_chat/',\n\
+          \          reward_model_reference='LLAMA_2_13B',\n          reward_model_path='gs://vertex-rlhf-restricted/pretrained_models/llama/t5x_llama_2_13b/',\n\
+          \          is_supported=True,\n      ),\n  }\n\n  reference_model_key =\
+          \ large_model_reference.lower().replace('_', '-')\n  if reference_model_key\
+          \ not in reference_models:\n    supported_models = [\n        k for k, v\
+          \ in reference_models.items() if v.is_supported\n    ]\n    raise ValueError(\n\
+          \        f'Unknown reference model {large_model_reference}.'\n        '\
+          \ large_model_reference must be one of'\n        f' {sorted(supported_models)}.'\n\
+          \    )\n\n  reference_model = reference_models[reference_model_key]\n\n\
+          \  outputs = NamedTuple(\n      'Outputs',\n      large_model_reference=str,\n\
+          \      reference_model_path=str,\n      reward_model_reference=str,\n  \
+          \    reward_model_path=str,\n  )\n\n  return outputs(\n      large_model_reference=reference_model.large_model_reference,\n\
+          \      reference_model_path=(\n          reference_model_path or reference_model.reference_model_path\n\
+          \      ),\n      reward_model_reference=reference_model.reward_model_reference,\n\
+          \      reward_model_path=reference_model.reward_model_path,\n  )\n\n"
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-resolve-regional-endpoint:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - resolve_regional_endpoint
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef resolve_regional_endpoint(upload_location: str) -> str:\n  \"\
+          \"\"Gets the regional endpoint used to upload a model to the registry.\n\
+          \n  Args:\n    upload_location: Region where the model will be uploaded.\n\
+          \n  Returns:\n    Regional endpoint.\n  \"\"\"\n  return f'https://{upload_location}-aiplatform.googleapis.com/ui'\n\
+          \n"
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-resolve-upload-model:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - resolve_upload_model
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef resolve_upload_model(large_model_reference: str) -> bool:\n \
+          \ \"\"\"Returns whether the model should be uploaded.\"\"\"\n  supported_models\
+          \ = {'BISON'}\n  if large_model_reference in supported_models:\n    return\
+          \ True\n  return False\n\n"
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-rewardmodeltrainer:
+      container:
+        args:
+        - --type
+        - CustomJob
+        - --payload
+        - '{"display_name": "RewardModelTrainer", "job_spec": {"worker_pool_specs":
+          [{"replica_count": "1", "machine_spec": {"machine_type": "{{$.inputs.parameters[''machine_type'']}}",
+          "accelerator_type": "{{$.inputs.parameters[''accelerator_type'']}}", "accelerator_count":
+          {{$.inputs.parameters[''accelerator_count'']}}}, "container_spec": {"image_uri":
+          "{{$.inputs.parameters[''image_uri'']}}", "args": ["--train_steps={{$.inputs.parameters[''train_steps'']}}",
+          "--input_model_path={{$.inputs.parameters[''input_model_path'']}}", "--input_dataset_path={{$.inputs.parameters[''input_dataset_path'']}}",
+          "--output_model_path={{$.outputs.parameters[''output_model_path''].output_file}}",
+          "--tensorboard_metrics_path={{$.outputs.artifacts[''tensorboard_metrics''].path}}",
+          "--large_model_reference={{$.inputs.parameters[''large_model_reference'']}}",
+          "--inputs_sequence_length={{$.inputs.parameters[''inputs_sequence_length'']}}",
+          "--targets_sequence_length={{$.inputs.parameters[''targets_sequence_length'']}}",
+          "--train_split={{$.inputs.parameters[''train_split'']}}", "--batch_size={{$.inputs.parameters[''batch_size'']}}",
+          "--learning_rate_multiplier={{$.inputs.parameters[''learning_rate_multiplier'']}}",
+          "--private_bucket_subdir={{$.pipeline_task_name}}_{{$.pipeline_task_uuid}}",
+          "--lora_dim={{$.inputs.parameters[''lora_dim'']}}"]}}]}}'
+        - --project
+        - '{{$.inputs.parameters[''project'']}}'
+        - --location
+        - '{{$.inputs.parameters[''location'']}}'
+        - --gcp_resources
+        - '{{$.outputs.parameters[''gcp_resources''].output_file}}'
+        command:
+        - python3
+        - -u
+        - -m
+        - google_cloud_pipeline_components.container.v1.custom_job.launcher
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-upload-llm-model:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - upload_llm_model
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef upload_llm_model(\n    project: str,\n    location: str,\n  \
+          \  artifact_uri: dsl.Input[dsl.Artifact],\n    model_reference_name: str,\n\
+          \    model_display_name: str,\n    regional_endpoint: str,\n    model_resource_name:\
+          \ dsl.OutputPath(str),\n    gcp_resources: dsl.OutputPath(str),\n    encryption_spec_key_name:\
+          \ str = '',\n    upload_model: bool = True,\n):\n  \"\"\"Uploads LLM model.\n\
+          \n  Args:\n      project: Name of the GCP project.\n      location: Location\
+          \ for model upload and deployment.\n      artifact_uri: KFP Artifact for\
+          \ adapter.\n      model_reference_name: Large model reference name.\n  \
+          \    model_display_name: Name of the model (shown in Model Registry).\n\
+          \      regional_endpoint: Regional API endpoint.\n      encryption_spec_key_name:\
+          \ Customer-managed encryption key.\n      upload_model: Whether to upload\
+          \ the model to the Model Registry. Default\n        is ``True``. If ``False``,\
+          \ the model will not be uploaded and output\n        artifacts will contain\
+          \ empty strings.\n\n  Returns:\n      model_resource_name: Path to the created\
+          \ Model on Model Registry.\n      gcp_resources: Serialized JSON of `gcp_resources`.\n\
+          \  \"\"\"\n  import json\n  import logging\n  import os\n  import sys\n\n\
+          \  try:\n    from google_cloud_pipeline_components.container.v1.gcp_launcher\
+          \ import lro_remote_runner\n  except ImportError:\n    from google_cloud_pipeline_components.container.v1.gcp_launcher\
+          \ import lro_remote_runner\n\n  try:\n    os.makedirs(os.path.dirname(model_resource_name),\
+          \ exist_ok=True)\n\n    if not upload_model:\n      with open(model_resource_name,\
+          \ 'w') as fout:\n        fout.write('')\n      return\n\n    pipeline_labels_str\
+          \ = os.getenv('VERTEX_AI_PIPELINES_RUN_LABELS')\n    labels = json.loads(pipeline_labels_str)\
+          \ if pipeline_labels_str else {}\n    labels['google-vertex-llm-tuning-base-model-id']\
+          \ = (\n        model_reference_name.replace('@', '-')\n    )\n\n    model_upload_payload\
+          \ = {\n        'model': {\n            'displayName': model_display_name,\n\
+          \            'largeModelReference': {'name': model_reference_name},\n  \
+          \          'labels': labels,\n            'generatedModelSource': {'genie_source':\
+          \ {'base_model_uri': ''}},\n            'artifactUri': artifact_uri.uri,\n\
+          \        }\n    }\n    if encryption_spec_key_name:\n      model_upload_payload['model']['encryption_spec']\
+          \ = {\n          'kms_key_name': encryption_spec_key_name\n      }\n\n \
+          \   regional_endpoint = regional_endpoint.rstrip('/')\n    upload_model_uri\
+          \ = (\n        f'{regional_endpoint}/projects/{project}/locations/{location}/models:'\n\
+          \        'upload'\n    )\n\n    remote_runner = lro_remote_runner.LroRemoteRunner(location)\n\
+          \    upload_model_lro = remote_runner.create_lro(\n        upload_model_uri,\n\
+          \        json.dumps(model_upload_payload),\n        gcp_resources,\n   \
+          \ )\n    upload_model_lro = remote_runner.poll_lro(lro=upload_model_lro)\n\
+          \    model_resource = upload_model_lro['response']['model']\n    model_version_id\
+          \ = upload_model_lro['response'].get(\n        'model_version_id'\n    )\
+          \ or upload_model_lro['response'].get('modelVersionId')\n    if model_version_id:\n\
+          \      model_resource += f'@{model_version_id}'\n\n    with open(model_resource_name,\
+          \ 'w') as fout:\n      fout.write(model_resource)\n\n  except Exception\
+          \ as e:  # pylint: disable=broad-exception-caught\n    if isinstance(e,\
+          \ ValueError):\n      raise\n    logging.exception(str(e))\n    sys.exit(13)\n\
+          \n"
+        env:
+        - name: VERTEX_AI_PIPELINES_RUN_LABELS
+          value: '{"tune-type": "rlhf"}'
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-upload-tensorboard-metrics:
+      container:
+        args:
+        - '{{$.inputs.parameters[''tensorboard_resource_id'']}}'
+        - '{{$.inputs.artifacts[''metrics_directory''].path}}'
+        - '{{$.inputs.parameters[''experiment_name'']}}'
+        - '{{$.outputs.parameters[''tensorboard_uri''].output_file}}'
+        command:
+        - bash
+        - -c
+        - "\nset -e -x\nTENSORBOARD_RESOURCE_ID=\"$0\"\nMETRICS_DIRECTORY_URI=\"$1\"\
+          \nEXPERIMENT_NAME=\"$2\"\nTENSORBOARD_URI=\"$3\"\n\nmkdir -p \"$(dirname\
+          \ ${TENSORBOARD_URI})\"\nif [ -z \"${TENSORBOARD_RESOURCE_ID}\" ];\nthen\n\
+          \  echo \"TensorBoard ID is not set. Skip uploading the TensorBoard.\"\n\
+          \  echo -n \"\" > \"${TENSORBOARD_URI}\"\n  exit 0\nfi\n\nif [ -z \"${METRICS_DIRECTORY_URI}\"\
+          \ ]; then\n  echo \"Metrics directory uri is not set.\"\n  exit 1\nelif\
+          \ [ -z \"${EXPERIMENT_NAME}\" ]; then\n  echo \"Experiment name is not set.\"\
+          \n  exit 1\nelif [ -z \"${TENSORBOARD_URI}\" ]; then\n  echo \"TensorBoard\
+          \ URI is not set.\"\n  exit 1\nfi\n\ncase \"${METRICS_DIRECTORY_URI}\" in\n\
+          \  \"gs://\"*) ;;\n  \"/gcs/\"*)\n    METRICS_DIRECTORY_URI=${METRICS_DIRECTORY_URI/\"\
+          /gcs/\"/\"gs://\"}\n    echo \"Replaced /gcs/ path with ${METRICS_DIRECTORY_URI}\"\
+          \n    ;;\n  *)\n    echo \"Invalid metrics directory uri. Metrics directory\
+          \ uri must start with gs:// or /gcs/.\"\n    exit 1\n    ;;\nesac\n\nif\
+          \ [[ \"${TENSORBOARD_RESOURCE_ID}\" =~ ^projects/[^/]+/locations/[^/]+/tensorboards/[0-9]+$\
+          \ ]]; then\n  echo \"Split tensorboard resource id\"\n  TENSORBOARD_RESOURCE_ARR=(${TENSORBOARD_RESOURCE_ID//\\\
+          // })\n  PROJECT=${TENSORBOARD_RESOURCE_ARR[1]}\n  LOCATION=${TENSORBOARD_RESOURCE_ARR[3]}\n\
+          \  TENSORBOARD_ID=${TENSORBOARD_RESOURCE_ARR[5]}\nelse\n  echo '[ERROR]:\
+          \ Invalid format of tensorboard_resource_id. It must be a string with format\
+          \ projects/${PROJECT_NUMBER}/locations/${LOCATION}/tensorboards/${TENSORBOARD_ID}'\n\
+          \  exit 1\nfi\n\nset +e\n\n/opt/conda/bin/tb-gcp-uploader --tensorboard_resource_name\
+          \ \\\n  \"${TENSORBOARD_RESOURCE_ID}\" \\\n  --logdir=\"${METRICS_DIRECTORY_URI}\"\
+          \ \\\n  --experiment_name=\"${EXPERIMENT_NAME}\" \\\n  --one_shot=True\n\
+          \nif [ $? -ne 0 ]; then\n  exit 13\nfi\n\nset -e\n\nweb_server_uri=\"tensorboard.googleusercontent.com\"\
+          \ntensorboard_resource_name_uri=\"projects+${PROJECT}+locations+${LOCATION}+tensorboards+${TENSORBOARD_ID}+experiments+${EXPERIMENT_NAME}\"\
+          \necho -n \"https://${LOCATION}.${web_server_uri}/experiment/${tensorboard_resource_name_uri}\"\
+          \ > \"${TENSORBOARD_URI}\"\n"
+        image: us-docker.pkg.dev/vertex-ai/training/tf-cpu.2-11:latest
+    exec-upload-tensorboard-metrics-2:
+      container:
+        args:
+        - '{{$.inputs.parameters[''tensorboard_resource_id'']}}'
+        - '{{$.inputs.artifacts[''metrics_directory''].path}}'
+        - '{{$.inputs.parameters[''experiment_name'']}}'
+        - '{{$.outputs.parameters[''tensorboard_uri''].output_file}}'
+        command:
+        - bash
+        - -c
+        - "\nset -e -x\nTENSORBOARD_RESOURCE_ID=\"$0\"\nMETRICS_DIRECTORY_URI=\"$1\"\
+          \nEXPERIMENT_NAME=\"$2\"\nTENSORBOARD_URI=\"$3\"\n\nmkdir -p \"$(dirname\
+          \ ${TENSORBOARD_URI})\"\nif [ -z \"${TENSORBOARD_RESOURCE_ID}\" ];\nthen\n\
+          \  echo \"TensorBoard ID is not set. Skip uploading the TensorBoard.\"\n\
+          \  echo -n \"\" > \"${TENSORBOARD_URI}\"\n  exit 0\nfi\n\nif [ -z \"${METRICS_DIRECTORY_URI}\"\
+          \ ]; then\n  echo \"Metrics directory uri is not set.\"\n  exit 1\nelif\
+          \ [ -z \"${EXPERIMENT_NAME}\" ]; then\n  echo \"Experiment name is not set.\"\
+          \n  exit 1\nelif [ -z \"${TENSORBOARD_URI}\" ]; then\n  echo \"TensorBoard\
+          \ URI is not set.\"\n  exit 1\nfi\n\ncase \"${METRICS_DIRECTORY_URI}\" in\n\
+          \  \"gs://\"*) ;;\n  \"/gcs/\"*)\n    METRICS_DIRECTORY_URI=${METRICS_DIRECTORY_URI/\"\
+          /gcs/\"/\"gs://\"}\n    echo \"Replaced /gcs/ path with ${METRICS_DIRECTORY_URI}\"\
+          \n    ;;\n  *)\n    echo \"Invalid metrics directory uri. Metrics directory\
+          \ uri must start with gs:// or /gcs/.\"\n    exit 1\n    ;;\nesac\n\nif\
+          \ [[ \"${TENSORBOARD_RESOURCE_ID}\" =~ ^projects/[^/]+/locations/[^/]+/tensorboards/[0-9]+$\
+          \ ]]; then\n  echo \"Split tensorboard resource id\"\n  TENSORBOARD_RESOURCE_ARR=(${TENSORBOARD_RESOURCE_ID//\\\
+          // })\n  PROJECT=${TENSORBOARD_RESOURCE_ARR[1]}\n  LOCATION=${TENSORBOARD_RESOURCE_ARR[3]}\n\
+          \  TENSORBOARD_ID=${TENSORBOARD_RESOURCE_ARR[5]}\nelse\n  echo '[ERROR]:\
+          \ Invalid format of tensorboard_resource_id. It must be a string with format\
+          \ projects/${PROJECT_NUMBER}/locations/${LOCATION}/tensorboards/${TENSORBOARD_ID}'\n\
+          \  exit 1\nfi\n\nset +e\n\n/opt/conda/bin/tb-gcp-uploader --tensorboard_resource_name\
+          \ \\\n  \"${TENSORBOARD_RESOURCE_ID}\" \\\n  --logdir=\"${METRICS_DIRECTORY_URI}\"\
+          \ \\\n  --experiment_name=\"${EXPERIMENT_NAME}\" \\\n  --one_shot=True\n\
+          \nif [ $? -ne 0 ]; then\n  exit 13\nfi\n\nset -e\n\nweb_server_uri=\"tensorboard.googleusercontent.com\"\
+          \ntensorboard_resource_name_uri=\"projects+${PROJECT}+locations+${LOCATION}+tensorboards+${TENSORBOARD_ID}+experiments+${EXPERIMENT_NAME}\"\
+          \necho -n \"https://${LOCATION}.${web_server_uri}/experiment/${tensorboard_resource_name_uri}\"\
+          \ > \"${TENSORBOARD_URI}\"\n"
+        image: us-docker.pkg.dev/vertex-ai/training/tf-cpu.2-11:latest
+    exec-value-exists:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - value_exists
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef value_exists(value: Optional[str] = None) -> bool:\n  \"\"\"\
+          Returns whether a runtime parameter was provided.\n\n  Args:\n    value:\
+          \ That might have been provided.\n\n  Returns:\n    Whether the string is\
+          \ not None and non-empty.\n  \"\"\"\n  if not value:\n    return False\n\
+          \  return True\n\n"
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+    exec-value-exists-2:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - value_exists
+        command:
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef value_exists(value: Optional[str] = None) -> bool:\n  \"\"\"\
+          Returns whether a runtime parameter was provided.\n\n  Args:\n    value:\
+          \ That might have been provided.\n\n  Returns:\n    Whether the string is\
+          \ not None and non-empty.\n  \"\"\"\n  if not value:\n    return False\n\
+          \  return True\n\n"
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.5.0
+pipelineInfo:
+  description: Performs reinforcement learning from human feedback.
+  name: rlhf-train-template
+root:
+  dag:
+    outputs:
+      parameters:
+        endpoint_resource_name:
+          valueFromParameter:
+            outputParameterKey: endpoint_resource_name
+            producerSubtask: create-endpoint-and-deploy-model
+        model_resource_name:
+          valueFromParameter:
+            outputParameterKey: model_resource_name
+            producerSubtask: upload-llm-model
+    tasks:
+      condition-1:
+        componentRef:
+          name: comp-condition-1
+        dependentTasks:
+        - rewardmodeltrainer
+        - value-exists
+        inputs:
+          artifacts:
+            pipelinechannel--rewardmodeltrainer-tensorboard_metrics:
+              taskOutputArtifact:
+                outputArtifactKey: tensorboard_metrics
+                producerTask: rewardmodeltrainer
+          parameters:
+            pipelinechannel--tensorboard_resource_id:
+              componentInputParameter: tensorboard_resource_id
+            pipelinechannel--value-exists-Output:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: value-exists
+        taskInfo:
+          name: Upload Reward Model Tensorboard Metrics
+        triggerPolicy:
+          condition: inputs.parameter_values['pipelinechannel--value-exists-Output']
+            == true
+      condition-2:
+        componentRef:
+          name: comp-condition-2
+        dependentTasks:
+        - reinforcer
+        - value-exists
+        inputs:
+          artifacts:
+            pipelinechannel--reinforcer-tensorboard_metrics:
+              taskOutputArtifact:
+                outputArtifactKey: tensorboard_metrics
+                producerTask: reinforcer
+          parameters:
+            pipelinechannel--tensorboard_resource_id:
+              componentInputParameter: tensorboard_resource_id
+            pipelinechannel--value-exists-Output:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: value-exists
+        taskInfo:
+          name: Upload Reinforcement Learning Tensorboard Metrics
+        triggerPolicy:
+          condition: inputs.parameter_values['pipelinechannel--value-exists-Output']
+            == true
+      condition-3:
+        componentRef:
+          name: comp-condition-3
+        dependentTasks:
+        - reinforcer
+        - value-exists-2
+        inputs:
+          parameters:
+            pipelinechannel--eval_dataset:
+              componentInputParameter: eval_dataset
+            pipelinechannel--instruction:
+              componentInputParameter: instruction
+            pipelinechannel--large_model_reference:
+              componentInputParameter: large_model_reference
+            pipelinechannel--location:
+              componentInputParameter: location
+            pipelinechannel--project:
+              componentInputParameter: project
+            pipelinechannel--prompt_sequence_length:
+              componentInputParameter: prompt_sequence_length
+            pipelinechannel--reinforcer-output_model_path:
+              taskOutputParameter:
+                outputParameterKey: output_model_path
+                producerTask: reinforcer
+            pipelinechannel--target_sequence_length:
+              componentInputParameter: target_sequence_length
+            pipelinechannel--value-exists-2-Output:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: value-exists-2
+        taskInfo:
+          name: Perform Inference
+        triggerPolicy:
+          condition: inputs.parameter_values['pipelinechannel--value-exists-2-Output']
+            == true
+      convert-to-delimited-string:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-convert-to-delimited-string
+        inputs:
+          parameters:
+            items:
+              runtimeValue:
+                constant:
+                - candidate_0
+                - candidate_1
+        taskInfo:
+          name: convert-to-delimited-string
+      create-endpoint-and-deploy-model:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-create-endpoint-and-deploy-model
+        dependentTasks:
+        - resolve-deploy-model
+        - resolve-model-display-name
+        - resolve-regional-endpoint
+        - upload-llm-model
+        inputs:
+          parameters:
+            deploy_model:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: resolve-deploy-model
+            display_name:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: resolve-model-display-name
+            location:
+              runtimeValue:
+                constant: us-central1
+            model_resource_name:
+              taskOutputParameter:
+                outputParameterKey: model_resource_name
+                producerTask: upload-llm-model
+            project:
+              runtimeValue:
+                constant: '{{$.pipeline_google_cloud_project_id}}'
+            regional_endpoint:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: resolve-regional-endpoint
+        taskInfo:
+          name: Deploy Model
+      importer:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-importer
+        dependentTasks:
+        - reinforcer
+        inputs:
+          parameters:
+            uri:
+              taskOutputParameter:
+                outputParameterKey: output_adapter_path
+                producerTask: reinforcer
+        taskInfo:
+          name: Import Tuned Adapter
+      privatetextcomparisonimporter:
+        cachingOptions: {}
+        componentRef:
+          name: comp-privatetextcomparisonimporter
+        dependentTasks:
+        - convert-to-delimited-string
+        - resolve-image-uri-2
+        - resolve-reference-model-metadata
+        inputs:
+          parameters:
+            choice_field_name:
+              runtimeValue:
+                constant: choice
+            comma_separated_candidates_field_names:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: convert-to-delimited-string
+            image_uri:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: resolve-image-uri-2
+            input_text:
+              componentInputParameter: preference_dataset
+            inputs_field_name:
+              runtimeValue:
+                constant: input_text
+            instruction:
+              componentInputParameter: instruction
+            large_model_reference:
+              taskOutputParameter:
+                outputParameterKey: reward_model_reference
+                producerTask: resolve-reference-model-metadata
+            location:
+              componentInputParameter: location
+            project:
+              componentInputParameter: project
+            split:
+              runtimeValue:
+                constant: train
+        taskInfo:
+          name: Import Preference Dataset
+      privatetextimporter:
+        cachingOptions: {}
+        componentRef:
+          name: comp-privatetextimporter
+        dependentTasks:
+        - resolve-image-uri
+        - resolve-reference-model-metadata
+        inputs:
+          parameters:
+            image_uri:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: resolve-image-uri
+            input_text:
+              componentInputParameter: prompt_dataset
+            inputs_field_name:
+              runtimeValue:
+                constant: input_text
+            instruction:
+              componentInputParameter: instruction
+            large_model_reference:
+              taskOutputParameter:
+                outputParameterKey: large_model_reference
+                producerTask: resolve-reference-model-metadata
+            location:
+              componentInputParameter: location
+            output_split_name:
+              runtimeValue:
+                constant: train
+            project:
+              componentInputParameter: project
+            targets_field_name:
+              runtimeValue:
+                constant: non_existent_targets_field_name
+        taskInfo:
+          name: Import Prompt Dataset
+      reinforcer:
+        cachingOptions: {}
+        componentRef:
+          name: comp-reinforcer
+        dependentTasks:
+        - privatetextimporter
+        - resolve-image-uri-4
+        - resolve-machine-spec
+        - resolve-reference-model-metadata
+        - rewardmodeltrainer
+        inputs:
+          parameters:
+            accelerator_count:
+              taskOutputParameter:
+                outputParameterKey: accelerator_count
+                producerTask: resolve-machine-spec
+            accelerator_type:
+              taskOutputParameter:
+                outputParameterKey: accelerator_type
+                producerTask: resolve-machine-spec
+            batch_size:
+              runtimeValue:
+                constant: 64.0
+            image_uri:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: resolve-image-uri-4
+            input_dataset_path:
+              taskOutputParameter:
+                outputParameterKey: imported_data_path
+                producerTask: privatetextimporter
+            input_reference_model_path:
+              taskOutputParameter:
+                outputParameterKey: reference_model_path
+                producerTask: resolve-reference-model-metadata
+            input_reward_model_path:
+              taskOutputParameter:
+                outputParameterKey: output_model_path
+                producerTask: rewardmodeltrainer
+            inputs_sequence_length:
+              componentInputParameter: prompt_sequence_length
+            kl_coeff:
+              componentInputParameter: kl_coeff
+            large_model_reference:
+              taskOutputParameter:
+                outputParameterKey: large_model_reference
+                producerTask: resolve-reference-model-metadata
+            learning_rate_multiplier:
+              componentInputParameter: reinforcement_learning_rate_multiplier
+            location:
+              componentInputParameter: location
+            lora_dim:
+              runtimeValue:
+                constant: 1.0
+            machine_type:
+              taskOutputParameter:
+                outputParameterKey: machine_type
+                producerTask: resolve-machine-spec
+            project:
+              componentInputParameter: project
+            reward_model_reference:
+              taskOutputParameter:
+                outputParameterKey: reward_model_reference
+                producerTask: resolve-reference-model-metadata
+            targets_sequence_length:
+              componentInputParameter: target_sequence_length
+            train_steps:
+              componentInputParameter: reinforcement_learning_train_steps
+        taskInfo:
+          name: Reinforcer
+      resolve-deploy-model:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-resolve-deploy-model
+        dependentTasks:
+        - resolve-reference-model-metadata
+        inputs:
+          parameters:
+            deploy_model:
+              componentInputParameter: deploy_model
+            large_model_reference:
+              taskOutputParameter:
+                outputParameterKey: large_model_reference
+                producerTask: resolve-reference-model-metadata
+        taskInfo:
+          name: Resolve Deploy Model
+      resolve-image-uri:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-resolve-image-uri
+        inputs:
+          parameters:
+            artifact_registry:
+              runtimeValue:
+                constant: rlhf
+            image_name:
+              runtimeValue:
+                constant: text_importer
+            image_name_prefix:
+              runtimeValue:
+                constant: rlhf_
+            location:
+              runtimeValue:
+                constant: us
+            project:
+              runtimeValue:
+                constant: vertex-ai-restricted
+            tag:
+              runtimeValue:
+                constant: 20231010_1107_RC00
+        taskInfo:
+          name: Resolve Prompt Dataset Image URI
+      resolve-image-uri-2:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-resolve-image-uri-2
+        inputs:
+          parameters:
+            artifact_registry:
+              runtimeValue:
+                constant: rlhf
+            image_name:
+              runtimeValue:
+                constant: text_comparison_importer
+            image_name_prefix:
+              runtimeValue:
+                constant: rlhf_
+            location:
+              runtimeValue:
+                constant: us
+            project:
+              runtimeValue:
+                constant: vertex-ai-restricted
+            tag:
+              runtimeValue:
+                constant: 20231010_1107_RC00
+        taskInfo:
+          name: Resolve Preference Dataset Image URI
+      resolve-image-uri-3:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-resolve-image-uri-3
+        dependentTasks:
+        - resolve-machine-spec
+        inputs:
+          parameters:
+            accelerator_count:
+              taskOutputParameter:
+                outputParameterKey: accelerator_count
+                producerTask: resolve-machine-spec
+            accelerator_type:
+              taskOutputParameter:
+                outputParameterKey: accelerator_type
+                producerTask: resolve-machine-spec
+            artifact_registry:
+              runtimeValue:
+                constant: rlhf
+            image_name:
+              runtimeValue:
+                constant: reward_model
+            image_name_prefix:
+              runtimeValue:
+                constant: rlhf_
+            location:
+              runtimeValue:
+                constant: us
+            project:
+              runtimeValue:
+                constant: vertex-ai-restricted
+            tag:
+              runtimeValue:
+                constant: 20231010_1107_RC00
+        taskInfo:
+          name: Resolve Reward Model Image URI
+      resolve-image-uri-4:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-resolve-image-uri-4
+        dependentTasks:
+        - resolve-machine-spec
+        inputs:
+          parameters:
+            accelerator_count:
+              taskOutputParameter:
+                outputParameterKey: accelerator_count
+                producerTask: resolve-machine-spec
+            accelerator_type:
+              taskOutputParameter:
+                outputParameterKey: accelerator_type
+                producerTask: resolve-machine-spec
+            artifact_registry:
+              runtimeValue:
+                constant: rlhf
+            image_name:
+              runtimeValue:
+                constant: reinforcer
+            image_name_prefix:
+              runtimeValue:
+                constant: rlhf_
+            location:
+              runtimeValue:
+                constant: us
+            project:
+              runtimeValue:
+                constant: vertex-ai-restricted
+            tag:
+              runtimeValue:
+                constant: 20231010_1107_RC00
+        taskInfo:
+          name: Resolve Reinforcer Image URI
+      resolve-machine-spec:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-resolve-machine-spec
+        inputs:
+          parameters:
+            location:
+              componentInputParameter: location
+            use_test_spec:
+              runtimeValue:
+                constant: false
+        taskInfo:
+          name: Resolve Machine Spec
+      resolve-model-display-name:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-resolve-model-display-name
+        dependentTasks:
+        - resolve-reference-model-metadata
+        inputs:
+          parameters:
+            large_model_reference:
+              taskOutputParameter:
+                outputParameterKey: large_model_reference
+                producerTask: resolve-reference-model-metadata
+            model_display_name:
+              componentInputParameter: model_display_name
+        taskInfo:
+          name: Resolve Model Display Name
+      resolve-reference-model-metadata:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-resolve-reference-model-metadata
+        inputs:
+          parameters:
+            large_model_reference:
+              componentInputParameter: large_model_reference
+        taskInfo:
+          name: Resolve Model Metadata
+      resolve-regional-endpoint:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-resolve-regional-endpoint
+        inputs:
+          parameters:
+            upload_location:
+              runtimeValue:
+                constant: us-central1
+        taskInfo:
+          name: Resolve Regional Endpoint
+      resolve-upload-model:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-resolve-upload-model
+        dependentTasks:
+        - resolve-reference-model-metadata
+        inputs:
+          parameters:
+            large_model_reference:
+              taskOutputParameter:
+                outputParameterKey: large_model_reference
+                producerTask: resolve-reference-model-metadata
+        taskInfo:
+          name: Resolve Upload Model
+      rewardmodeltrainer:
+        cachingOptions: {}
+        componentRef:
+          name: comp-rewardmodeltrainer
+        dependentTasks:
+        - privatetextcomparisonimporter
+        - resolve-image-uri-3
+        - resolve-machine-spec
+        - resolve-reference-model-metadata
+        inputs:
+          parameters:
+            accelerator_count:
+              taskOutputParameter:
+                outputParameterKey: accelerator_count
+                producerTask: resolve-machine-spec
+            accelerator_type:
+              taskOutputParameter:
+                outputParameterKey: accelerator_type
+                producerTask: resolve-machine-spec
+            batch_size:
+              runtimeValue:
+                constant: 64.0
+            image_uri:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: resolve-image-uri-3
+            input_dataset_path:
+              taskOutputParameter:
+                outputParameterKey: output_dataset_path
+                producerTask: privatetextcomparisonimporter
+            input_model_path:
+              taskOutputParameter:
+                outputParameterKey: reward_model_path
+                producerTask: resolve-reference-model-metadata
+            inputs_sequence_length:
+              componentInputParameter: prompt_sequence_length
+            large_model_reference:
+              taskOutputParameter:
+                outputParameterKey: reward_model_reference
+                producerTask: resolve-reference-model-metadata
+            learning_rate_multiplier:
+              componentInputParameter: reward_model_learning_rate_multiplier
+            location:
+              componentInputParameter: location
+            lora_dim:
+              runtimeValue:
+                constant: 0.0
+            machine_type:
+              taskOutputParameter:
+                outputParameterKey: machine_type
+                producerTask: resolve-machine-spec
+            project:
+              componentInputParameter: project
+            targets_sequence_length:
+              componentInputParameter: target_sequence_length
+            train_steps:
+              componentInputParameter: reward_model_train_steps
+        taskInfo:
+          name: Reward Model Trainer
+      upload-llm-model:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-upload-llm-model
+        dependentTasks:
+        - importer
+        - resolve-model-display-name
+        - resolve-regional-endpoint
+        - resolve-upload-model
+        inputs:
+          artifacts:
+            artifact_uri:
+              taskOutputArtifact:
+                outputArtifactKey: artifact
+                producerTask: importer
+          parameters:
+            location:
+              runtimeValue:
+                constant: us-central1
+            model_display_name:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: resolve-model-display-name
+            model_reference_name:
+              runtimeValue:
+                constant: text-bison@001
+            project:
+              runtimeValue:
+                constant: '{{$.pipeline_google_cloud_project_id}}'
+            regional_endpoint:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: resolve-regional-endpoint
+            upload_model:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: resolve-upload-model
+        taskInfo:
+          name: Upload Model
+      value-exists:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-value-exists
+        inputs:
+          parameters:
+            value:
+              componentInputParameter: tensorboard_resource_id
+        taskInfo:
+          name: Resolve Tensorboard Resource ID
+      value-exists-2:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-value-exists-2
+        inputs:
+          parameters:
+            value:
+              componentInputParameter: eval_dataset
+        taskInfo:
+          name: Resolve Inference Dataset
+  inputDefinitions:
+    parameters:
+      deploy_model:
+        defaultValue: true
+        description: Whether to deploy the model to an endpoint in `us-central1`.
+          Default is True.
+        isOptional: true
+        parameterType: BOOLEAN
+      eval_dataset:
+        description: Optional Cloud storage path to an evaluation dataset. If provided,
+          inference will be performed on this dataset after training. The dataset
+          format is jsonl. Each example in the dataset must contain a field `input_text`
+          that contains the prompt.
+        isOptional: true
+        parameterType: STRING
+      instruction:
+        description: This field lets the model know what task it needs to perform.
+          Base models have been trained over a large set of varied instructions. You
+          can give a simple and intuitive description of the task and the model will
+          follow it, e.g. "Classify this movie review as positive or negative" or
+          "Translate this sentence to Danish". Do not specify this if your dataset
+          already prepends the instruction to the inputs field.
+        isOptional: true
+        parameterType: STRING
+      kl_coeff:
+        defaultValue: 0.1
+        description: Coefficient for KL penalty. This regularizes the policy model
+          and penalizes if it diverges from its initial distribution. If set to 0,
+          the reference language model is not loaded into memory. Default value is
+          0.1.
+        isOptional: true
+        parameterType: NUMBER_DOUBLE
+      large_model_reference:
+        description: Name of the base model. Supported values are `text-bison@001`,
+          `t5-small`, `t5-large`, `t5-xl` and `t5-xxl`. `text-bison@001` and `t5-small`
+          are supported in `us-central1` and `europe-west4`. `t5-large`, `t5-xl` and
+          `t5-xxl` are only supported in `europe-west4`.
+        parameterType: STRING
+      location:
+        defaultValue: '{{$.pipeline_google_cloud_location}}'
+        description: Location used to run custom jobs. If not specified the location
+          used to run the pipeline will be used.
+        isOptional: true
+        parameterType: STRING
+      model_display_name:
+        description: Name of the fine-tuned model shown in the Model Registry. If
+          not provided, a default name will be created.
+        isOptional: true
+        parameterType: STRING
+      preference_dataset:
+        description: 'Cloud storage path to a human preference dataset used to train
+          a reward model. The dataset format is jsonl. Each example in the dataset
+          must contain the following fields: `input_text` that contains the prompt,
+          `candidate_0` and `candidate_1` that contain candidate responses, `choice`
+          that specifies the preferred candidate.'
+        parameterType: STRING
+      project:
+        defaultValue: '{{$.pipeline_google_cloud_project_id}}'
+        description: Project used to run custom jobs. If not specified the project
+          used to run the pipeline will be used.
+        isOptional: true
+        parameterType: STRING
+      prompt_dataset:
+        description: Cloud storage path to an unlabled prompt dataset used for reinforcement
+          learning. The dataset format is jsonl. Each example in the dataset must
+          have an `input_text` field that contains the prompt.
+        parameterType: STRING
+      prompt_sequence_length:
+        defaultValue: 512.0
+        description: Maximum tokenized sequence length for input text. Higher values
+          increase memory overhead. This value should be at most 8192. Default value
+          is 512.
+        isOptional: true
+        parameterType: NUMBER_INTEGER
+      reinforcement_learning_rate_multiplier:
+        defaultValue: 1.0
+        description: Constant used to adjust the base learning rate used during reinforcement
+          learning. Multiply by a number > 1 to increase the magnitude of updates
+          applied at each training step or multiply by a number < 1 to decrease the
+          magnitude of updates. Default value is 1.0.
+        isOptional: true
+        parameterType: NUMBER_DOUBLE
+      reinforcement_learning_train_steps:
+        defaultValue: 1000.0
+        description: Number of reinforcement learning steps to perform when tuning
+          a base model. Default value is 1000.
+        isOptional: true
+        parameterType: NUMBER_INTEGER
+      reward_model_learning_rate_multiplier:
+        defaultValue: 1.0
+        description: Constant used to adjust the base learning rate used when training
+          a reward model. Multiply by a number > 1 to increase the magnitude of updates
+          applied at each training step or multiply by a number < 1 to decrease the
+          magnitude of updates. Default value is 1.0.
+        isOptional: true
+        parameterType: NUMBER_DOUBLE
+      reward_model_train_steps:
+        defaultValue: 1000.0
+        description: Number of steps to use when training a reward model. Default
+          value is 1000.
+        isOptional: true
+        parameterType: NUMBER_INTEGER
+      target_sequence_length:
+        defaultValue: 64.0
+        description: ' Maximum tokenized sequence length for target text. Higher values
+          increase memory overhead. This value should be at most 1024. Default value
+          is 64.'
+        isOptional: true
+        parameterType: NUMBER_INTEGER
+      tensorboard_resource_id:
+        description: Optional tensorboard resource id in format `projects/{project_number}/locations/{location}/tensorboards/{tensorboard_id}`.
+          If provided, tensorboard metrics will be uploaded to this location.
+        isOptional: true
+        parameterType: STRING
+  outputDefinitions:
+    parameters:
+      endpoint_resource_name:
+        description: Path the Online Prediction Endpoint. This will be an empty string
+          if the model was not deployed.
+        parameterType: STRING
+      model_resource_name:
+        description: Path to the model uploaded to the Model Registry. This will be
+          an empty string if the model was not deployed.
+        parameterType: STRING
+schemaVersion: 2.1.0
+sdkVersion: kfp-2.3.0

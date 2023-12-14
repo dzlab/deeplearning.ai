@@ -14,3 +14,4 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Vector Databases: from Embeddings to Applications](VectorDatabasesfromEmbeddingstoApplications)
 - [Quality and Safety for LLM Applications](QualityandSafetyforLLMApplications)
 - [Building and Evaluating Advanced RAG](BuildingandEvaluatingAdvancedRAG)
+- [Reinforcement Learning from Human Feedback](ReinforcementLearningfromHumanFeedback)
