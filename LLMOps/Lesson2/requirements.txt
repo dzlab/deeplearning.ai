@@ -1,0 +1,36 @@
+# requirements file
+# note which revision of python, for example 3.9.6
+# in this file, insert all the pip install needs, include revision
+
+google-ai-generativelanguage==0.2.0
+google-api-core==2.11.0
+google-api-python-client==2.94.0
+google-auth==2.22.0
+google-auth-httplib2==0.1.0
+google-auth-oauthlib
+google-cloud-aiplatform==1.39.0
+google-cloud-bigquery==3.11.0
+google-cloud-core==2.3.2
+google-cloud-resource-manager==1.10.1
+google-cloud-storage==2.9.0
+google-crc32c==1.5.0
+google-generativeai==0.1.0
+google-resumable-media==2.5.0
+googleapis-common-protos==1.59.0
+kfp==2.4.0
+vertexai==0.0.1
+python-dotenv==1.0.0
+scikit-learn==1.2.2
+mplcursors==0.5.2
+ipympl==0.9.3
+tqdm==4.65.0
+protobuf==3.19.6
+ipython==8.14.0
+pandas==2.0.2
+pyarrow==12.0.1
+
+
+
+
+
+

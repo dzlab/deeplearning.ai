@@ -16,4 +16,4 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Building and Evaluating Advanced RAG](BuildingandEvaluatingAdvancedRAG)
 - [Reinforcement Learning from Human Feedback](ReinforcementLearningFromHumanFeedback)
 - [Advanced Retrieval for AI with Chroma](AdvancedRetrievalforAIwithChroma)
-
+- [LLMOps](LLMOps)
