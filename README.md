@@ -17,3 +17,4 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Reinforcement Learning from Human Feedback](ReinforcementLearningFromHumanFeedback)
 - [Advanced Retrieval for AI with Chroma](AdvancedRetrievalforAIwithChroma)
 - [LLMOps](LLMOps)
+- [Automated Testing for LLMOps](AutomatedTestingforLLMOps)
