@@ -1,0 +1,8 @@
+jobs:
+  run-hello-world:  # This is the name of the job - feel free to change it to better match what you're trying to do!
+    docker:
+      - image: cimg/python:3.10.5
+    steps:
+      - run:
+          name: Print Hello World
+          command: echo "Hello World!"
