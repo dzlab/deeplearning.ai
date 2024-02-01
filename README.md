@@ -18,3 +18,4 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Advanced Retrieval for AI with Chroma](AdvancedRetrievalforAIwithChroma)
 - [LLMOps](LLMOps)
 - [Automated Testing for LLMOps](AutomatedTestingforLLMOps)
+- [Building Applications with Vector Databases](BuildingApplicationswithVectorDatabases)
