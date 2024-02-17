@@ -1,0 +1,9 @@
+#There is this one too: 
+
+#OutputBucketName= os.environ['S3_BUCKETNAME_TEXT'],  # specify the output bucket
+
+#import os
+
+#os.environ['LEARNER_S3_BUCKETNAME_TEXT'] = 'dlai-learner-bucket-6723reufiwdsyv'
+#os.environ['LEARNER_S3_BUCKETNAME_AUDIO'] = 'dlai-learner-bucket-6723reufiwdsyv-audio'
+#os.environ['LAMBDA_LAYER_VERSION_ARN'] = 'arn:aws:lambda:us-west-2:157708787616:layer:dlai-bedrock-jinja-layer:1'

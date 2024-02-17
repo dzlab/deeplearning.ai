@@ -1,0 +1,22 @@
+# Testing note to setup CFN:
+# Create a bucket to be used in this lessons.
+# Note the bucket name must be globally unique!
+
+#!aws s3api create-bucket --bucket dlai-bucket-test-logging-87gadiubasdiuh
+
+# Add the name of the bucket here               |
+#                                              \ /
+#                                               v
+
+# Also create a role with this CloudFormation, and put the ARN below: 
+
+# !aws cloudformation create-stack --stack-name DLAITestingIAMRoleStack --template-body file://cfn_role.yaml --capabilities CAPABILITY_NAMED_IAM
+
+# !aws cloudformation describe-stacks --stack-name DLAITestingIAMRoleStack
+
+
+
+
+#import os
+#os.environ['LOGGING_ROLE_ARN'] = 'arn:aws:iam::157708787616:role/dlai-amazon-bedrock-logging-role'
+#os.environ['LOGGING_BUCKETNAME'] = 'dlai-rec-logging-bucket-6723reufiwdsyv'

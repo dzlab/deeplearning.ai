@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation Template to Create an IAM Role with a Trust Relationship and Permissions Policy'
+
+Resources:
+  MyIAMRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Principal:
+              Service: 'bedrock.amazonaws.com'
+            Action: 'sts:AssumeRole'
+            Condition:
+              StringEquals:
+                'aws:SourceAccount': !Ref 'AWS::AccountId'
+              ArnLike:
+                'aws:SourceArn': !Sub 'arn:aws:bedrock:us-west-2:${AWS::AccountId}:*'
+
+  MyRolePolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: 'MyIAMRolePolicy'
+      Roles:
+        - !Ref MyIAMRole
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Action:
+              - 'logs:CreateLogStream'
+              - 'logs:PutLogEvents'
+            Resource: !Sub 'arn:aws:logs:us-west-2:${AWS::AccountId}:log-group:/my/amazon/bedrock/logs:log-stream:aws/bedrock/modelinvocations'
+
+Outputs:
+  RoleArn:
+    Description: 'The ARN of the created IAM Role'
+    Value: !GetAtt MyIAMRole.Arn

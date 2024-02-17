@@ -19,3 +19,5 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [LLMOps](LLMOps)
 - [Automated Testing for LLMOps](AutomatedTestingforLLMOps)
 - [Building Applications with Vector Databases](BuildingApplicationswithVectorDatabases)
+- [Serverless LLM apps with Amazon Bedrock](ServerlessLLMappswithAmazonBedrock)
+

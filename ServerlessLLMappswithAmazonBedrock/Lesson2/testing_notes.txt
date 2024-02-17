@@ -1,0 +1,23 @@
+# Testing note to set up CFN:
+
+# Create a bucket to be used in this lessons.  Reuse the bucket in future lessons.
+# Note the bucket name must be globally unique!
+
+#!aws s3api create-bucket --bucket dlai-bucket-test-87gadiubasdiuh
+
+# Add the name of the bucket here               |
+#                                              \ /
+#                                               v
+
+# ToDo: Add CLI line to copy the mp3 to the bucket....
+
+# Tech Note: DLAI will need to get output (bucket name) from CFN Stack 
+# and make available to the environment var. ToDo: Mike provide a CLI script 
+# to get name of the bucket from the stack. 
+
+# Tech Note: Will also need to upload the mp3 into the bucket (in the CFN or maybe in script). 
+
+
+#import os
+#os.environ['RESOURCE_S3_BUCKETNAME'] = 'dlai-rec-bucket-6723reufiwdsyv'
+#bucket_name = os.environ['RESOURCE_S3_BUCKETNAME']

@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation Template to Create an IAM Role with a Trust Relationship and Permissions Policy'
+
+Resources:
+  MyIAMRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: 'LambdaRoleDLAICourse'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Principal:
+              Service: 'lambda.amazonaws.com'
+            Action: 'sts:AssumeRole'
+
+  MyRolePolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: 'MyIAMRolePolicy'
+      Roles:
+        - !Ref MyIAMRole
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Action:
+              - 'bedrock:InvokeModel'
+            Resource: arn:aws:bedrock:*::foundation-model/*
+          - Effect: 'Allow'
+            Action:
+              - 's3:GetObject'
+              - 's3:PutObject'
+            Resource: '*'
+          - Effect: 'Allow'
+            Action:
+              - 'transcribe:StartTranscriptionJob'
+            Resource: '*'
+          - Effect: 'Allow'
+            Action:
+              - 'logs:CreateLogGroup'
+              - 'logs:CreateLogStream'
+              - 'logs:PutLogEvents'
+            Resource: '*'
+
+Outputs:
+  RoleArn:
+    Description: 'The ARN of the created IAM Role'
+    Value: !GetAtt MyIAMRole.Arn

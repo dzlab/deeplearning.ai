@@ -1,0 +1,26 @@
+### Testing note:
+# Create a bucket to be used in this lessons. (You can use the same one as created before - not the logging one.)
+# Note the bucket name must be globally unique!
+
+#!aws s3api create-bucket --bucket dlai-bucket-test-logging-87gadiubasdiuh
+
+# Add the name of the bucket here               |
+#                                              \ /
+#                                               v
+
+# We also need to create a Lambda Layer: 
+# !aws lambda publish-layer-version --layer-name dlai-bedrock-jinja-layer --zip-file fileb://dlai-bedrock-jinja-layer.zip
+
+# Add the name of the layer  here               |
+#                                              \ /
+#                                               v
+
+# Also create a role with this CloudFormation, and put the ARN below: 
+
+#!aws cloudformation create-stack --stack-name LambdaRoleDLAICourse --template-body file://dlai_lambda_role.yaml --capabilities CAPABILITY_NAMED_IAM
+
+#!aws cloudformation describe-stacks --stack-name LambdaRoleDLAICourse
+
+#import os
+#os.environ['LEARNER_S3_BUCKETNAME_TEXT'] = 'dlai-learner-bucket-6723reufiwdsyv'
+#os.environ['LAMBDA_LAYER_VERSION_ARN'] = 'arn:aws:lambda:us-west-2:157708787616:layer:dlai-bedrock-jinja-layer:1'
