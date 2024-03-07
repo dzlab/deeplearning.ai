@@ -21,4 +21,5 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Building Applications with Vector Databases](BuildingApplicationswithVectorDatabases)
 - [Serverless LLM apps with Amazon Bedrock](ServerlessLLMappswithAmazonBedrock)
 - [Prompt Engineering with Llama 2](PromptEngineeringwithLlama2)
+- [Open Source Models with Hugging Face](OpenSourceModelswithHuggingFace)
 
