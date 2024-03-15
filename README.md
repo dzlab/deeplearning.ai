@@ -2,6 +2,7 @@
 
 Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 
+## 2023
 - [Evaluating and Debugging Generative AI](EvaluatingandDebuggingGenerativeAI)
 - [Large Language Models with Semantic Search](LargeLanguageModelswithSemanticSearch)
 - [Finetuning Large Language Models](FinetuningLargeLanguageModels)
@@ -14,6 +15,8 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Vector Databases: from Embeddings to Applications](VectorDatabasesfromEmbeddingstoApplications)
 - [Quality and Safety for LLM Applications](QualityandSafetyforLLMApplications)
 - [Building and Evaluating Advanced RAG](BuildingandEvaluatingAdvancedRAG)
+
+## 2024
 - [Reinforcement Learning from Human Feedback](ReinforcementLearningFromHumanFeedback)
 - [Advanced Retrieval for AI with Chroma](AdvancedRetrievalforAIwithChroma)
 - [LLMOps](LLMOps)
@@ -22,4 +25,5 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Serverless LLM apps with Amazon Bedrock](ServerlessLLMappswithAmazonBedrock)
 - [Prompt Engineering with Llama 2](PromptEngineeringwithLlama2)
 - [Open Source Models with Hugging Face](OpenSourceModelswithHuggingFace)
+- [Knowledge Graphs for RAG](KnowledgeGraphsforRAG)
 
