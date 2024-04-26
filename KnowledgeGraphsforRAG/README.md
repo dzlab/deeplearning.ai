@@ -11,3 +11,16 @@ Learn how to build and use knowledge graph systems to improve your retrieval aug
 Intermediate
 Andreas Kollegger
 Prerequisite recommendation: We recommend familiarity with LangChain or taking "LangChain: Chat with Your Data" prior to this course.
+
+Lesson Videos
+```
+https://dyckms5inbsqq.cloudfront.net/Neo4j/neo4j-c1/neo4j_c1_01/video/neo4j_c1_01_720p/neo4j_c1_01_720p.m3u8
+https://dyckms5inbsqq.cloudfront.net/Neo4j/neo4j-c1/neo4j_c1_02/video/neo4j_c1_02_720p/neo4j_c1_02_720p.m3u8
+https://dyckms5inbsqq.cloudfront.net/Neo4j/neo4j-c1/neo4j_c1_03/video/neo4j_c1_03_720p/neo4j_c1_03_720p.m3u8
+https://dyckms5inbsqq.cloudfront.net/Neo4j/neo4j-c1/neo4j_c1_04/video/neo4j_c1_04_720p/neo4j_c1_04_720p.m3u8
+https://dyckms5inbsqq.cloudfront.net/Neo4j/neo4j-c1/neo4j_c1_05/video/neo4j_c1_05_720p/neo4j_c1_05_720p.m3u8
+https://dyckms5inbsqq.cloudfront.net/Neo4j/neo4j-c1/neo4j_c1_06/video/neo4j_c1_06_720p/neo4j_c1_06_720p.m3u8
+https://dyckms5inbsqq.cloudfront.net/Neo4j/neo4j-c1/neo4j_c1_07/video/neo4j_c1_07_720p/neo4j_c1_07_720p.m3u8
+https://dyckms5inbsqq.cloudfront.net/Neo4j/neo4j-c1/neo4j_c1_08/video/neo4j_c1_08_720p/neo4j_c1_08_720p.m3u8
+https://dyckms5inbsqq.cloudfront.net/Neo4j/neo4j-c1/neo4j_c1_09/video/neo4j_c1_09_720p/neo4j_c1_09_720p.m3u8
+```
