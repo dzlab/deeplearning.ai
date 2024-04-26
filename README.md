@@ -26,4 +26,5 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Prompt Engineering with Llama 2](PromptEngineeringwithLlama2)
 - [Open Source Models with Hugging Face](OpenSourceModelswithHuggingFace)
 - [Knowledge Graphs for RAG](KnowledgeGraphsforRAG)
+- [Efficiently Serving LLMs](EfficientlyServingLLMs)
 

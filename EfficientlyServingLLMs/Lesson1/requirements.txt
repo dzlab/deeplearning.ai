@@ -1,0 +1,11 @@
+# requirements file
+# python 3.8.5
+
+python-dotenv==1.0.0
+torch==2.0.0
+transformers==4.35.2
+matplotlib==3.5.2
+tqdm==4.64.1
+openai==1.5.0  
+accelerate==0.27.0
+lorax-client==0.3.2
