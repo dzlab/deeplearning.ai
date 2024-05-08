@@ -1,0 +1,8 @@
+# requirements file
+# Tested on Python 3.11.6
+
+giskard[llm]==2.7.4
+pandas==2.1.4
+llama-index==0.9.44
+openai==1.5.0  
+python-dotenv==1.0.0

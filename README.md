@@ -28,4 +28,5 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Knowledge Graphs for RAG](KnowledgeGraphsforRAG)
 - [Efficiently Serving LLMs](EfficientlyServingLLMs)
 - [JavaScript RAG Web Apps with LlamaIndex](JavaScriptRAGWebAppswithLlamaIndex)
+- [Red Teaming LLM Applications](RedTeamingLLMApplications)
 
