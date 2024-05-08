@@ -1,0 +1,5 @@
+# requirements file
+# note which revision of python, for example 3.8.5
+# in this file, insert all the pip install needs, include revision
+
+python-dotenv==1.0.0
