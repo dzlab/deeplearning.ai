@@ -30,4 +30,5 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [JavaScript RAG Web Apps with LlamaIndex](JavaScriptRAGWebAppswithLlamaIndex)
 - [Red Teaming LLM Applications](RedTeamingLLMApplications)
 - [Preprocessing Unstructured Data for LLM Applications](PreprocessingUnstructuredDataforLLMApplications)
+- [Quantization Fundamentals with Hugging Face](QuantizationFundamentalswithHuggingFace)
 
