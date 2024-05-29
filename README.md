@@ -31,4 +31,6 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Red Teaming LLM Applications](RedTeamingLLMApplications)
 - [Preprocessing Unstructured Data for LLM Applications](PreprocessingUnstructuredDataforLLMApplications)
 - [Quantization Fundamentals with Hugging Face](QuantizationFundamentalswithHuggingFace)
+- [AI Agentic Design Patterns with AutoGen](AIAgenticDesignPatternswithAutoGen)
+
 

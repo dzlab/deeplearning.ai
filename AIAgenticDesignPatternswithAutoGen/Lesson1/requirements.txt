@@ -1,0 +1,11 @@
+# requirements file
+# note which revision of python, for example 3.9.6
+# in this file, insert all the pip install needs, include revision
+
+# python==3.10.13
+pyautogen==0.2.25
+chess==1.10.0
+matplotlib
+numpy
+pandas
+yfinance
