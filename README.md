@@ -32,5 +32,5 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Preprocessing Unstructured Data for LLM Applications](PreprocessingUnstructuredDataforLLMApplications)
 - [Quantization Fundamentals with Hugging Face](QuantizationFundamentalswithHuggingFace)
 - [AI Agentic Design Patterns with AutoGen](AIAgenticDesignPatternswithAutoGen)
+- [AI Agents in LangGraph](AIAgentsinLangGraph)
 - [Building Your Own Database Agent](BuildingYourOwnDatabaseAgent)
-

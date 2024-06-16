@@ -1,0 +1,24 @@
+# requirements file updated to version with more state data
+
+#Python 3.11.1
+# sudo apt-get install python3-dev graphviz libgraphviz-dev pkg-config
+
+#Models Used:
+#OpenAI:
+# - gpt-3.5, gpt-4o : Standard Key 
+# - tavily search tool : Joe has the key
+
+python-dotenv~=1.0.1
+tavily-python==0.3.3
+duckduckgo_search==5.3.1b1 
+beautifulsoup4==4.12.3
+openai==1.30.1
+langgraph==0.0.53
+langchain_core==0.2.0
+langchain_openai==0.1.7
+langchain-community==0.2.0
+langchain==0.2.0
+aiosqlite==0.20.0
+pygments==2.17.2
+pygraphviz==1.13
+gradio==4.31.3
