@@ -1,0 +1,52 @@
+Traditional LLMs are trained on static data sets and lack the ability to access or process information that has emerged after their last training update. This leads to outdated or irrelevant responses, especially in rapidly evolving fields like technology, medicine, or current events. Function calling allows LLMs to retrieve current data from the web or from your company internal databases in real time.
+
+For example, a function can be called to fetch the latest news, stock market updates, or weather forecasts, ensuring that the information provided is up to date. This capability is crucial for applications where timeliness and accuracy of information are essential. Let's dive into a few examples.
+
+Suppose you're interested in events that took place after you finished training your LLM. How would you adapt your LLM to this new information? For example, let's ask about a recent product announcement. We will first load the .env file.
+
+Great. Now you will ask about this Rabbit R1 device, which was announced well after the conclusion of the training of the LLM. So just pose the question asking about this Rabbit R1 thing, to the LLM and submit your query.
+
+And you'll notice that the LLM rejects it, saying it doesn't have the information necessary. Let’s try using web search instead. Let’s define a utility called do_search, which accepts a user query, The number of results that you want to circumscribe your search to, And within the tool, you will query the search API, specifically the search endpoint for this API. The payload you will build essentially contains your API key, as well as the user query, which you want to pull more information for.
+
+You will submit a POST request to the endpoint and collate all of the content from all of the responses into a single string and return that string, Provide the tool that you constructed earlier to Raven. Similar to earlier, you will define a function calling prompt that Raven will use, which contains the function annotations that you've designed earlier, such as the function signature and the doc string.
+
+You'll also provide a one-shot example for an example user query and function call that you want Raven to use as reference when understanding the tool that you've built. You will then provide the query that you've been using since the first cell. You will get back a Raven function call, which you can execute to get the list of information that your tool returns.
+
+You will then provide that information returned by your tool back to the LLM, along with the same question you've been using since the first cell. You will provide this prompt back to your LLM to get back a grounded response. Taking a look at the response, you'll notice that it's far richer and contains far more details, such as the product dimensions, as well as the capabilities of the product.
+
+Information that the LLM had no idea about since this product was released well past its training date. However, because we provided access to the internet via the search tool, the LLM was able to find this information and then digest the results and provide you with a very concrete answer. 
+
+Try this yourself with your own queries.
+
+Let's take a look at chatting with your SQL database.
+
+Oftentimes, for a lot of companies, there are a lot of insights that are locked behind company internal databases and knowledge bases. Because these are private data that public models will not have access to, a lot of the public open source language models will not be able to give you any meaningful answers for questions that depend on data that's locked behind these sources. A good way of resolving this is to provide access to your databases to your LLM using function calling.
+
+Let's take a look at making this more concrete. You will first create a random database. In the utils.py file found within the same folder, you will find a utility called create random database.
+
+This utility will create a database called toy database.db, which will be populated with random toy names and toy prices. The database will create a table called toys, which contains the name of the toys and the price of the toys. You will also define another utility called execute SQL within the same utils.py file.
+
+This will simply take in some SQL code and execute it against your database from the previous utility. You will import the create random base utility and run it. You will then pose a question such as what is the most expensive item your company currently sells? Answering this question depends on data that's locked behind the database that you created earlier.
+
+So let's try running it and getting the information. Since the LLM doesn't really understand the schema that you've designed earlier, let's make it concrete and provide the schema. This schema, once again, just tells the LLM that you created a table called toys, which contains the name of the toy and the price of the toy.
+
+You will provide the schema in your Raven prompt along with your function annotation. And you will provide the user question or the user query that you had earlier, again, to the model. You will run the model to get the output.
+
+You will print the output and you will execute it against your database to get your database result. Great. You see that the model has returned a SQL call that selects the name and price, orders it by the price in descending and limits it to one, which will get you the most expensive item.
+
+You will provide the results that you got from the database to your LLM along with your user query. And you get back a response that says that the most expensive item your company currently sells is the SuperTrain, which costs nearly $20. But you'll notice that you had to allow the LLM full access to your database.
+
+What if you didn't want to do that? What if due to security purposes, you didn't want the LLM to generate raw SQL code that you can execute against the database? There is a more gated version that you can use for more security. Instead of asking the LLM to generate native SQL, which could be problematic, we can guard the access to our database more carefully. Let's define a few functions.
+
+You will define a function just to set up the database. You will define a function to list all toys in your database and implement the SQL behind the scenes. Similarly, to find toy by the prefix, to find toys in a price range, to get random toys, to get the most expensive toy, to get the cheapest toy, and you will provide all of these functions that you've defined so far to Raven.
+
+And since Raven doesn't need to know the schema, you do not need to provide the database schema. Rather, you just allow Raven to use the templates that you provided earlier to access your database. Raven has used one of your templates to get the most expensive toy.
+
+And you can provide the result back to Raven to get an answer to your original query. Great. 
+
+Try to create a query to use one of the other functions!
+
+You've now seen how you can use Raven and other function calling LLMs and ground it with access to the internet via Google search or to your database via native SQL or the safer templated approach to get concrete answers to your user queries, which might depend on company internal data or the most up-to-date happening.
+
+In the next lesson, we will start taking a look at further pushing the capabilities of function calling LLMs by taking a look at structured extraction. Thank you.
+

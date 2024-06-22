@@ -36,3 +36,6 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [AI Agentic Design Patterns with AutoGen](AIAgenticDesignPatternswithAutoGen)
 - [AI Agents in LangGraph](AIAgentsinLangGraph)
 - [Building Your Own Database Agent](BuildingYourOwnDatabaseAgent)
+
+### 06
+- [Function-Calling and Data Extraction with LLMs](./2024/06/FunctionCallingandDataExtractionwithLLMs/)
