@@ -35,8 +35,8 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Introduction to On-Device AI](2024/05/IntroductiontoOnDeviceAI/)
 - [AI Agentic Design Patterns with AutoGen](AIAgenticDesignPatternswithAutoGen)
 
-- [Building Your Own Database Agent](BuildingYourOwnDatabaseAgent)
 
 ### 06
 - [AI Agents in LangGraph](./2024/06/AIAgentsinLangGraph)
+- [Building Your Own Database Agent](./2024/06/BuildingYourOwnDatabaseAgent)
 - [Function-Calling and Data Extraction with LLMs](./2024/06/FunctionCallingandDataExtractionwithLLMs/)
