@@ -31,6 +31,11 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Red Teaming LLM Applications](RedTeamingLLMApplications)
 - [Preprocessing Unstructured Data for LLM Applications](PreprocessingUnstructuredDataforLLMApplications)
 - [Quantization Fundamentals with Hugging Face](QuantizationFundamentalswithHuggingFace)
+
+### 05
+- [Quantization in Depth]()
+- [Building Agentic RAG with LlamaIndex]()
+- [Building Multimodal Search and RAG]()
 - [Multi AI Agent Systems with crewAI](2024/05/MultiAIAgentSystemswithcrewAI/)
 - [Introduction to On-Device AI](2024/05/IntroductiontoOnDeviceAI/)
 - [AI Agentic Design Patterns with AutoGen](AIAgenticDesignPatternswithAutoGen)
@@ -40,3 +45,7 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [AI Agents in LangGraph](./2024/06/AIAgentsinLangGraph)
 - [Building Your Own Database Agent](./2024/06/BuildingYourOwnDatabaseAgent)
 - [Function-Calling and Data Extraction with LLMs](./2024/06/FunctionCallingandDataExtractionwithLLMs/)
+
+
+### 07
+- [Pretraining LLMs](./2024/07/PretrainingLLMs)
