@@ -45,6 +45,7 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [AI Agents in LangGraph](./2024/06/AIAgentsinLangGraph)
 - [Building Your Own Database Agent](./2024/06/BuildingYourOwnDatabaseAgent)
 - [Function-Calling and Data Extraction with LLMs](./2024/06/FunctionCallingandDataExtractionwithLLMs/)
+- [Carbon Aware Computing for GenAI Developers](./2024/06/CarbonAwareComputingforGenAIDevelopers/)
 
 
 ### 07
