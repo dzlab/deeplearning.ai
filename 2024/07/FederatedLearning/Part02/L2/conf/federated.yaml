@@ -1,0 +1,49 @@
+# Federated Instruction Tuning on General Dataset
+---
+
+dataset:
+  name: "medalpaca/medical_meadow_medical_flashcards"
+
+model:
+  name: "EleutherAI/pythia-70m"
+  quantization: 4 # 8 or 4 if you want to do quantization with BitsAndBytes
+  gradient_checkpointing: True
+  use_fast_tokenizer: True
+  lora:
+    peft_lora_r: 16
+    peft_lora_alpha: 64
+    target_modules: null
+
+train:
+  num_rounds: ${flower.num_rounds}
+  save_every_round: 5
+  learning_rate_max: 5e-5
+  learning_rate_min: 1e-6
+  seq_length: 512
+  padding_side: "left"
+  evaluate_split: false
+  training_arguments:
+    output_dir: null # to be set by hydra
+    learning_rate: null # to be set by the client
+    disable_tqdm: true
+    per_device_train_batch_size: 2 # increase it based on your device's RAM/VRAM size
+    gradient_accumulation_steps: 1
+    logging_steps: 5
+    num_train_epochs: 3
+    max_steps: 1
+    report_to: null
+    save_steps: 1000
+    save_total_limit: 10
+    gradient_checkpointing: ${model.gradient_checkpointing}
+    lr_scheduler_type: "constant"
+
+flower:
+    num_clients: 20 # total number of clients
+    num_rounds: 2
+    fraction_fit: 0.2
+    client_resources:
+      num_cpus: 2
+      num_gpus: 0.0
+    dp:
+      noise_mult: 0.02
+      clip_norm: 0.5

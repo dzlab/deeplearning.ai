@@ -1,0 +1,21 @@
+# requirements file
+# note which revision of python, for example 3.9.6
+# in this file, insert all the pip install needs, include revision
+
+# We have used Python 3.10.11 to prepare the materials of this course
+
+flwr==1.10.0
+ray==2.6.3
+flwr_datasets==0.2.0
+hydra-core==1.3.2
+trl==0.8.1
+bitsandbytes==0.43.0
+scipy==1.13.0
+peft==0.6.2
+transformers==4.39.3
+ipywidgets==8.1.2
+gradio==3.50.2
+fireworks-ai==0.14.0
+scikit-learn==1.4.0
+cryptography==42.0.7
+python-dotenv~=1.0.1

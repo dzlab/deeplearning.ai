@@ -13,14 +13,14 @@ Today we’re launching [Carbon Aware Computing for GenAI Developers](https://le
 
 Training, fine-tuning, and serving generative AI models can be demanding in terms of compute and energy. But these processes don't have to be as carbon-intensive if you choose when and where to run them in the cloud. In this course, you’ll learn how to perform model training and inference jobs with cleaner, low-carbon energy in the cloud.
 
-![GIF from lesson one of the course](https://ci3.googleusercontent.com/meips/ADKq_NZ_ivVljxZ7wABhy5-5_tq-nP0yUSDCsTdJxueTiW4TapTr9ELPr73R1VD5z7lBVcUpWDUsW3jSMMlA5gwARfl7EA2ljwgTuXveTM2DKG89KAgJMF6mk34V5lbrKrEiJ-Pz7e1ZuMzujh0eaD435P8I_Dsbsr-ANvkYiOQ5_dZF1Q-ZXVr8aDlLU50eWsS71g40fZNy9erM7UEKXkBo=s0-d-e1-ft#https://info.deeplearning.ai/hs-fs/hubfs/Launch%20email%20GIFs%20(24).gif?width=1120&upscale=true&name=Launch%20email%20GIFs%20(24).gif)
+![GIF from lesson one of the course](https://ci3.googleusercontent.com/meips/ADKq_NZ_ivVljxZ7wABhy5-5_tq-nP0yUSDCsTdJxueTiW4TapTr9ELPr73R1VD5z7lBVcUpWDUsW3jSMMlA5gwARfl7EA2ljwgTuXveTM2DKG89KAgJMF6mk34V5lbrKrEiJ-Pz7e1ZuMzujh0eaD435P8I_Dsbsr-ANvkYiOQ5_dZF1Q-ZXVr8aDlLU50eWsS71g40fZNy9erM7UEKXkBo=s0-d-e1-ft#https://info.deeplearning.ai/hs-fs/hubfs/Launch%20email%20GIFs%20(24).gif)
 
 Explore how to measure the environmental impact of your machine learning jobs and how to optimize their use of clean electricity, and:
 
-    Query real-time electricity grid data: Explore the world map, and based on latitude and longitude coordinates, get the power breakdown of a region (e.g. wind, hydro, coal etc.) and the carbon intensity (CO2 equivalent emissions per kWh of energy consumed).
-    Train a model with low-carbon energy: Select a region that has a low average carbon intensity to upload your training job and data. Optimize even further by selecting the lowest carbon intensity region using real-time grid data from ElectricityMaps.
-    Retrieve measurements of the carbon footprint for ongoing cloud jobs.
-    Use the Google Cloud Carbon Footprint tool, which provides a comprehensive measure of your carbon footprint by estimating greenhouse gas emissions from your usage of Google Cloud.
+  - Query real-time electricity grid data: Explore the world map, and based on latitude and longitude coordinates, get the power breakdown of a region (e.g. wind, hydro, coal etc.) and the carbon intensity (CO2 equivalent emissions per kWh of energy consumed).
+  - Train a model with low-carbon energy: Select a region that has a low average carbon intensity to upload your training job and data. Optimize even further by selecting the lowest carbon intensity region using real-time grid data from ElectricityMaps.
+  - Retrieve measurements of the carbon footprint for ongoing cloud jobs.
+  - Use the Google Cloud Carbon Footprint tool, which provides a comprehensive measure of your carbon footprint by estimating greenhouse gas emissions from your usage of Google Cloud.
 
 Throughout the course, you'll work with ElectricityMaps, a free API for querying electricity grid information globally. You'll also use Google Cloud to run a model training job in a cloud data center that is powered by low-carbon energy.
 

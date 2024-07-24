@@ -1,0 +1,17 @@
+fl_model: "EleutherAI/pythia-70m"
+cen_model: "EleutherAI/pythia-70m"
+pre_trained_model: "EleutherAI/pythia-70m"
+key_name: "input"
+quantization: 0
+device: "cuda"
+positive_dataset:
+  name: "medalpaca/medical_meadow_medical_flashcards"
+  split: "train[0:10]"
+  renames: [["output", "response"],]
+  kwargs: {}
+
+negative_dataset:
+  name: "bigbio/pubmed_qa"
+  split: "validation[0:10]"
+  renames: [["CONTEXTS", "input"],]
+  kwargs: {}

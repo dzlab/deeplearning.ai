@@ -1,0 +1,30 @@
+---
+
+dataset:
+  name: "medalpaca/medical_meadow_medical_flashcards"
+
+model:
+  name: "EleutherAI/pythia-70m" # for CPU-only machines, we need a smaller model that can run in a reasonable amount of time
+  quantization: 4 # 8 or 4 if you want to do quantization with BitsAndBytes
+  gradient_checkpointing: True # ! Ensure it matches that in train.train_arguments
+  use_fast_tokenizer: True
+  lora:
+    peft_lora_r: 16
+    peft_lora_alpha: 64
+    target_modules: null
+
+train:
+  save_every_round: 5
+  seq_length: 512
+  padding_side: "left"
+  training_arguments:
+    learning_rate: 5e-4
+    per_device_train_batch_size: 2
+    gradient_accumulation_steps: 1
+    logging_steps: 1
+    max_steps: 5
+    report_to: null
+    save_steps: 200
+    save_total_limit: 10
+    gradient_checkpointing: True # ! Ensure it matches that in model
+    lr_scheduler_type: "cosine"
