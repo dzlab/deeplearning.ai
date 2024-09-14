@@ -52,3 +52,4 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Prompt Compression and Query Optimization](./2024/07/PromptCompressionandQueryOptimization/)
 - [Pretraining LLMs](./2024/07/PretrainingLLMs)
 - [Federated Learning](./2024/07/FederatedLearning/)
+- [Embedding Models](./2024/07/EmbeddingModels/)
