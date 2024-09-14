@@ -56,4 +56,5 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 
 ### 08
 - [Improving Accuracy of LLM Applications](./2024/08/ImprovingAccuracyofLLMApplications/)
+- [Building AI Applications with Haystack](./2024/08/BuildingAIApplicationswithHaystack/)
 - [Large Multimodal Model Prompting with Gemini](./2024/08/LargeMultimodalModelPromptingwithGemini/)
