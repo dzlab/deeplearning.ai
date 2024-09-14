@@ -3,18 +3,18 @@
 Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 
 ## 2023
-- [Evaluating and Debugging Generative AI](EvaluatingandDebuggingGenerativeAI)
-- [Large Language Models with Semantic Search](LargeLanguageModelswithSemanticSearch)
-- [Finetuning Large Language Models](FinetuningLargeLanguageModels)
-- [How Business Thinkers Can Start Building AI Plugins With Semantic Kernel](HowBusinessThinkersCanStartBuildingAIPluginsWithSemanticKernel)
-- [Building Systems with the ChatGPT API](BuildingSystemswiththeChatGPTAPI)
-- [Pair Programming with a Large Language Model](PairProgrammingwithaLargeLanguageModel)
-- [Functions Tools and Agents with LangChain](FunctionsToolsandAgentswithLangChain)
-- [Understanding and Applying Text Embeddings](UnderstandingandApplyingTextEmbeddings)
-- [LangChain Chat with Your Data](LangChainChatwithYourData)
-- [Vector Databases: from Embeddings to Applications](VectorDatabasesfromEmbeddingstoApplications)
-- [Quality and Safety for LLM Applications](QualityandSafetyforLLMApplications)
-- [Building and Evaluating Advanced RAG](BuildingandEvaluatingAdvancedRAG)
+- [Evaluating and Debugging Generative AI](./2023/EvaluatingandDebuggingGenerativeAI)
+- [Large Language Models with Semantic Search](./2023/LargeLanguageModelswithSemanticSearch)
+- [Finetuning Large Language Models](./2023/FinetuningLargeLanguageModels)
+- [How Business Thinkers Can Start Building AI Plugins With Semantic Kernel](./2023/HowBusinessThinkersCanStartBuildingAIPluginsWithSemanticKernel)
+- [Building Systems with the ChatGPT API](./2023/BuildingSystemswiththeChatGPTAPI)
+- [Pair Programming with a Large Language Model](./2023/PairProgrammingwithaLargeLanguageModel)
+- [Functions Tools and Agents with LangChain](./2023/FunctionsToolsandAgentswithLangChain)
+- [Understanding and Applying Text Embeddings](./2023/UnderstandingandApplyingTextEmbeddings)
+- [LangChain Chat with Your Data](./2023/LangChainChatwithYourData)
+- [Vector Databases: from Embeddings to Applications](./2023/VectorDatabasesfromEmbeddingstoApplications)
+- [Quality and Safety for LLM Applications](./2023/QualityandSafetyforLLMApplications)
+- [Building and Evaluating Advanced RAG](./2023/BuildingandEvaluatingAdvancedRAG)
 
 ## 2024
 - [Reinforcement Learning from Human Feedback](ReinforcementLearningFromHumanFeedback)
