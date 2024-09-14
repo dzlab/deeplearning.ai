@@ -58,3 +58,6 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Improving Accuracy of LLM Applications](./2024/08/ImprovingAccuracyofLLMApplications/)
 - [Building AI Applications with Haystack](./2024/08/BuildingAIApplicationswithHaystack/)
 - [Large Multimodal Model Prompting with Gemini](./2024/08/LargeMultimodalModelPromptingwithGemini/)
+
+### 09
+- [Multimodal RAG: Chat with Videos](./2024/09/MultimodalRAGChatwithVideos/)

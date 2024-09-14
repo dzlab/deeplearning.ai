@@ -1,0 +1,4 @@
+$77dcb38c-6e12-4b93-9d26-0d316210250e²ä2vector ÿÿÿÿÿÿÿÿÿ*fixed_size_list:float:51208id ÿÿÿÿÿÿÿÿÿ*string08text ÿÿÿÿÿÿÿÿÿ*string08%
+image_path ÿÿÿÿÿÿÿÿÿ*string08!metadata ÿÿÿÿÿÿÿÿÿ*struct0&extracted_frame_path *string08mid_time_ms *double08
+transcript *string08
+video_path *string08!video_segment_id	 *int6408
