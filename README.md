@@ -53,3 +53,6 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Pretraining LLMs](./2024/07/PretrainingLLMs)
 - [Federated Learning](./2024/07/FederatedLearning/)
 - [Embedding Models](./2024/07/EmbeddingModels/)
+
+### 08
+- [Improving Accuracy of LLM Applications](./2024/08/ImprovingAccuracyofLLMApplications/)

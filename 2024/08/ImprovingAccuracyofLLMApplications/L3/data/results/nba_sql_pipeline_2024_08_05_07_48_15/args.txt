@@ -1,0 +1,5 @@
+{'gold_file_name': 'gold-test-set.jsonl',
+ 'max_examples': 100,
+ 'num_to_generate': 10,
+ 'sql_model_name': 'meta-llama/Meta-Llama-3-8B-Instruct',
+ 'training_file_name': 'archive/generated_queries.jsonl'}

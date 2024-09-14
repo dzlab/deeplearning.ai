@@ -1,0 +1,9 @@
+# requirements file
+# note which revision of python, for example 3.9.6
+# in this file, insert all the pip install needs, include revision
+
+#Python 3.10.11
+
+python-dotenv~=1.0.1
+lamini==3.0.5
+
