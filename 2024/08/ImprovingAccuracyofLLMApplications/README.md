@@ -43,7 +43,6 @@ Start improving the accuracy of LLM applications today!
 |Introduction|[video](https://dyckms5inbsqq.cloudfront.net/Lamini/C1/L0/sc-Lamini-C1-L0-master.m3u8)||
 |Overview|[video](https://dyckms5inbsqq.cloudfront.net/Lamini/C1/L1/sc-Lamini-C1-L1-master.m3u8)|[code](./L1/)|
 |Create an SQL Agent|[video](https://dyckms5inbsqq.cloudfront.net/Lamini/C1/L2/sc-Lamini-C1-L2-master.m3u8)|[code](./L2/)|
-||[video](https://dyckms5inbsqq.cloudfront.net/Lamini/C1/L3/sc-Lamini-C1-L3-master.m3u8)|[code](./L3/)|
 |Create an Evaluation|[video](https://dyckms5inbsqq.cloudfront.net/Lamini/C1/L3/sc-Lamini-C1-L3-master.m3u8)|[code](./L3/)|
 |finetuning, peft, & Memory Tuning|[video](https://dyckms5inbsqq.cloudfront.net/Lamini/C1/L4/sc-Lamini-C1-L4-master.m3u8)||
 |Generate Data & Finetune|[video](https://dyckms5inbsqq.cloudfront.net/Lamini/C1/L5/sc-Lamini-C1-L5-master.m3u8)|[code](./L5/)|
