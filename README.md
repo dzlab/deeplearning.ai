@@ -18,7 +18,7 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 
 ## 2024
 - [Reinforcement Learning from Human Feedback](ReinforcementLearningFromHumanFeedback)
-- [Advanced Retrieval for AI with Chroma](AdvancedRetrievalforAIwithChroma)
+- [Advanced Retrieval for AI with Chroma](./2024/AdvancedRetrievalforAIwithChroma)
 - [LLMOps](LLMOps)
 - [Automated Testing for LLMOps](AutomatedTestingforLLMOps)
 - [Building Applications with Vector Databases](BuildingApplicationswithVectorDatabases)
