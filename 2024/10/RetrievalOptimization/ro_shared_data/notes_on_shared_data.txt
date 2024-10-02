@@ -1,0 +1,13 @@
+This directory can contain read only data shared by all the lessons.
+This is a good location for shared images or datasets used by multiple lessons.
+
+When the repo is deployed to the platform, the shared directory will be copied to a subdirectory in each lesson.
+So, when referring to the shared data in your code, you should use
+./ro_shared_data/shared_file
+and not
+../shared_data/shared_file.
+
+Because each lesson is potentially in its own docker container, data written to files in the shared directory is not visible to other lessons.
+If you wish, for example to write to a database in lesson1 and have it visible in lesson2, you will need to copy the data from the L1 location to a location under the L2 directory that is not shared.
+This is helpful in that students may not run the labs in order, or at all, and will still expect later labs to run in the same way as they see in the video.
+

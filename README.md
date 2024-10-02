@@ -61,3 +61,6 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 
 ### 09
 - [Multimodal RAG: Chat with Videos](./2024/09/MultimodalRAGChatwithVideos/)
+
+### 10
+- [Retrieval Optimization: From Tokenization to Vector Quantization](./2024/10/RetrievalOptimization/)

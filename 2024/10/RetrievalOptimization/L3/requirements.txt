@@ -1,0 +1,23 @@
+# requirements file
+# note which revision of python, for example 3.9.6
+# in this file, insert all the pip install needs, include revision
+
+#for example:
+#torch==2.0.1
+#matplotlib==3.7.2
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+python-dotenv==1.0.1
+jupyter==1.0.0
+tokenizers==0.19.1
+transformers==4.40.2
+sentence-transformers==2.7.0
+torch==2.3.0
+scikit-learn==1.4.1.post1
+qdrant-client==1.9.1
+plotly==5.21.0
+tiktoken==0.7.0
+openai==1.30.1
+pandas==2.2.2
+real-wordpiece==0.1.6
+ranx==0.3.19
