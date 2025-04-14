@@ -69,4 +69,4 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 ## 2025
 
 ### 04
-- [Getting Structured LLM Output](./2025/GettingStructuredLLMOutput/)
+- [Getting Structured LLM Output](./2025/04/GettingStructuredLLMOutput/)
