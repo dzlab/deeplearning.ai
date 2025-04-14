@@ -64,3 +64,9 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 
 ### 10
 - [Retrieval Optimization: From Tokenization to Vector Quantization](./2024/10/RetrievalOptimization/)
+
+
+## 2025
+
+### 04
+- [Getting Structured LLM Output](./2025/GettingStructuredLLMOutput/)

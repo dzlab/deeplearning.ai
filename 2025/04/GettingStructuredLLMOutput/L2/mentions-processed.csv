@@ -1,0 +1,4 @@
+,product,sentiment,needs_response,response,support_ticket_description,mention
+0,app,positive,True,"Thank you so much for your kind words! We're thrilled to hear that you love the new design. If you have any feedback or suggestions, feel free to share!",,@techcorp your app is amazing! The new design is perfect
+1,website,negative,True,Hi there! We're sorry to hear you're having trouble with our website. Our team is aware of the issue and is working hard to fix it as quickly as possible. Thank you for your patience!,User reported that the website is down.,"@techcorp website is down again, please fix!"
+2,not_applicable,negative,False,,,hey @techcorp you're so evil
