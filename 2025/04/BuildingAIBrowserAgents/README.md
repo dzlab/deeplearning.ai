@@ -40,3 +40,4 @@ By the end, you’ll be equipped to build reliable web agents and understand the
 |Agent Q|[video](https://learn.deeplearning.ai/courses/building-ai-browser-agents/lesson/gfq05/agent-q)||
 |Deep Dive into AgentQ and MCTS|[video](https://learn.deeplearning.ai/courses/building-ai-browser-agents/lesson/m2fm5/deep-dive-into-agentq-and-mcts)|[code](L5)|
 |Future of AI Agents|[video](https://learn.deeplearning.ai/courses/building-ai-browser-agents/lesson/ag2xr/future-of-ai-agents)||
+|Conclusion|[video](https://learn.deeplearning.ai/courses/building-ai-browser-agents/lesson/znsq5/conclusion)||

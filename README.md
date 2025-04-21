@@ -68,6 +68,10 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 
 ## 2025
 
+### 03
+
+- [Vibe Coding 101 with Replit](./2025/03/VibeCoding101withReplit/)
+
 ### 04
 - [Getting Structured LLM Output](./2025/04/GettingStructuredLLMOutput/)
 - [Building AI Browser Agents](./2025/04/BuildingAIBrowserAgents/)
