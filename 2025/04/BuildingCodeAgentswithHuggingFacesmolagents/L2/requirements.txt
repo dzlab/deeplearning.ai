@@ -1,0 +1,32 @@
+# requirements file
+
+#python 3.11
+
+pandas==2.2.3
+numpy==2.2.3
+ipywidgets==8.1.5
+plotly==6.0.1
+kaleido==0.2.1
+pillow==11.1.0
+#shapely
+#geopandas
+#json
+
+# hugging face things
+smolagents[telemetry]==1.13.0
+
+# arize things
+openinference-instrumentation==0.1.21
+#arize-phoenix-otel==0.7.1
+#arize-phoenix==7.0.0
+arize-phoenix-otel==0.9.0
+arize-phoenix==8.19.1
+
+# E2B things
+e2b-code-interpreter==1.0.5
+openai==1.66.3
+# web search
+tavily-python==0.5.1
+
+#
+#pydantic<2
