@@ -76,3 +76,6 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Getting Structured LLM Output](./2025/04/GettingStructuredLLMOutput/)
 - [Building AI Browser Agents](./2025/04/BuildingAIBrowserAgents/)
 - [Building Code Agents with Hugging Face smolagents](./2025/04/BuildingCodeAgentswithHuggingFacesmolagents)
+
+### 05
+- [Building AI Voice Agents for Production](2025/05/BuildingAIVoiceAgentsforProduction/)

@@ -34,7 +34,7 @@ Start building agents that write and execute code to perform complex tasks!
 |Lesson|Video|Code|
 |-|-|-|
 |Introduction|[video](https://learn.deeplearning.ai/courses/building-code-agents-with-hugging-face-smolagents/lesson/txu26/introduction)||
-|A Brief History of Agents|[video](https://learn.deeplearning.ai/courses/building-code-agents-with-hugging-face-smolagents/lesson/fgsfr/a-brief-history-of-agents)|[code]()|
+|A Brief History of Agents|[video](https://learn.deeplearning.ai/courses/building-code-agents-with-hugging-face-smolagents/lesson/fgsfr/a-brief-history-of-agents)||
 |Introduction to Code Agents|[video](https://learn.deeplearning.ai/courses/building-code-agents-with-hugging-face-smolagents/lesson/tv10w/introduction-to-code-agents)|[code](./L2/)|
 |Secure Code Execution|[video](https://learn.deeplearning.ai/courses/building-code-agents-with-hugging-face-smolagents/lesson/h11ie/secure-code-execution)|[code](./L3/)|
 |Monitoring and Evalutating your Agent|[video](https://learn.deeplearning.ai/courses/building-code-agents-with-hugging-face-smolagents/lesson/qjxfz/monitoring-and-evalutating-your-agent)|[code](./L4/)|

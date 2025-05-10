@@ -1,0 +1,17 @@
+# python package requirements file
+
+# Note to our Learners: Our courses are created at a specific point in time. The models and libraries used will naturally change over time.
+# If you download and run the notebooks locally, you should create a Python virtual environment  
+# with the Python version matching the one used in the course and use this requirements.txt file to install the required Python packages.
+# Due to the wide diversity of platforms and environments, DeepLearning does not explicitly support running locally. However, if you encounter
+# issues, the course support channel is a good place to ask questions.
+
+
+# python 3.10.11
+
+livekit-agents[openai, silero, elevenlabs]==1.0.11
+fastapi==0.115.8
+uvicorn==0.34.0
+python-dotenv==1.0.1
+httpx==0.28.1
+ipython==8.13.2
