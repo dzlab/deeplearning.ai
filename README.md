@@ -2,6 +2,9 @@
 
 Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 
+<details>
+<summary>Courses from 2023</summary>
+
 ## 2023
 - [Evaluating and Debugging Generative AI](./2023/EvaluatingandDebuggingGenerativeAI)
 - [Large Language Models with Semantic Search](./2023/LargeLanguageModelswithSemanticSearch)
@@ -16,21 +19,30 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Quality and Safety for LLM Applications](./2023/QualityandSafetyforLLMApplications)
 - [Building and Evaluating Advanced RAG](./2023/BuildingandEvaluatingAdvancedRAG)
 
+### 12
+- [Reinforcement Learning from Human Feedback](./2024/ReinforcementLearningFromHumanFeedback)
+
+</details>
+
+<details>
+<summary>Courses from 2024</summary>
+
 ## 2024
-- [Reinforcement Learning from Human Feedback](ReinforcementLearningFromHumanFeedback)
-- [Advanced Retrieval for AI with Chroma](./2024/AdvancedRetrievalforAIwithChroma)
-- [LLMOps](LLMOps)
-- [Automated Testing for LLMOps](AutomatedTestingforLLMOps)
-- [Building Applications with Vector Databases](BuildingApplicationswithVectorDatabases)
-- [Serverless LLM apps with Amazon Bedrock](ServerlessLLMappswithAmazonBedrock)
-- [Prompt Engineering with Llama 2](PromptEngineeringwithLlama2)
-- [Open Source Models with Hugging Face](OpenSourceModelswithHuggingFace)
-- [Knowledge Graphs for RAG](KnowledgeGraphsforRAG)
-- [Efficiently Serving LLMs](EfficientlyServingLLMs)
-- [JavaScript RAG Web Apps with LlamaIndex](JavaScriptRAGWebAppswithLlamaIndex)
-- [Red Teaming LLM Applications](RedTeamingLLMApplications)
-- [Preprocessing Unstructured Data for LLM Applications](PreprocessingUnstructuredDataforLLMApplications)
-- [Quantization Fundamentals with Hugging Face](QuantizationFundamentalswithHuggingFace)
+- [Automated Testing for LLMOps](./2024/AutomatedTestingforLLMOps)
+- [Building Applications with Vector Databases](./2024/BuildingApplicationswithVectorDatabases)
+- [Serverless LLM apps with Amazon Bedrock](./2024/ServerlessLLMappswithAmazonBedrock)
+- [Prompt Engineering with Llama 2](./2024/PromptEngineeringwithLlama2)
+- [Open Source Models with Hugging Face](./2024/OpenSourceModelswithHuggingFace)
+- [Knowledge Graphs for RAG](./2024/KnowledgeGraphsforRAG)
+- [Efficiently Serving LLMs](./2024/EfficientlyServingLLMs)
+- [JavaScript RAG Web Apps with LlamaIndex](./2024/JavaScriptRAGWebAppswithLlamaIndex)
+- [Red Teaming LLM Applications](./2024/RedTeamingLLMApplications)
+- [Preprocessing Unstructured Data for LLM Applications](./2024/PreprocessingUnstructuredDataforLLMApplications)
+- [Quantization Fundamentals with Hugging Face](./2024/QuantizationFundamentalswithHuggingFace)
+
+### 01
+- [LLMOps](./01/2024/LLMOps)
+- [Advanced Retrieval for AI with Chroma](./01/2024/AdvancedRetrievalforAIwithChroma)
 
 ### 05
 - [Quantization in Depth]()
@@ -38,7 +50,7 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Building Multimodal Search and RAG]()
 - [Multi AI Agent Systems with crewAI](2024/05/MultiAIAgentSystemswithcrewAI/)
 - [Introduction to On-Device AI](2024/05/IntroductiontoOnDeviceAI/)
-- [AI Agentic Design Patterns with AutoGen](AIAgenticDesignPatternswithAutoGen)
+- [AI Agentic Design Patterns with AutoGen](2024/05/AIAgenticDesignPatternswithAutoGen)
 
 
 ### 06
@@ -65,6 +77,7 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 ### 10
 - [Retrieval Optimization: From Tokenization to Vector Quantization](./2024/10/RetrievalOptimization/)
 
+</details>
 
 ## 2025
 
@@ -79,3 +92,4 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 
 ### 05
 - [Building AI Voice Agents for Production](2025/05/BuildingAIVoiceAgentsforProduction/)
+- [MCP Build Rich-Context AI Appswith Anthropic](2025/05/MCPBuildRichContextAIAppswithAnthropic/)
