@@ -1,0 +1,20 @@
+# AI Reasoning Capabilities: Research Summary
+
+After exploring deeplearning.ai, I identified "reasoning" as a significant area of interest in current AI research. This topic appears in recent articles such as "Recipes For Reasoning" and "Easy Reasoning Hack," indicating its importance in the AI community.
+
+## Paper 1: AI Capability Assessment Model
+**Title**: Towards a Capability Assessment Model for the Comprehension and Adoption of AI in Organisations
+**Authors**: Butler, Tom; Espinoza-Limón, Angelina; Seppälä, Selja
+**Published**: May 25, 2023
+
+This paper introduces a 5-level AI Capability Assessment Model (AI-CAM) to help organizations understand and adopt AI technologies. One of the key focuses is on "AI-based solutions that seek to emulate human reasoning and decision-making." The model addresses various capability dimensions including business, data, technology, organization, AI skills, risks, and ethical considerations necessary for implementing AI reasoning systems in organizational contexts.
+
+## Paper 2: AI Awareness
+**Title**: AI Awareness
+**Authors**: Xiaojian Li, Haoyuan Shi, Rongwu Xu, Wei Xu
+**Published**: April 25, 2025
+
+This paper explores AI awareness as a functional capacity rather than a philosophical concept of consciousness. It examines four types of awareness: meta-cognition, self-awareness, social awareness, and situational awareness. The research specifically highlights that AI awareness is linked to reasoning capabilities, noting that "more aware AI agents tend to exhibit higher levels of intelligent behaviors." The authors describe AI awareness as a "double-edged sword" that improves reasoning and safety while also raising concerns about misalignment and societal risks.
+
+## Conclusion
+The research indicates that reasoning capabilities are becoming increasingly important in AI development. Organizations are developing frameworks to assess and implement AI systems with human-like reasoning, while researchers are exploring how different forms of awareness contribute to an AI system's ability to reason effectively. As AI reasoning continues to advance, balancing improved capabilities with safety and ethical considerations remains a critical challenge.

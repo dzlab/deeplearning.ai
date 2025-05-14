@@ -1,0 +1,30 @@
+{
+  "2504.02590v1": {
+    "title": "LexPam: Legal Procedure Awareness-Guided Mathematical Reasoning",
+    "authors": [
+      "Kepu Zhang",
+      "Guofu Xie",
+      "Weijie Yu",
+      "Mingyue Xu",
+      "Xu Tang",
+      "Yaxin Li",
+      "Jun Xu"
+    ],
+    "summary": "The legal mathematical reasoning ability of LLMs is crucial when applying\nthem to real-world scenarios, as it directly affects the credibility of the\nLLM. While existing legal LLMs can perform general judicial question answering,\ntheir legal mathematical reasoning capabilities have not been trained.\nOpen-domain reasoning models, though able to generate detailed calculation\nsteps, do not follow the reasoning logic required for legal scenarios.\nAdditionally, there is currently a lack of legal mathematical reasoning\ndatasets to help validate and enhance LLMs' reasoning abilities in legal\ncontexts. To address these issues, we propose the first Chinese legal\nMathematical Reasoning Dataset, LexNum, which includes three common legal\nmathematical reasoning scenarios: economic compensation, work injury\ncompensation, and traffic accident compensation. Based on LexNum, we tested the\nperformance of existing legal LLMs and reasoning LLMs, and introduced LexPam, a\nreinforcement learning algorithm guided by legal procedural awareness to train\nLLMs, enhancing their mathematical reasoning abilities in legal scenarios.\nExperiments on tasks in the three legal scenarios show that the performance of\nexisting legal LLMs and reasoning models in legal mathematical reasoning tasks\nis unsatisfactory. LexPam can enhance the LLM's ability in these tasks.",
+    "pdf_url": "http://arxiv.org/pdf/2504.02590v1",
+    "published": "2025-04-03"
+  },
+  "2410.13080v1": {
+    "title": "Graph-constrained Reasoning: Faithful Reasoning on Knowledge Graphs with Large Language Models",
+    "authors": [
+      "Linhao Luo",
+      "Zicheng Zhao",
+      "Chen Gong",
+      "Gholamreza Haffari",
+      "Shirui Pan"
+    ],
+    "summary": "Large language models (LLMs) have demonstrated impressive reasoning\nabilities, but they still struggle with faithful reasoning due to knowledge\ngaps and hallucinations. To address these issues, knowledge graphs (KGs) have\nbeen utilized to enhance LLM reasoning through their structured knowledge.\nHowever, existing KG-enhanced methods, either retrieval-based or agent-based,\nencounter difficulties in accurately retrieving knowledge and efficiently\ntraversing KGs at scale. In this work, we introduce graph-constrained reasoning\n(GCR), a novel framework that bridges structured knowledge in KGs with\nunstructured reasoning in LLMs. To eliminate hallucinations, GCR ensures\nfaithful KG-grounded reasoning by integrating KG structure into the LLM\ndecoding process through KG-Trie, a trie-based index that encodes KG reasoning\npaths. KG-Trie constrains the decoding process, allowing LLMs to directly\nreason on graphs and generate faithful reasoning paths grounded in KGs.\nAdditionally, GCR leverages a lightweight KG-specialized LLM for\ngraph-constrained reasoning alongside a powerful general LLM for inductive\nreasoning over multiple reasoning paths, resulting in accurate reasoning with\nzero reasoning hallucination. Extensive experiments on several KGQA benchmarks\ndemonstrate that GCR achieves state-of-the-art performance and exhibits strong\nzero-shot generalizability to unseen KGs without additional training.",
+    "pdf_url": "http://arxiv.org/pdf/2410.13080v1",
+    "published": "2024-10-16"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "2109.09586v1": {
+    "title": "Some Critical and Ethical Perspectives on the Empirical Turn of AI Interpretability",
+    "authors": [
+      "Jean-Marie John-Mathews"
+    ],
+    "summary": "We consider two fundamental and related issues currently faced by Artificial\nIntelligence (AI) development: the lack of ethics and interpretability of AI\ndecisions. Can interpretable AI decisions help to address ethics in AI? Using a\nrandomized study, we experimentally show that the empirical and liberal turn of\nthe production of explanations tends to select AI explanations with a low\ndenunciatory power. Under certain conditions, interpretability tools are\ntherefore not means but, paradoxically, obstacles to the production of ethical\nAI since they can give the illusion of being sensitive to ethical incidents. We\nalso show that the denunciatory power of AI explanations is highly dependent on\nthe context in which the explanation takes place, such as the gender or\neducation level of the person to whom the explication is intended for. AI\nethics tools are therefore sometimes too flexible and self-regulation through\nthe liberal production of explanations do not seem to be enough to address\nethical issues. We then propose two scenarios for the future development of\nethical AI: more external regulation or more liberalization of AI explanations.\nThese two opposite paths will play a major role on the future development of\nethical AI.",
+    "pdf_url": "http://arxiv.org/pdf/2109.09586v1",
+    "published": "2021-09-20"
+  },
+  "2201.11117v1": {
+    "title": "Cybertrust: From Explainable to Actionable and Interpretable AI (AI2)",
+    "authors": [
+      "Stephanie Galaitsi",
+      "Benjamin D. Trump",
+      "Jeffrey M. Keisler",
+      "Igor Linkov",
+      "Alexander Kott"
+    ],
+    "summary": "To benefit from AI advances, users and operators of AI systems must have\nreason to trust it. Trust arises from multiple interactions, where predictable\nand desirable behavior is reinforced over time. Providing the system's users\nwith some understanding of AI operations can support predictability, but\nforcing AI to explain itself risks constraining AI capabilities to only those\nreconcilable with human cognition. We argue that AI systems should be designed\nwith features that build trust by bringing decision-analytic perspectives and\nformal tools into AI. Instead of trying to achieve explainable AI, we should\ndevelop interpretable and actionable AI. Actionable and Interpretable AI (AI2)\nwill incorporate explicit quantifications and visualizations of user confidence\nin AI recommendations. In doing so, it will allow examining and testing of AI\nsystem predictions to establish a basis for trust in the systems' decision\nmaking and ensure broad benefits from deploying and advancing its computational\ncapabilities.",
+    "pdf_url": "http://arxiv.org/pdf/2201.11117v1",
+    "published": "2022-01-26"
+  }
+}

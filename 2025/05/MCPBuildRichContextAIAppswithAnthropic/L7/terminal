@@ -1,0 +1,400 @@
+jovyan@ip-172-29-102-88:~/work/L7$ cd mcp_project
+jovyan@ip-172-29-102-88:~/work/L7/mcp_project$ source .venv/bin/activate
+(mcp_project) jovyan@ip-172-29-102-88:~/work/L7/mcp_project$ uv run mcp_chatbot.py
+Installed 31 packages in 9ms
+Secure MCP Filesystem Server running on stdio
+Allowed directories: [ '/home/jovyan/work/L7/mcp_project' ]
+Error Method not found
+Processing request of type ListToolsRequest
+Processing request of type ListPromptsRequest
+Processing request of type ListResourcesRequest
+Error Method not found
+
+MCP Chatbot Started!
+Type your queries or 'quit' to exit.
+Use @folders to see available topics
+Use @<topic> to search papers in that topic
+Use /prompts to list available prompts
+Use /prompt <name> <arg1=value1> to execute a prompt
+
+Query: @folders
+Processing request of type ReadResourceRequest
+
+Resource: papers://folders
+Content:
+# Available Topics
+
+- ai_interpretability
+- llm_reasoning
+
+Use @llm_reasoning to access papers in that topic.
+
+
+Query: @llm_reasonng
+Processing request of type ReadResourceRequest
+
+Resource: papers://llm_reasonng
+Content:
+# No papers found for topic: llm_reasonng
+
+Try searching for papers on this topic first.
+
+Query: @llm_reasoning
+Processing request of type ReadResourceRequest
+
+Resource: papers://llm_reasoning
+Content:
+# Papers on Llm Reasoning
+
+Total papers: 2
+
+## LexPam: Legal Procedure Awareness-Guided Mathematical Reasoning
+- **Paper ID**: 2504.02590v1
+- **Authors**: Kepu Zhang, Guofu Xie, Weijie Yu, Mingyue Xu, Xu Tang, Yaxin Li, Jun Xu
+- **Published**: 2025-04-03
+- **PDF URL**: [http://arxiv.org/pdf/2504.02590v1](http://arxiv.org/pdf/2504.02590v1)
+
+### Summary
+The legal mathematical reasoning ability of LLMs is crucial when applying
+them to real-world scenarios, as it directly affects the credibility of the
+LLM. While existing legal LLMs can perform general judicial question answering,
+their legal mathematical reasoning capabilities have not been trained.
+Open-domain reasoning models, though able to generate detailed calculation
+steps, do not follow the reasoning logic required for legal scenarios.
+Additionally, there is currently a lack of legal math...
+
+---
+
+## Graph-constrained Reasoning: Faithful Reasoning on Knowledge Graphs with Large Language Models
+- **Paper ID**: 2410.13080v1
+- **Authors**: Linhao Luo, Zicheng Zhao, Chen Gong, Gholamreza Haffari, Shirui Pan
+- **Published**: 2024-10-16
+- **PDF URL**: [http://arxiv.org/pdf/2410.13080v1](http://arxiv.org/pdf/2410.13080v1)
+
+### Summary
+Large language models (LLMs) have demonstrated impressive reasoning
+abilities, but they still struggle with faithful reasoning due to knowledge
+gaps and hallucinations. To address these issues, knowledge graphs (KGs) have
+been utilized to enhance LLM reasoning through their structured knowledge.
+However, existing KG-enhanced methods, either retrieval-based or agent-based,
+encounter difficulties in accurately retrieving knowledge and efficiently
+traversing KGs at scale. In this work, we introduce...
+
+---
+
+
+
+Query: /prompts
+
+Available prompts:
+- generate_search_prompt: Generate a prompt for Claude to find and discuss academic papers on a specific topic.
+  Arguments:
+    - topic
+    - num_papers
+- fetch: Fetch a URL and extract its contents as markdown
+  Arguments:
+    - url
+
+Query: /prompt 
+Usage: /prompt <name> <arg1=value1> <arg2=value2>
+
+Query: /prompt generate_search_prompt topic=math
+Processing request of type GetPromptRequest
+
+Executing prompt 'generate_search_prompt'...
+I'll help you search for academic papers on 'math' and provide a structured analysis of the findings. Let me use the search_papers tool to find 5 papers on this topic.
+Processing request of type CallToolRequest
+Requesting page (first: True, try: 0): https://export.arxiv.org/api/query?search_query=math&id_list=&sortBy=relevance&sortOrder=descending&start=0&max_results=100
+Got first page: 100 of 61524 total results
+Now I'll extract detailed information for each of these papers using the extract_info tool:
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+Processing request of type CallToolRequest
+# Comprehensive Analysis of Academic Papers on Math
+
+Based on the search results, I've analyzed 5 academic papers related to the topic of 'math'. Below is a detailed breakdown of each paper, followed by a synthesis of the research landscape.
+
+## Paper 1: Low progress math in a high performing system
+
+**Title:** Low progress math in a high performing system  
+**Authors:** A. Jamaludin, A. I. Jabir, F. J. Wang, A. L. Tan  
+**Publication Date:** January 26, 2023
+
+**Key Findings:**
+- Math anxiety has a negative relationship with math performance
+- This relationship is potentially more severe in low-progress math learners
+- The study focused on Singapore's education system, which has high performance overall but still has struggling students
+
+**Main Contributions:**
+- Analysis of anxiety profiles of 151 students in Singapore's math learning support intervention program
+- Examination of the complex relationship between math anxiety, demographic characteristics, working memory, and math performance
+
+**Methodologies:**
+- Survey-based data collection from students in math intervention programs
+- Statistical analysis of relationships between anxiety and performance variables
+
+**Relevance to Math:**
+- Addresses psychological factors affecting math learning
+- Focuses on struggling math learners within high-performing educational systems
+- Could inform intervention strategies to improve math education
+
+## Paper 2: Solutions to Problems in Mathematical Journals
+
+**Title:** Solutions to Problems in Amer. Math. Monthly, Math. Magazine, College Math. J., Elemente der Math., Crux Math., EMS Newsletter Math. Gazette  
+**Author:** Raymond Mortini  
+**Publication Date:** January 9, 2025 (Note: this appears to be an error in the metadata as the date is in the future)
+
+**Key Findings:**
+- Presents solutions to mathematical problems published in multiple mathematical journals
+- Solutions were developed collaboratively with multiple mathematicians
+
+**Main Contributions:**
+- Collection of mathematical problem solutions
+- Collaborative approach to problem-solving in mathematics
+
+**Methodologies:**
+- Mathematical analysis and problem-solving techniques
+- Collaborative mathematics research
+
+**Relevance to Math:**
+- Directly contributes to mathematical problem-solving literature
+- Demonstrates approaches to solving published mathematical challenges
+- Provides educational value for math students and educators
+
+## Paper 3: Math Neurosurgery: Isolating Language Models' Math Reasoning Abilities
+
+**Title:** Math Neurosurgery: Isolating Language Models' Math Reasoning Abilities Using Only Forward Passes  
+**Authors:** Bryan R. Christ, Zack Gottesman, Jonathan Kropko, Thomas Hartvigsen  
+**Publication Date:** October 22, 2024
+
+**Key Findings:**
+- Math reasoning capabilities can be isolated within Large Language Model (LLM) parameters
+- By isolating and modifying math-specific parameters, math performance can be improved without altering non-math behavior
+- The process is data-efficient, requiring as little as a single sample
+
+**Main Contributions:**
+- Introduction of "Math Neurosurgery" (MathNeuro) method to identify math-specific parameters in LLMs
+- Demonstration of improved performance (4-17% on GSM8K and 5-35% on MATH datasets) through parameter scaling
+- Ability to delete a model's math reasoning abilities without affecting general language capabilities
+
+**Methodologies:**
+- Parameter importance calculation using weights and activations
+- Filtering out parameters important for general language tasks
+- Pruning and scaling of identified math-specific parameters
+
+**Relevance to Math:**
+- Explores how mathematical reasoning is encoded in AI systems
+- Has implications for math education and AI-assisted learning
+- Provides insights into the nature of mathematical thinking
+
+## Paper 4: Automatic Generation of Headlines for Online Math Questions
+
+**Title:** Automatic Generation of Headlines for Online Math Questions  
+**Authors:** Ke Yuan, Dafang He, Zhuoren Jiang, Liangcai Gao, Zhi Tang, C. Lee Giles  
+**Publication Date:** November 27, 2019
+
+**Key Findings:**
+- Students often struggle with understanding mathematical content and equations
+- Creating concise headlines for detailed math questions is challenging
+- A unified framework can jointly model textual and mathematical information
+
+**Main Contributions:**
+- Introduction of a novel summarization task called "geNerating A concise Math hEadline" (NAME)
+- Development of MathSum, a summarization model using pointer mechanism and multi-head attention
+- Creation of two datasets: EXEQ-300k and OFEQ-10k containing real-world math questions with human-written headlines
+
+**Methodologies:**
+- Pointer mechanism for copying textual or math tokens from source questions
+- Multi-head attention mechanism to model both semantic and structural features of equations
+- Evaluation against state-of-the-art models on newly created datasets
+
+**Relevance to Math:**
+- Addresses challenges in communicating mathematical concepts
+- Improves accessibility of online math content for students
+- Combines natural language processing with mathematical representation
+
+## Paper 5: Comments on Corner Vortices in Applied Mathematics
+
+**Title:** Comments on "Comment on "Finiteness of corner vortices" [Z. Angew. Math. Phys. (2018) 69:37]"[Z. Angew. Math. Phys. (2018) 69:64]  
+**Author:** Jiten C Kalita  
+**Publication Date:** June 30, 2018
+
+**Key Findings:**
+- Provides clarification to comments made on the author's work regarding corner vortices
+- Part of an academic discussion within the field of applied mathematics
+
+**Main Contributions:**
+- Addresses criticisms or questions about previous research
+- Clarifies aspects of fluid dynamics research related to corner vortices
+
+**Methodologies:**
+- Academic discourse and rebuttal
+- Applied mathematical analysis
+
+**Relevance to Math:**
+- Demonstrates the iterative nature of mathematical research and discourse
+- Focuses on applied mathematics in fluid dynamics
+- Contributes to the understanding of mathematical modeling of physical phenomena
+
+## Current State of Research in Math
+
+**Overview:**
+Based on these papers, mathematics research spans a diverse range of topics from educational psychology (math anxiety), problem-solving, artificial intelligence applications, natural language processing of mathematical content, and applied mathematics in physics. The field shows strong interdisciplinary connections, with mathematics interfacing with psychology, education, computer science, and physics.
+
+**Common Themes and Trends:**
+1. **Integration of AI and Mathematics:**
+   - Using AI to improve math education and accessibility
+   - Modeling mathematical reasoning in computational systems
+   - Developing tools to process and generate mathematical content
+
+2. **Educational Focus:**
+   - Understanding psychological factors affecting math performance
+   - Creating better tools for math communication and education
+   - Supporting struggling learners with targeted interventions
+
+3. **Applied Mathematics:**
+   - Mathematical modeling of physical phenomena
+   - Collaborative problem-solving in mathematics
+   - Academic discourse and refinement of mathematical models
+
+4. **Mathematical Communication:**
+   - Improving how math content is presented and summarized
+   - Making mathematical concepts more accessible
+   - Combining natural language and mathematical notation effectively
+
+**Research Gaps and Future Directions:**
+1. **Personalized Mathematics Education:**
+   - More research needed on tailoring math education to different anxiety levels and learning styles
+   - Development of AI-assisted learning tools that adapt to individual needs
+
+2. **Mathematical Reasoning in AI:**
+   - Further exploration of how mathematical thinking differs from general reasoning in AI systems
+   - Development of specialized AI architectures for mathematical tasks
+
+3. **Accessibility of Mathematics:**
+   - Continued work on making complex mathematical concepts more accessible
+   - Development of tools to bridge formal mathematical notation and natural language
+
+4. **Cross-cultural Mathematics Education:**
+   - More comparative studies between different educational systems and their approaches to mathematics
+   - Understanding cultural factors in mathematical learning and performance
+
+**Most Impactful Papers:**
+From this limited sample, the "Math Neurosurgery" paper appears to have the most innovative approach, offering novel insights into how mathematical reasoning is encoded within AI systems and suggesting ways to enhance mathematical capabilities selectively. The paper on math anxiety in Singapore's education system also provides valuable insights by examining psychological factors within a high-performing system, potentially offering lessons for other educational contexts.
+
+The MathSum paper introduces valuable datasets and methodologies for processing mathematical content in natural language, which could have significant implications for math education technology and online learning platforms.
+
+Overall, these papers reflect a vibrant and interdisciplinary approach to mathematics research, with strong connections to education, psychology, computer science, and physics, indicating the central role mathematics continues to play across multiple fields of study.
+
+Query: @folders
+Processing request of type ReadResourceRequest
+
+Resource: papers://folders
+Content:
+# Available Topics
+
+- ai_interpretability
+- llm_reasoning
+- math
+
+Use @math to access papers in that topic.
+
+
+Query: /folder math
+Unknown command: /folder
+
+Query: @math       
+Processing request of type ReadResourceRequest
+
+Resource: papers://math
+Content:
+# Papers on Math
+
+Total papers: 5
+
+## Low progress math in a high performing system
+- **Paper ID**: 2302.01910v1
+- **Authors**: A. Jamaludin, A. I. Jabir, F. J. Wang, A. L. Tan
+- **Published**: 2023-01-26
+- **PDF URL**: [http://arxiv.org/pdf/2302.01910v1](http://arxiv.org/pdf/2302.01910v1)
+
+### Summary
+Math anxiety negatively relates to math performance. This negative
+relationship may be exacerbated in low-progress math learners. However, there
+are limited studies on math anxiety among low progress learners in a
+paradoxically high performing education system like Singapore. To fill this
+research gap, this research analysed the anxiety profiles of 151 students who
+were in the math learning support intervention program administered by the
+Ministry of Education, Singapore (MOE). We examined the c...
+
+---
+
+## Solutions to Problems in Amer. Math. Monthly, Math. Magazine, College Math. J., Elemente der Math.,Crux Math., EMS Newsletter Math. Gazette
+- **Paper ID**: 2501.05096v1
+- **Authors**: Raymond Mortini
+- **Published**: 2025-01-09
+- **PDF URL**: [http://arxiv.org/pdf/2501.05096v1](http://arxiv.org/pdf/2501.05096v1)
+
+### Summary
+In this arxiv-post I present my solutions (published or not) to Problems that
+appeared in Amer. Math. Monthly, Math. Magazine, Elemente der Mathematik and
+CRUX, that were mostly done in collaboration with Rudolf Rupp. Some of them
+(including a few own proposals which were published) were also done in
+cooperation with Rainer Br\"uck, Bikash Chakraborty, Pamela Gorkin, Gerd
+Herzog, J\'er\^ome No\"el, Peter Pflug and Amol Sasane....
+
+---
+
+## Math Neurosurgery: Isolating Language Models' Math Reasoning Abilities Using Only Forward Passes
+- **Paper ID**: 2410.16930v2
+- **Authors**: Bryan R. Christ, Zack Gottesman, Jonathan Kropko, Thomas Hartvigsen
+- **Published**: 2024-10-22
+- **PDF URL**: [http://arxiv.org/pdf/2410.16930v2](http://arxiv.org/pdf/2410.16930v2)
+
+### Summary
+Math reasoning is an active area of Large Language Model (LLM) research
+because it is a hallmark of artificial intelligence and has implications in
+several domains, including math education. However, few works have explored how
+math reasoning is encoded within LLM parameters and if it is a skill that can
+be isolated within models. Doing so could allow targeted intervention to
+improve math performance without altering non-math behavior and foster
+understanding of how models encode math reasoning....
+
+---
+
+## Automatic Generation of Headlines for Online Math Questions
+- **Paper ID**: 1912.00839v1
+- **Authors**: Ke Yuan, Dafang He, Zhuoren Jiang, Liangcai Gao, Zhi Tang, C. Lee Giles
+- **Published**: 2019-11-27
+- **PDF URL**: [http://arxiv.org/pdf/1912.00839v1](http://arxiv.org/pdf/1912.00839v1)
+
+### Summary
+Mathematical equations are an important part of dissemination and
+communication of scientific information. Students, however, often feel
+challenged in reading and understanding math content and equations. With the
+development of the Web, students are posting their math questions online.
+Nevertheless, constructing a concise math headline that gives a good
+description of the posted detailed math question is nontrivial. In this study,
+we explore a novel summarization task denoted as geNerating A co...
+
+---
+
+## Comments on "Comment on "Finiteness of corner vortices" [ Z. Angew. Math. Phys. (2018) 69:37]"[Z. Angew. Math. Phys. (2018) 69:64]
+- **Paper ID**: 1807.00200v1
+- **Authors**: Jiten C Kalita
+- **Published**: 2018-06-30
+- **PDF URL**: [http://arxiv.org/pdf/1807.00200v1](http://arxiv.org/pdf/1807.00200v1)
+
+### Summary
+In this short note we provide clarification to the comments made in Z. Angew.
+Math. Phys. (2018) 69:64 on our work "Finiteness of corner vortices" [ Z.
+Angew. Math. Phys. (2018) 69:37]....
+
+---
+
+
+
+Query: quit
+(mcp_project) jovyan@ip-172-29-102-88:~/work/L7/mcp_project$

@@ -1,0 +1,117 @@
+jovyan@ip-172-29-102-88:~/work$ cd L6
+jovyan@ip-172-29-102-88:~/work/L6$ l
+bash: l: command not found
+jovyan@ip-172-29-102-88:~/work/L6$ ls
+L6.ipynb  images  mcp_project
+jovyan@ip-172-29-102-88:~/work/L6$ source .venv/bin/activate
+bash: .venv/bin/activate: No such file or directory
+jovyan@ip-172-29-102-88:~/work/L6$ uv init
+Initialized project `l6`
+jovyan@ip-172-29-102-88:~/work/L6$ source .venv/bin/activate
+bash: .venv/bin/activate: No such file or directory
+jovyan@ip-172-29-102-88:~/work/L6$ ls -alt
+total 36
+drwxr-xr-x. 1 jovyan jovyan   148 May 14 21:19 .
+drwxr-xr-x. 7 jovyan jovyan   119 May 14 21:19 .git
+-rw-r--r--. 1 jovyan jovyan   109 May 14 21:19 .gitignore
+-rw-r--r--. 1 jovyan jovyan     5 May 14 21:19 .python-version
+-rw-r--r--. 1 jovyan jovyan     0 May 14 21:19 README.md
+-rw-r--r--. 1 jovyan jovyan    80 May 14 21:19 main.py
+-rw-r--r--. 1 jovyan jovyan   148 May 14 21:19 pyproject.toml
+-rw-r--r--. 1 jovyan jovyan 19587 May 14 21:04 L6.ipynb
+drwxr-xr-x. 1 jovyan jovyan    26 May 14 05:51 ..
+drwxr-xr-x. 1 jovyan jovyan    28 May 14 01:51 mcp_project
+drwxr-xr-x. 1 jovyan jovyan    33 May 14 01:46 .ipynb_checkpoints
+drwxr-xr-x. 1 jovyan jovyan    51 May 14 01:18 images
+jovyan@ip-172-29-102-88:~/work/L6$ cd mcp_project
+jovyan@ip-172-29-102-88:~/work/L6/mcp_project$ ls
+README.md  mcp_chatbot.py  research_server.py  uv.lock
+main.py    pyproject.toml  server_config.json
+jovyan@ip-172-29-102-88:~/work/L6/mcp_project$ source .venv/bin/activate
+(mcp_project) jovyan@ip-172-29-102-88:~/work/L6/mcp_project$ uv run mcp_chatbot.py
+Installed 31 packages in 10ms
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'minimatch@10.0.1',
+npm WARN EBADENGINE   required: { node: '20 || >=22' },
+npm WARN EBADENGINE   current: { node: 'v18.19.0', npm: '7.24.0' }
+npm WARN EBADENGINE }
+Secure MCP Filesystem Server running on stdio
+Allowed directories: [ '/home/jovyan/work/L6/mcp_project' ]
+
+Connected to filesystem with tools: ['read_file', 'read_multiple_files', 'write_file', 'edit_file', 'create_directory', 'list_directory', 'directory_tree', 'move_file', 'search_files', 'get_file_info', 'list_allowed_directories']
+Processing request of type ListToolsRequest
+
+Connected to research with tools: ['search_papers', 'extract_info']
+Installed 35 packages in 10ms
+
+Connected to fetch with tools: ['fetch']
+
+MCP Chatbot Started!
+Type your queries or 'quit' to exit.
+
+Query: Fetch the content of this website: https://modelcontextprotocol.io/docs/concepts/architecture and save the content in the file "mcp_summary.md", create a visual diagram that summarizes the content of "mcp_summary.md" and save it in a text file
+I'll help you fetch the content from the website and save it, then create a visual diagram based on the content. Let me do this step by step.
+
+First, let's fetch the content from the website:
+Calling tool fetch with args {'url': 'https://modelcontextprotocol.io/docs/concepts/architecture'}
+Now, let's save the fetched content to a file named "mcp_summary.md":
+Calling tool write_file with args {'path': 'mcp_summary.md', 'content': "Contents of https://modelcontextprotocol.io/docs/concepts/architecture:\nThe Model Context Protocol (MCP) is built on a flexible, extensible architecture that enables seamless communication between LLM applications and integrations. This document covers the core architectural components and concepts.\n\n## Overview\n\nMCP follows a client-server architecture where:\n\n* **Hosts** are LLM applications (like Claude Desktop or IDEs) that initiate connections\n* **Clients** maintain 1:1 connections with servers, inside the host application\n* **Servers** provide context, tools, and prompts to clients\n\n## Core components\n\n### Protocol layer\n\nThe protocol layer handles message framing, request/response linking, and high-level communication patterns.\n\nKey classes include:\n\n* `Protocol`\n* `Client`\n* `Server`\n\n### Transport layer\n\nThe transport layer handles the actual communication between clients and servers. MCP supports multiple transport mechanisms:\n\n1. **Stdio transport**\n\n   * Uses standard input/output for communication\n   * Ideal for local processes\n2. **HTTP with SSE transport**\n\n   * Uses Server-Sent Events for server-to-client messages\n   * HTTP POST for client-to-server messages\n\nAll transports use [JSON-RPC](https://www.jsonrpc.org/) 2.0 to exchange messages. See the [specification](/specification) for detailed information about the Model Context Protocol message format.\n\n### Message types\n\nMCP has these main types of messages:\n\n1. **Requests** expect a response from the other side:\n2. **Results** are successful responses to requests:\n3. **Errors** indicate that a request failed:\n4. **Notifications** are one-way messages that don't expect a response:\n\n## Connection lifecycle\n\n### 1. Initialization\n\n1. Client sends `initialize` request with protocol version and capabilities\n2. Server responds with its protocol version and capabilities\n3. Client sends `initialized` notification as acknowledgment\n4. Normal message exchange begins\n\n### 2. Message exchange\n\nAfter initialization, the following patterns are supported:\n\n* **Request-Response**: Client or server sends requests, the other responds\n* **Notifications**: Either party sends one-way messages\n\n### 3. Termination\n\nEither party can terminate the connection:\n\n* Clean shutdown via `close()`\n* Transport disconnection\n* Error conditions\n\n## Error handling\n\nMCP defines these standard error codes:\n\nSDKs and applications can define their own error codes above -32000.\n\nErrors are propagated through:\n\n* Error responses to requests\n* Error events on transports\n* Protocol-level error handlers\n\n## Implementation example\n\nHere's a basic example of implementing an MCP server:\n\n## Best practices\n\n### Transport selection\n\n1. **Local communication**\n\n   * Use stdio transport for local processes\n   * Efficient for same-machine communication\n   * Simple process management\n2. **Remote communication**\n\n   * Use SSE for scenarios requiring HTTP compatibility\n   * Consider security implications including authentication and authorization\n\n### Message handling\n\n1. **Request processing**\n\n   * Validate inputs thoroughly\n   * Use type-safe schemas\n   * Handle errors gracefully\n   * Implement timeouts\n2. **Progress reporting**\n\n   * Use progress tokens for long operations\n   * Report progress incrementally\n   * Include total progress when known\n3. **Error management**\n\n   * Use appropriate error codes\n   * Include helpful error messages\n   * Clean up resources on errors\n\n## Security considerations\n\n1. **Transport security**\n\n   * Use TLS for remote connections\n   * Validate connection origins\n   * Implement authentication when needed\n2. **Message validation**\n\n   * Validate all incoming messages\n   * Sanitize inputs\n   * Check message size limits\n   * Verify JSON-RPC format\n3. **Resource protection**\n\n   * Implement access controls\n   * Validate resource paths\n   * Monitor resource usage\n   * Rate limit requests\n4. **Error handling**\n\n   * Don't leak sensitive information\n   * Log security-relevant errors\n   * Implement proper cleanup\n   * Handle DoS scenarios\n\n## Debugging and monitoring\n\n1. **Logging**\n\n   * Log protocol events\n   * Track message flow\n   * Monitor performance\n   * Record errors\n2. **Diagnostics**\n\n   * Implement health checks\n   * Monitor connection state\n   * Track resource usage\n   * Profile performance\n3. **Testing**\n\n   * Test different transports\n   * Verify error handling\n   * Check edge cases\n   * Load test servers"}
+Now, I'll create a visual diagram that summarizes the content of "mcp_summary.md" and save it in a text file. I'll design an ASCII diagram to represent the architecture of the Model Context Protocol:
+Calling tool write_file with args {'path': 'mcp_architecture_diagram.txt', 'content': '```\n+---------------------------+       Model Context Protocol Architecture       +---------------------------+\n|                                                                                                         |\n|                                                                                                         |\n|  +----------------+                                                          +------------------+       |\n|  |                |                   CONNECTION LIFECYCLE                   |                  |       |\n|  |     HOST       |                                                          |      SERVER      |       |\n|  | (LLM App/IDE)  |           1. Initialization                              |                  |       |\n|  |                |           - initialize request                           |   Provides:      |       |\n|  |  +-----------+ |           - capability exchange                          |   - Context      |       |\n|  |  |           | |           - initialized notification                     |   - Tools        |       |\n|  |  |  CLIENT   | | <----------------------------------------->              |   - Prompts      |       |\n|  |  |           | |           2. Message Exchange                            |                  |       |\n|  |  +-----------+ |           - Request-Response pattern                     |                  |       |\n|  |                |           - Notifications                                 |                  |       |\n|  +----------------+                                                          +------------------+       |\n|                                 3. Termination                                                          |\n|                                 - close()                                                               |\n|                                 - disconnection                                                         |\n|                                 - errors                                                                |\n|                                                                                                         |\n|  +-----------------------------------------------------------------------------------------+            |\n|  |                                   PROTOCOL LAYERS                                        |            |\n|  |  +------------------------+    +-----------------------------+    +--------------------+ |            |\n|  |  |     Protocol Layer     |    |      Transport Layer        |    |    Message Types   | |            |\n|  |  | - Protocol             |    | 1. Stdio Transport          |    | 1. Requests        | |            |\n|  |  | - Client               |    |    (standard I/O)           |    | 2. Results         | |            |\n|  |  | - Server               |    | 2. HTTP with SSE            |    | 3. Errors          | |            |\n|  |  |                        |    |    (Server-Sent Events)     |    | 4. Notifications   | |            |\n|  |  +------------------------+    +-----------------------------+    +--------------------+ |            |\n|  |                                                                                         |            |\n|  |                          All using JSON-RPC 2.0 for message exchange                    |            |\n|  +-----------------------------------------------------------------------------------------+            |\n|                                                                                                         |\n|                                                                                                         |\n|  +-------------------------+    +------------------------+    +-------------------------+                |\n|  |                         |    |                        |    |                         |                |\n|  |    BEST PRACTICES       |    |    ERROR HANDLING      |    |  SECURITY & DEBUGGING   |                |\n|  |                         |    |                        |    |                         |                |\n|  | - Transport selection   |    | - Error codes          |    | - Transport security    |                |\n|  | - Message validation    |    | - Error responses      |    | - Message validation    |                |\n|  | - Progress reporting    |    | - Transport errors     |    | - Resource protection   |                |\n|  | - Error management      |    | - Error handlers       |    | - Logging & Monitoring  |                |\n|  |                         |    |                        |    | - Testing               |                |\n|  +-------------------------+    +------------------------+    +-------------------------+                |\n|                                                                                                         |\n+--------------------------------------------------------------------------------------------------------+\n```'}
+I've completed both tasks:
+
+1. Fetched the content from https://modelcontextprotocol.io/docs/concepts/architecture and saved it to a file named "mcp_summary.md"
+2. Created a visual ASCII diagram that summarizes the Model Context Protocol architecture and saved it to "mcp_architecture_diagram.txt"
+
+The diagram visually represents the key components of the MCP architecture, including:
+- The Host-Client-Server relationship
+- The three main stages of the connection lifecycle
+- The protocol layers (Protocol, Transport, and Message Types)
+- Key best practices, error handling approaches, and security/debugging considerations
+
+You can find both files in your current directory. The diagram provides a high-level overview that should help in understanding how the different components of the Model Context Protocol fit together.
+
+
+
+Query: Fetch deeplearning.ai and find an interesting term. Search for 2 papers around the term and then summarize your findings and write them to a file called results.txt
+I'll help you fetch information from deeplearning.ai, find an interesting term, search for related papers, and then write a summary to results.txt. Let me break this down into steps:
+
+1. First, let's fetch content from deeplearning.ai
+2. Identify an interesting term from the content
+3. Search for papers related to that term
+4. Summarize the findings
+5. Write the summary to results.txt
+
+Let's start by fetching the deeplearning.ai website:
+Calling tool fetch with args {'url': 'https://www.deeplearning.ai/'}
+Based on the content from deeplearning.ai, I've found several interesting AI terms. One that stands out is "Reasoning" which appears in their recent news section ("Recipes For Reasoning" and "Easy Reasoning Hack"). This is an important area in modern AI research. Let's search for some papers on this topic:
+Calling tool search_papers with args {'topic': 'AI reasoning capabilities', 'max_results': 2}
+Processing request of type CallToolRequest
+Requesting page (first: True, try: 0): https://export.arxiv.org/api/query?search_query=AI+reasoning+capabilities&id_list=&sortBy=relevance&sortOrder=descending&start=0&max_results=100
+Got first page: 100 of 191128 total results
+Now let's extract information about these papers:
+Calling tool extract_info with args {'paper_id': '2305.15922v1'}
+Processing request of type CallToolRequest
+Calling tool extract_info with args {'paper_id': '2504.20084v1'}
+Processing request of type CallToolRequest
+Now I'll summarize the findings and write them to results.txt:
+Calling tool write_file with args {'path': 'results.txt', 'content': '# AI Reasoning Capabilities: Research Summary\n\nAfter exploring deeplearning.ai, I identified "reasoning" as a significant area of interest in current AI research. This topic appears in recent articles such as "Recipes For Reasoning" and "Easy Reasoning Hack," indicating its importance in the AI community.\n\n## Paper 1: AI Capability Assessment Model\n**Title**: Towards a Capability Assessment Model for the Comprehension and Adoption of AI in Organisations\n**Authors**: Butler, Tom; Espinoza-Limón, Angelina; Seppälä, Selja\n**Published**: May 25, 2023\n\nThis paper introduces a 5-level AI Capability Assessment Model (AI-CAM) to help organizations understand and adopt AI technologies. One of the key focuses is on "AI-based solutions that seek to emulate human reasoning and decision-making." The model addresses various capability dimensions including business, data, technology, organization, AI skills, risks, and ethical considerations necessary for implementing AI reasoning systems in organizational contexts.\n\n## Paper 2: AI Awareness\n**Title**: AI Awareness\n**Authors**: Xiaojian Li, Haoyuan Shi, Rongwu Xu, Wei Xu\n**Published**: April 25, 2025\n\nThis paper explores AI awareness as a functional capacity rather than a philosophical concept of consciousness. It examines four types of awareness: meta-cognition, self-awareness, social awareness, and situational awareness. The research specifically highlights that AI awareness is linked to reasoning capabilities, noting that "more aware AI agents tend to exhibit higher levels of intelligent behaviors." The authors describe AI awareness as a "double-edged sword" that improves reasoning and safety while also raising concerns about misalignment and societal risks.\n\n## Conclusion\nThe research indicates that reasoning capabilities are becoming increasingly important in AI development. Organizations are developing frameworks to assess and implement AI systems with human-like reasoning, while researchers are exploring how different forms of awareness contribute to an AI system\'s ability to reason effectively. As AI reasoning continues to advance, balancing improved capabilities with safety and ethical considerations remains a critical challenge.'}
+I've completed all the requested tasks:
+
+1. Fetched content from deeplearning.ai and identified "reasoning" as an interesting term from their recent content.
+2. Searched for and found 2 papers related to AI reasoning capabilities.
+3. Extracted detailed information about both papers.
+4. Created a comprehensive summary of my findings, highlighting:
+   - How reasoning appears in current AI discussions
+   - Key points from the first paper on AI capability assessment for reasoning systems
+   - Insights from the second paper on AI awareness and its connection to reasoning
+   - A conclusion about the importance of reasoning in AI development
+
+5. Successfully wrote this summary to a file named "results.txt"
+
+The summary connects the AI reasoning topic found on deeplearning.ai with academic research, providing context on how organizations can assess AI reasoning capabilities and how AI awareness contributes to better reasoning abilities in AI systems.
+
+
+
+Query: quit
+(mcp_project) jovyan@ip-172-29-102-88:~/work/L6/mcp_project$ 

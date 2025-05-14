@@ -1,0 +1,698 @@
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy
+New connection
+Query parameters: [Object: null prototype] {
+  command: 'uv',
+  args: 'run research_server.py',
+  env: '{"HOME":"/home/jovyan","PATH":"/home/jovyan/work/L4/mcp_project/node_modules/.bin:/home/jovyan/work/L4/node_modules/.bin:/home/jovyan/work/node_modules/.bin:/home/jovyan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/jovyan/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/home/jovyan/work/L4/mcp_project/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","TERM":"xterm-256color"}',
+  transportType: 'stdio'
+}
+Stdio transport: command=/usr/local/bin/uv, args=run,research_server.py
+Spawned stdio transport
+Connected MCP client to backing server transport
+Created web app transport
+Set up MCP proxy

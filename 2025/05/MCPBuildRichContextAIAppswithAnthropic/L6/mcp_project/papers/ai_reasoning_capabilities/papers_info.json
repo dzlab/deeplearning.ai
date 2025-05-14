@@ -1,0 +1,28 @@
+{
+  "2305.15922v1": {
+    "title": "Towards a Capability Assessment Model for the Comprehension and Adoption of AI in Organisations",
+    "authors": [
+      "Butler",
+      "Tom",
+      "Espinoza-Lim\u00f3n",
+      "Angelina",
+      "Sepp\u00e4l\u00e4",
+      "Selja"
+    ],
+    "summary": "The comprehension and adoption of Artificial Intelligence (AI) are beset with\npractical and ethical problems. This article presents a 5-level AI Capability\nAssessment Model (AI-CAM) and a related AI Capabilities Matrix (AI-CM) to\nassist practitioners in AI comprehension and adoption. These practical tools\nwere developed with business executives, technologists, and other\norganisational stakeholders in mind. They are founded on a comprehensive\nconception of AI compared to those in other AI adoption models and are also\nopen-source artefacts. Thus, the AI-CAM and AI-CM present an accessible\nresource to help inform organisational decision-makers on the capability\nrequirements for (1) AI-based data analytics use cases based on machine\nlearning technologies; (2) Knowledge representation to engineer and represent\ndata, information and knowledge using semantic technologies; and (3) AI-based\nsolutions that seek to emulate human reasoning and decision-making. The AI-CAM\ncovers the core capability dimensions (business, data, technology,\norganisation, AI skills, risks, and ethical considerations) required at the\nfive capability maturity levels to achieve optimal use of AI in organisations.",
+    "pdf_url": "http://arxiv.org/pdf/2305.15922v1",
+    "published": "2023-05-25"
+  },
+  "2504.20084v1": {
+    "title": "AI Awareness",
+    "authors": [
+      "Xiaojian Li",
+      "Haoyuan Shi",
+      "Rongwu Xu",
+      "Wei Xu"
+    ],
+    "summary": "Recent breakthroughs in artificial intelligence (AI) have brought about\nincreasingly capable systems that demonstrate remarkable abilities in\nreasoning, language understanding, and problem-solving. These advancements have\nprompted a renewed examination of AI awareness, not as a philosophical question\nof consciousness, but as a measurable, functional capacity. In this review, we\nexplore the emerging landscape of AI awareness, which includes meta-cognition\n(the ability to represent and reason about its own state), self-awareness\n(recognizing its own identity, knowledge, limitations, inter alia), social\nawareness (modeling the knowledge, intentions, and behaviors of other agents),\nand situational awareness (assessing and responding to the context in which it\noperates).\n  First, we draw on insights from cognitive science, psychology, and\ncomputational theory to trace the theoretical foundations of awareness and\nexamine how the four distinct forms of AI awareness manifest in\nstate-of-the-art AI. Next, we systematically analyze current evaluation methods\nand empirical findings to better understand these manifestations. Building on\nthis, we explore how AI awareness is closely linked to AI capabilities,\ndemonstrating that more aware AI agents tend to exhibit higher levels of\nintelligent behaviors. Finally, we discuss the risks associated with AI\nawareness, including key topics in AI safety, alignment, and broader ethical\nconcerns.\n  AI awareness is a double-edged sword: it improves general capabilities, i.e.,\nreasoning, safety, while also raises concerns around misalignment and societal\nrisks, demanding careful oversight as AI capabilities grow. On the whole, our\ninterdisciplinary review provides a roadmap for future research and aims to\nclarify the role of AI awareness in the ongoing development of intelligent\nmachines.",
+    "pdf_url": "http://arxiv.org/pdf/2504.20084v1",
+    "published": "2025-04-25"
+  }
+}

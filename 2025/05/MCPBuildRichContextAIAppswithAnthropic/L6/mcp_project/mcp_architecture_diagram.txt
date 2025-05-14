@@ -1,0 +1,48 @@
+```
++---------------------------+       Model Context Protocol Architecture       +---------------------------+
+|                                                                                                         |
+|                                                                                                         |
+|  +----------------+                                                          +------------------+       |
+|  |                |                   CONNECTION LIFECYCLE                   |                  |       |
+|  |     HOST       |                                                          |      SERVER      |       |
+|  | (LLM App/IDE)  |           1. Initialization                              |                  |       |
+|  |                |           - initialize request                           |   Provides:      |       |
+|  |  +-----------+ |           - capability exchange                          |   - Context      |       |
+|  |  |           | |           - initialized notification                     |   - Tools        |       |
+|  |  |  CLIENT   | | <----------------------------------------->              |   - Prompts      |       |
+|  |  |           | |           2. Message Exchange                            |                  |       |
+|  |  +-----------+ |           - Request-Response pattern                     |                  |       |
+|  |                |           - Notifications                                 |                  |       |
+|  +----------------+                                                          +------------------+       |
+|                                 3. Termination                                                          |
+|                                 - close()                                                               |
+|                                 - disconnection                                                         |
+|                                 - errors                                                                |
+|                                                                                                         |
+|  +-----------------------------------------------------------------------------------------+            |
+|  |                                   PROTOCOL LAYERS                                        |            |
+|  |  +------------------------+    +-----------------------------+    +--------------------+ |            |
+|  |  |     Protocol Layer     |    |      Transport Layer        |    |    Message Types   | |            |
+|  |  | - Protocol             |    | 1. Stdio Transport          |    | 1. Requests        | |            |
+|  |  | - Client               |    |    (standard I/O)           |    | 2. Results         | |            |
+|  |  | - Server               |    | 2. HTTP with SSE            |    | 3. Errors          | |            |
+|  |  |                        |    |    (Server-Sent Events)     |    | 4. Notifications   | |            |
+|  |  +------------------------+    +-----------------------------+    +--------------------+ |            |
+|  |                                                                                         |            |
+|  |                          All using JSON-RPC 2.0 for message exchange                    |            |
+|  +-----------------------------------------------------------------------------------------+            |
+|                                                                                                         |
+|                                                                                                         |
+|  +-------------------------+    +------------------------+    +-------------------------+                |
+|  |                         |    |                        |    |                         |                |
+|  |    BEST PRACTICES       |    |    ERROR HANDLING      |    |  SECURITY & DEBUGGING   |                |
+|  |                         |    |                        |    |                         |                |
+|  | - Transport selection   |    | - Error codes          |    | - Transport security    |                |
+|  | - Message validation    |    | - Error responses      |    | - Message validation    |                |
+|  | - Progress reporting    |    | - Transport errors     |    | - Resource protection   |                |
+|  | - Error management      |    | - Error handlers       |    | - Logging & Monitoring  |                |
+|  |                         |    |                        |    | - Testing               |                |
+|  +-------------------------+    +------------------------+    +-------------------------+                |
+|                                                                                                         |
++--------------------------------------------------------------------------------------------------------+
+```

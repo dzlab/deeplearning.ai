@@ -1,0 +1,58 @@
+{
+  "2302.01910v1": {
+    "title": "Low progress math in a high performing system",
+    "authors": [
+      "A. Jamaludin",
+      "A. I. Jabir",
+      "F. J. Wang",
+      "A. L. Tan"
+    ],
+    "summary": "Math anxiety negatively relates to math performance. This negative\nrelationship may be exacerbated in low-progress math learners. However, there\nare limited studies on math anxiety among low progress learners in a\nparadoxically high performing education system like Singapore. To fill this\nresearch gap, this research analysed the anxiety profiles of 151 students who\nwere in the math learning support intervention program administered by the\nMinistry of Education, Singapore (MOE). We examined the complex relationship\ncentred in math anxiety with relevant variables such as demographic\ncharacteristics, working memory and math performance. Limitations and future\ndirections are discussed.",
+    "pdf_url": "http://arxiv.org/pdf/2302.01910v1",
+    "published": "2023-01-26"
+  },
+  "2501.05096v1": {
+    "title": "Solutions to Problems in Amer. Math. Monthly, Math. Magazine, College Math. J., Elemente der Math.,Crux Math., EMS Newsletter Math. Gazette",
+    "authors": [
+      "Raymond Mortini"
+    ],
+    "summary": "In this arxiv-post I present my solutions (published or not) to Problems that\nappeared in Amer. Math. Monthly, Math. Magazine, Elemente der Mathematik and\nCRUX, that were mostly done in collaboration with Rudolf Rupp. Some of them\n(including a few own proposals which were published) were also done in\ncooperation with Rainer Br\\\"uck, Bikash Chakraborty, Pamela Gorkin, Gerd\nHerzog, J\\'er\\^ome No\\\"el, Peter Pflug and Amol Sasane.",
+    "pdf_url": "http://arxiv.org/pdf/2501.05096v1",
+    "published": "2025-01-09"
+  },
+  "2410.16930v2": {
+    "title": "Math Neurosurgery: Isolating Language Models' Math Reasoning Abilities Using Only Forward Passes",
+    "authors": [
+      "Bryan R. Christ",
+      "Zack Gottesman",
+      "Jonathan Kropko",
+      "Thomas Hartvigsen"
+    ],
+    "summary": "Math reasoning is an active area of Large Language Model (LLM) research\nbecause it is a hallmark of artificial intelligence and has implications in\nseveral domains, including math education. However, few works have explored how\nmath reasoning is encoded within LLM parameters and if it is a skill that can\nbe isolated within models. Doing so could allow targeted intervention to\nimprove math performance without altering non-math behavior and foster\nunderstanding of how models encode math reasoning. We introduce Math\nNeurosurgery (MathNeuro), a computationally efficient method we use to isolate\nmath-specific parameters in LLMs using only forward passes. MathNeuro builds on\nexisting work by using weights and activations to calculate parameter\nimportance, but isolates math-specific parameters by filtering out those\nimportant for general language tasks. Through pruning parameters MathNeuro\nidentifies, we delete a LLM's math reasoning ability without significantly\nimpacting its general language ability. Scaling the identified parameters by a\nsmall constant improves a pretrained or instruction-tuned LLM's performance by\n4-17% on GSM8K and 5-35% on MATH while leaving non-math behavior unaltered.\nMathNeuro is also data efficient: most of its effectiveness holds when\nidentifying math-specific parameters using a single sample. MathNeuro\nhighlights the potential for future work to intervene on math-specific\nparameters.",
+    "pdf_url": "http://arxiv.org/pdf/2410.16930v2",
+    "published": "2024-10-22"
+  },
+  "1912.00839v1": {
+    "title": "Automatic Generation of Headlines for Online Math Questions",
+    "authors": [
+      "Ke Yuan",
+      "Dafang He",
+      "Zhuoren Jiang",
+      "Liangcai Gao",
+      "Zhi Tang",
+      "C. Lee Giles"
+    ],
+    "summary": "Mathematical equations are an important part of dissemination and\ncommunication of scientific information. Students, however, often feel\nchallenged in reading and understanding math content and equations. With the\ndevelopment of the Web, students are posting their math questions online.\nNevertheless, constructing a concise math headline that gives a good\ndescription of the posted detailed math question is nontrivial. In this study,\nwe explore a novel summarization task denoted as geNerating A concise Math\nhEadline from a detailed math question (NAME). Compared to conventional\nsummarization tasks, this task has two extra and essential constraints: 1)\nDetailed math questions consist of text and math equations which require a\nunified framework to jointly model textual and mathematical information; 2)\nUnlike text, math equations contain semantic and structural features, and both\nof them should be captured together. To address these issues, we propose\nMathSum, a novel summarization model which utilizes a pointer mechanism\ncombined with a multi-head attention mechanism for mathematical representation\naugmentation. The pointer mechanism can either copy textual tokens or math\ntokens from source questions in order to generate math headlines. The\nmulti-head attention mechanism is designed to enrich the representation of math\nequations by modeling and integrating both its semantic and structural\nfeatures. For evaluation, we collect and make available two sets of real-world\ndetailed math questions along with human-written math headlines, namely\nEXEQ-300k and OFEQ-10k. Experimental results demonstrate that our model\n(MathSum) significantly outperforms state-of-the-art models for both the\nEXEQ-300k and OFEQ-10k datasets.",
+    "pdf_url": "http://arxiv.org/pdf/1912.00839v1",
+    "published": "2019-11-27"
+  },
+  "1807.00200v1": {
+    "title": "Comments on \"Comment on \"Finiteness of corner vortices\" [ Z. Angew. Math. Phys. (2018) 69:37]\"[Z. Angew. Math. Phys. (2018) 69:64]",
+    "authors": [
+      "Jiten C Kalita"
+    ],
+    "summary": "In this short note we provide clarification to the comments made in Z. Angew.\nMath. Phys. (2018) 69:64 on our work \"Finiteness of corner vortices\" [ Z.\nAngew. Math. Phys. (2018) 69:37].",
+    "pdf_url": "http://arxiv.org/pdf/1807.00200v1",
+    "published": "2018-06-30"
+  }
+}
