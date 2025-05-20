@@ -1,0 +1,164 @@
+"use client"
+
+import React, { useState } from 'react';
+
+const FeedbackForm = () => {
+  const rubrics = [
+    { id: 'communication', label: 'Communication', weight: 0.3 },
+    { id: 'technical', label: 'Technical Skills', weight: 0.4 },
+    { id: 'problemSolving', label: 'Problem Solving', weight: 0.2 },
+    { id: 'cultureFit', label: 'Culture Fit', weight: 0.1 },
+  ];
+
+  const [feedback, setFeedback] = useState(
+    rubrics.reduce((acc, rubric) => {
+      acc[rubric.id] = { rating: '', evidence: '' };
+      return acc;
+    }, {})
+  );
+
+  const [recommendation, setRecommendation] = useState('');
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (id, field, value) => {
+    setFeedback({
+      ...feedback,
+      [id]: { ...feedback[id], [field]: value },
+    });
+
+    // Validate on change
+    if (field === 'rating' && !value) {
+      setErrors((prev) => ({ ...prev, [id]: 'Rating is required.' }));
+    } else if (field === 'evidence' && value.trim() === '') {
+      setErrors((prev) => ({ ...prev, [id]: 'Evidence is required.' }));
+    } else {
+      setErrors((prev) => ({ ...prev, [id]: null }));
+    }
+  };
+
+  const calculateRecommendation = () => {
+    let totalScore = 0;
+    let totalWeight = 0;
+    let validationErrors = {};
+
+    rubrics.forEach((rubric) => {
+      const { rating, evidence } = feedback[rubric.id];
+      if (!rating) {
+        validationErrors[rubric.id] = 'Rating is required.';
+      }
+      if (!evidence.trim()) {
+        validationErrors[rubric.id] = 'Evidence is required.';
+      }
+      const numericRating = parseInt(rating, 10);
+      if (!isNaN(numericRating)) {
+        totalScore += numericRating * rubric.weight;
+        totalWeight += rubric.weight;
+      }
+    });
+
+    if (totalWeight === 0) {
+      setRecommendation('Insufficient data to make a recommendation.');
+      return;
+    }
+
+    const averageScore = totalScore / totalWeight;
+
+    let rec = '';
+    if (averageScore >= 4.5) {
+      rec = 'Strongly Recommend';
+    } else if (averageScore >= 3.5) {
+      rec = 'Recommend';
+    } else if (averageScore >= 2.5) {
+      rec = 'Consider';
+    } else {
+      rec = 'Do Not Recommend';
+    }
+
+    setRecommendation(rec);
+
+    setErrors(validationErrors);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    calculateRecommendation();
+
+    if (Object.values(errors).some((error) => error)) {
+      // Handle errors
+      return;
+    }
+
+    // Submit feedback logic here
+    console.log('Feedback submitted:', feedback, 'Recommendation:', recommendation);
+    alert('Feedback submitted successfully!');
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-md">
+      <h1 className="text-2xl font-semibold mb-4 text-center">Interview Feedback Form</h1>
+      <form onSubmit={handleSubmit}>
+        {rubrics.map((rubric) => (
+          <div key={rubric.id} className="mb-6">
+            <h2 className="text-xl font-medium mb-2">{rubric.label}</h2>
+            <div className="flex items-center mb-2">
+              <label htmlFor={`${rubric.id}-rating`} className="mr-4 w-32">
+                Rating (1-5):
+              </label>
+              <select
+                id={`${rubric.id}-rating`}
+                value={feedback[rubric.id].rating}
+                onChange={(e) => handleChange(rubric.id, 'rating', e.target.value)}
+                className="border rounded px-3 py-2 w-full"
+                required
+              >
+                <option value="">Select</option>
+                {[1,2,3,4,5].map((num) => (
+                  <option key={num} value={num}>{num}</option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-2">
+              <label htmlFor={`${rubric.id}-evidence`} className="block mb-1">
+                Evidence / Examples:
+              </label>
+              <textarea
+                id={`${rubric.id}-evidence`}
+                value={feedback[rubric.id].evidence}
+                onChange={(e) => handleChange(rubric.id, 'evidence', e.target.value)}
+                placeholder={`Provide specific examples demonstrating ${rubric.label.toLowerCase()}...`}
+                className="border rounded px-3 py-2 w-full h-24"
+                required
+              ></textarea>
+            </div>
+            {errors[rubric.id] && (
+              <p className="text-red-500 text-sm mt-1">{errors[rubric.id]}</p>
+            )}
+          </div>
+        ))}
+        <div className="mb-4">
+          <button
+            type="button"
+            onClick={calculateRecommendation}
+            className="bg-blue-500 text-white px-4 py-2 rounded mr-2 hover:bg-blue-600"
+          >
+            Calculate Recommendation
+          </button>
+          <button
+            type="submit"
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+          >
+            Submit Feedback
+          </button>
+        </div>
+        {recommendation && (
+          <div className="mt-4 p-4 bg-gray-100 rounded">
+            <h3 className="text-lg font-medium">Final Recommendation:</h3>
+            <p className="text-xl font-semibold">{recommendation}</p>
+          </div>
+        )}
+      </form>
+    </div>
+  );
+};
+
+export default FeedbackForm;

@@ -77,7 +77,13 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 ### 10
 - [Retrieval Optimization: From Tokenization to Vector Quantization](./2024/10/RetrievalOptimization/)
 
+### 12
+- [Reasoning with o1](./2024/12/Reasoningwitho1/)
+
 </details>
+
+<details open>
+<summary>Courses from 2025</summary>
 
 ## 2025
 
@@ -93,3 +99,5 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 ### 05
 - [Building AI Voice Agents for Production](2025/05/BuildingAIVoiceAgentsforProduction/)
 - [MCP Build Rich-Context AI Appswith Anthropic](2025/05/MCPBuildRichContextAIAppswithAnthropic/)
+
+</details>

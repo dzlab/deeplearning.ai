@@ -1,0 +1,7 @@
+# requirements file
+openai==1.54.0
+pandas==2.2.3
+ipython==8.13.2
+python-dotenv==1.0.1
+termcolor==2.5.0
+tiktoken==0.8.0

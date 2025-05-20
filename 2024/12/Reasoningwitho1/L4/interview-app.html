@@ -1,0 +1,88 @@
+use client
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Feedback Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-8">
+    <div id="FeedbackForm" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Interview Feedback Form</h1>
+        
+        <form id="feedback-form" class="space-y-8">
+            <!-- Candidate Details -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Candidate Name</label>
+                <input type="text" name="candidate-name" id="candidate-name" placeholder="Enter Candidate Name" class="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+            </div>
+
+            <!-- Rubric Dimensions -->
+            <div class="space-y-4">
+                <!-- Communication Skills -->
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-700">Communication Skills</h2>
+                    <p class="text-sm text-gray-500 mb-2">Rate the candidate's ability to communicate effectively, providing clear examples.</p>
+                    <input type="range" min="1" max="5" id="communication" name="communication" class="w-full">
+                    <textarea name="communication-evidence" id="communication-evidence" rows="2" placeholder="Provide specific examples of the candidate's communication skills" class="mt-2 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required></textarea>
+                </div>
+                
+                <!-- Technical Skills -->
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-700">Technical Skills</h2>
+                    <p class="text-sm text-gray-500 mb-2">Rate the candidate's technical abilities with supporting evidence.</p>
+                    <input type="range" min="1" max="5" id="technical" name="technical" class="w-full">
+                    <textarea name="technical-evidence" id="technical-evidence" rows="2" placeholder="Provide specific examples of the candidate's technical skills" class="mt-2 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required></textarea>
+                </div>
+                
+                <!-- Problem Solving -->
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-700">Problem Solving</h2>
+                    <p class="text-sm text-gray-500 mb-2">Evaluate how well the candidate solves problems and provide examples.</p>
+                    <input type="range" min="1" max="5" id="problem-solving" name="problem-solving" class="w-full">
+                    <textarea name="problem-solving-evidence" id="problem-solving-evidence" rows="2" placeholder="Provide specific examples of the candidate's problem-solving ability" class="mt-2 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required></textarea>
+                </div>
+            </div>
+
+            <!-- Final Recommendation -->
+            <div>
+                <h2 class="text-lg font-semibold text-gray-700">Final Recommendation</h2>
+                <p class="text-sm text-gray-500 mb-2">Provide a recommendation based on your overall assessment.</p>
+                <input type="text" id="final-recommendation" name="final-recommendation" placeholder="Recommendation will auto-calculate" class="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" readonly>
+            </div>
+            
+            <!-- Submit Button -->
+            <div>
+                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Submit Feedback</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Calculate final recommendation based on ratings
+        document.getElementById('feedback-form').addEventListener('input', function() {
+            const communication = parseInt(document.getElementById('communication').value) || 0;
+            const technical = parseInt(document.getElementById('technical').value) || 0;
+            const problemSolving = parseInt(document.getElementById('problem-solving').value) || 0;
+            
+            // Simple weighted scoring system (you can adjust the weights)
+            const finalScore = (communication * 0.3) + (technical * 0.4) + (problemSolving * 0.3);
+            
+            let recommendation = "Neutral";
+            if (finalScore >= 4) {
+                recommendation = "Strong Hire";
+            } else if (finalScore >= 3) {
+                recommendation = "Hire";
+            } else if (finalScore >= 2) {
+                recommendation = "Consider";
+            } else {
+                recommendation = "No Hire";
+            }
+            
+            document.getElementById('final-recommendation').value = recommendation;
+        });
+    </script>
+</body>
+</html>
