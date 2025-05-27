@@ -1,0 +1,8 @@
+Congratulations on completing the course.
+In this course, you learned about how to build powerful code agents using hugging-face
+small agents.
+In particular, you now know how to securely run an LLM-generated code, how to monitor and
+evaluate the agents, and how to build powerful multi-agent systems.
+Small agents is an open source library.
+Please come and join us making it even better.
+See you on GitHub.

@@ -1,0 +1,107 @@
+With the help of your agents, you've now set up your ice cream truck.
+But as word spreads are what you've done, you start getting more and more calls, mostly
+with ice cream pre-orders for people who want to skip the line when they come to collect
+their ice cream.
+But this can also be more complicated requests, like I want to set up an ice cream truck,
+how do I do this?
+So in this lesson, you will learn how to build a strong agent to help you triage this
+flow of requests.
+And most importantly, I will show you how to record agent runs to monitor how they
+went.
+Alright, let's go.
+Let us first set the name for our projects.
+Well, let me custom our success, since this is about answering customer requests.
+Then we can set up the tracing.
+Note that we use our project name here, and in this specific case, we use a custom
+endpoint to redirect you to the correct URL.
+But if you were running this locally, you would have a simpler code.
+Let's run this.
+Now, instrumentation is ready.
+That means that whenever a small agent's related code is running, it will be recorded
+in the tracing interface.
+Now let us set up the small agent's side of this.
+We start by logging into the hub with our API key.
+Then we can try to display a very simple trace.
+Let us just record a modal answer.
+We run this and get the answer.
+Now I will show you how to go and display this trace.
+Here is the link.
+We click it.
+Now you can see the interface in which you can find your new project by its name, customer
+success.
+Let's click it.
+Then here, you can see your model called displayed.
+It has a latency, it has token counts, it has input and output messages.
+This interface is very efficient to display model runs.
+But it can also display agent runs.
+I will not show you how to do this.
+Let's switch back to the notebook.
+Now we will define a full agent based on the model above.
+So we give it the same model and an empty list of tools.
+Let's ask it a math question.
+Okay, actually the agent one shoted this one.
+Let's see what it looks like in the interface.
+So we're back in the interface.
+From within here, we will travel back to the agents and the agent run displays here.
+So as you can see, the agent did quick work of this one with only one step.
+But the interesting part is that you had this hierarchical structure with on top the agent
+run.
+And within the step, you have first a model call similar to the other one that I've
+shown you earlier and a tool call.
+When you have several steps, they will be chained together on the step level.
+And if you have multiple agents, the tree lags structure will be extended to show all the
+difference agent runs.
+Now that you've learned how to trace an agent run, I'll show you how to set up your
+production system.
+For your full customer support agents, you want to define several tools that will help
+customers place orders or get information about the prices.
+Now you're ready to set up the final agents using the tools above.
+And we can test run it with a simple order.
+As you can see, the agent properly uses the tool to place another.
+Now that the agents is ready, requests will come streaming in.
+I've made a small data set of fake client requests to test the agents.
+Each of these is a tuple with under left the request and on the right, the expected
+tool call, which sometimes is none.
+We can now run each of these requests and all the processing done by the agents will
+be traced within the platform Phoenix that we've just defined above.
+And once all the requests are processed, you can just get all the traces from Phoenix
+as a data frame of the different spans.
+Let us see how this looks like.
+As you can see here, all the individual spans have been traced.
+It beats on the top level the agent run and an intermediate level, the different steps
+logged as chains.
+And then even more fine grain, we also log tool and LLM calls.
+This data frame will be consequent, especially as you have many requests.
+So we need to do a bit of processing to extract the information that we want from this.
+Here what we want to check is that each request was followed by an appropriate tool call.
+So for instance, we want the request, how did you start your ice cream business to be
+followed by no tool call?
+Let us process the spans data frame to extract for each request the corresponding tool calls
+performed by the agents.
+And this will allow us to get a final data frame of the results and if the tool calls were
+correctly performed.
+As you can see, sometimes the tool calls perform well the right ones and sometimes they weren't.
+For instance, the question, how did you start your ice cream business was followed by
+the tool call get prices, which was not appropriate for this request.
+Of course, for your production system, you would need to check for additional elements
+as well.
+For instance, the question, what's the weather at the Louvre right now was not one that
+we could have answered properly with the tools given to your agent.
+So here no tool was called, which is correct, according to our scoring criterion, which
+is very basic, did we call the correct tools or not.
+And if you inspect more closely the answer here, the agent has defined a simulated weather
+API call before running it, which means that the answer given to the clients was hallucinated.
+The client was answered that the weather was sunny with 22 degrees Celsius, whereas in
+facts, the agent knows nothing about this because it has no available information.
+So this is the kind of behavior that you would want to monitor with a more fine grain assessment.
+For instance, using LLM as a judge to rate the agent trace compared to the requests and
+the expected answer.
+So of course, your own implementation may vary depending on the results that you want
+to achieve.
+But now you've got all the tools to build it.
+Let's take a step back and recap what you've just learned.
+You've learned how to set up the tracing for your smart agent objects and how to trace
+an agent run before finally obtaining the traces and assessing them to check that your
+agent is running properly.
+In the next lesson, I will show you how to set up a multi-agent system to tackle extremely
+complex tasks.

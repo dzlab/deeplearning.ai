@@ -1,0 +1,82 @@
+Hi everyone, I'm Thomas Wolf, I'm the co-founder and Chief Science Officer of Hagiface.
+Today I would like to provide a brief history of agents, as a foundation for this course
+on code agents.
+Now let's dive right in with the elephant in the room question.
+What is an agent?
+This question has been debated for months, if not years, and no definition will be perfect.
+The most rigorous that we found is this one, an AI agent is a program where an AI model
+output impacts the execution flow.
+In other words, the LLM is embedded as a brain in the computer program as a vehicle.
+The LLM decisions then drive the vehicle towards the user expected goal, but the impact
+of AI models on the execution flow can vary.
+Mini-agentic is not a clear-cut one-zero concept.
+There are levels of agency.
+In the first, the lowest level, the LLM outputs simply controls the decision in the program
+workflow.
+The higher level of agency, the LLM can call an external tool.
+At yet a higher level of agency, we will see the agent taking decisions on the next step
+or the next iteration or even the stop condition of the program.
+This is what's called the multi-step workflow.
+Finally, at the highest level of agency, an agentic workflow can create or start another
+agency workflow at a middle level.
+This notion of levels of agency has been reflected in the evolution of agents' capabilities
+throughout the years.
+As the release of the first LLM's, more and more agency has been unlocked for AI agents,
+which went from simple routers where the LLM output mostly decided toward which branch
+of an IFL switch the program should go to tool calling and multi-step agents.
+And taking a step back, the highest level of agency that we can give an LLM is to let
+them write and execute code.
+This is what we call content agents, and it's a bread and butter of the small agent library
+that we'll cover in details in the next lesson of this short course.
+But let's continue on our history of agents.
+The performance of agentic system has been strongly tied to the wave of increasing capabilities
+for the LLM's that power them.
+As the performance of generalist LLM's grew, so did their planning ability, making them
+increasingly suited to power multi-step agents with longer time horizons.
+The graph we're showing here is the evolution of the top model score on the Gaia benchmark.
+A benchmark could be adopted by Hergenface and Meta, in which measures the performance
+of agents on a wide range of tasks using computer and internet.
+Most of the task in Gaia takes about 10 minutes for your mental soul by using a set of
+standard softwares available on any computers.
+Predicting future capabilities of AI system is always a challenging exercise, but when
+we extrapolate this past core improvement on Gaia, we see that we could reach human level
+performance sometimes in 2026.
+This would mean that in about 12-18 months from now, we would have agentic system as efficient
+as your and I on a large number of tasks that currently takes about 10 minutes for your
+mental to complete on a computer, providing the course that we give them access to all
+the programs they need to solve these tasks.
+Another interesting trend that I wanted to mention is our agents have a tendency to rely
+less and less on the specific framework as well.
+As the capabilities of LLMs are increasing, they can more and more decide autonomously
+what next step they should take without any specific scaffolding help or hand engineer framework.
+As an example, you can now in many cases load a vision language model, show it a capture
+of your screen and let it decide where to click or what to type on the keyboard without
+much guidance.
+The result is that you get an agent that can operate seamlessly on many user interface
+and when integrated in a wide range of systems and agent libraries.
+Another interesting emerging synergy is with the field of robotics, given that there
+is not such a large difference in API between a computer tool and a physical electronic device
+command.
+A wide scope of capabilities of multiple LLMs means that just like our agents was able
+to decide what to do from a screenshot, the LLM controlling robots can more and more
+decide what next step to take simply on the basis of a video image acquired by its camera.
+More and more of the models pouring AI agents are actually trained on a mix of computer
+interface data and physical world data.
+Now let us finish with a few high-level words on how to train agents.
+Until recently many teams and companies were pushing for a specific fine-tuning of LLM,
+so-called the function call fine-tuning for agents.
+This typically consisted in training on LLM to call a set of predefined tools that was
+given at training time.
+While this approach trained the LLM to write tool calls in the expected format and with
+proper arguments, modern LLMs like Deepseek R1 or Quinn Kiwiki are now powerful enough
+to write tool calls even without any specific training and just by being given a few examples
+in their prompts.
+The main remaining struggle for agent LLMs in early 2025 is the ability to plan and
+reason over many steps.
+And this is where reinforcement learning and the recent wave of reasoning models I expected
+to step in and to be game changers.
+I expect the continued improvements of LLMs and the development of agent-specific training
+methods to proper agent-existent to a new level of performance and reliability, so much
+that we'll see more and more real-life usage of agent-existent.
+So following this course was a great decision, now I'll leave you with Emrik to tell you
+more.

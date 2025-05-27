@@ -1,0 +1,166 @@
+I'm excited to get to help you learn more about coding agents in this lesson.
+Hugging face has built an agent framework called Small Agents.
+Small Agents is a lightweight framework that has limited abstractions and is simple to
+use.
+Importantly, in Small Agents, we make code agents first class citizens.
+Alright, let's get started.
+So now you're going to learn about the core idea of Small Agents.
+These agents write their actions in code.
+To understand why, let us take a look at the standard React Loop.
+This is how most agents work nowadays.
+They follow the principle called React for Reflect and Act.
+And so their action follows a cycle of thought, then action, then an observation of the
+results that their action had on their environment.
+And this cycle repeats until the task given by the user has been sold.
+So let's take an example.
+If I ask an agent to give me the weather instant forward, first, the agent will think that
+it needs to call the weather API, then take this action, observe the results from their
+tool call, which are at present.
+It's sunny out there.
+Well, it always is.
+So there was no real need for a tool call here.
+And then it's step two.
+It will think again that now time has come to return the answer.
+It will take the action to use the tool file answer and return that the weather is sunny.
+But how does the action occur?
+And that's where code agents have their real difference compared to other agents.
+So if we zoom in on the action taken in the first step, here is how a JSON or text
+agents would do this.
+It would think first, I need to call the weather API and then write its action as a JSON
+dictionary with as name key, the name of the tool and as arguments stand for it.
+Because the goal here is to target stand for it.
+As opposed to this, the code agent will write its action as follows with a code snippets
+and the tool will just be written as if it was calling a Python function.
+Here when you see this, it doesn't make that much of a difference.
+But you will now see how much of a difference it can do.
+Now if the task was more complex, like determining the most cost effective country to purchase
+a smartphone out of the list of countries, and you have several tools to apply in a sequence
+for each of these countries to get the final price, well, in code, it's quite simple to
+do.
+You just write a Python snippet that would loop through the countries and for each of
+these perform a few actions changed together.
+Before returning the file answer in the same Python snippet.
+As opposed to this, the JSON or text agent would have needed to perform many steps in
+a succession.
+So here, maybe 12 steps to get to the same result.
+Or is it actually the same result?
+Each new step means that you have more latency, more cost, and more chances of error.
+Now writing actions as JSON or text has become a de facto standard, probably because
+it was the first attempt to do agenting behaviors, since it's so simple to just write
+out a JSON, parse it, and execute the tool call that was found in the dictionary.
+But we believe that we now need to do agent actions in code, not only for the reasons that
+we've just illustrated, that it's easier to chain or parallelize actions in code, but
+also for many other reasons.
+For instance, in code, you can assign variables to reuse them later, or manipulate non-text
+elements, or build your own tools by defining functions.
+In short, code is a much more powerful way to describe actions performed by a computer.
+Because it was built for that.
+If JSON was a better way, you would be coding everyday in JSON, but of course no one does
+that.
+The example in the previous slide was taken from a great paper shown here on this slide.
+You should read it.
+This paper also compares the success rate and count of element calls needed for both code
+and JSON actions, and it shows that code actions are both more successful and lean.
+This is also what we've experienced when comparing code and JSON agents in small agents.
+But you don't have to take my word for it.
+Let's dive into the notebook and we'll see how it turns out in practice.
+In the next few lessons, we will be using the example of a nice cream truck.
+Indeed, you have finally decided to pursue your true passion.
+You have decided to start an ice cream truck business.
+Congratulations, I think that's a great idea.
+To start with, you've bought the truck, all the required equipment, and you estimated
+that you would sell 30 liters of ice cream per day.
+Now you will need to get raw ice cream every morning.
+You want to compare different options of daily delivery from wholesale suppliers.
+And that's where I jump in to help you.
+I will show you how to build an agent that can calculate and compare the total prices
+for all the options.
+I will first set up the environments, then import the necessary data.
+Here are the different suppliers.
+Let us calculate which supplier is actually the cheapest.
+I've made the calculations for you to use as a reference.
+And from these calculations, it turns out that the cheapest supplier that you can source
+your delivery from is this one, Brain Freeze Brothers.
+Now let me show you this agent.
+I start by defining the tools that it can use.
+I use the tool decorator from small agents that can turn any function equipped with proper
+type hints and dock strings into a tool that an agent can use.
+To use this decorator on a function, you need to make sure that these type hints are properly
+set up, as well as the function dock strings, including a description for each input argument.
+Each new tool now has all the required attributes, like name and description.
+These will be used by the agent to properly use the tool.
+We then initialize the mold that we will use as the engine to power our agents.
+Here I use a quen model provided by TogetherAI through the Hagenface Hub.
+I have to give you a disclaimer that I'm a big fan of quen models.
+I think they do an amazing work.
+For this model to work, we have logged in above using a token created from the settings
+page of our Hub account with access enabled to inference providers.
+Let us now set up our agents.
+Code agents is the main class of agents in small agents.
+It is a versatile agent that generates and executes Python code snippets.
+In each code, it can also call the tools that you've given to it.
+Here.
+It will call them as regular Python functions.
+To initialize your agents, you need the two arguments, model and tools.
+Here I also give it additional authorized imports to let it efficiently run calculations
+on pandas data frames.
+Now let me show you what one single tool call looks like in code.
+I give the agents a simple task that requires only one call.
+Here you can see that the row model output contains code snippets, which was then extracted
+and run by our agents.
+In this snippet, the tool calculate transport costs is just called as if it was a standard
+pattern function.
+After printing the outputs of the first step to inspect it, the agent could just go on
+to return the answer in its second step.
+Now I will give the agents its true task, compare supplier costs for you.
+Note that it's important to give your agent detail instructions as to what to do, exactly
+like you would do with a team mate.
+Here I give it all the required information, as well as additional detail about including
+transportation costs and possible tariffs.
+And it seems that the code agent has successfully solved the task at hand, giving the correct
+result that BrainFree's Brothers was the cheapest supplier with the correct price.
+How did the agent do this?
+It only needed two steps to do it.
+In the first step, it generated its own function to calculate the price in Python.
+This is very interesting, it means that the function would be ready to be called again
+in the future.
+Basically, the agent just created a new tool for itself as a great way to shortcut future
+effort.
+Then it displayed the results for itself to inspect.
+And in step two, after inspecting the results, it just returned them.
+So this was a code agent, but how does it compare against a traditional tool calling format?
+Let me show you first how they differ.
+Here is how a code agent would write its output to a simple question about how to calculate
+a transportation cost.
+As you can see, there's the same type of Python code snippets as above.
+Instead, a traditional tool calling agent would write its actions as JSON-blob, something
+like this.
+And the thoughts can be exactly the same, but the actions are formulated differently.
+In this example of a single tool call, no formulation is really more natural than the
+other.
+But how would it work for more complex tasks?
+Small agents also implement traditional tool calling in the class named tool calling agents.
+So I'll now show you how to create such an agent.
+I give it the same model as above and the same set of tools.
+Now let us run these new agents on the exact same task as above.
+As you can see, these agents change many individual tool calls, because it cannot make use of
+four loops or chain sequential actions using different variables like our code agent could.
+The code agent was solving the task in two steps.
+Here, the agents run many more steps, thus accumulating tokens, latency and price.
+Each new step is also an additional risk of making an error.
+The agents could only return stable as a markdown text, because it does not have the ability
+to return a data frame like our code agent did.
+And in the end, since each calculation needed to input all variables again in texts, instead
+of handling them naturally in code, the LLM had to remember them all correctly and get
+the calculations right.
+As a result, it looks like the LLM did a mistake, because the final price for brain freeze
+brothers doesn't match the ground truth that we established above.
+Note that the results might differ for you, for instance, you might have a tool calling
+agent that nails the task on the first try, but we often see this kind of failure happening.
+In any case, the runs take much longer, because the agent always has to chain these many
+individual tool calls.
+So that's it.
+I have shown you a head-to-head comparison between code agents and tool calling agents.
+But maybe you're wondering about how this code agent can run LLM generated code in a
+secure way.
+That is what I will show you in the next lesson.

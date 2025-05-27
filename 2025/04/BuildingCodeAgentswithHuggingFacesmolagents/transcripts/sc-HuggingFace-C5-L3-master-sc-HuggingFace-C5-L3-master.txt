@@ -1,0 +1,137 @@
+You've probably noticed that your code agent executing LLM generated Python code creates
+a risk of arbitrary Python execution, thus of malicious attacks.
+What if the program calls a command to remove every file in your system?
+One could argue that on the spectrum of agency, code agents give much higher agency to the
+LLM on your system than other less agency setups.
+This goes hand-in-hand with higher risk.
+This code execution could happen in at least three ways, LLM error.
+LLMs are still quite dumb, and they might destroy your system by trying to help you.
+This risk is low, but in my thousands of agents runs, I've observed a few attempts to
+run code that could have been harmful.
+Two, supply chain attack, where you run a malicious LLM, then this LLM will generate code
+that actively tries to harm your system.
+This risk is extremely low when using well-known models on secure inference, but it could
+happen.
+Three, prompt injection, an agent browsing the web could arrive on the malicious website
+that contains harmful instructions, thus injecting an attack into the agent's memory.
+These are only a few of the ways that malicious code can be executed on your system accidentally
+or intentionally.
+Once it's done, this code can target many things.
+It can harm your file system, steal data, abuse resources, beat local resources or API
+services, compromise your network, or install malware or backdoors to be used in a later
+attack.
+All these risks mean that code execution should be made as safe as possible.
+We will now see how to use the various protection layers available for running code agents.
+Let us start with the custom Python interpreter that we've built.
+To add a first layer of security, code execution in small agents is not performed by the vanilla
+Python interpreter.
+We have rebels a more secure local Python executor from the ground up to be precise.
+This interpreter works by loading the abstract syntax tree AST from your code and executes
+it operation by operation, making sure to always follow certain rules.
+These are the following.
+Any undefined command is ignored, imports are secured, and infinite loops are prevented.
+Let's go take a look at this in practice.
+So let us start by setting up the executor.
+Here we'll also make a wrapper around the executor to nicely display only the final error
+instead of the whole traceback.
+Now here are the safe guards built into the Python interpreter.
+First, what about running undefined commands?
+Some commands would work in a Jupyter environment, like this one, here you see I manage to execute
+the command that I wanted, but in this Python interpreter, since we re-built the interpreter
+from the ground up, any non-implemented behavior would fail.
+Here as you can see, an error is thrown.
+Now let us move on to imports.
+Any imports outside of this white list must be explicitly allowed to be performed.
+Let's try it out.
+We will try to import OS and use OS.system to run an arbitrary command.
+As you can see, it throws an error.
+This fails because the import was not allowed.
+By default, imports are disallowed unless they have been explicitly added to an authorization
+list.
+Even so, because some innocuous packages like random can give access to potentially
+harmful packages as in random.os, set packages that match a list of dangerous patterns
+are not imported.
+Let me show you.
+I'll try to start from an innocuous module imported by you, like random, and get access
+to OS commands from it.
+Does it work?
+As you can see, it gives an error as well.
+Now here's the final save word that I wanted to show you today.
+We have a cap over the total counts of elementary operations processed to prevent infinite loops
+and resource bloating.
+Let's see what you would get with an infinite loop.
+So the command starts to run, but after some time, you will get this.
+Our hard limit on the number of iterations in the wild loop has been exceeded and this
+throws an error.
+As a result of all these save words, the interpreter is safer.
+Personally, I have used it on a diversity of use case without ever observing any damage
+to my environment.
+However, this solution is certainly not watertight, as no local pattern sandbox can really be.
+One could imagine occasions where LLM's fine tune for malignant actions could still
+hurt your environment.
+For instance, if you have allowed an innocuous package like pillow to process images,
+the LLM could generate thousands of images to blow to your hydra.
+Here's how it would play.
+So you would have this import here would be allowed because you've explicitly added it
+to the list of authorized packages.
+And then you just set up a loop, which is not that big, so it won't trigger the iterations
+counter and it saves an image each time in your system.
+Let's not execute this because I don't want to blow out my system, but it could certainly
+end up bloating yours.
+So the solution to this is to use more sandboxed environments.
+Let's show how to do this.
+Now I've just demonstrated that even with built-in save words, the custom Python interpreter
+is not 100% safe.
+Actually, any path in sandbox run on your local system will still bear risk.
+So how to improve security?
+The best way to secure LLM generated code execution is to use secure sandboxes, even
+better remote sandboxes that are not in your local environment.
+You could do this in two ways.
+The first one would be to keep most of the code local and only after the agent generated
+code snippets send them to the remote sandbox for execution.
+This is quite safe.
+We will demonstrate this method in the notebook.
+However, if you want to do multi-agent runs, this first solution will limit you.
+Indeed, since your code is not entirely ported on the sandbox, you cannot run multi-agent
+systems.
+So let me precise why.
+Imagine you have a manager agent writing a call in a code snippet to a managed agent
+and you send the snippets for execution to the remote sandbox.
+The remote code executor will not be able to call the managed agents unless it has all
+the code to run it and all the API keys required to call its underlying LLM.
+So to solve this, the second solution would be to export everything on your sandbox.
+Code API keys tools.
+This will unlock multi-agent systems, but it forces you to export potentially sensitive
+API keys to call models.
+Small agents allows you to use either local Docker containers or E2B sandboxes.
+In the notebook, I will show you how to implement the first solution out of the two that we've
+mentioned before using E2B.
+Let's jump in.
+So let us use E2B sandbox to run a code agent.
+We start by passing our E2B API key, then we define our agents.
+Here we're going to define a custom visit web page tool.
+We will not use the default one provided in small agents because I want to show you that
+you can just define a custom tool and send it to the E2B sandbox.
+And this will be done very naturally.
+You just have to define the tool, then pass it to the agents, and then you pass executor
+type equals E2B and the executor quarks take your E2B API key.
+When running this, the agent will automatically be initialized on the sandbox with the tool
+that has been transferred to the server and using our API key.
+This might take a while as the sandbox has a call start.
+You can see that all the necessary imports and installs are performed on the server.
+Then we get this message, which means that our agent is ready.
+Let's run it.
+We give our agent a request that will leverage the visit web page tool that we've just defined.
+And after a few installs to make sure the tool works, our agent runs normally, but this
+code is executed from within the sandbox.
+So this displays the GitHub page from hugging face with the top repost shown here.
+Then our agents properly returns one of the top reposts, namely transformers.
+So of course, you could build much more complex agents with E2B.
+Bear in mind that, as we've seen on the slides, this is a solution where you cannot build
+multi-agent systems.
+Single-agent systems are often powerful enough to run all the workloads you need, but if
+you want to switch to a multi-agent system, you can set up the whole system on the sandbox.
+This will require some custom setup, and the diagram for it was shown in the solution
+too in our slides.
+Now that you have a safer environment to run your agents, we'll move on to the next lesson
+where I will show you how to monitor your agents in production.

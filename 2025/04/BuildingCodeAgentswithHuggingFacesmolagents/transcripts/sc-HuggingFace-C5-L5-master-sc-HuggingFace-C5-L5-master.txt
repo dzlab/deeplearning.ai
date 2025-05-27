@@ -1,0 +1,118 @@
+You have learned how code agents work and explored many facets of their operation.
+Now it is time to have them face our final tests.
+The task that we have is the following.
+Since you love museums, you've decided to open ice cream trucks in front of the biggest
+museums in the world.
+But you must make sure the average temperature there doesn't get too hot, or your ice cream
+will melt too quickly.
+You want to find the top 10 museums in the world by visitor count and the temperatures
+at their locations.
+In this lesson, you will build a deep research agent that can find this information and
+organize it into an interactive report.
+Let's dive right in.
+So we start by creating a search tool leveraging the excellent search library Tavoli and another
+tool to visit web pages.
+Here the code is using the two different tool constructors from small agents, the tool
+the creator that you can just apply to a function and the class definition.
+You can check the online documentation from the library to learn how these two work.
+And we also test the search tool with the basic requests to get to know more about the melting
+temperature of ice cream.
+So then let's move on to setting up your agents.
+We set up the model using GPT-40 from OpenAI.
+Then we start with creating a baseline simple agent that can browse the web.
+We'll give it this request.
+Could you give me a short list of the top 10 museums in the world in 2023, along with their
+visitor count and the approximate daily temperature in July?
+To define the code agents, we simply make sure to pass it the two tools that we've defined
+above.
+Then we can run it with our request.
+As you can see, sometimes agents produce errors while trying to execute actions.
+So here it is an incorrect snippet that no code could be passed from.
+But this is the nature of agentic systems that then this error gets upended into their
+memory and they can iterate upon that to correct their own mistake, recover from it and
+still end up producing proper results.
+The agent is still running.
+Let's give it a bit more time.
+Okay, now we have the final report.
+Let's display it.
+So as you can see, it seems there are mistakes in this report.
+First the temperature being whole numbers.
+It seems like the agent didn't really check the exact number.
+Also we asked for 10 museums and we only get four here.
+So probably we need to set up more scaffolding to improve the results.
+So what we will do is first we will set a planning interval, meaning that our agents will
+be able to regularly plan forward.
+And also since web browsing is particularly important here, we will need to use a multi-agent
+structure to assign a dedicated agent to the information search parts.
+Multi-agent structures are a perfect fit for the above task.
+They will have to separate memories between different sub-tasks with two great benefits.
+So first you can specialize each agent, so for instance by the tools or the model that
+you choose, you can specialize it on its core task.
+Thus making it more perfect and also separating memories reduces the count of input tokens
+each step, thus reducing latency and cost.
+So let's create a team with a dedicated web search agent managed by another agent.
+We start by defining the web search agents.
+It is quite similar to the other one that we define above with this exception that it
+will have a specific name and description, which can then be used by the manager agent
+to understand what this agent does and call it by its name.
+Then the manager agent will need to do some mental heavy lifting.
+So as said above, we will give it a good model to think, as well as the ability to periodically
+run a dedicated planning step through the planning interval argument, which will be five
+here.
+Manager agents should also have plotting capabilities because we want it to produce an interactive
+final report.
+So let us give it access to additional imports, including ploply for spatial plotting.
+And finally, in this function, we will use a multimodal model running on the saved map
+image to ask it a list of questions, basically to make sure that the user given task was
+properly answered.
+And depending on the output of this agent, if it is a fail, an exception is raised, meaning
+that the agent should keep running and needs to address the points raised in the review
+before proceeding on the opposites.
+If the test passes, the final answer can be returned to the user.
+We also have a utility function to visualize more clearly what this team of agents looks
+like.
+As you can see, we have the manager agent here with its authorized imports, allowing it
+to do some plotting.
+It only has access to the final answer tool, but it can also call upon its managed agents
+here, the web agents, which has more tools at its disposal to browse the web.
+Now everything is set up.
+So we can just give the manager agents its task and send it running.
+This will take some time to run, but I will work you through the process as the agent
+makes progress.
+So first, since we set up a specific planning interval, the agent starts by laying out
+its plan where it breaks our larger, overarching task into smaller, easier to solve sub-tasks.
+Then it proceeds to solving them, and the very first thing it does is create a request
+for search that it will send to its web agents.
+When the web agent receives it, it starts running to solve this request, and it will produce
+its own report to return to the manager agent.
+This is quite verbose because the agent is going through many web pages, but actually
+this is exactly why we did a specialized agent.
+We want this agent to handle all the stuff that's in the web pages so that the manager agent
+doesn't have to bother with filling its context length with this.
+And in the end, the web agent ends up producing a very clear and concise report that it will
+send back to the manager agent.
+And based on this, the manager agent can now proceed.
+It says, I now have the top 10 museums in the world, along with their visitor accounts.
+Now I need to find the average daily temperature, and it proceeds to finding it by asking the
+web agent again to produce a report this time on this new topic of the temperatures.
+And in turn, it produces a new report with all of these lists of temperatures to return
+to the manager agent.
+The manager agent now asks for the last part, the last report that he wants from the web
+agent, which is about the geographical coordinates for the museums that it has found.
+Now the manager agent has received all the relevant information to give its final answer.
+But remember that this answer should be an interactive map, not merely a pandas data
+frame.
+So the manager agent proceeds to plotting the figure before trying to return it.
+So this is what the figure looks like.
+If we zoom in a bit because it's a bit cluttered, you can see that every museum is plotted
+on the different points, and it has all the required information.
+Now remember that we had a check in place to verify that the map was correct.
+This is the analysis from the multimodal model, and the final decision is a pass.
+So now the final answer will be returned to the user.
+And now we get this final report.
+We can even access the interpreter states to get this map if we want.
+Here is how to access it.
+Then we can display it again after zooming in a bit to make it clearer.
+Okay.
+Now you have everything you want.
+You can proceed to opening an ice cream truck at each of these locations.

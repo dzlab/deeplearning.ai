@@ -1,0 +1,59 @@
+Welcome to Building Code Agents with Hugging Face Small Agents,
+built in partnership with Hugging Face.
+This clause shows you how to build Code Agents.
+Code Agents are agents that write code to perform sequences of actions.
+This is sustained from coding agents,
+which are agents like those in Windsurf or Crosse,
+that write code for you to execute.
+I'm delighted that their instructors for this course are Thomas Wolf,
+whose co-founder and CSL of Hugging Face
+who join you in the next lesson,
+as well as Amarika Rocher,
+who is developer of Small Agents at Hugging Face.
+Thanks, Andrew.
+I'm really excited about this course.
+I use the right code for me all the time to get stuff done.
+The idea behind this course is
+let your LM write code for your agent as well to get stuff done.
+Code Agents lets you take advantage of LM's coding ability
+to write code to perform actions.
+So rather than having LM generate function calls one after another
+to complete a complex sequence of tasks,
+where you generate one function call and execute that,
+then have the LM decide what's the second function call to generate,
+then execute that and so on one at a time.
+In contrast, a Code Agents would consolidate all of these calls
+into a single separate code.
+So let's in LM lay out an entire plan of action all at the same time
+that can then be executed efficiently,
+rather than forcing an LM to review the plan to you one small step at a time.
+And this turns out to be more efficient
+and also give more reliable results.
+In the first lesson,
+Thomas will describe a brief history of agents
+to bring you to the current day.
+Then in the second lesson,
+you will learn about Hugging Face small agents
+and get it changed to explore the benefits of Code Agents yourself.
+We'll also review some of the academic results
+showing the savings of this approach.
+It is important when using LM generate code
+to protect your system from potential effects.
+For example, the code may have syntax errors
+or may perform actions that could harm your system.
+To protect against this, in lesson three,
+you will learn about a constrained Python interpreter using small agents
+and also how to execute your code in a sandbox for safety.
+In lesson four, you will see how to trace your agents
+in order to debug more complex scenarios.
+And in lesson five, you will learn about
+and build a multi-agent system.
+Many people have worked to create this course.
+I'd like to thank from Hugging Face, Albert Villanova,
+and from deepland.ai, Jeff Ludwig,
+also contributed to this course.
+Additionally, we received help and support
+from Basake Lenski, co-founder and CEO of E2B,
+a company which provides cloud-based secure sandboxes
+which you use today.
+All right, this could start it on the first lesson.
