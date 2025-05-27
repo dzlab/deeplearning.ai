@@ -39,12 +39,12 @@ By the end of the course, you’ll know how to fine-tune LLMs for complex reason
 |Lesson|Video|Code|
 |-|-|-|
 |Introduction|[video](https://learn.deeplearning.ai/courses/reinforcement-fine-tuning-llms-grpo/lesson/sjbja/introduction)||
-|Introduction to reinforcement learning|[video]()||
-|Benefits of reinforcement finetuning|[video]()||
-|Can a large language model master Wordle|[video]()||
-|Reward functions|[video]()|[code](./L4/)|
-|Reward functions with LLM as a judge|[video]()|[code](./L5/)|
-|Reward hacking|[video]()||
-|Calculating loss in GRPO|[video]()||
-|Putting it all together: Training Wordle|[video]()||
-|Conclusion|[video]()||
+|Introduction to reinforcement learning|[video](https://learn.deeplearning.ai/courses/reinforcement-fine-tuning-llms-grpo/lesson/eklye/introduction-to-reinforcement-learning)||
+|Benefits of reinforcement finetuning|[video](https://learn.deeplearning.ai/courses/reinforcement-fine-tuning-llms-grpo/lesson/r3p2x/benefits-of-reinforcement-finetuning)||
+|Can a large language model master Wordle|[video](https://learn.deeplearning.ai/courses/reinforcement-fine-tuning-llms-grpo/lesson/bxwwv/can-a-large-language-model-master-wordle)|[code](./L3/)|
+|Reward functions|[video](https://learn.deeplearning.ai/courses/reinforcement-fine-tuning-llms-grpo/lesson/e5esw/reward-functions)|[code](./L4/)|
+|Reward functions with LLM as a judge|[video](https://learn.deeplearning.ai/courses/reinforcement-fine-tuning-llms-grpo/lesson/ub5r8/reward-functions-with-llm-as-a-judge)|[code](./L5/)|
+|Reward hacking|[video](https://learn.deeplearning.ai/courses/reinforcement-fine-tuning-llms-grpo/lesson/xxwlq/reward-hacking)|[code](./L6/)|
+|Calculating loss in GRPO|[video](https://learn.deeplearning.ai/courses/reinforcement-fine-tuning-llms-grpo/lesson/aifo6/calculating-loss-in-grpo)|[code](./L7/)|
+|Putting it all together: Training Wordle|[video](https://learn.deeplearning.ai/courses/reinforcement-fine-tuning-llms-grpo/lesson/xfrzl/putting-it-all-together:-training-wordle)|[code](./L8/)|
+|Conclusion|[video](https://learn.deeplearning.ai/courses/reinforcement-fine-tuning-llms-grpo/lesson/lo7ww/conclusion)||
