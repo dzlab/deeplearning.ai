@@ -1,0 +1,149 @@
+In this lesson, you will build an autonomous web agent that can execute multiple tasks simultaneously.
+You will prompt the agent to perform tasks such as navigating, taking actions, summarizing the web pages,
+even filling up a form and signing up for a new setup.
+Alright, let's start coding.
+Now, we will make the use case much more complex and see how can the agent work fully autonomously.
+The agent will open a course page, get the summary of learning outcomes and even subscribe for the new setup.
+In the lab, you will learn how to create autonomous web agents.
+You will use multi-on-web agent in this lab.
+Now, we start by importing hard multi-on-client and we prepared some functions and utils for you to make the lab much easier to visualize.
+So, we allow you to visit the session, see your multi-on-demo, have a session manager,
+image YouTube and also see displayed step headers.
+Here, we start by initializing our multi-on agent.
+We load the multi-on API key from the utils.
+Now, we create multi-on-client.
+Here, you are creating a simplified client for our multi-on-apiers.
+First, we initialize the multi-on-client with the API key.
+Here, we will use the already created instance for our multi-on-class.
+Then, we create a new session for our agent,
+which starts at our URL that we provide and we also allow it to include screenshots.
+Then, we also allow you to close all open sessions and we allow you to also navigate to a particular URL.
+Now, we allow you to execute a task in the current agent session.
+Here, you can give it a specific task that you want the agent to follow.
+Here, the task executes in a single step,
+but you can allow it to continuously run in a multi-world steps.
+Some of the instructions that we are given to our agent is,
+first, to not ask questions to the user.
+It has all the necessary information in the page,
+and it should try to complete the task in best of its abilities.
+Finally, we describe the task and also ask it to repeat an ask screenshot.
+Now, we initialize our multi-on-client that we created.
+Let's start with our first example.
+We give it an instruction to get list of all the courses.
+Here, we start by creating our session.
+We ask it to execute task based on each step,
+and we define each step as a particular action that the agent can take.
+It can be either click, type, submit, scroll or retrieving the information.
+Right now, we limit it to a certain number of max steps,
+and that we have defined is 10.
+You can visualize the session using the Visualized Session function,
+and then execute the task following the instruction that we have given it.
+A new session has been created.
+We continue to see how many steps have been executed.
+Now, let's run it.
+This might take some time, but we will speed it up and post.
+Now, we have our results.
+We can see the step 0 is created as a session.
+Then, the first step that we take is to scroll down the page to load more content.
+Similarly, it keeps scrolling down until it will reach the end of the page,
+while following multiple steps.
+Now, you will see the final response.
+We will use our Builder Session function again,
+and this is the final response that the agent gives us.
+Here, it is able to find all the courses that are part of deep learning AI website in full details.
+You can see it does not follow our particular structure,
+because it is a more of a conversational assistant,
+where it follows the answers as a more of a conversation.
+But, if we give it instruction, give us structure output,
+like a JSON or mock-down, you would have followed the results.
+You can see it's like the final screenshot, where it's stocked
+and started giving us all the course listing.
+Now, you will create your own browser UI.
+Here, you use your initialized multi-on-client as part of our session manager,
+for which we have already provided you the implementation in the utel's folder.
+You can ask it to follow certain instructions,
+like funding a course on a subject and open it,
+summarize the course, get detailed course lessons,
+and finally, we start with a more complex example.
+You can go to the deep learning AI homepage,
+subscribe to the batch newsletter,
+news of particular name, email, choose any other required field,
+and then give it guidelines to make sure that it selects the proper drop-down values.
+And once it sees the subscribe button, it clicks it.
+Now, let's describe our variables,
+like course, subject, email, and name.
+Here, we have given it some of our subject as rack.
+We define the name as the Gurg and our email info at theag.com company.
+Now, we will create our own multi-on-browser UI,
+and also see what results and page is interacting on.
+Now, our multi-on-browser UI is fully loaded,
+and you can see it started on deep learning AI courses.
+We will start with our first example,
+asking it to find the rack course and open it.
+You can see it entered the rack course in the search bar,
+and waiting for the search results to roll.
+And here is trying to scroll and find the course that it wants to open,
+and examine its content.
+Scroll more to see which course it wants to open for a rack.
+Ask a question on,
+it's seeing multiple courses on rack,
+but it wants us to give it a specific title.
+And as you can see in the browser UI,
+we see a course on multi-model rack,
+and I will ask it to open that.
+As you can see, it is able to interact with the browser
+and open the course on multi-model rack.
+Now, as the next instruction,
+we will ask it to summarize it.
+Here, it has given us the summary of the course,
+and concluded summary.
+We can ask it to give it a more detailed code lessons.
+Here, it improved the format and gives us a,
+what are the different topics that the lesson covers?
+Go to the course website and see in details,
+did we add the concepts right?
+So, you can see this is the multi-model rack chat with video,
+with Vasodov-Lal.
+Let's see course lesson on outline.
+And you can see it has eight lessons and six code examples.
+And our agent was able to find the course lessons outline
+in a structured order.
+This displays the capability of autonomous AI agents.
+Let's do something even more exciting.
+We will ask the agent to go to the deep learning AI homepage,
+subscribe to that batch newsletter, use the name,
+they go info at the azr.com company,
+choose the other required field like country as United States,
+and job title as software engineer.
+And we give it a guideline to make sure that proper
+problem value is selected by typing and clicking on it.
+And finally, once it sees the subscribe button,
+it clicks it.
+Now, we're getting to the deep learning AI homepage.
+This might be small to see, but it is able to enter the curve
+as a name and also the email.
+It might have reached the maximum number of steps,
+but we will ask it to continue.
+Now, it's selected country as United States.
+So, it missed one particular step,
+but we will ask it to also select the job title.
+So, the agent seems to be asking more questions,
+just to make sure that it follows the correct guidelines.
+And I can mention, yes, that is correct.
+And you can see, now it's entering the proper job title,
+trying to select it from the drop-down menu.
+And it has finally selected it.
+And it clicked on subscribe button to subscribe to the newsletter.
+So, in this lesson, you learn how to create autonomous web agents,
+how you can give it simple instructions and we follow them.
+And you can also follow a much more structured response,
+without us manually describing it as code.
+And then you also see how it can interact with the browser.
+But you also see there are some challenges,
+where it might forget some steps,
+or it might need more clarification of guidelines to follow.
+But agents are able to follow these steps fully autonomously
+in a multiple step manner.
+Now, I encourage you to interact with this amazing browser UI.
+And if you are not subscribed to the deep learning app,
+try it and see how it goes.

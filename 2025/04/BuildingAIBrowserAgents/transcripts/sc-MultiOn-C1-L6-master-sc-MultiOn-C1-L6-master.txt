@@ -1,0 +1,143 @@
+In this lesson, we will discuss the key factors
+driving AI agents and their evolution in the field.
+You will learn about the current limitations
+and will explore possible future directions
+for where AI agent technology is headed
+and how this developments might shape the AI landscape.
+Let's learn about the key factors
+driving AI agent proliferation.
+The first is technological advancements,
+specialized hardware improvements,
+such as GPUs,
+and distributed computing are a large models
+and more complex agents to run particular timeframes.
+Second, computational and algorithmic innovation
+provides a foundation for agents capable of planning
+and acting autonomously with a variety of different
+new advancements and alerts.
+Another factor is data availability.
+When now we have large and average sets
+that enable agents to learn complex patterns
+for decision making through open data initiatives
+and large skill data platforms.
+Vividions have these great challenges.
+At first, they suffer from a lack of uniformity.
+There's like diverse frameworks and implementations
+but there's no ways to make them work together.
+And there's a five minute ecosystem
+where again, there's a lot of things going on
+in the current ecosystem,
+but interoperability is really hard.
+What is needed is some sort of sanitization
+for allowing interoperability, scalability, and collaboration.
+I say our agents become increasingly adapt
+at navigating the path.
+It's crucial to assess the performance environments
+that mirror children's conditions.
+Traditional evaluation methods often fall short
+in replicating the dynamic and an unbreakable nature
+of actual web interactions.
+We are seeing too many websites
+and need deterministic environments
+to ensure consistent conditions for each evaluation,
+eliminating variability that could affect performance assessments,
+limited insight into user behavior
+and Asian performance in web navigation
+can be corrected by realistic interactions
+that emulate renewable challenges,
+including loading errors,
+high latency, and a slow-to-power.
+To test the agents' resilience and adaptability.
+Finally, even methods fall short
+in unpredictable interactions
+and need comprehensive evaluation metrics.
+But just as both the final outcomes of the agents' actions
+and the ability to navigate complex web scenarios, in fact, away.
+To address these challenges,
+we are building a new benchmark
+that realistic evaluations for agents' leaderboard, real.
+The real benchmark addresses previous challenges by providing
+a deterministic yet realistic playground
+that models real-world browser experiences.
+This setup allows for consistent evaluation of our agents,
+ability to perform tasks such as information retrieval
+and transaction operations,
+and establishes a baseline for a browser agent models.
+This collective approach aims to establish robust baselines
+and leaderboards.
+For state-of-art agents,
+benefiting both the public and academic sectors.
+I encourage you to engage with the project by providing feedback,
+sharing insights, and contributing to the refinement of
+evaluation scenarios.
+By collaborating, we can enhance the evaluation frameworks
+for AI agents,
+ensuring that they are well-equipped to handle the complexities
+of real-world web navigation tasks.
+So far, you have discussed a single AI agent.
+Now, as a user,
+you can have a multi-titan system
+with a manager, agent,
+and that oversees multiple specialized work regions.
+However, with everyone getting their own agents,
+this can lead to a chaotic ecosystem.
+Let's explore the challenges and constructions
+for multi-titan systems.
+First, as the coordination complexity,
+there is ensuring coherent behavior among autonomous agents
+which can be challenging without a centralized oversight.
+Second,
+communication overhead,
+decentralized systems may require more complex
+communication protocols to facilitate effective collaboration
+and third, security concerns,
+maintaining system integrity and preventing malicious behavior
+and an open decentralized environment
+necessitates robust security measures.
+What is needed is modularity,
+spatialization,
+and control.
+Here are some future research actions
+that we see first,
+exploring hybrid architectures
+that combine centralized and decentralized elements
+to leverage advantages of both approaches,
+advanced communication protocols
+that are more effective
+and allow for better coordination.
+And third, investigating the applications
+of decentralized multi-titan systems
+in different domains,
+such as collaborative robotics, sensing, and simulations.
+Here are some multi-titan architectures
+that need further exploration,
+such as using Supervisor,
+using LLM virtual calling,
+having like a network-based architecture,
+having custom multi-titan workflows,
+and having hierarchy.
+Now we take a look at the future trends and directions.
+By our agents,
+advanced in capabilities
+with better national language understanding and to use,
+where deep learning will enable frustrations
+to perform complex sequences of actions online,
+such as book appointments, research,
+sharing, and summarizing information,
+coordinating across websites,
+all our users' behalf.
+Multi-titan systems,
+cooperate in a shared environment,
+and it learns our secure strategies
+by interacting with each other.
+Finally,
+advances in distributed cloud computing
+will support the other advancements
+and lead to building more scalable systems
+that need to be deployed in the real world.
+In this lesson,
+we explored some of the challenges
+in the current agent ecosystem
+and the future trends on how
+this can be standardized
+and improved for large-scale deployments.

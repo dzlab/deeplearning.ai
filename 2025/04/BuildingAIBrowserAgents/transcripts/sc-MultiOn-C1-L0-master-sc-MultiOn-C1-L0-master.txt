@@ -1,0 +1,52 @@
+Welcome to Building AI Browser Agents, those in partnership with AsiaInc.
+AI Browser or AI Web Agents can log into websites for a forms,
+click through web pages or even place an online order for you.
+Your AI web agent can use both visual information,
+that is screenshots and structural information,
+such as the HTML or the Duckburn object model or DOM representation
+of a web page to reason and take actions.
+If you open the page on the website and take a look at the code underlying that web page,
+you see how large the action space can be for the agent at each step.
+Since these agents can run long sequences of actions automatically,
+can the error can have unintended consequences like paying for the wrong flight
+or ordering random products?
+Or if the agent misves a single field, say a product name,
+it can head down to wrong path entirely and these errors can compound quickly.
+In this course, you learn about these problems and several approaches to tackle them.
+On delights, it should use the instructor Zilgar and Namagag,
+who are the co-founders of AsiaInc.
+Div, Namin and the team have built multi-on, which is a web agent platform,
+that is based on the approach that they publish in the agent queue paper.
+Thanks, Andrew.
+To address the challenges you mentioned, we have introduced agent queue.
+Agent queue combines Monte Carlo research on MCTS,
+with a self-critic mechanism and an iterative font tuning using direct preference optimization or DPO.
+During the search process of agent queue,
+different branches or sequence of actions are explored,
+and their outcomes are evaluated.
+The civilizations combined with their feedback are used to create preference pairs,
+additional of the search tree.
+The DPO algorithm is then used to find in the underlying language policy model
+by learning from this high level preferences.
+This helps favor actions that lead to better outcomes
+or are ranked higher by the AI feedback.
+In this course, you will build several bad visions.
+You will build a simple bad vision that analyzes
+learning.air website and lists all the courses on a specific topic.
+Then, you will extend this to taking actions like clicking on a course or summarizing it
+and even signing up for a batch newsletter.
+Next, you will dive deep into MCTS,
+that is an integral part of our agent queue method
+and solve a great world problem of finding the optimal path.
+He will then explore a variant of agent queue plus MCTS
+that takes a course title and searches the web and navigates the result
+until it finds the right course.
+He will visualize and analyze different tree paths
+that agent takes until it accomplishes the goal.
+When people have worked the greatest course,
+I'd like to thank Michelle G and Millen Mighty from A.J. Inc.
+From Dbandar AI, Ashmar Gagari and Jeff Ludwig
+have also contributed to this course.
+The first lesson will be an introduction to AI by the agents.
+That sounds great.
+Now, let's have you, rather than your web agent, get started.

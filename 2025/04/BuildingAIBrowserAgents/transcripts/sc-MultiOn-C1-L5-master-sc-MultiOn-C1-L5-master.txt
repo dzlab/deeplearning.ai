@@ -1,0 +1,110 @@
+In this lesson, you will deep dive into Monte Carlo 3 Search, a powerful algorithm for finding
+optimal solutions in complex decision spaces.
+We will then explore MCTS approach in AgentQ framework to create autonomous browser agents
+capable of completing web tasks.
+Alright, let's go.
+In this lab, we are going to go over how we can implement MCTS over the grid world.
+And in this example, you can see we have our starting state which is green at cell 76
+and our end state in the red color which is at 2.4.
+This marks our starting and end states and once marked with W, our walls or obstacles.
+And in this example, we want to traverse the grid to reach from start state to end state
+where you can traverse through the white nodes.
+The agent can only travel north, south, east and west.
+And now we will go over the different examples of exploring how weights can affect the speed
+of convergence to the optimal path, the final queue value and the exploration pattern
+across the grid.
+Once we implement MCTS in the grid world example, we will take this to our AgentQ example where
+we run MCTS with our browser agent.
+Let's now core and have fun.
+Let's start with the lab.
+First we start by importing unnecessary packages.
+Here we have already created one grid world example where we have an MCTS grid wrapper and
+a DPS algorithm to add labels to our grid.
+Let's start with our MCTS example for grid world.
+So we must start by creating our initial grid state and here the zero represents our
+possible paths that we can take to traverse the grid.
+Once our obstacles, two is our starting position and three is our end state.
+The final state that we want to reach here, we first start by constructing our grid, adding
+our colors, defining our boundaries and we plot our graph.
+Let's see our initial map.
+So in the map have our starting position which is green as cell 76 and state which is
+red at cell 24 and our obstacles which are marked by W, classifying them as walls.
+The goal is to reach from the starting position to the end state by taking the shortest path
+possible and there we will use MCTS to find the most optimal and the shortest route that
+we can get.
+Now we are going to run MCTS on our grid example.
+One thing we do is we compare how different weights can affect our MCTS results and exploration.
+We have lower weight of 1 and a high weight of 3.0 and we have 5 explorations and overall
+we run around 1000 iterations for MCTS.
+This MCTS grid wrapper is provided to you in your YouTube's where you can see the implementation.
+Here this allows us to trigger MCTS over grid word to see and collect our optimal routes.
+Now once our MCTS has been triggered, here you can use compare exploration weights that
+is provided in MCTS animation, that's part of our YouTube's follow.
+This allows you to visualize our MCTS results.
+We can see in the heat map of our end states for different explorations and you can see different
+results. For this particular weight for 1.8, we see it starts here's initial state and reaches
+the end state where you can see much more darker colors whereas you see a much more brighter yellow.
+This signifies it's following a path birth.
+This path is less optimal so the Q value is lower, signifying darker green.
+Whereas here and state, the Q value is higher signifying that this is the best state to reach.
+And as you can see in this element, this signifies the lowest Q value.
+That means the agent we are always avoiding this particular state.
+And similarly for this rollout, we avoid going through this path which are very not optimal
+for the agent to follow. And similarly for the algorithm to avoid this weights,
+this signifies that these are really less optimal paths with the lowest Q value.
+Now for more exciting results, let's see something cool.
+Here you can see what's the best path our algorithm is following.
+And for the first example, it's able to reach the most optimal state and the end and
+converges closer to 0.8 in value. Initially the model is exploring a much larger path,
+but then it's able to converge into a shortest path possible.
+Let's make it much more complex. You can add much more obstacles.
+You can make it even bigger. So you can visualize how well entity has performs with different
+weights and different rollouts and how quickly it converges into the shortest path.
+However, please leave a path for our agent to follow from start to the end.
+Now once we've finished with our empty tiers, let's see the empty tiers in a browser example
+with our agent queue. So in the agent queue, we represent the world model in a browser state.
+The states are represented by the DOM URL and the objective.
+The action executions are clicking typing navigation and it's able to do state transitions.
+In the browser MCTS, entire process follows first initialization of the world model
+such configurations. And then we run our MCTS algorithm to generate
+queue reward values for TPO, which is direct preference optimization.
+Now let's see this in our lab.
+agent queue clone is available for you to use. To visualize a tree, we can use this functions
+plot tree and DFS browser node to visualize our property representation for MCTS tree.
+So these are our different states on what URLs, messages, actions, and critic responses
+that were captured during the MCTS process. These are all nodes and these are all queue values.
+Then this represents our objectives reward, mentioning which states are terminal
+and the completed task. And we run DFS to fully add and collect all those labeled data.
+Now let's visualize our tree.
+So now we can see a pretty complex tree representation for our MCTS tree.
+Now let's zoom out to properly visualize the whole tree and what pass it took.
+As you can see, it started at good.com which was the initial state and it assigned a queue value.
+Then it pended on the first node. Then realized it's not the most optimal path. It abandoned it.
+Then the second node, same. The third node is our optimal path that is selected.
+And you can see because of the queue value and it's much higher than the rest of the queue values.
+And from what we can see, node 4 has the highest queue value and it's also the end state.
+So this is where it stopped after evaluating all the possible loadouts.
+On selecting this node, it further created three more paths that it can follow.
+And started with node 4, node 5 and node 6.
+Then it further explores all the paths following those nodes.
+And then it breakfast gets back to node 4 and assigns it the highest queue value and determines
+it's the terminal state where it reached the goal and also the shorted route possible to
+achieve our goal. From this possible path, it continued to node 4 and it didn't exploit further
+because this is the terminal state where it's already on the course page, which is building
+evaluating advance rack. That was one of the possible objectives. Then in the other nodes,
+you can see it instead navigated to community, not deep learning that AI.
+And further path it navigated to short courses in the community.
+And even more exciting, this page is about rack, but it's not a course. It's more a community
+discussion on the course. And you can see once it sees that it's more of a discussion,
+it abandons this path. And same with our other possible path, which is again on the community
+page, it further explores it down, finds the course or discussion on rack. In this case,
+building multimodal rack search and same with trying to find knowledge graph for rack.
+And again, here it's decided it needs to navigate back and back propagate to its initial state
+because it determined this is the wrong page. And same you can see here, once it's continued
+down this line, it sees this is a multimodal search, but not the proper state that it needs to be.
+Same it sees it's a discussion. And here it even sees an error that allows you to think it
+can't continue further and it's a terminal state. Following this route, the agent sees that node
+4 is the shortest route and the best possible state to see the course listing for our rack course.
+In this lesson, you learned about how to implement MCTS and also see how MCTS can behave in
+a browser environment and find the shortest and most optimal path possible and see how it can
+actually improve our results compared to previous results.

@@ -1,0 +1,6 @@
+In this course, you learned about web agents from the ground up.
+You started with the fundamentals of what they are and how they work.
+Then progressed through building simple and autonomous web agents.
+You explored advanced frameworks like AgentQ for self-correction,
+and finally examined the current limitations and feature directory of AI agent technology.
+We are looking forward to seeing what you have built on your own.

@@ -1,0 +1,110 @@
+In this lesson, we'll jump right into what web agents are and how they can be used to
+automate tasks online, like purchasing an item on any commercial website. We'll also discuss
+common challenges such as reliability issues, compounding errors, and agents getting stuck in loops.
+Let's go. First, let's see a real world example. Imagine you want to purchase books online,
+but don't have time to search and check out. In this demo, we've asked our web agent to order
+two books, the radical calendar, and the cold set problem, and add them to our cart and on MSR.
+Here, we notice how the agent is navigating to MSR, just like a human world. It's intelligently
+searching for the first book. Once it finds a book, it proceeds to add it to the cart.
+Next, it goes and starts searching for the second book, and then also proceeds and adds it
+to your cart. And here we see the agent exactly in a sense where to click and how to navigate
+on the websites. Finally, the agent can go and place the order.
+As you can see, the agent successfully found both books and added them to the cart,
+without any human intervention. This is just one example of what web agents can do. Imagine
+all the possibilities. This agent could automate tasks across virtually any website on the internet.
+Our web agent is an autonomous software program that performs on and task automatically on
+a behalf. The intelligent agents are being created for various purposes, such as automating
+repetitive online tasks, getting data from multiple sources, or monitoring websites for changes
+or updates. Web agents can power countless applications in our daily digital lives. This
+range from enhancing online search that goes beyond simple over queries, e-commerce assistance
+of finding products and completing purchases, social media management including monitoring and
+automated posting, data analysis across multiple platforms, customer support automation, travel
+booking and planning, as well as specialized applications in finance, healthcare and many other
+industries. Now let's see the key components for building web agents. Here we explore the architecture
+on how this agents work. A well-designed web agent consists of five essential modules.
+The user interface module, which allows people to communicate with the agent using match language.
+The control module, which acts as a brain of the system and handles reasoning and decision-making
+for actions. The third is an knowledge base with the agent's chosen body data, rules and
+information needed to contact us. The fourth is the communication module that manages interactions
+with websites, APIs and other systems. Finally, the data processing module, which analyzes processes
+and transforms data before returning to the results. Within these modules, several specialized
+components work together. First, we have passwords that can systematically extract
+website data and interpret HTML. Second, action models that do decision-making and predict
+actions to take. Third, executors and specific actions on the website, such as clerics,
+formfilling, etc. Here's how the entire process flows. First, our human provides a request
+to the agent. The agent understands the user's request. It personalizes its approach based on the
+context. The action model takes a web representation of the website and determines what actions to take
+on the web page. Next, the model predicts what is the optimal action in the setting. This action
+is then executed on the website. The cycle repeats until the task is complete. Let's see an example.
+Here is a screenshot of keep learning AI website's first page. We are going to build an agent
+that processes both visual information, i.e. screenshots, as well as structural information
+that is the HTML DOM representation of the website. That can navigate to find courses
+on deep learning AI and do a website interactions. Now, we explore how agents can process the
+DOM tree structure to understand page elements. Weavitants can interact with virtually any HTML
+element on a web page. This can range from links to text areas for entry information,
+checkboxes for making selections, radio buttons for choosing options, drop down menus for selecting
+formulas, buttons for submitting forms or triggering actions, as well as reset form fields.
+To understand the limitations of existing frameworks, let's examine the key steps and agent
+follows. First, planning, data mining, what actions to take. Second, reasoning. Making decisions based
+on the available information, third, environmental actions, executing the plan actions,
+finally explanations that is communicating to the user, what was done, and why. There are many
+issues that occur during this reasoning phase. If an agent cannot form a reasonable plan,
+it may make incorrect decisions. This is why improving reasoning is a critical focus in our later
+lessons. Let's see the main limitations of existing autonomous agent frameworks. First,
+reliability and trust challenges. Ensuring autonomous AI systems can be trusted with mechanisms for
+human rights. Second, decision-making errors. Where there is compounding mistakes and trade-offs
+between exploration and exploitation. And finally, planned divergence and looping. Where there are
+risks of repetitive cycles or diverging plans during agent execution. First, it's very hard to
+establish reliability and trust. With current autonomous systems, the astochastic and things can
+go wrong. When it comes to decision-making errors, agents suffer from compounding mistakes.
+That is, a cascade of errors that can grow over time. Early errors can snowball
+into larger problems as the inclined subsequent decisions. Lack of self-correction means
+agents cannot identify and fix their own mistakes. This can lead to catastrophic failures as errors
+accumulate and magnify. Limited context, agents may miss critical information when making decisions.
+Without complete context, choices become increasingly flawed. Incense is
+increasing. Decisions based on incorrect or incomplete logical processes leads to
+imperative behavior and unreliable outcomes. Bias problems, which may represent
+in training data, can be amplified in agent decisions. Over time, this creates
+increasingly skewed or unfair results. Together, this issues significantly
+undermined the decision-making capabilities of autonomous agents. Web agents constantly face a
+critical decision-making challenge. Should the exploit, what they already know, or should the
+explore new possibilities? This trade-offs fundamentally shape how agents navigate websites.
+In the exploitation strategy, agents focus on maximizing awards. They follow a single path
+deeply before considering alternatives. They explore the childhood elements in the domed
+and use recursion to navigate deeper into the promising paths. The advantages of
+exploitation are that it allows maximizing the current rewards by leveraging known successful
+strategies. It allows efficient use of resources on paths with known proven values,
+and gives more predictable performance in familiar environments. It also has a lot of disadvantages
+where it can potentially miss alternative paths. The agents can become logged into the current
+strategy. They might be unable to adapt if the chosen path is so optimal.
+Now, we examine the alternative approach, exploration. In exploration, agents use a breadth
+for search strategy. The agent tries new, untested paths to discover potentially
+better rewards and strategies. Rather than going deep, it goes and explores all possible
+directions. As shown in the diagram, the agent examines all child elements at each level before
+starts going deeper. When a promising path is bound, the agent continues exploration.
+If the path doesn't lead to a desired state, the agent can backtrack, and it can try alternatives.
+The scripts are border search pattern across the whole website structure.
+It has the advantages that can unlock new opportunities, help discovering higher rewards for better
+paths that were not previously known. It can prevent stagnation, at risk of being stuck in some
+optimal strategies, and it enables adaptation to changing environments or requirements.
+It also has a couple of disadvantages, such as it might have more immediate cost.
+Exploration may yield immediate rewards and could even lead to worse outcomes.
+It can lead to the risk of wasted time, pursuing unknown paths can result in inefficient
+user resources and time, and also increasing complexity in decision making processes.
+The critical challenge for web agents is determining when to explore
+versus when to exploit. Choosing incorrectly between the strategies is a common source of decision
+making errors. The ideal approach often involves balancing both strategies,
+adaptably based on the context. Now, we examine a critical challenge facing automissations,
+when history away from the intended path. Among the limitations in current frameworks,
+we will now focus on planned divergence and looping behaviors.
+Plan divergence happens when an agent wears off course. In this diagram, you can see the ideal path
+as a straight line, but the actual path diverse significantly, like asking a system to
+summarize a topic, but receiving unrelated information is done. Even advanced AI agents like the
+OVDD to self-correct them and make mistakes. Once an agent deviates or gets stuck, recovery
+becomes extremely difficult due to 3 key factors. First, agents typically have limited
+dominant knowledge, that train non-general information, but they struggle with specialized tasks.
+Second, unexpected changes in an environment in confusion, causing it to repeat
+ineffective actions rather than duct. Finally, insufficient training data can be difficult
+for agents to navigate unfamiliar situations, and you can recognize when they should background.
+In this lesson, we explored what agents are, what are the key components in building them,
+and their main issues. In the next lessons, you will learn how to address this fundamental challenges.

@@ -1,0 +1,75 @@
+In this lesson, you will build a simple bi-vegent that is capable of scraping the web and
+providing the results as a structured output based on natural language instructions.
+All right, let's dive into the code. So, in this lesson, we are going to be building
+a simple bi-vegent. Here, we are calling it a Learning Recommender agent. Here, we start with
+navigating to the deep learning AI website and we ask the agent to scrape the courses
+list a specific course on a specific topic and then read the details and learning objectives
+of that course. Now, let's go to the lab. So, we are going to start with importing our
+libraries. In this lesson, we are going to be using Pandas, Playride, Async, OpenAI,
+WebClient, ImageLibrary to display our screenshot data and same for our Python. And then we are
+going to be using our helper functions. Then, we start with initializing our OpenAI client
+with the API key and we also make sure our driven notebook can run asynchronously. I am going
+to run this and then we already have the key set up for you in the deep learning app platform.
+We are going to start with creating a simple web scraping agent. So, here we have described our
+web scraper agent, webgizing it. We are also initializing our browser that we are scraping our
+web HTML content. We are also allowing it to take screenshots and converting it into a
+screenshot buffer to better display. And finally, we allow you to close your browser.
+Then, we initialize our webginc client. We will start with creating our structured data format.
+Here, we start with describing our deep learning app course, which has the title, description,
+who the presenter is, is image URL and the course URL. Here, you create multiple deep learning
+app courses. So, we will start with creating our OpenAI client. Here, we are describing our model,
+which is deputy forum meaning with this traffic version, which is highly fine tuned towards
+returning our script response. So, we are describing our system prompt, which describes the role
+of the agent. Here, we are asking it to act like a web scraping agent. And its task is to follow
+the relevant information and convert it from HTML to JSON. And here, we allow it to give your
+own instructions. And a subjective is to return the title, description, presenter, image URL,
+course URL of all of the courses in deep learning app website. And basically,
+instruct it only give JSON. And not the format that we do not find, where you give your
+HTML content to the agent. And you also describe the response format you want your structure output
+to be. Here, you return your structured response. In the web scraper, this is where everything
+comes together. You first get your HTML content. Then, we take our screen shot. And finally,
+you give it to your LLM to process and return a structured response. And as a way to do it properly,
+we also close our scraper. Now, let us work on our first example. So, we first start with our
+target URL. This is where web page we started. And we also define a base URL that we need for
+displaying our final course URL. Then, let us give it our instruction. So, in the instruction
+is a simple instruction where we ask it to get all the courses. And we get the result and
+screenshot from the web scraper. We run this. So, the agent start extracting the HTML content,
+taking screenshot. And finally, it is processing the results to get our script data.
+This might take some time, but we will speed up in post. And finally, we have our structure
+response. Here, using the visualize course function, you will visualize your results.
+The details of this is in the helper file. And here is our output. As you can see,
+it is scraped on the courses that are in deep learning AI website. And it starts with long-term
+energy memory with LandGraph, its description, who the presenter is, the image URL.
+And finally, the course URL that you can directly navigate to. Same with Lama Index,
+Windsorff, course from deep learning AI, Arise, and many more. And you can also visualize the
+screenshot of the page that the web scraper agent got all these courses from.
+Now, let us work on our second example. What you can do is you can read the description
+and have the LLAM understand what the course is about. And only retrieve the course that you are
+interested in. You can ask the agent to read all the description about the course. And the description
+can be even entitled some of the course summary, even like who the presenter is. And some overall
+details that are not visible here. And that way LLAM has information that is not visible to you,
+but it has an inherent understanding of what the course is about.
+Now, we will give a instruction that follows it reading our description about the course.
+And only giving three courses that are about the subject. And we make sure that it does not
+give any other course in output. Here, the subject we are choosing is retrieval augment in generation
+rack. And now, let us process our results. Now, that we have generated our structure response.
+We can use the visualized function again to see our structure response visualization.
+Here, now the course is that our agent is returning is about rack. So, you can see it is able to
+find the description of our rack, course description and their tags and labels. Now, let us see
+some of the challenges that we have in our web agents. Here, if we give it like a bit more complex
+example, where suppose to even get the summary of the top course and provide what are the
+learnings from it given the subject. Let us see what it can return.
+Now, we will use our visualized function again to visualize the results what our agent returned.
+And here, you see that it didn't follow our instructions correctly. The instruction was
+give us the summary and learnings that we get from it. But since the agent was not able to follow
+our instructions correctly, it returned all the courses that are available in the website.
+Now, you might be able to improve the agent in terms of having it go deeper in the course,
+open the course, get the learnings, its descriptions, summary, all the teachings,
+and have the agent then able to output that as a structure result. But then you're overfitting
+towards the data. But rather, the use case that we want from our agents is it needs to understand
+our task really well and generalize on our learnings. In this lesson, we learn how to build simple
+web agents that are capable of scraping the web and follow our instructions. We also notice the
+challenges where sometimes the instructions can be unclear or agents just don't have the
+capability of following that. And then they give us a wrong output which shows the challenges.
+In the next lesson, we'll go over how can we overcome some of these challenges that we have
+seen in our current pageant.

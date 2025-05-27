@@ -1,0 +1,91 @@
+In this lesson, we will explore AgentQ, a framework designed to teach AI agents how to self-correct
+through various techniques used by AI researchers. We'll dive into the key methods for improving
+agent performance. We also provide a comprehensive overview of the AgentQ framework and examine
+how it effectively addresses common AI agent challenges. Let's dive in.
+Remember, from lesson 1, the existing frameworks have various limitations. First,
+reliability and trust. Second, decision-making errors. Third, plant divergence and looping.
+There are four steps for agent execution, planning, reasoning, where significant issues
+for agent execution come from the reasoning part, and this is what we're going to address
+in this lesson. Now, let's learn about AgentQ, which is a state of art algorithm that addresses
+these issues and improve reasoning in web agents. AgentQ combines the following methodologies
+to teach agents to self-correct, want to call it research, efficiently explore search spaces,
+self-create mechanisms for continuous improvement, where agents receive your time feedback,
+and that preference optimization, DPR, which is the reinforcement learning algorithm that
+improves based on the current experience. You will learn how these methods work together
+to create a powerful framework for autonomous agent reasoning called AgentQ. Our research team
+has published this findings in our paper online that can be found on archive. In our next lab,
+you'll explore some of these concepts. Now, as staff 1 in understanding AgentQ,
+we will learn about how Monte Carlo 3 Search or MCTS works. MCTS is a search methodology
+for backtracking and exploring, and it allows decisions where we plant several steps ahead.
+In MCTS, we started the root node, which is our current situation. From here, the algorithm will
+follow what it thinks is the best path, based on what it knows so far, using an exploration
+strategy. The algorithm continues on the tree, selecting what seems to be the most promising
+until it is the node where further exploration is needed, and this point, the algorithm expands
+the tree by adding a new possibility, and explores this uncharted trajectory, once reached the end
+node, which is as far as we can go. The algorithm creates an expected future reward of continuing
+on this path as a Monte Carlo estimate. Think of this as playing out a quick word of scenario
+to see how good this choice might be. After the future reward estimate, MCTS updates all the notes
+has visited on the way down. This called back propagation, essentially telling the algorithm,
+hey, this path led to this results, so update your knowledge accordingly. The magical MCTS is the
+data process, repeats many times. With each iteration, the agent gets smarter, focusing more
+on the promising paths, and less on data, just like how you might get better at chance by thinking
+through different moves, and their consequences. We understand step two of each machine,
+self-critic mechanisms, and process supervision. This is an approach that uses an LM critic to give
+feedback and improve reasoning capabilities of the accuracy. When an user asks something like
+booking an assigned reservation, the AR receives a request along with any context or history from
+previous interactions. The actor part of the AI part was a separate possible actions that can take.
+It must have selected a date and time first, or selecting a specific restaurant or going to the
+open table homepage to start from there. This is where the critic comes in. Think of it, this
+is the actor's software advisor, the critic analyzes. On the current browser is showing what the user
+actually asked for, what information is the motion element right now. Based on this analysis,
+the critic can determine which actions speak the most sense. It provides CTF feedback on each option.
+In our restaurant booking example, instead of randomly trying actions,
+the critic must register better sequence. First, go to the open table homepage,
+then search for the restaurant name, and finally select the rating time. This ranking of action
+solves the AMX part of choices, similar to how you might mentally consider different approaches,
+before deciding on the best way to solve the problem. For step three, for agent queue,
+we understand reinforcement learning from your own feedback or RLHF, which is a method that allows
+AI systems to learn to make better decisions by incorporating human judgments about what works best.
+It's like training a health assistant through ongoing feedback and guidance.
+Now, we understand how all this comes together in a durable example of booking a restaurant
+reservation on open table. When the agent runs through the Monte Carlo tree search and self-critic
+process, it creates what we call preference data. These are comparisons between different outcomes
+for the same user query, and tell us which outcome is better. In this case,
+the outcome one is preferred over outcome two. This preference data is crucial for improving
+the system and building what we call a reward model. The reward model labels different actions
+of the rewards, giving us core of plus one to good behaviors and minus one to the last useful ones.
+This rewards how finding the AI agent to make better decisions.
+The system then generates simple outputs and feeds them back to the reward models for evaluation.
+This creates a continuous learning loop, the AI address and time gets feedback, learns from it,
+and improves. The cycle is the essence of reinforcement learning, just like how we humans learn
+from experience and feedback over time. If we want to learn more about RLHF, the deep learning
+course is available in the link below. Now we understand step three of the agent care,
+direct preference optimization or DPO, a faster approach to reinforcement learning from human
+feedback. DPO streamlines how AI learns from preferences by directly updating the model
+without creating a separate reward model. It refines the AI's decision making through direct
+feedback loops, essentially creating a shortcut in the learning process. Instead of building an
+image-it reward model, DPO takes preference data and directly fountains the AI model itself.
+This powerful approach complements our earlier techniques,
+Monte Carlo research, explorers, possibilities, self-critic, evaluates options.
+You can need more about DPO in the research paper referenced at the bottom of this slide.
+This approach significantly speeds up learning while maintaining or even improving response
+quality. To repeat, the agent queue framework comprises of three methods. First, Monte Carlo
+research, a method for structured exploration in search, second, self-critic mechanism and process
+supervision, incorporating feedback for better decision making, also part of the search process.
+This two methods combine to search, identify failures and find better options.
+Diet preference automation is a reinforcement learning algorithm that optimizes
+based on what the agent has seen before. These three methodologies address the major challenges
+of our agents, identified before. Here, let's look at an example on looking at a reservation
+unopenedable. First, the agent incorrectly navigates to the wrong restaurant. Then agent queue
+identifies the failure and navigates back to the home page. It then corrects to go to the right
+restaurant. Then it accidentally selects the correct date. In which case, it can be covered
+by opening the date selector and then going to the seed selection with the correct date and finally
+completing the reservation. We tested agent queue in earful scenarios in booking on a Monte Carlo
+where we benchmark agent queue against other methods. We find that GP-D40 is only able to reach
+a success rate of 62.6% in terms of successful open-table reservations. Agent queue, without
+any including any air feedback, reaches an accuracy of 75.2%. Similarly, agent queue, without
+including entities, reaches an accuracy of 81.7%. Our final agent algorithm, including all the
+three methodologies we have discussed so far, is able to reach an amazing score of 95.4%
+in this scenario. To recap, we learned agent queue and its main three elements, MCTS,
+self-critic, and DPO. In the next lesson, you're going to explore MCTS and agent queue and action.
+Right, see there.
