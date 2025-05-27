@@ -1,0 +1,29 @@
+Welcome to Reasoning with O1 built in partnership with OpenAI.
+Your instructor for this course is Colin Javins, whose head of AI solutions at OpenAI. Colin, great to meet you.
+Thanks Andrew. I'm really excited to be working with you on this course.
+In this short course, you learn how to best prompt and use OpenAI's O1 model.
+This recently released model has shown remarkable improvements in reasoning and planning tasks.
+In our very first short course, ESA Fullfare for OpenAI taught some prompting techniques to give the best performance from GP3.5.
+She described Chain of Thought, which is a technique that gives the model time to think.
+With Chain of Thought prompting, you might instruct the model to think step by step.
+And maybe also give some examples of step by step reasoning.
+And in response to that, rather than just providing the answer directly to query, the model will process a query step by step.
+Here's an example from the 2022 paper Chain of Thought prompting elicits reasoning and large language models by Jason Wei and others from the Google Brain team.
+In this example, when using Chain of Thought prompting, you also provide the model with an example of a response that takes a problem and breaks it down into simpler steps.
+When responding to the query, the model creates a chain of simple steps, which allows it to answer the question successfully.
+OpenAI has taken this to a new level and fine-tuned the model using reinforcement learning to autonomously incorporate Chain of Thought step by step reasoning into this response process.
+Well, the performance we see today is impressive. What will be significant long-term is test time or inference time scaling.
+We have found that the performance of 01 consistently improves with more reinforcement learning, called train time compute, and with more time spent thinking, which we call test time or inference time compute.
+This is a whole new dimension you can use to scale LLM performance.
+The 01 model, however, is not the right model for all situations.
+In the course, you'll learn to recognize what task 01 is suited for, and when you might want to use a smaller or faster model, or combine those two.
+Here's the outline. We'll start with an overview of the 01 models and when you might want to use them, as well as how scaling performance at inference time works.
+Then, you'll learn about prompting the 01 models to get the best performance. The best way to prompt 01 is pretty different from earlier models.
+You'll then learn how to use 01 to solve complex multi-step tasks with planning. In this case, optimizing a supply chain logistical challenge using an 01 orchestrator with a 40 worker.
+You'll use combinations of models together, 01 for planning a sequence of tasks, and faster, less expensive models for task execution.
+After that, you'll use 01 to do some coding. It's really good at this. Then, you'll try out a really cool new feature, reasoning with images.
+Image understanding has traditionally been difficult to get into production, but with 01, we are seeing new levels of performance with these tasks.
+Finally, we'll wrap using 01 to generate and optimize your prompts, a technique we call metapromding.
+Many people have worked to create this course. I'd like to thank from OpenAI, RoyZif, James Hills, and Boris Power.
+From Deepland.ai, Jeff Ludwig, and Ashmo Gagari, he'll also contribute it to this course.
+Alright, let's go on to the next video where you'll learn more about the details of how 01 was trained.

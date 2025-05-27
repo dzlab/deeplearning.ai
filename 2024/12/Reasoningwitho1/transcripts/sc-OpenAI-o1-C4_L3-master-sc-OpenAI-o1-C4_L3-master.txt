@@ -1,0 +1,253 @@
+One of the great use cases where O1 models shine is creating a plan to solve a task,
+given a set of tools to carry out the plan and constraints to set bounds around the task.
+This kind of use case would be very slow if we used O1 for every step.
+So what we'll do is generate a plan with O1 Mini
+and then execute each step with GPD40 Mini.
+This trade-off of intelligence against latency and cost is a practical one
+that we've seen developers use to great effects so far.
+Alright, let's go.
+Let me tell you about the overall architecture of the task
+that we don't get lost in the details as we go through the code.
+You'll begin with a scenario.
+This comes from a customer where they're making an ask
+which requires multi-step logic to answer that scenario.
+That scenario will be given to O1 Mini
+who will have at its disposal some instructions of how to build a plan
+and then a number of tools which it can use to carry out the plan.
+This is a great use case for O1 where we use its multi-step reasoning logic
+to build a durable plan before we then engage 40 Mini as a worker
+to carry out each step of the plan.
+Once the plan is completed, we'll have an answer
+which we provide back to our customer.
+Now let's snip into the code and see how this works in practice.
+You'll start by importing your OpenAI key
+and initiating the OpenAI client and the O1 and GPT models.
+You'll first define the constraints that this scenario will be bound by.
+Your first variable is a message list
+because our 40 worker is going to loop through multiple steps
+we need a list of messages to accumulate the history
+so that the worker can tell what steps is performed of the plan that we've come up with.
+Then you've got a bunch of context.
+I'm not going to go through every variable here,
+but essentially we have an inventory,
+an order that a customer wants to place,
+and then we have suppliers which we can use to supply us with additional material
+if the customer asks for something that we don't currently have.
+We then have a few other variables like the shipping options
+and the metadata of the customer who's going to be giving us our scenario.
+The last element is the state.
+Because we're going to go through multiple turns of conversation,
+we will maintain conversation state.
+When you take this and apply your own scenario,
+you can consider whether you want to wrap this in an application
+where you clear down the state at certain points
+to allow the customer to submit multiple scenarios.
+Next, you need to define the prompt
+which dictates how O1 is going to go about building a plan
+to solve the customer's scenario.
+This prompt consists of a few main sections.
+The first is where we define who it is and what it's task is.
+So we're telling it that it's a supply chain assistant
+and it's task is to review the challenge that it's been set or the scenario
+and create a detailed plan to answer it.
+We tell it that it will have access to an LLM agent
+and then we give it a list of functions.
+Now, it's important to note here that the O1 model
+isn't going to be provided with the OpenAI function calls.
+Those will be given to the worker, the foro mini model,
+which will be doing the work for it.
+But O1 needs to know what those functions are
+and what they roughly do so that it can build up that multi-step plan
+for the foro mini worker to carry out.
+So, for example, it needs to know that there's a fetch new orders function
+which will allow the foro mini model to check the status of new orders
+that have come in and decide whether to fulfill the or not.
+Underneath this, we've given O1 a set of instructions
+which tell it how to layout this plan so that we can then parse it
+and provide it to foro mini to carry out.
+Next, we'll define the functions themselves.
+It's important to note that O1 can now do function calling
+but we're not going to use it for this scenario
+because we want it to come up with that multi-step plan
+to give to foro mini to execute.
+If we wanted O1 to carry out each step bit by bit,
+we could supply it opening our function calls.
+But in this case, it's going to create the plan for foro mini to carry out.
+Now, we'll define the GPT-4O system prompt.
+So, the prompt that dictates how that foro mini worker is going to do its job.
+Again, we've given it a personality so you're a helpful assistant
+for telling it that it's responsible for executing the policy that it will be given
+and its task is to follow the policy exactly as written.
+We also ask it to explain its decision-making process across various steps
+and this will come in handy later.
+So, as it goes through the plan,
+it will decide whether to update the customer on the progress
+and whether it's hit any blockers.
+We then give it step-by-step instruction.
+Again, referring back to the principles for prompting O1,
+we don't give O1 explicit chain of thought prompting,
+but given that we have a foro mini worker here,
+it is useful to give it some chain of thought to help it make the right decisions.
+And lastly, we'll instantiate that policy that was generated by O1,
+which is that plan, and give it to foro to then execute each step.
+To allow foro mini to take action on each step of the plan,
+it needs to have open AI function calls.
+We define those here.
+You'll see a long list of function calls,
+and I'm not going to go through each one in detail,
+but just picking out one of them,
+this function allows us to check the production capacity.
+So, it will look at the amount of components that we have
+and figure out how much capacity we have to create more units.
+And again, we've got our standard open AI function call parameters here,
+so in this case, a time frame, which is an enum that it can pick from.
+Each one of these functions will tie to a step of the plan,
+which O1 is produced for it,
+and will allow foro mini to take action.
+Those open AI function calls, not to Python functions,
+which actually execute the results of each function call.
+Again, looking at the same one that we looked at a second ago
+with the open AI function calls,
+here's the Python function,
+which is implemented based on the results of that function call.
+So, we pass in that time frame,
+and then we get back a JSON,
+which the foro mini model will assess,
+and use to decide whether it moves on to the next step of the plan.
+Now that we've defined the input variables,
+the foro and O1 system prompts,
+and the function calls with their Python definitions,
+we can move on to create a function,
+which will knit all of this together to orchestrate the process.
+The first step is to take in a scenario provided by the customer,
+and call O1, who will produce a plan.
+We then take that plan and initiate a foro mini worker.
+That foro mini worker will loop until it's carried out the whole plan,
+and then return the messages,
+and that is what we will provide back to the user,
+to tell them how we managed to perform against the scenario that they gave.
+If you'd like to look into the underlying details,
+behind that orchestration wrapper,
+the first function is the append message function,
+which takes in a message,
+and decides which variables to include with it
+to give foro mini contacts to continue carrying out the plan.
+The next function provides the scenario provided by your customer to O1,
+and generates the response.
+This plan is what we're going to provide to foro mini to then carry out that scenario.
+The last orchestrating function calls GP40 with the plan generated by O1,
+and uses that to carry out the plan.
+You'll see here that we initiate a well loop,
+which begins producing tool calls with GP40 mini,
+and decides what action to take based on the content of those tool calls.
+It will keep looping until it receives an instructions complete function,
+at which point it will break.
+Now you define all the variables you need.
+The only thing remaining is to come up with a scenario
+that the customer wants us to carry out.
+In this case, we've said that we've received a major shipment of new orders.
+We're asking O1 to generate a plan that gets the list of awaiting orders
+and determines the best policy to fulfill them.
+We've given it some idea of what the plan should include,
+and we've also given it an overriding directive
+that it should notify the customer before completing.
+Lastly, we've given it a criteria,
+which is to prioritize getting any possible orders out that it can,
+well-placing orders for any backlog items.
+With that, we're ready to start generating the plan.
+You can see the plan that O1 is generated for you
+laid out nicely here and marked down.
+The first step is to retrieve new orders.
+You can see here where O1 has specified the exact order
+with these OpenAI function call that foro mini should use
+to carry out this step.
+Next, it's asked it to process each order individually,
+and then within that, it's given extra detail.
+So, for each order in the list,
+extract these variables,
+check availability,
+and handle any backlogged quantity.
+If there's backlogged quantity,
+we've given it if-then-else logic
+to go about actually handling that.
+Once it breaks out of that,
+it will arrange shipping for the available inventory
+and notify the customer.
+We give it a little bit of logic here to tell it what to do
+if the order is fully fulfilled,
+if it's partially fulfilled,
+or if there's a backlog that it needs to let the customer know about.
+Lastly, it will finalize the instructions
+and call instructions complete,
+which will break out of the well loop
+and provide the answer to the customer.
+Next, we'll go through the actual steps,
+which foro mini carried out,
+to check that it followed this plan as specified.
+The last thing to note is that
+O1 has adhered to the prompt engineering principles,
+which we mentioned earlier,
+by providing a structured prompt,
+so that foro mini will find it easier to follow.
+As we go through the foro mini actions that took place,
+it's key to refer back to this
+and understand whether or not
+it actually properly followed these steps as specified.
+To review the actions that foro mini took in more detail,
+I'm going to print out the messages
+that they're a little bit easier to read.
+I'm going to skip past the O1 policy,
+because we've already gone through that,
+and start with the different actions that foro mini took.
+First, we can see that it called the fetch new orders function,
+and that got us one new order,
+which is a quantity of 200 of product ID X200,
+which we can see here.
+We then see that it called the getInventoryStatus function,
+to check whether we actually have the inventory
+to serve what the customer asked for,
+and we can see that we do have that particular product,
+but we only have 50,
+so it's going to need to order a few more
+if it's going to be able to fulfill the customer's order.
+The next thing foro mini did was allocate the stock that it did have,
+so we can see here that it allocated the 50 units that it had.
+To fulfill the 150 units that it doesn't have,
+the first step is to get the product details
+and figure out what components are needed.
+We can see that this comp X200 component
+is what you need to build one of these units.
+It then checks the available suppliers,
+finds that we have two,
+and then calls the first one to figure out what the available quantity is.
+It then places a purchase order for the quantity that it needs,
+which is 150, there's 500 available, so that's okay.
+The next step is to check whether we have production capacity
+to actually produce those once we have the raw materials.
+You can see that it checks for the immediate production capacity,
+and we only have capacity for 100,
+so it schedules a production run for 100 immediately,
+and then it goes back and checks the production capacity for next week,
+and is able to schedule the remaining 50 units to be produced next week.
+The last step is to calculate the shipping options
+for the units which we have right now.
+Before finally sending an order update to the customer,
+telling them your order has been partially shipped,
+the remaining items are being processed,
+and will be shipped shortly,
+and then successfully closing off the process.
+So, pretty impressive.
+We've been able to implement an agentic flow
+whereby O1 acts as the orchestrator, creating a plan,
+and then handing to Foro Mini,
+who then executes the multi-step plan in sequence.
+Now is a great opportunity for you to take a step back,
+and think about where you might have opportunities
+to use this kind of planning paradigm,
+using the intelligence of O1,
+and combining that with the low latency and cost of Foro
+to carry out these complex multi-step agentic processes.
+Next, we'll change our focus from planning
+over to a very common use case for our O1 models,
+which is coding.
+Look forward to seeing you there.

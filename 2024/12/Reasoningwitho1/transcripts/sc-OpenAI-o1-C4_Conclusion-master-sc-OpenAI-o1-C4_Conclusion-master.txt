@@ -1,0 +1,4 @@
+In this course, you learned about how our reasoning models work,
+how to prompt them, and some great use cases that developers are delivering in the real world.
+You now have what you need to start building with this new class of model.
+We are very excited to see what you come up with.

@@ -1,0 +1,86 @@
+Image understanding with GPD40 can perform well, but often needs chain of thought prompting,
+few shot examples, or fine tuning to achieve the best results. Conversely,
+O1 performs well at understanding images out of the box. This is due to the test and learn
+approach it follows in its reasoning, which gives it multiple chances to detect hallucinations
+before providing an answer. One use case that is emerging is to incur the latency and cost
+hit for O1 up front, pre-process in the image, and index in it with rich details so that it can
+be used for Q&A later. Let's have some fun. For this image reasoning task, we're going to use an
+org structure of a fictional organization. This is the kind of nuanced diagram with a spatial
+reasoning that 40 would typically hallucinate at, but we're finding that O1 performs much better,
+and it's because of that testing and learning approach that we referred to earlier. It will come
+up with a first impression of what the diagram is telling it and iterate until it thinks it has
+a decent outline of what the purpose is. We're going to start off fairly basic and just ask
+O1 to tell us what this is. Then we're going to move on to a use case which we're finding customers
+using practically in the real world pretty often, which is that you use O1 to do image understanding
+and extract a detailed JSON that describes that image and what's going on in it in a lot of detail.
+Then you can do text only follow-ups to then interpret the information. You're not paying the
+extra cost and latency of processing the image every time. You effectively pre-process it with O1
+in a very high quality detailed manner and then use it for follow-up Q&A. Let's head on and see how
+this works practically. As always, we'll begin with our imports, bringing in our libraries and
+any variables that we need to import. Here are our same standard libraries. We've stored our vision
+request in a utils file which will import here. For this, we're going to use the new mainline O1
+model because that one is capable of image reasoning. To get an understanding of the image that we're
+going to process, you should open up the org chart file which we provided. You'll be able to see
+here that we have a CEO at the top. We have their C suite, their managers, and then the reports of
+those managers. You'll begin with the simple question of what is this so we can get a detailed
+rundown of what's contained in that org chart image. We'll kick that off and display the contents.
+The model's given you a detailed rundown so it's an organizational structure chart.
+It's called out the different levels of hierarchy and also given us a brief description of how the
+charts organized and what the purpose is. This is informative but not super useful. What we'll do next
+is process this into data that we can then use for follow-up questions so that we can create
+analysis on top of this org chart and understand the details of how these different roles hang together.
+What we're about to work through here is where we start to really see the improvement
+from 4.0 to 0.1 in terms of the quality of image understanding that we can achieve.
+What we saw previously with 4.0 is that it could generally give a high-level description of what
+was in an image. But once you start to ask nuanced questions about spatial reasoning,
+what does that arrow point to or who reports to who in that org chart? 4.0 would give inconsistent
+performance and would typically need few shot examples or fine-tuning to achieve a decent level
+of performance. What we should see here with 0.1 is that out of the box it will perform pretty
+well and be able to reduce our reasonably complex org chart to a simple JSON array which we can
+then use for analysis. So to accomplish that we've got a structured prompt here again using the
+principles that we learned in lesson two. We have some instructions where we have a consulting
+assistant who processes org data and we'd like it to extract the org hierarchy. We've given it
+a specification for the JSON that we want. So we want it to make up an arbitrary ID for every person
+their name their role and then give us an array of IDs they report to and array of IDs that report
+to them. So once we have this we have something which codifies the relationships in that image as
+data and enables it for ongoing processing. So you'll run this and receive the results.
+You'll execute the cell and we print out the prompt. So there it is detailed here. Now you can
+feed that prompt into a 0.1 request with the image and if we run that and print the results
+we should receive a array of JSON dictionaries which describe the different people in that org chart
+and how they relate to each other. You can see in front of you the data representation of that
+org chart now. So we've got our array of dictionaries each one contains that arbitrary ID and if we
+just reconcile the first one we've got Juliana Silva CEO ID one and we can see that she reports to
+no one she's the CEO that's correct and her reports are numbers two three and four. If we check
+two three and four those are indeed the CFO CTO COO great. So now that you've reduced this org chart
+to data you can now use it for analysis. So let's step on and do some Q&A on top of this data
+and see if O1 is able to use the data that is processed to accurately answer some questions about
+the org chart. You can start by loading the O1 response as JSON and then we can create a prompt
+and add this data to it and then ask some questions. In this case you've created an analysis prompt.
+You're an org chart expert assistant. Your role is to answer any org chart questions with your org
+data and then then there's an org data XML tag here where we're going to interpolate the org data.
+Before you ask your analysis questions of the org data you'll need to initiate a fresh
+open AI client. The reason we're not using the O1 vision request is that we're simply heading
+out with a text only request. Now that we've pre-processed that image we don't need to send the
+image every time. We're just going to use that data that we extracted and use that for our Q&A.
+Here you have a simple O1 request. You've got that analysis prompt that you had at the beginning
+and then a structured question here and there are two questions in contained within it. So who has
+the highest ranking reports and which manager has the most reports? If you execute that you'll see
+the results. You can display the results as marked down here and we can interpret the answers
+that we've gotten. So first of all Juliana Silva the CEO has the highest ranking direct reports
+that is correct. All of her reports are C level executives which manager has the most reports. So
+first of all it's successfully filtered for only the folks with role manager and indeed these two
+do have the most direct reports. So that is a correct answer to the question and a conclusion to
+our image understanding task. Before we close off I want to share one more example so that you can
+take what you've learned and test it out on a fresh image and domain. In the folder you can see a
+photo that we've included of an entity relationship diagram. This is a great use case for image understanding.
+Imagine all the data warehouses that you've dealt with with a complex ERD that you needed
+one of the local data scientists or our owners of the warehouse to talk you through. Now we can
+provide it to O1 with image understanding and get it to parse it for you. So the challenge for you
+is to think of a few use cases for the entity relationship diagram. For example you may want to ask
+O1 with vision to generate a table of order records which have IDs to that link to these product
+and client tables and then get it to generate SQL to actually query the three. Generation of synthetic
+data is a great use case that we've used vision for in these sorts of cases on customer site.
+We're very interested to see what use cases you come up with and very excited to see what you use
+O1 with image understanding for. Look forward to catching up with you on the next one
+where we'll be going into metaprompting. How to use O1 to automatically optimize your prompts.
+Look forward to seeing you there.

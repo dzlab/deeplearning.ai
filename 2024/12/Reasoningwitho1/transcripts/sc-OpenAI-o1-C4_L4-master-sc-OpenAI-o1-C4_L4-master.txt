@@ -1,0 +1,140 @@
+Building on the approach we use with planning,
+you're going to use O1 to help with the coding task.
+O1 performs best with simple, direct prompting
+to both create new applications and to edit existing ones.
+To test this, you'll run two coding competitions
+between O1 Mini and GP40 to create a new application
+and to edit some existing code.
+Let's get coding.
+In this lab, we're going to learn how to use O1
+to assist us with creating an original app using code,
+and then editing existing code using O1.
+To start with, we'll import our variables.
+So our OpenAI API key, and again, the GPT model
+and O1 model that we've been using so far.
+We'll begin by creating a React app.
+To start with, I'm going to define a function,
+which will allow us to get a check completion response.
+The next thing you'll do is define a prompt
+for how O1 and 4O should think about creating this app.
+So, paste in in a prompt here where we give instructions
+to create an elegant, delightful React component
+for an interview feedback form.
+We give it some criteria for how this app should perform
+and what the overall goal is and a couple of reminders here.
+I've included these because I'm working with 4O.
+Generally, I wouldn't for O1.
+So now we'll generate code using both 4O and O1,
+and then we're going to render both apps
+and visually compare the quality of each.
+You'll begin with 4O here.
+We'll get it to generate the app, we'll render the app,
+and then we'll do O1, and hopefully we'll see
+a market improvement with the O1 model.
+Let's kick off the generation.
+Now that the code's done, let's print it and have a look.
+There we are, I'm just going to copy this out,
+render it in our app, and we'll be ready to inspect the results.
+I'm going to display a static image of what I've gotten
+when I loaded that code into the app.
+And here we can see an interview feedback form,
+but it's not so great looking,
+some sort of little weird formatting.
+So hopefully, O1 is capable of improving on this.
+Now we'll repeat the process with O1.
+Our hope here is that using the same prompt
+will get superior results.
+So I'll kick this off to generate our code.
+Now that that's generated, we'll print it out to have a look at it,
+and see that we've got some JSX here,
+and I'm going to copy that into the app
+and print the image so that we can have a look
+at the quality of what it produced.
+We can see here a, you'd have to say a superior app,
+so it's gone with some drop downs for the different rating numbers.
+It's listened to all of our instructions,
+instead of including just a subset of categories.
+That's giving us a nice green feedback box as well.
+So a quick view of where O1 can help you
+when you have a high level design for an app,
+and you want a starting point,
+often O1 will get you a bit further forward
+than 4O will with equivalent prompting.
+This is a static example that I've generated,
+but if you want to delve into this yourself
+and do some prompt engineering and then render your own app,
+then please follow the instructions in the notebook.
+If you want to try out the code,
+you can go to the link in the notebook,
+cut and paste the code into the editor,
+and it'll render the form.
+You can see the recommendation changing as we fill things in.
+And you can submit some feedback.
+If you're an expert in JavaScript and React,
+also in the notebook is a description
+of how to download a zip file containing application,
+you can run on your local computer.
+Next we'll move on to editing some existing code
+and show how O1 can give useful feedback
+that will result in, again, superior code
+to that produced by 4O.
+To compare the editing capabilities of 4O versus O1,
+we've produced some code that has some clear issues,
+like multiple nested loops, a lack of error handling,
+and overall is not super readable.
+What we'll do is we'll feed this code to both models
+and we'll see how they clean it up.
+Then we'll employ a O1 LM as a judge
+to rate the two resulting code blocks
+and tell us which one performed better.
+We'll begin again with a simple and direct prompt
+and use 4O for our first generation.
+So the prompt, I have some code
+that I'd like you to clean up and improve,
+return only the updated code that fixes the issues
+and then we're passing in that code snippet,
+which we showed above.
+We'll generate this, have a look at the results.
+You've now generated some code and outwardly,
+I mean, on first glance, it looks a little better,
+but let's generate the O1 code
+and then we'll compare the two with LM as a judge.
+Here we're gonna generate the same output
+but this time using O1
+and again, the results look plausible here
+but the best way to figure this out
+is to employ an LM to compare the two.
+So let's do that.
+We're going to employ O1 as our greater here
+because this is the sort of nuanced multi-step process
+where O1 does generally tend to perform better than 4O.
+So again, we feel pretty good using it here
+and in this case, we used again, a simple and direct prompt.
+So which code is better and why?
+Option one, 4O code and option two, the O1 code.
+So we'll run that and you'll see the results.
+The results are in and O1's deduce
+that both of them are trying to do the same thing
+but there are several key differences
+between the two implementations that make option two better.
+It's called out the readability and structure,
+the error handling and robustness
+where option two has selected a more effective way of doing that
+and also the data processing calculations,
+the debugging and logging
+and just general performance considerations.
+So again, a useful example of where even if you didn't rely
+on the 4O for a code editor or kind of a copilot
+to help you work through issues
+and edit your existing code,
+this is an area that O1 does fairly well at.
+Great, so you should now be confident using O1
+to assist you in coding,
+whether it's creating net new applications
+or helping improve your existing code.
+This is an area we're seeing a ton of uptake of O1,
+especially in the first category
+where you have a high level design
+and you want a really good first stab.
+Looking forward to being with you for the next stage
+where we use O1 to reason on top of images.
