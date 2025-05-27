@@ -1,0 +1,169 @@
+With all the details of reward functions and GRPO loss in hand, let's get to the fun part.
+Setting up an RFD run to train an LLM to play Wordal.
+You'll see how to set up an RFD training job using the Fedobeys SDK,
+and then compare the resulting models Wordal abilities to some other LLMs.
+Finally, you'll also see how GRPO can be combined with the supervised fine-tuning warm-up stage
+for even better performance outcomes.
+We're going to see how we can train a model for Wordal using RFD and Fedobeys.
+We'll start by writing out our system and user prompts.
+As we saw in Lessons 2 and 3, the system prompt lays out the game's rules,
+the format of the feedback, and an example of a valid response.
+The user prompt includes the current game state,
+so previous guesses, the feedback that it received for those guesses,
+and the clear instructions to make a new guess.
+Once we have these prompts defined, we pass the complete prompt to the LLM,
+which is 12.57 billion instruct, and have it generate 16 candidate responses
+using temperature-based sampling.
+Each of these guesses is then scored using three distinct reward functions.
+These three functions are actually a lot more sophisticated than the reward functions you've
+seen, and these were developed as we iteratively worked on improving our model
+to learn how to play the game of Wordal.
+The first reward function is called output format check,
+and it ensures that the model's response includes the correct think and guess tags,
+and that it outputs a valid five-letter English word from the dictionary.
+The user's previous feedback function evaluates how well the new guess
+incorporates feedback from earlier attempts,
+rewarding guesses that logically build on prior clues.
+The guess feedback reward function scores how effective guesses
+in eliminating possibilities.
+More incorrect words a guess helps rule out.
+From the set of all possible five-letter English words,
+the higher that award.
+If you're interested in seeing how these functions are implemented,
+please take a look at the utils file associated with this lesson.
+Finally, we use these rewards scores to compute advantages,
+apply clipping to prevent any training instability,
+and calculate the GRP or loss to update the model.
+Over time, this loop nudges the model towards more strategic and successful Wordal play.
+Now that you've seen the roadmap for how we can do RFD for Wordal,
+let's jump into the code to see how we can build this through PradaBase.
+We can start by importing PradaBase,
+and various config classes that we will use to train the model,
+as well as the data sets library from HuggingFace.
+Next, since we're training this through PradaBase,
+you will need to sign up with the PradaBase account,
+and you can sign into the PradaBase SDK by providing your API token as so.
+Now that we signed into PradaBase, let's get started.
+The first thing we'll want to do is actually load a data set
+to do GRPO training.
+We can do this by loading a data set from HuggingFace.
+This data set is hosted at PradaBase- Wordal GRPO,
+and we created this data set by taking a set of seed five letter words
+from past Wordal games and having strong models
+like plot 3.7 thinking, simulate gameplay.
+We discarded the actual outputs produced by the model,
+but we kept the intermediate guesses it makes
+as it works towards the solution.
+Once we do that, we can actually upload this data set
+to PradaBase directly from Pandas,
+and this is done by calling pb.datasets.fromPandaStaterframe.
+Once we uploaded our data set to PradaBase,
+the next step is to create a new depository.
+A depository is just like a GitHub depository
+except that you can use it to track all of your training experiments in the platform.
+In our case, we'll create a repository called Wordal.
+Don't worry about this warning.
+Once we've created our depository and uploaded the data,
+we're now ready to set up our training run.
+As you know, in GRPO, we need to define our award functions,
+and we've done that in our utils file.
+So we have the gas value, the output format check,
+and the user's previous feedback.
+With our award function setup,
+we can now define the fine-tuning job that we want to run.
+As you can see, the fine-tuning job consists of four parts.
+A config to define what we want to train with reward functions,
+a data set, the depository, and an optional description.
+Let's zoom in to the GRPO config that helps define the configuration
+for our GRPO training run.
+We can specify the base model,
+which is quen 2.57 billion instruct.
+Next, we can define our set of reward functions
+using the reward functions config.
+This consists of two attributes that we can set,
+runtime, and the set of functions,
+which is a mapping of a human readable name
+to the actual function definition.
+The reward functions are executed on a databases server,
+and so if these need optional dependencies such as pandas,
+or maybe open AI, if you're doing LLM as a judge,
+those need to be specified within this runtime config.
+Once you define the reward functions,
+we also have the option of setting optional sampling parameters.
+This can include things like max tokens,
+temperature, top-kate, top-b sampling, etc.
+In this case, we want to give the model enough tokens
+to evolve its chain of thought,
+and so we'll set max tokens to 4096.
+Finally, we can set num generations to 8, or 16,
+or even larger number, depending on the compute budget we want to give it.
+And these are all the components that are required
+to set up a valid GRPO config.
+Once our fine-tuning job is set up,
+we can run the cell to execute, to kick off the training job.
+You won't actually be able to run this in the notebook,
+but if you set up your own Prattabase API key,
+when you run this cell, you will see an output
+that looks very similar to what you're seeing on your screen right now.
+If you want to try this yourself,
+you can get started with $25 worth of free credits on Prattabase today.
+We use this setup to train a model to play Wordl
+throughout the duration of this course.
+Let's take a look at how this model performed
+on a set of games that it's never seen before.
+We benchmarked both closed source and open source models
+on 10 games of Wordl,
+and specifically we measured two metrics,
+the number of games that the model could solve,
+and the average number of guesses in those solved games.
+We found that GPT-4 or Mini is only able to solve one game,
+while Cloud 3.5's Sonnet is able to solve
+about 8 out of the 10 games, which is pretty good.
+Cloud 3.7's Sonnet thinking is able to solve all 10 games
+with fewer than 4 guesses on average,
+but it does this only when we give it a thinking budget of 8,000 tokens.
+The base Gwen model actually fails to solve a single game.
+When we use GRPO to do reinforcement fine tuning,
+the Gwen model solved three out of 10 games,
+with an average of four guesses in the game that solves.
+This is actually pretty incredible for a model of this size,
+and clearly demonstrates gains in strategic play,
+and efficiency from purely reward driven optimizations.
+We can also combine supervised and reinforcement fine tuning
+to get the best of both worlds.
+In step one, we start by having Cloud 3.7 Sonnet
+play 35 games of worldl,
+and capture the reasoning traces in generates
+for each intermediate guess.
+These prompt completion pairs form our SFD dataset,
+which teaches the model how to think through its guesses
+step by step in a logical way.
+The resulting SFD checkpoint gives us a strong initialization
+for further optimization,
+essentially a model that mimics good reasoning.
+Then, in step two, we use this SFD model
+as the starting point for GRPO.
+We will run the same reinforcement fine tuning process
+that we described earlier,
+so generating the completions,
+throwing them with reward functions,
+computing advantages, and updating the model.
+And this produces our final GRPO checkpoint,
+now optimized not just to imitate reasoning,
+but to solve worldl more efficiently.
+By combining supervised fine tuning with reinforcement fine tuning,
+our Gwen 2.5 model was not able to solve
+seven out of 10 games correctly,
+which is over two x improvement in its performance.
+One thing to remember about GRPO and RL in general
+is that it is a on-policy algorithm.
+It is used to help the model to find its own knowledge
+to do better on a downstream task.
+When you do SFD using outputs from a strong model,
+and then use GRPO to refine that knowledge,
+very often we find that small models are actually able to beat
+these larger models on the same task.
+If you're interested in training a model using SFD,
+or training it using a combination or SFD and GRPO,
+we've made the code available to do this in pathways
+towards the end of the notebook.

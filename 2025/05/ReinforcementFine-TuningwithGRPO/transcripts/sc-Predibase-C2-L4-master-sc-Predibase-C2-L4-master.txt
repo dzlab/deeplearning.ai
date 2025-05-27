@@ -1,0 +1,110 @@
+In the last lesson, you saw how an LLM can be instructed to play the game of Wordl.
+In this lesson, you'll learn how to design the reward functions that power the reinforcement
+finding process and see how rewards are converted to advantages that help steer the model
+towards better outcomes during learning.
+Let's head to the notebook to get started.
+Let's go ahead and get started by importing our dependencies.
+In this lesson, we're going to be making use of PyTorch as well, so let's go ahead and
+import that. Let's create our deployment, which we'll be using to prompt as the base model,
+and this base model for this lesson is going to be the Quinn 2.57 billion instruct model,
+so let's define that as a variable. A straightforward approach to defining a reward function is to
+use a simple binary success or failure signal. This assigns a reward of one for a correct answer,
+and zero for incorrect. So this is analogous to in the supervised fine-tuning world,
+having a ground-truth answer that the model is trying to get correct. Now, let's see how
+this reward function works in practice on some example guesses. So let's say that our secret word
+is pound, and we're going to assume that the model has guessed a few things before this points,
+the word crane, and blonde, and then finally found. So we have this helper class here called
+guess with feedback, which is essentially just going to take our guess and the secret word as input,
+and then store off information about which of these letters were correct versus incorrect versus
+in the wrong position, so forth. Now let's go ahead and take all these past guesses and attempt to
+generate a new guess from our model. What we're going to do is call the generate function,
+converting the past guesses into our fully rendered prompt, get a response, and then from that
+response we're going to extract out the guess, and then we're finally going to use the
+world reward function that we defined above to score the final guess, and let's see when
+we get. So in this case, the model guessed gone, which got a reward of zero, meaning that from
+the perspective of the learning process, this guess was just completely wrong. So now let's
+briefly talk about how these reward functions ultimately translate into learning in this process.
+In reinforcement learning, a reward function gives feedback to the agent about how well it's
+achieving its goal, and these rewards are numerical values assigned after some action is taken,
+indicating how desirable the outcome is. What we're ultimately doing is we are taking all the
+different guesses that the model is making for a particular prompt, and then figuring out which
+ones are relatively better than the others. The agent's goal is to maximize its overall reward
+over time. There are two ingredients that are necessary for this learning to occur. One is that
+we need to have diversity of the responses that are generated, and two that ultimately needs to
+lead to a diversity of rewards. And the reason that this is the case is because the way that we
+determine the relative desirability of one response versus another is with something we call the
+advantage. This is the equation that computes the advantage. All we're really doing here is we're
+taking all the rewards that were computed for a particular prompt, and then we're just computing
+a normalized value where we subtract out the mean divided by the standard deviation, so it ends up
+being a nice number centered around zero. In code, what this looks like is a function like this,
+so we have this compute advantages function, it takes in a list of rewards, we compute the mean,
+we compute the standard deviation, we avoid a division by zero here by just giving all zeroes
+in the event that the standard deviation is zero, and then the advantages themselves are just
+computed as shown in the equation, and we return that all as a list at the end. Let's look at a
+quick example of how this advantage computation works, assuming some fake reward scores. So let's say
+we had reward scores ranging from zero to one, and then a bunch of values in between like point two,
+point four, point five, etc. And let's see what the advantages look like. You can see that the
+advantages are centered at zero for those rewards that are in the middle, they go down to negative
+values for rewards that are low, relative to the others, and they go up proportionally for numbers
+that are relatively high. So this shows you that from a learning perspective, we're going to discourage
+the model from generating responses that look like the things that scored zero, and we're going to
+be encouraging the model to generate more responses that look like the responses that generated
+these high reward values. Let's visualize the rewards and the advantages for our existing reward
+function on the task of wordals. So we're going to define this function here that's going to
+print out the table of guesses. So for every response and a reward function, we're going to
+get the guesses, get the rewards, and print out a table showing those values. Let's make a few
+guesses and go ahead and compute the rewards and the advantages and render that table.
+Here we can see that, again, for our secret word of pound, we had eight different guesses that we
+made, crane, tower, sword, food, etc. And in each case, none of these guesses was the word pound.
+So the reward was zero, and as a result, the advantage is zero. And so consequently,
+from the perspective of the GRPO algorithm, these rewards actually are not going to result in
+any learning at all. Now, although all the guesses are currently receiving a reward of zero,
+not all of them are equally incorrect, right? Some guesses contain correct letters and the
+correct positions. Like, for example, you can see news here, NOU, rather OU, those are definitely
+in the right letters in the right position. N is the right letter, but in the wrong position.
+So you could say that this is directly better than a guess like crane, which has far fewer correct
+letters in the correct position. This suggests that a binary reward function might be too strict,
+and then instead, we can introduce a partial credit system to assign higher rewards for guesses
+that are closer to the target word based on correctness and positional accuracy. Let's introduce
+a new reward function that assigns partial credit. First thing we're going to do is look at the length
+of the guess compared to the length of the secret word. If they're not the same length, we're just
+going to return a reward of zero, and therefore, directionally, discourage the model from making any
+guesses that are not the right number of letters. Next, we're going to get a set of all the valid
+letters that exist in the secret word, and we're going to iterate over every letter that's in the
+guess, and in the secret word, one at a time, and compare them. So if the letter and the secret letter
+match, then we're in the situation where we have the right letter and the right location, and we're
+going to give it a reward of 0.2. If we have a letter that's in the word, but in the wrong
+location, then we're going to give it a score of 0.1, and otherwise, we're going to give it no
+rewards. And what this means is that for a given five letter word, that if every single letter is
+in the right location, it's going to get a total reward of one, and for everything in between,
+we're going to have partial credit where right letters in the right location could lead to say a
+score of 0.2 or 0.4, etc. So we should hope to see some variation and the types of reward scores
+we're getting from this process. Let's try applying our new partial credit reward function to the
+previous secret word and use our model to try creating a few guesses. As we're going to see here,
+this process, even with partial credit relies heavily on getting a good diversity of different
+responses for a given prompt. And the way we control that diversity is with a parameter called
+temperature. There are other sampling parameters as well that exist, but temperature is one of the
+most common ones that we can use. And here we're going to see what happens if we set temperature
+equals 0, which means that the model will always select for the highest probability guess for each
+prompt. Unsurprisingly, when we set temperature equals 0, we've essentially created deterministic
+sampling process. And so every time the model guesses the same thing, in this case, the word frown.
+Frown receives a reward of 0.2, but because it guesses frown literally every single time, we're back
+to the situation where the advantage itself is just all zeros. On the other end of the spectrum,
+we can try generating responses with a high temperature like 1.3 here, which should introduce
+a lot more variation. Using a higher temperature value has successfully resulted in more variety in
+the reward scores that are generated. So we are seeing now the kind of advantage variation that
+we're hoping for, but we're also seeing that the guesses in general are just on average worse than
+if we do a greedy sampling. So we're seeing a lot more examples where the guess is blank, meaning
+that the model never actually managed to generate a guess. And so what this ultimately means is that
+while there will be some directional learning here that happens because we are able to compute
+advantages, the overall learning process will be slower because the guess quality itself is
+generally pretty low. So what we want to do is find a way to strike a balance between these two
+extremes. And that means setting a reasonable temperature value here like 0.7. All right, so now we
+can see that we're finally starting to get something that looks a lot more like what we're hoping for.
+So the guesses tend to generally be the right number of letters. They're all valid words.
+Some of them are better than others. We're seeing that there is some variation in the reward
+scores. There's variation in the advantages as well. And in general, we expect that this is going
+to start pushing our model towards learning to guess words that are more likely to receive
+higher reward. And therefore more likely to ultimately get the word correct. And the next lesson
+will look at other examples of reward functions that you can use to assess softer criteria that
+sometimes more subjective or relies more on human value judgment during the learning process.

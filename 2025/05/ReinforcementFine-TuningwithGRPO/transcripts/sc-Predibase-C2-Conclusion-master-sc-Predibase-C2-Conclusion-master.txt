@@ -1,0 +1,22 @@
+Congratulations on making it to the end of the course.
+You've covered a lot from the detailed foundations of
+reinforcement learning with GRPO to the art and science of
+creating reward functions at steerLMs to
+good performance on complex tasks.
+Crafting reward functions for RFD is very flexible,
+and there's a lot of scope to insert
+your own domain knowledge since you build the functions from scratch.
+We've worked with lots of customers at
+Prattabase who are coming up with
+interesting and creative RFD solutions
+for their business problems, including the
+quiz-taking reward function for summarization
+that you saw earlier in the course.
+If you are interested in going deeper,
+there are more RFD learning resources on the
+Prattabase website.
+And because this technique is still in its
+infancy, we'd love to hear from you about
+any use cases you explore.
+We hope you enjoyed the course, and we can't
+wait to see what you build.

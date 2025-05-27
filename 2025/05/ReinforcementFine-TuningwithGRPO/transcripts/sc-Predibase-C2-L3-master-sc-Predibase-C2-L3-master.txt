@@ -1,0 +1,105 @@
+In this lesson, we introduce Wordal as a running example for GRPO.
+Wordal is a simple game, but requires planning, hypothesis testing, and step-by-step reasoning to play well.
+This makes it a great example to see how an LLM can learn to plan, analyze feedback, and improve its strategy over time by reinforcement-finding tuning.
+Let's dive in.
+Let's start by reviewing the rules of the game.
+The goal is to identify a secret five letter word in atmostix guesses.
+After each guess, you receive feedback on every letter in your guess.
+Green means the letter is correct and in the right position, yellow indicates that the letter appears in the word, but in a different position, and gray means that the letter does not appear in the word at all.
+Because we're feeding this into an LLM, we'll represent those colors with text symbols.
+Mark then indicate green, a dash to indicate yellow, and a cross mark to indicate gray.
+Now, let's head to the notebook and see how we can frame Wordal as a reinforcement-finding tuning problem.
+We'll start by importing some necessary packages. We'll point the OpenAI SDK to a model hosted in petabase by giving it a different base URL, and for this lesson, we'll be looking at Gwen 2.5 7 billion instruct.
+Once we initialize our client, we can use the Transformers package to load the tokenizer associated with this model.
+Once we load the tokenizer, let's set up our system prompt that we will pass to the model to play the game of Wordal.
+The system prompt has a few key components.
+The first is we will tell the LLM that it is playing Wordal, which is the word guessing game.
+The second part of the system prompt focuses on giving it the three game rules that we just discussed.
+The third part of the system prompt, it tells the model how it's going to receive feedback.
+Once we give it these basic piece of information, we'll also give it an example of a secret word as well as guesses and feedback.
+So in this case, we'll give it secret word is brisk, and let's say made the guess storm, we'll give it feedback in the format of a symbol for each letter.
+So in this case, S is in the word brisk, but in the wrong position, so we give it a dash, and O, T, and M are not in the word at all.
+And finally, we'll tell the model what response format we want.
+Specifically, we're going to ask it to use chain of thought reasoning to explain its dot process and return that within think tags.
+And then we want it to return the guess word between guess tags.
+Next, we'll work on defining some helper classes and methods.
+We can import some additional dependencies to help us define these.
+We'll define an enum, which will help us indicate feedback for each letter in the guess.
+We'll also define a data class called guess with feedback that we'll use throughout the course.
+And it contains a guess, which is a string, and a feedback attribute, which is a list of these enum objects.
+We'll also define a wrapper, and what this does is it helps us convert the guess and feedback into a string that we can add into our prompt.
+Now that we have a way to represent this feedback, we need to define a method that helps us capture all of this feedback into a user prompt that we can pass to the model.
+We always start with the base prompt, make a new five letter word guess, and we'll use the list of past guesses to create these feedback strings from the guess with feedback object and return this in the user prompt.
+Next, we need a way to capture our system prompt, our user prompt with feedback, and also give the model a little bit of a preamble at the starting point for its step by step reasoning.
+So we'll define this method as object that has the system prompt, the fully rendered user prompt, and this preamble.
+And then we'll use the tokenizer to format this with the right chat template tokens so that the model gets it in the format that it expects.
+Finally, we'll define a generate stream function that takes a prompt and an optional adapter ID. This will call the OpenAI completions are create endpoint, but the prompt, temperature, machine tokens, and then stream the output as it's generating it.
+It's important to note that we're setting temperature to 0 to produce the deterministic responses since we're trying to evaluate the model's quality.
+Now that we have these helper methods defined, let's take a look at how the formatted data looks with our prompts.
+Let's assume that the secret where we want to guess is craft. And so far, the model has made two guesses, crane and crash.
+We can create instances of the guesses feedback class that have the guess along with detailed feedback for each letter.
+And when we pass this into the render prompt method, we'll see that our prompt has all of the same stuff as our system prompt along with formatted feedback and the preamble to start making a guess.
+Next, we can see what happens when we send this prompt to the base model.
+So the base model understands a lot of the feedback that CRA are incorrect positions, while NES and H are not, yet it decides to repeat its original guess, which is crane.
+So this is a pretty suboptimal guess.
+Now we can see how a fine tune model would do on the same prompt. Note that we're passing in an adapter ID here.
+And this points to the weights of a model that we trained using this reinforcement fine tuning process that we will continue to explore to other rest of this course.
+We fine tuned our model using a technique called Lora, which allows us to add and update only a small set of low rank adapter weights instead of modifying all the weights in the base model.
+So as a such the producer responds, we can see that it understands that CR and AR and the correct position and N and E are not in the word.
+Similarly, it understands the same is true for the word crash.
+Next, it thinks about possible words and eliminates them step by step. After producing this large strain of thought, it decides that craft is an optimal guess to make based on all the criteria that it's left.
+The fine tune model actually used the past feedback to correctly guess our secret word in three guesses.
+Now that we've taken a look at how the base model and fine tune models do on a single turn, we can try and simulate an entire game.
+For this, we can define two useful helper methods.
+The get feedback method will take a guess and secret word is input and assign feedback for each letter in the guess using the criteria we defined above.
+So if the letter matches in the exact position, we give it a correct symbol.
+If it's in the list of letters, but in the wrong position, we'll give it a dash.
+And if it's just not in the word at all, we'll mark it as a wrong letter.
+It'll then return a list of these individual feedbacks back as output.
+We can also define a function to simulate gameplay, turn by turn, which we'll call next turn.
+This takes three attributes as input, past guesses, secret word and an optional adapter ID.
+It starts by taking a list of past guesses and generating the rendered form to be saw above.
+Next, it sends this to the model to generate an output.
+Once we have the response, we'll use rejects matching to extract the words between guess tags.
+If the reject match succeeds, we actually have the model's guess.
+And we can assign it feedback using the get feedback method we defined above.
+We can add this to a list of past guesses and continue this process.
+Finally, this function will pin all the past guesses to this point.
+And if the guess matches the secret word, we'll mark it as a success.
+And if we've made more than six guesses, we'll say that the model did not succeed.
+With all of these helper methods defined, let's get to the fun part.
+For the gameplay, we'll find guess the secret word brick, which is rather easy word for this model to guess.
+We'll start with no past guesses as our history, and we'll set adapter ID to empty, so that we can guess with the base model first.
+Next, we can invoke the next darn function, but the past guesses secret word and adapter ID and see what it will produce as output.
+So for the first guess, the model decides that it's a good idea to guess a common word that has a popular vowels and continents, so it guesses the word crane.
+And accordingly, it gets some feedback.
+Let's see how it incorporates feedback in the next guess.
+So if you look at the model's chain of thought on the second guess, we can see that it utilized some of the feedback, such as arming in the correct place, but it also concluded that C-A-N-N-E are not in the word at all, which is incorrect.
+If we read the rest of the chain of thought, we'll see that it decided to take a random guess and guess the word brick.
+And so it gets this word correct.
+Now let's see how the fine tune model does for the same secret word.
+Once again, we'll define our secret word, our past guesses as an empty list, but this time we will set the adapter ID to the same model we saw above.
+Then we can invoke the next darn function, just like we did before.
+So the fine tune model decides that it wants to pick a first word and needs to contain common letters, have vowels, and has minimal repeated letters.
+It comes up with a set of reasonable candidates such as arise, or stare, or crane, and then decides that stare is a good first guess because it has a lot of common letters in it.
+For this guess, it receives the following feedback. Let's see how it utilizes this feedback in its next guess.
+So the model starts by analyzing its first guess, and it correctly learns that S-D-A-N-E are not in the secret word.
+It also acknowledges that R is in the word, but in the wrong position.
+This comes up with the strategy where it thinks about common letters it hasn't tried yet, and then thinks about how to use this information.
+So based on the fact that it knows that R is in the word, but in the wrong position, it thinks that R should probably be in the second position, and it comes up with the list of possible words.
+Now based on this, it eliminates words such as print because it knows that T is not in the word.
+And as it continues on, it decides that Proud is a good guess because it does multiple new letters which will eliminate a lot of words.
+For the guess Proud, it learns that R is indeed in the second position, but OU, D and P are not in the word.
+Now if you think about this for a moment, its guessed A, O, U, and E, four of the five vowels that exist.
+So the next guess, it should actually try and make a guess with the letter I. Let's see what it does in its third guess.
+So once again, it starts by analyzing the two guesses, and tries to use this to think about what words follow the following pattern, which is question mark R, followed by three question marks.
+And it comes up with the list of candidate words. It also correctly eliminates words that are not valid, that are too short, or that are too long, and it eventually reaches a point where it decides that there's only three valid options.
+Brick, drink, and grind, that would be good candidates for the next guess. It decides to go with Brick because it introduces new letters that we haven't tested yet.
+And then it spends a moment verifying that this guess is a valid guess based on all the criteria from the original feedback.
+And it turns out that Brick is indeed a correct guess.
+Now, one thing you'll notice compared to the base model is that the fine tune model iteratively taught through its reasoning process and had a much more strategic approach to solving the game of wordal.
+And this is actually one of the benefits of the enforcement fine tuning because we asked the model to emit its chain of thought before providing a response.
+It can learn how to iteratively refine that during the training process to come up with more sound reasoning to get good results.
+This would be a great moment to try other secret words to see how the base model and fine tune model compare.
+And in particular, to get a good understanding of how the fine tune model comes up with consistent sound reasoning as it works towards guessing the secret word.
+And when you're done, you can join Travis in the next lesson where he'll show you how to define reward functions for the game of wordal.

@@ -1,0 +1,65 @@
+Now that you've seen the basics of how the enforcement learning works,
+let's discuss how RL as a fine-teaming technique can benefit your work,
+and which tasks are best suited for this training method.
+Let's look at the concrete advantages of GRP of delivers and practice.
+The first is that it doesn't actually require label data.
+All you need is a means to verify correctness either through programmable reward functions,
+or LM as a judge and other methods that we'll talk about to the course.
+It works with as few as 10 examples,
+but scales as you increase the number of prompts that you show the model during training.
+It is also a lot more flexible than supervised fine-teaming,
+because it learns actively from feedback during the training process,
+rather than from a fixed set of labeled examples.
+And because of this,
+it enables reasoning models to organically discover better strategies
+to solve really complex problems
+by improving its internal chain of thought.
+At Gradabase, we wanted to see how GRP or trained models really perform on a tough, real-world task,
+such as translating PyTorch code into highly optimized GPU kernels written in Triton.
+Using Gradabase as the enforcement fine-teaming, built on top of GRP-O,
+we were able to create a state-of-the-art Triton kernel generation model,
+shining from an open weights model like Quent32-Billion Instruct,
+and this beats models like Cloud 3.7 thinking, DeepSeek R1, and even OpenAI's O1 model.
+This result underscores how the enforcement fine-teaming with programmable rewards
+can push algorithms well beyond supervised or preference-based training methods.
+So when should you actually use the enforcement fine-teaming?
+Well, it can work really well in three situations.
+The first is when you don't have labeled data,
+but you can verify the correctness of the output it's producing,
+such as code or simple agentic workflows that have a absolute output.
+The second is when you have limited label data,
+but it's not enough for supervised fine-teaming in itself.
+And this is usually when you have less than, let's say, a thousand labeled examples.
+The third is when chain of thought reasoning improves performance.
+Now, chain of thought reasoning is a process where you ask the model to produce tokens
+that tell us how it's thinking about the answer before actually telling us what the answer is.
+And it turns out that in cases where you have tasks that improve when you apply chain of thought,
+those tasks are very well suited to RFD as well.
+What are some tasks that are also very well suited for the enforcement fine-teaming?
+There are many, and here are three examples.
+The first is mathematical problem solving.
+In this case, RFD lets the model generate and verify detailed solution steps,
+and it refines its chain of thought until the calculation checks out.
+Core generation debugging is also a great use case for RFD.
+It learns by scoring against test cases or linting rules,
+learning to produce correct, idiomatic code, and to iteratively fix errors.
+And it also lends itself very well to logical and multi-step reasoning tasks such as agentic workflows.
+When a task requires a sequence of decisions,
+RFD encourages the model to self-critique and improve each step based on the final outcome.
+In each scenario, the ability to learn actively from programmatic or outcome-based awards
+unlocks far richer, more reliable behaviors than static supervised fine-teaming alone.
+If you're deciding whether to use the enforcement fine-teaming, start by checking for label data.
+With ample label data, upwards of 100,000 rows,
+supervised fine-teaming is usually your fastest path to a good model.
+And when you have moderate label data, say, under 100,000 rows, but, you know, on the order of the day.
+A thousand rows, you should ask yourself whether chain of thought or other reasoning prompts improve initial performance.
+If it does, RFD can amplify those reasoning gains by rewarding correct reasoning steps.
+If not, you will likely get the most from using SFD.
+Next, if you have no label data, you should think about task-verifiability.
+If you can verify the outputs and assign them a score, you can use RFD with programmatic reward functions.
+However, if your task is non-verifiable, you will likely need to use other algorithms like RLHF or DPO
+by first gathering preference labels.
+In the next lesson, we'll demonstrate how we use GRPO to train a model to play Wordal.
+All the Wordal is a game.
+It provides an ideal sandbox for exploring every component of the GRPO algorithm
+and seeing first-hand, why this approach excels after reinforcement fine-tuning.

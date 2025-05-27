@@ -1,0 +1,53 @@
+Welcome to reinforcement fine-tuning LMS with GRPO, built in partnership with Federal Base.
+In this course, you take a deep technical dive into reinforcement fine-tuning or RFT,
+which is training technique that uses reinforcement learning to improve the performance of LMS,
+on tasks that require multi-step reasoning, say to complete tasks like math or code generation.
+By harnessing an LMS ability to reason through problems to think step by step,
+reinforcement fine-tuning guides the model to discover solutions to complex tasks on its own,
+rather than relying on pre-existing examples as in traditional supervised learning.
+This approach lets you adapt models to complex tasks with much less training data,
+say just a couple dozen examples, then you typically need for successful supervised fine-tuning.
+I'm delighted to introduce your instructors for this course.
+Travis Dare is co-founder and CTO at Predabase, and Anavgog is senior machine learning engineer
+and machine learning lead at the company.
+Both have worked closely with many customers to solve practical business problems using RFT.
+Thanks Andrew, we're excited to be here.
+In this course, you'll explore how RFT works using a fun example,
+training a small LM-to-play wordle, a popular word puzzle game,
+in which the player has to guess a five-letter word in six tries or fewer.
+You'll start by prompting the Quinn 2.57 billion model to play the game,
+analyze this performance, and develop a reward function that can be used to help the model learn
+how to do better over time.
+This reward function is the key component of group relative policy optimization,
+or GRPO, the learning algorithm developed by DeepSeek to carry out reinforcement learning of reasoning tasks.
+In GRPO, an LM produces multiple responses to a single prompt
+that are dense scored using a reward function based on verifiable metrics
+like correct formatting or functioning code.
+This use of a reward function is the key difference between GRPO and other RL algorithms.
+If you've heard of RL algorithms like PPO or DPO,
+the rely on human feedback are complex multi-model systems to assign rewards.
+After developing a reward function for the wordle example,
+you'll learn some other general principles for writing good reward functions
+that you can apply to a wide range of problems.
+You'll also explore ways to avoid reward hacking,
+which is what a model learns behaviors that maximize rewards
+without actually solving the problem at hand.
+Next, you'll take a close look at the technical details of how losses calculated during RFT.
+You'll see how the seemingly complex process of the GRPO algorithm
+like clipping and kale divergence of the loss function
+are actually simpler than you might think once you implement them in code.
+Finally, you'll wrap up the course by seeing how you can carry out RFT
+using the Predabase API with your own data and your own custom reward functions.
+Many people have worked to develop this course.
+From Predabase, I'd like to thank Michael Ortega
+and from deep learning.ai, Tommy Nelson.
+Elms, they can reason well our critical components of many agentic systems
+and RFT will let smaller models work well in agentic workflows.
+There's a lot of excitement around this capability of Elms.
+And RL itself is, I think, a very powerful and important technique
+that is still very mysterious to many people.
+So this is a great time to learn how RR works
+and how to use it to tune your own custom reasoning models.
+I think you'll find learning these things really rewarding.
+Let's go to the next video where you learn what are the major differences
+between RFT and supervised fine tuning.
