@@ -1,0 +1,63 @@
+Welcome to ViveCoding 101 with Rapid, built in partnership with Rapid.
+In this course, you learned how to code with an AI agent using Rapid.
+Rapid provides a cloud environment that allows you to build host and share apps.
+And Rapid's recently added a very popular coding agent that makes generating and hosting
+web-based applications fast.
+Coding agents are changing how we write codes.
+I still do fair amount of software development myself,
+but now find it account on LMS to write most of the code for me.
+I'll simply take a problem and partition it into manageable blocks
+and then spend time creating a prompt describing what I want
+and use a model to produce a code one more you at a time.
+And this type of process is making me and many others much more and certainly much faster developers.
+I do want to know that as Rapid is a cloud-hosted environment,
+we're unable to present the course on our usual platform.
+And so this is a video-only course.
+If you watch only the videos, you learn the key concepts behind using coding agents
+as well as the process of using LMS to write code.
+Sometimes of you barely looking at the code itself, which some now call ViveCoding.
+If outside of watching the videos, you want to use Rapid,
+you have to create a user account there.
+Until I tell you down in structures for this course,
+our Mikaela Katasta, who's president of Replet,
+as well as Matt Palmer, who's head of developed relations.
+Thanks, Andy. We're really excited to present this course.
+So Mikaela, tell me how have you seen development change
+for the rise of AI coding agents?
+Well, Rapid terminates many of the barriers that prevent users from building
+and deploying applications.
+First of all, Rapid provides a powerful code editor and a universal package manager.
+So you don't need to struggle with installation of Python and JavaScript packages.
+Source control is powered by Git, but we made it as slim as possible for our users.
+And also Rapid offers building key value stores, databases, and deployment solutions.
+But now, with Rapid agent, every person in no coding experience can create apps
+and deploy them in public.
+It will take you only a few minutes to start.
+Even if you did not know manual deterrent that just used,
+you can still build an application.
+Matt will show exactly how to do it in this course.
+So a popular term today is five coding,
+where you lean into letting the coding agent do most of the heavy lifting.
+We'll maximize the capabilities of the agent,
+but we'll also show how some planning can improve your results.
+Along the way, you'll learn some tips and tricks
+to get the best results possible from our agent.
+We'll start by building a search engine optimization or SEO analyzer.
+This is a basic app that will get us started and introduce some key concepts.
+Then you'll build a head-to-head voting app,
+which will showcase data extraction and storage.
+Throughout the course, we'll learn the basic building blocks of web apps.
+I think you're going to be surprised at just how much you can build.
+I know I certainly have that.
+I'm telling you intuition on how to use a coding agent.
+Michaela will also share some of the details behind how Rapid is built.
+I hope some of these lessons that they learned building Rapid,
+which is itself a sophisticated agentic workflow,
+will also convey useful insights for how you might approach building
+other agentic AI applications.
+Yes, we learned quite a bit in the last year,
+and I'm very happy to share it.
+Many people have worked to create the scores.
+I'd like to thank from dblin.ai,
+Hara, Salami, and Jeff Laudway.
+All right, let's get started with the first lesson in the next video.

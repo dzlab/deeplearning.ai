@@ -1,0 +1,290 @@
+Now, we'll enhance our search engine optimization
+or SEO analyzer prototype.
+We'll use agent to add core functionality
+and switch to assistant for customization
+and feature expansion.
+Finally, we'll deploy our application
+so others can access it online.
+Now, let's get back to it.
+So in this lesson, we're going to enhance
+the functionality of our application
+and start adding a lot of polish to exactly what we built.
+So I'm going to go ahead to the top
+and create a new chat with agent
+to clear out the context like we discussed.
+And start off by saying that we want
+to make a more visually appealing
+and visually representative app.
+We have all this data about our website,
+about the tags that we've built,
+but the only real visual summary that we're getting
+is an overall SEO score.
+So I'm wondering if we could get something
+that more better captures the entirety of these tags,
+maybe something that tells us if our images,
+a summary of our images, a summary of our titles
+and descriptions, as well as this kind of high level information.
+So what we're going to do is we're going to consolidate
+that into a prompt and ask agent.
+We're also going to ask again,
+for a little bit more polish on the UI.
+So what I'm going to say here is make the application
+more visual.
+So I'm starting high level and then I'm going to drill down
+with just some quick bullet points for agent
+that are all kind of feeding into the same functionality.
+Again, we're keeping these very targeted.
+We're not getting too crazy with what we're doing
+in one prompt.
+So create summaries for each category of Metatag
+that you will display visually to the user,
+similar to the overall score.
+If you remember from our wireframe, right?
+I had in mind this concept of multiple scores
+that we could inspect each kind of category in our website.
+And it's okay that our MVP, what we're building here
+doesn't look exactly like my wireframe.
+The wireframe is really more just to guide what we're building
+and keep that in the front of my mind.
+But I am going to drill down here and try to tune those things
+in a little bit more.
+Make the app overall more visual and allow me
+to get a summary of the SEO results at Glance.
+So we'll add one more point, which is exactly that.
+And you know, a lot of times I see when people
+are building with AI, they'll come to me and say,
+hey, Matt, I'm trying to get AI to do this thing
+because XYZ and I want ABC outcome, right?
+And I might just tell the model that.
+So exactly what I just told you,
+we're going to tell it to agent.
+Help overall, let's make the app more visual
+and user friendly for folks that might be new to SEO.
+So we can get a high level view of how well our page
+is implemented.
+Now, it's kind of like, you know,
+giving wishes to a genie.
+You know, if you're not very explicit,
+the genie might just do some crazy stuff, right?
+So what we have to do here, if we're asking for simplicity,
+is follow up that we want all the functionality
+that our app has right now.
+We don't want you to take anything away.
+So that's a very important thing
+that I've noticed does wonders.
+Do not remove any functionality.
+Just make it easier to see a high level summary
+or drill down into the details.
+And I think we kind of know the drill by now.
+So we're just going to let this one run.
+We'll come back once agent is done implementing these features
+and we'll talk about what it did.
+Okay, so we're through that round of edits.
+Let's see what we've gotten here.
+We're just going to go back with our old example.
+We're going to analyze that.
+And now it looks like we get a bit more of a visual
+representation of our checks.
+There appears to be, let's see what's going on here.
+Much better overview.
+So we're generating kind of key findings
+and what's good.
+Meta keywords, it's good that these are present.
+What needs attention, as well as some priority
+recommendations.
+So optimizing the title tag and improving the description.
+We also get some category breakdowns.
+So SEO and social media optimization.
+So it looks like there are some checks going on there.
+It's checking both for titles and the way
+that things are going to show up on social media.
+We're checking how robots index our site.
+So it's known as a robots.txt.
+Typically determines how websites can be scraped.
+On social media, we also have open graph tags
+and Twitter card checks.
+Now we can still drill down into technical details
+and actually get a Google search preview, which is nice.
+So you can see like this is maybe a little too simple
+for Google, but as our social media previews.
+And this is a bit more clean, nicer display,
+both for Facebook and Twitter.
+And then if we want to drop down into our SEO
+recommendations, we get a much more descriptive view here.
+We can still see our raw tags.
+There's also some nice hover effects.
+So this is like three or four prompts,
+but what I want to point out is that more than anything,
+we had attention to detail
+and we had attention to exactly what we wanted changed.
+And so we drilled into our app.
+There's still some things that aren't perfect, right?
+Like this is not ideal to spacing here.
+We could really kind of like nerd out with getting
+this to look the way we want to,
+but overall we have something that's fundamentally more polished.
+Now there were still a couple of points.
+So we're going to open up assistant here
+to make some like finer grain changes
+to what we just built.
+And when you know, we'll open up assistant,
+you might notice that your app reads,
+darts, you might notice that there's a refraction.
+That's because we're kind of like leaving agent mode,
+so to speak.
+And if you'll remember,
+I didn't really like that I couldn't type in,
+that I had to type in HDTPS.
+So I'm going to say to assistant
+because it actually has a lot of the same context, right?
+Into our application that agent has,
+I'm going to say can you make the website entry form
+such that HDTPS is automatically populated
+and the user doesn't have to enter any other info.
+And because this is a quicker tool,
+assistant is a more lightweight tool.
+You're going to notice that the responses are much quicker.
+And so assistant is going to read the relevant files.
+Those are first kind of intro to assistant.
+It's behaving a lot like agent,
+but in a similar manner,
+it's going to make the change.
+And then it's going to make a checkpoint.
+So we made a checkpoint.
+HDTPS is prefixed theoretically,
+or we'll do deep learning this time, deep learning.
+We just type in deep learning AI, we get our result.
+So what you might notice is that our sort of globe element
+is on top of the HDTPS.
+To provide context for assistant,
+I'm going to actually open up our screenshot tool here.
+This is just using Mac OS.
+So if you're on Windows, it might be different.
+I'm going to copy this to my clipboard.
+And then I'm going to paste that screenshot in and say,
+now the globe icon overlaps with HDTPS.
+Can you fix it?
+Well, we talked about context, right?
+We talked about providing additional details to AI,
+giving it the information it needs to fix errors.
+And that's what we're doing here.
+Hey, now assistant can see the overlapping problem.
+And it's going to present us with a solution
+and ask if we want to apply those changes.
+Looks like we're getting a bit of an error here.
+Let's preview and see what's happening.
+It's actually just removing,
+it looks like removing the globe here,
+but the commit didn't quite work.
+That's okay.
+We're actually, you know, sometimes stuff like that happens.
+You might get similar errors.
+I'm just going to really paste this in.
+I'm going to copy this.
+I'm going to run it again.
+Let's see what happens.
+There.
+So it looks like it just took another command
+really quick to run through.
+It actually looks like the original changes were applied.
+We just might have gotten a bit of a rerun.
+Getting a little error there.
+It's all good.
+And when assistant makes a new checkpoint,
+it's going to restart our app.
+So now we have our app.
+We have the HDTPS.
+I can just type in deep learning AI and click analyze.
+But just like that, we flipped over to assistant.
+We made some more lightweight details.
+This is kind of like what we wanted to build for our application.
+So we're going to walk through the deploy pattern.
+This is something we'll do for both of our applications.
+Note that deployments are limited to replic core users.
+So you might not see this experience.
+But at any time, if you want to subscribe or upgrade,
+you can deploy that way.
+Clicking deploy, we're actually just going to configure
+the build for you.
+You don't really need to worry about these details,
+or really even what autoscale means.
+We're going to approve and configure the settings.
+And then we're going to come up with a name for our app.
+So I'm going to call my SEO tag inspector.
+Note that we're configuring the build command and the run command.
+I don't really need to worry about any of this.
+Agent's going to take care of it for me.
+I'm going to click deploy.
+And it's important to mention what's going on.
+This typically takes two or three minutes.
+We're taking this application.
+We're bundling it up.
+We're taking this entire environment that we've built with agent.
+And then we're just putting that on the cloud, basically.
+You don't really have to worry about the technical complexity
+of what's going on.
+You don't have to worry about any of the nuance or details.
+What you do have to know is that everything that you just
+build will look the same on the web page that we're deploying.
+Now, if you went back and made more changes
+this application, they will not automatically flow through.
+You'd have to go through and click redeploy.
+So we're going a little bit slower in this lesson,
+but that's because we want to cover all the basics
+and understand how things work.
+So when we build our application, when we click deploy,
+we're taking a snapshot of everything
+that we just built with agent, with assistant,
+all these features that we added,
+and then promoting them to their own web page,
+which we just defined.
+If at any time you want to learn more
+about the different types of deployments that we have
+or how deployments work or any of the technical details,
+you can learn more in our documentation
+or check out some videos on YouTube that I built
+that have some really in-depth content.
+But at a high level, we're going to select
+the right deployment type for you.
+And we can be very confident that that's the right type
+to deploy.
+So in the meantime, you can watch this cool loading screen.
+All deployments also come with logs,
+so you can see exactly what's happening in your deployment.
+They come with analytics, so you'll be able to see
+who's visiting your deployment, how many users you have,
+as well as some other settings that you can drill into.
+Those will be visible once our deployment is done.
+In the meantime, we're going to sit back.
+I'll join you once this is done to point.
+So we're back.
+You can see the deployment took about two minutes,
+which is great.
+And we're going to give you the domain
+we just deployed to.
+So if I go to this URL, we're going to get the same app.
+This is now deployed on the internet.
+Note it's at its own URL.
+You can visit the site if you want.
+I actually just entered a site and it had HTTPS
+and the forum automatically removed that for me.
+So that's really nice.
+Can click analyze.
+It's going to work exactly the same as what we had before.
+So these are the basics.
+We just built end-to-end an application with agent,
+with assistant that scrapes web pages,
+performs an analysis on that web page.
+Tell us if there's anything that we can improve
+or maybe optimize for SEO, Google results, or social posts.
+And then deployed it.
+We built a tool completely that other people can use
+that you can use.
+And that's how simple it is.
+And so this lesson was really more about polishing,
+flipping over to assistant.
+In the next lesson, we'll be able to speed through
+a bit more of the basics since we've already covered those
+and get into more of a complex topic.
+So I'm really excited for that one.
+I'll catch you in the next lesson.

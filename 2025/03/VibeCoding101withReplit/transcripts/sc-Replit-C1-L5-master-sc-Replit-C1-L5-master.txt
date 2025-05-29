@@ -1,0 +1,134 @@
+In this lesson, we'll refine our national parks voting app by integrating our complete
+data set.
+We'll also add final features with agent and assistant to ensure everything works correctly.
+Then we'll deploy the application for public use.
+When the last lesson we built out our park ranking, headhead voting app here, we got all
+the functionality implemented and we have our parks being stored in a database.
+We kind of got this nice little ranking table here along with our recent votes that are
+being stored in Postgres.
+Now we're going to add some additional functionality.
+We're going to understand how this works and then deploy our app.
+But on that last agent running, I'm not going to lie, I kind of zoned out and so I kind
+of missed.
+I missed exactly how things were being implemented.
+So what I'm going to do now is I'm going to head to assistant and I'm just going to ask
+it to help me understand how my project's working.
+Again, you're going to see the preview refresh as we switch to assistant mode.
+But I see a client, I see server and shared, but like, I don't know much about databases.
+Or how we implemented our database.
+So I'm just going to ask assistant, help me understand what frameworks we used for our
+database.
+How does it work and how are we managing it?
+And again, I think frameworks are important, something I've been emphasizing throughout
+this course and understanding what we're building is important because as we get into
+these debugging issues, you need to understand how to solve these problems and how things
+work in order to solve those problems.
+So assistant basically just gave me a recap of everything agent just built.
+We're using Postgres, which is a main database configured through a connection URL in our
+environment variables, which we talked about.
+Cool.
+We're using an ORM framework called drizzle ORM, which is a TypeScript first ORM.
+I have no idea what that means.
+We're going to dig into that in a second.
+We're also doing some schema management.
+So we're defining that.
+I can actually look through here, shared schema.
+Okay, cool.
+Like this is defining the parks table and all of the columns there is defining a vote
+stable.
+Need actually walking through our tables.
+And the code base has two storage implementations and in memory implementation.
+So this was like our old dev implementation.
+We could clean that up if we wanted to.
+So we could call out and explains how these things work.
+Now what was that?
+Did just walk this through?
+I don't really know what an ORM framework is.
+So I'm going to say what is an ORM framework?
+And why would I use drizzle ORM?
+This is exactly how I've learned to code how to build with AI.
+And basically everything that I'm showing you today, I just ask a bunch of questions.
+And assistant uses the latest models.
+We're just asking questions and understanding kind of what's going on.
+So assistant's going to actually tell us here exactly what our ORM is.
+Object relational mapping is a framework that lets you interact with your database using
+programming languages objects instead of writing all SQL queries.
+Okay.
+So we're using objects instead of writing SQL or SQL, which is a language for interacting
+with databases.
+So it's actually telling us some of the benefits, types of the schema management, query
+building, schema validation.
+Okay.
+Maybe I don't know exactly what these things are, but I could keep digging into them.
+So really the goal here is just to help you understand, hey, I don't actually know what
+this thing is.
+I don't really know what's going on, but I can learn and I can ask AI and I can use that
+as a way to kind of reinforce the things that I'm building and to keep iterative.
+So just like that, assistant helped us understand how our application worked and maybe even learn
+a few things about drizzle, about postgres and some of the tools that we're building with.
+But I've been really impressed.
+I like how this works.
+We have an application where we can vote for parks.
+The parks are recorded in our database and we get our ranking system.
+This is exactly what I wanted and it's really cool.
+It's really interactive.
+We actually pulled the data and these images from Wikipedia.
+So pretty complicated app here.
+Some data manipulation visualization, how to extract, transform, load type stuff.
+So now we're going to go ahead.
+We're going to deploy this.
+Just like last time we're going to use auto scale, we're going to prove those settings.
+And this time you'll notice that we have secrets for our database, right?
+So if we're going to deploy with APIs or external services, we'd pull those secrets through
+as well.
+We'll call this one park challenge.
+I think that's available and we're going to go down, we're going to deploy it.
+And just like last time, Revolet is going to build this deployment.
+It's going to configure everything and promote that to our production environment.
+And there's really not much we need to worry about since we built the entire thing out.
+And typically in development, it's really hard not only to recreate your environment in
+the cloud, but then to add in those external services to add in databases and manage those
+databases in a separate environment and we'll do a bunch of other stuff, right?
+And so what we have here is a database that's directly integrated into the environment.
+As we talked about before, our app kind of installed a bunch of stuff for us.
+It ran some Python scripts to import data, you know, agent configured this database that
+embedded into our application.
+And we didn't have to go anywhere.
+We didn't have to go to another tab.
+We didn't have to set up another account or input an API key.
+We just did it all from right in Repplet.
+And so the power of building with agent, the power of building with assistant is that
+we're able to make these applications, these full stack applications that have databases
+that have front ends and they have back ends and really build complex tooling from one
+pain.
+That is vibe coding, right?
+We did a lot of planning.
+We did a lot of discussion about tools and frameworks, but for the most part, this looked
+a lot different from coding or building otherwise.
+There's a lot of vibes.
+We're just kind of going by feel with the debugging and we're going by feel with like how
+we manage context.
+So I'm going to let this deployment wrap up.
+We'll come back.
+We'll finish it up.
+Make sure application works and we'll move on from there.
+Cool.
+So we deployed our application.
+We get a URL and it's deployed as an auto scale deployment.
+Again, if you want to learn more about that, you can check out our videos or the documentation.
+Opening the app, we get exactly what we had before.
+I can vote on mammoth cave.
+And actually, it's important to note that the same scores pulled through from before.
+That's because we're using the same database.
+So we have our voting system.
+We have some recent votes and we have our rankings that are being stored persistently
+in our database.
+As I kind of talked about, this is the power of Rupplet.
+We just deployed this live on the internet for anybody to access.
+If you want to share with your family or friends, you could do just that.
+And yeah, end to end, full stack application, persistent storage, vibe coded all the way.
+So in our next lesson, we're going to talk about next steps.
+We're going to talk about where you go from here.
+But thanks for joining along.
+Thanks for building some cool apps.
+Let's wrap it up.

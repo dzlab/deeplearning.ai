@@ -1,0 +1,111 @@
+And that's it.
+Congratulations on completing the course.
+In this lesson, we'll recap what we've built,
+discuss best practices, and explore next steps
+for continuing your journey in vibe coding.
+So we've just built some pretty amazing applications
+without writing any code at all.
+And the amazing thing in what we did was
+that we built two production ready apps,
+not just toy demos that were full stack
+with persistent storage and deployed
+five to their own URL for anyone to access.
+We wrote little or really no code, and it was all logic.
+It was all the concepts that we discussed
+at the beginning of this course.
+So what were those concepts?
+Well, it had to do with thinking
+and had to do with frameworks and debugging
+and checkpoints and context.
+So let's do a quick review of everything we learned
+before we move on to some next steps
+in your vibe coding journey.
+So in our very first lesson, we talked about five skills.
+Those were thinking framework checkpoints,
+debugging and context.
+In thinking, we discussed a logical hierarchy for thought.
+And that goes from everything from logical thought,
+maybe asking, what is the game that I'm playing
+if you're playing a game of chess to procedural thought?
+How do I excel at that game?
+And how do I implement the functionality
+or instruct a computer to excel at that game?
+And that's kind of what we did with our apps, right?
+We asked ourselves, what is SEO?
+What is the features?
+What are the features we're trying to implement understand?
+What is our natural parts system kind of rank
+or trying to do?
+What are we trying to implement?
+And that started with frameworks.
+It started with understanding what we didn't know
+and trying to figure out more about the things we wanted to
+and understanding what frameworks allowed us to do that thing
+and work best with LL apps.
+In some cases, that meant asking questions to our tools,
+to agent and assistant to learn.
+So even when we were building stuff broke
+and we kind of knew that going in,
+but we used checkpoints, we used versioning
+to minimize the impact of what we were building.
+And the really great thing is that agent and assistant
+came with those checkpoints,
+came with that version control out of the box.
+And so what that meant is that we could chunk up our builds
+into MVPs, minimum viable products and features
+and move really quickly.
+Now debugging, there was a good bit of debugging.
+I think we had fun, but we were methodical.
+We understood how our apps worked,
+sometimes asking assistant and we got to the root
+of the issues and fix our problems.
+Finally, context.
+Obviously context is important.
+It's been something I've emphasized throughout the course,
+but we got at context by providing images,
+providing links to what we were building.
+And in one case, providing actual data to a web page.
+Because we provided context,
+because we gave a thorough explanation
+to agent of what we were trying to do,
+it's actually able to extract that data
+and implement it into our application.
+When agent made a mistake with implementing our database,
+we provided an additional context
+that is additional details about our app
+in order to get around it.
+So remember, always think about the context
+that you're supplying or not supplying to your LLF.
+And finally, we used our framework
+for iterative building, iterative vibe coding,
+if you wanna call it that, for creating features with AI,
+testing those features, getting at an error
+or maybe not an error at all, debugging that error
+to get to a checkpoint and then moving on to the next feature.
+And along the way, we built two applications that worked,
+but if you follow this pattern,
+you'll be able to build much more advanced applications
+and much cooler things.
+So what are some next steps?
+If you're new to vibe coding
+or this is the start of your journey,
+I think the biggest step is to just keep building.
+I've found that I learned best by doing
+and I would encourage you to keep doing the same.
+And most importantly, keep having fun.
+I do this by finding common problems in my life
+or finding things that I wanna try to automate
+or recreate or improve,
+and then implementing the skills that we just did together.
+Second, you can follow along on social,
+you can connect with a Repplet, you can connect with me.
+I would love to see the things that you build
+and showcase them on our Repplet accounts.
+And finally, if you're a Repplet core member,
+we do have a Repplet community.
+So once you join core,
+you'll be eligible to join our community
+where you can post and interact with other members.
+But again, I'm Matt in developer relations with Repplet.
+This has been vibe coding 101 on Repplet.
+Thanks for joining.

@@ -1,0 +1,464 @@
+In this lesson, we'll build a national parks ranking app with voting capabilities.
+Just like in the last lesson, we'll develop a PRD and wireframe to outline our requirements,
+craft an effective prompt and use agent to create our initial application with our sample
+park data.
+So, now let's get started on our next project, and it's going to be a bit more of a complex
+project using persistent storage and some more complete interactive functionality.
+So, what we're going to build is a headhead ranking app that uses a custom dataset to
+store votes and rankings in a database.
+So, the idea is we're going to pull in some national parks data, the United States, and
+you'll be able to go to our app and vote between two parks that are presented to you, the
+user.
+Once you create a vote, we will in real time sort of tally up a ranking for that park and
+return the relevant ranked parks.
+So, we're going to go through a similar process.
+We'll start with a PRD.
+We'll start with a whiteboard.
+We're going to discuss some more advanced building techniques once we get into a
+replicate for our app.
+So, again, starting with our whiteboard here, we're building our headhead voting app.
+And I went ahead and sketched this one out as well.
+Again, I'm thinking we have two parks that we're comparing head to head.
+Once we vote on this park, we're going to calculate a dynamic ranking.
+Now, the parks are ranked according to what's known as an ELO system.
+So, the goal here is to have our rankings displayed in real time to store both our parks
+and our rankings in a database to use a persistent storage method like a database and display
+overall rankings in recent votes.
+This brings me to an important point, which is that by default, if you're creating apps
+on another platform or on Replic, that data has to be stored somewhere so that we can
+re-access it and we can have it available to us at any time.
+And so, what we're going to do is initialize this application and then move that data to
+persistent storage to a database such that we can access it, we can update those values
+and have it stored in our application.
+And that's a really cool feature about Replic.
+We have databases built in.
+We'll walk through that.
+So, key skills for this one, prompting persistent data deployments, debugging and handling errors
+and edge cases.
+So, let's look at our prompt.
+Help me build an interactive app for voting and ranking the best national parks.
+The app should allow users to vote on parks head to head, then calculate a ranking for
+the parks based on the chess ELO system.
+The app should prominently display the matchup along with overall rankings in recent votes.
+Again, this is really straightforward.
+We're emphasizing these with our Frankbork and ELO system.
+And you might be saying, hey, what about the data?
+Is the LLM just going to know about all these national parks?
+Well, probably not.
+And even if it does, it's not going to have images for those parks.
+It's going to be hard to find the information.
+So, what we're going to do from this app is we're actually going to pull data in from
+an external source.
+Let me show you how to do this in Replic.
+It'll be really straightforward, but first, let's just take our prompt to the Replic
+homepage.
+So, just like the last lesson, we're getting started here with our prompt.
+We've entered everything in.
+And now what we're going to do is enhance this prompt with some additional context,
+like we talked about in the introduction to this course.
+So it looks like the US has 63 national parks.
+And this is the Wikipedia page for national parks.
+And it actually, we actually just list all of the national parks here.
+So this is really cool.
+Something we haven't talked about is that agent can actually just scrape this web page
+for us.
+And if we're thinking about the context that we provide to LLMs, well, if we say build
+this ranker with all these national parks, and then we just give AI, a list of all the
+national parks, and potentially the image URLs for those parks, we can be pretty comfortable
+that it it'll be able to use that data to integrate it into our application.
+So what we're just going to do is copy the URL and bring that over to agent.
+And so what we're going to do, we're going to hit Shift Enter to create a new line, and
+we're going to paste in our Wikipedia link.
+What you're going to see up top is this little modal here.
+It's going to prompt us if we want to take a screenshot of that page or get the text
+content.
+Obviously, a screenshot of a Wikipedia page, probably not what we want.
+So we can fetch the text content.
+Our tools are just going to scrape that web page and return us the text content.
+You can actually see it in real time so you'll know exactly what's it completes.
+It typically takes one or two seconds here.
+And once you see something populated, you can see the content.
+So now we know, hey, we're asking AI to build this interactive voting app.
+Theoretically, it should have all of the content that it needs, all of the data, which is
+the list of parks, the 63 parks.
+It'll also have access to the URLs.
+So we'll see if agent can implement those properly that might take some additional prompting.
+And the next piece, we can actually use that PRD a little bit more directly.
+We can use that wireframe that we drew a little bit more directly in this app than we
+did in the last one.
+And then head back over to our wireframe.
+And so now what we're going to do for this one is we're going to actually just take a
+screenshot of this wireframe because I like the design here.
+I want AI to also have some context into what we're doing.
+And we're going to paste this into agent.
+So now I've pasted the wireframe and our prompt is just a little bit more complete.
+We not only have a really descriptive but concise prompt that tells agent exactly what we want.
+But we also have the text content of the Wikipedia page that explains what national parks are,
+what parks exist in the United States and has a complete list of the parks along with
+really relevant data.
+And we've attached our screenshot.
+So let's see what agent does with this information.
+Just like the last time, agent is going to come up with a plan and present us info for
+what it's going to build before we jump in.
+Since we've been through this process since, you know, really the first lesson was getting
+comfortable with what we're building, we're going to confirm the plan here.
+And then I'll catch back up with you once agent is done with the initial MVP build.
+One thing important thing to note, these additional features here are just that additional
+features.
+So regardless, agents going to work towards the initial prototype, we're actually going
+to work towards implementing things like a Postgres database, or maybe some of these
+other functionalities.
+So you don't have to worry about that.
+You can just improve the plan and start.
+Also note that right results may vary.
+So if you're following this tutorial, AI does different things sometimes.
+Your preview might look different.
+The final result might look different, but we're going to work through it together.
+So I'll catch you once this preview is done.
+Okay, so we're back.
+And if you're following along what the app was being built, you might have seen some errors
+come up and we still have some errors.
+So that's okay.
+And we're going to work through these one at a time.
+And you probably saw actually that agent fixed some errors.
+And that was because agent has the ability to both read the output of what's coming from
+the application.
+So what's being written to the console, if we open a new tab and type in console, you can
+actually see what's happening as the application is working.
+And it also has the ability to take screenshots and fix things dynamically.
+So we have our interface.
+There's a lot of stuff going on here.
+There's not a lot of things that are working, but that's okay.
+We expected to get errors.
+On the whole, this looks nice.
+The images aren't coming through.
+I don't think we have all of the parks here.
+I don't think it's scraped the data like we asked it to.
+And we have some like non-functional account buttons up top, which is fine.
+But this looks like our wireframe.
+So I think that's good.
+And we're going to try and fix this.
+And we're not going to worry too much about the broken images or some of the other stuff
+that's going on here.
+We're just going to focus on seeing if we can make this work.
+But let's check actually if the voting works.
+So I click vote.
+And actually in these ones, the images do work.
+So the Everglades got a vote.
+It is tallied in my recent votes, which is cool.
+It doesn't look like it flowed through to my rankings.
+So that's something to note.
+The rankings don't appear to be working, but the recent votes and the images in some instances
+do seem to work.
+This is where it might be helpful to dig into the code and kind of see what's going
+on.
+We're going to poke around in the components, see what's in a hook, slip.
+Okay.
+So park data, it looks like, you know, it just hard coded a bunch of parks in here.
+These do not appear to be all of the parks and it assigned an icon type for these parks,
+which is probably what's flowing through the front end.
+And then replete has access to unsplash.
+So it looks like it just pulled these images from unsplash.
+And then my guess would be for some parks that didn't have images.
+So I think what our goal here is going to be to see if we can get it to use Wikipedia,
+like we originally asked for.
+It's possible we just gave it a little bit too much information.
+This is building with AI, right?
+We're going to take a look at this.
+As we talked about what we're doing now is we're testing the application, seeing what
+works, seeing what doesn't work.
+What doesn't work is that our rankings aren't pulling from our persistent data storage.
+We are recording recent votes, which is cool, but we also didn't really pull in parks
+the way we wanted to.
+So what I'm going to tell agent, we're going to try something different.
+We're going to say the parks data are listed on the Wikipedia page inside a table in the
+HTML.
+Please fetch the page, download it, and extract all the parks from the source.
+There should be 63, if I remember correctly.
+Each park has an image in the table.
+You should use the externally hosted image as the park image in our app.
+And then I'm going to paste in the Wikipedia page.
+This time, we're actually not going to get the text content.
+The goal here is to see if maybe through an alternative prompting method we can get agent
+to just integrate this directly, and I'm going to run that.
+So the goal here is I'm thinking about the biggest problems with our app.
+The first one is that we just don't have accurate data.
+So there are other ways to go about this.
+We could process the data ourselves.
+We could upload it, but I just prompted agent.
+You can see what it did.
+Was it ran a curl command on that Wikipedia page?
+And curl is just a fancy way of getting HTML.
+And now it's using a couple libraries, beautiful soup and requests, and writing a Python script
+to extract the park data from the Wikipedia page.
+So this is pretty complicated, but I think it's important to walk through because we're
+kind of, there are these tools that the AI can do for us, that agent can do for us, and
+sometimes it works, and sometimes it doesn't.
+But this would save us time, and it would let us build something really cool, given that
+we have all the resources that we need.
+It's kind of like what we built previously in the SEO analyzer.
+We were able to scrape and access that data.
+So it looks like it just ran the script to extract the parks, and now it's trying out
+a different approach.
+So it actually looks like agent is writing some scripts here to analyze the structure
+of that HTML that it just downloaded.
+And hopefully if this is running, we can kind of see the scripts that it's reading and
+writing in the file structure here.
+So we have analyzed parks, updating these scripts to actually kind of introspect that website
+that it downloaded.
+And I guess our goal or my expectation would be that we'd come out with something that
+has all of our park data implemented, pretty complete.
+I'm actually pretty impressed that agent was able to do this.
+So theoretically it understands the structure of what we just extracted, and now it's executing
+that Python script, and then going to get the contents there.
+OK, so now I want to talk what just happened because there was a lot of stuff going on
+in that run.
+What agent did was it wrote Python scripts both to fetch and analyze the parks.
+And if you've been paying attention here, if you've been writing programming or if you've
+been, you know, doing more technical work, you might have noticed this is a JavaScript
+project.
+There's a TypeScript project.
+But we also now have Python files, and you might be saying, well, how do we set that
+up?
+And that is because replete as a platform allows you to install languages in just seconds.
+And so agent actually configured this entire environment to run Python, ran these files
+to analyze the Wikipedia entry, pulled down the Wikipedia page, wrote the data to parks
+data Jason, verified there were 63 entries in the list, and we can look through this
+list and be sure that this is the same.
+It's actually using the same images.
+These images are much better than the ones we had before.
+And if we want to double check, we can flip on over Wikipedia.
+So now I'm in Wikipedia, and I'm going to search for Virgin Islands.
+And we can verify that this is, in fact, the same image that we had previously.
+So what do we just do?
+We were able to extract this data without actually providing or cleaning any data ourselves.
+Agent just did all of that for us.
+This is really cool.
+And we're making some good progress because my guess would be voting probably still works
+exactly the same.
+We get new matchups.
+We can skip the matchup.
+We get our recent votes.
+The rankings probably don't work.
+They definitely don't work.
+But again, this is what we talked about before.
+We're adding context.
+We're fetching data.
+We're doing things one step at a time.
+And so now we have a description of our park.
+We have some data we pulled in and we can provide those votes.
+Sign in, sign up, not functional.
+Votes are not functional.
+We're going to work through this one step at a time.
+So let's say the rankings currently aren't working.
+The recent votes flow through.
+But I don't see any updates for these scores.
+And again, we're going to trust that Agent is going to be able to analyze this and make
+the fix.
+We have a storage implementation.
+Agents can open that up and take a look at it.
+Now you might be saying Matt, why didn't we just start with the database?
+You talked about implementing a database.
+We know we want a database eventually.
+In my experience, it actually works better to make sure that the data is being fetched
+properly.
+And then make sure that the app actually works within memory storage.
+So storing in memory works for this application.
+But it means that like every time it's restarted, we probably lose our rankings.
+So making sure that the app works first and then asking Agent to migrate that data over
+to a database.
+And that's what we're doing.
+Other things to note, we can also rely on Agent to kind of solve these problems.
+So what do we do before?
+Well, we just specified where the image lived.
+We gave it a URL.
+We specified how we wanted the problem to be approached.
+I want you to go to this URL.
+There's a table.
+You have to analyze the table, extract the data.
+Agent was able to do that and actually take care of that entire thing for us.
+So again, as these models get better, we can think about the smallest sort of building blocks
+that AI is able to solve.
+Maybe like a year ago, six months ago, it was writing a function or tab auto complete
+or like doing something that wasn't even that impressive.
+Now it can solve much more high level problems.
+Hey, we don't have a data source.
+We need to fix a ranking system.
+Hey, we need to update how these things are flowing through.
+And so now, if you recall, we just revoted for the Virgin Islands, right?
+So Virgin Islands beat Hawaii volcanoes and our ranking now reflects a 15-16 score.
+We can also check.
+Let's make sure all of our parks are being pulled through here that we do in fact have 63
+national parks.
+So we have all of those.
+And again, so we have Death Valley up against Virgin Islands.
+The way that an ELO system works is that if the score is higher for the competitor and
+a lower rank competitor beats that competitor, it should be higher in the ranking.
+So if we vote for Death Valley, you can now see Death Valley is number one and it has
+a 15-17 score rather than a 15-16.
+It looks like, let's check.
+Ranked 30.
+I have no idea how to pronounce this, so please don't hold me to that.
+We're going to check and make sure that this actually is ranked 30, go in the page.
+It is.
+We can confirm that works.
+What are we doing?
+We're just testing our application and that's that loop I was talking about in the very
+first lesson.
+So what can we do now?
+Well, we have our voting system.
+We have our rankings.
+They're updating in real time and we have our recent votes.
+This is all in memory though.
+So what we want to do is add this to a database.
+Now if you've built with other tools, you know that adding databases are pretty complicated.
+One of the really great features about Agent and about vibe coding with Repplet Agent is
+that we can say, okay, let's now make our storage persistent.
+Store all data in a database.
+So it persists across sessions and users.
+Really, that's it.
+We can kind of just trust that if we send this prompt, that Agent is going to be able
+to number one, understand what we would like and have the access to tools.
+You can see there we just created a database.
+We created a server database file and now it's going to take that in memory storage and
+it's going to migrate it over to our database.
+Now while agent is moving through our sort of database steps, we're going to open up
+a new tab just because I want to show you what's going on and we have a Postgres database.
+If you haven't used the database before or you don't even really know what a database
+is, it's kind of just like a CSV that relates to other sort of tables.
+So we're going to have a table structure.
+I mean, what we're going to see is that Agent is going to start populating this database
+with data.
+You can actually see on the left exactly what it's doing.
+It's going to start running some scripts.
+We have included a database viewer where you can kind of interact with all of the tables.
+We'll come back to this once there are tables.
+But what I want to point out fundamentally what's going on here, it's important to understand
+how our databases work is that if we go to our tools and we go to secrets, we have some
+really great partners.
+We work with Neon for databases and so what you can think about is we're spinning up
+this like Postgres database on the back end through our partners at Neon and all we're
+doing is dropping in these connection secrets into our secrets pane.
+So our secrets pane, if you've ever built an application before, is like an environment,
+these are environment variables.
+We can pull in secrets from our account or just have these secrets that live in our app.
+Let's see what's going on over here.
+Looks like Agent is still working through the database connection.
+It's debugging and fixing some type errors and then executing some database migration
+scripts.
+Again, don't worry about this too much, but if you're interested in this and you're
+trying to learn a bit more about how databases work with full stack web applications, hey,
+like understanding that it's using Postgres, understanding what Postgres is, understanding
+how the connection works and the packages work.
+These are all really great ways to learn more about databases, what database migrations
+are and how applications work.
+And this is how I've learned.
+So that's why I'm going through this.
+Again, Agent is going to take a minute here.
+We're just going to let it work and then we'll come back once we have some data in our
+database.
+Okay, we're back.
+And we tried the database implementation.
+I'm going to walk through what happened because Agent went completely off the rails for
+about 15 minutes, but it's okay.
+So what happened?
+It did a lot of stuff and it set up our Postgres database, created a schema, used consistent
+naming.
+It says it loaded parks into the database, but like I'm here, I'm refreshing, okay, we
+have matchups, we have parks, users and votes, but it then kind of started working on
+an API server integration with database stores that's separate from our actual integration.
+So let's see what's going on in the web view.
+If we run the application, fails to run, so we're getting errors.
+So it looks like it did most of this, something went wrong.
+This is where we're going to use what we talked about before, which are rollbacks.
+And you know, the last change we made was up here.
+You can see we had a checkpoint about 15 minutes ago and this is backed by Git.
+So if you really wanted to see what was going on here with our checkpoints, if you go to
+the Git pane, we'll actually get a summary of everything Agent has ever done.
+This is really useful.
+And you can actually create a GitHub repository from here, push it to your GitHub account,
+if that's what you're into.
+But the cool thing about checkpoints, we hit a really, like we just hit a roadblock.
+I'm going to roll this back.
+So what you're going to see is that Agent is rolling back, it completed that rollback.
+Now, if I run our application, we are back precisely to where we were before.
+Agent's going to ask us, hey, what should I do differently?
+I'll tell you what you should do differently in a second.
+I'm going to refresh this and see what's going on.
+It initializes our app.
+So now we're back to that state.
+Stuff breaks.
+This is kind of what I was talking about before, right?
+It's okay that stuff breaks.
+The cool thing is that we're rolling it back and we're going to try again.
+So we're going to think through what we did and we're going to try something differently.
+So I think I was pretty basic.
+I'm going to create a new chat and we're going to be really descriptive this time.
+We're going to say our app currently uses Parks data hard coded in parks data dot json.
+We'd like to move this to a postgres database again.
+Agent's going to know how to have the tools to access that.
+I think what we need to do is just be very explicit about the type of data we're using
+and how we want that data inserted.
+You should analyze the structure of the data and create a schema for rapid import.
+Be sure to check the data types and perform all necessary migrations.
+So what are we doing here?
+We're trying again.
+We ran into a roadblock.
+We reset the app.
+We're trying one more time with new data.
+What you probably notice in the app is that we lost all our scores and votes.
+That's expected because we don't have persistent data just yet.
+So we kind of took another approach.
+We added a little bit more description to our prompt.
+We started a new chat session just to make sure that the context was clear since we've
+been doing a lot in this application.
+And now we're running the app to rerun that transformation.
+So we're going to let agent roll here for hopefully sure amount of time.
+We'll come back.
+We'll see what happened and we'll keep building.
+All right, amazing.
+So it looks like our updated prompt got us the result we wanted.
+So agent went through, pulled that data, created our database, and then performed a migration
+importing the data from the JSON file that we had into the database.
+Now we're getting the parks and we go to our database tab should be able to refresh this.
+We see votes, which is empty.
+We see parks, which has all the parks that we wanted.
+Now in a form of persistence storage, we have a user's table as well, which could be useful
+in the future.
+We have matchups.
+So it's recording every matchup, park AID, park BID, which I would assume course born
+in the past.
+So we have a list of different options to Carl's bag caverns and Bryce Canyon, both in
+Utah, if I'm not mistaken.
+But if we check those out, 11, Carl's bag caverns might not actually be in Utah.
+And Bryce Canyon is eight.
+So looks like we have that.
+We have this really cool database explorer here where you can kind of poke around and look
+at the data, see what we're working with.
+So very cool stuff.
+We have some other interesting rows, but this is kind of what we're going for.
+So let's see if it works.
+We're going to vote for Bryce.
+Recording vote, vote recorded.
+We get the matchup to change and Bryce Canyon gets a better ranking.
+What we would expect to see in our database, right, is a vote in the votes table.
+So we have eight versus 11.
+We have the winner, loser, and the updates, populating through.
+And then we also have a new matchup in the matchups table.
+So that was just a couple of prompts.
+We migrated the data over into persistent storage.
+So now, right, we have our ranking for Bryce Canyon.
+If I stop this app, well, we won't stop it.
+But if I refresh it or if I restart it, the scores will all persist.
+We have persistent data.
+We've done a really good job.
+This is something that has been historically really hard to do, integrated a database and
+really agent did most of the heavy lifting.
+So we're going to spin it down for this lesson here.
+We're going to pick it up.
+We're going to learn a bit more about our app, maybe implement one more feature, deploy
+it, and have a real functioning as an NPS rank application deploy in just a couple of
+minutes.
+So stick around.
+We'll wrap this one up.
+And you guys are going to be expert vibe coders by the end of next lesson.
