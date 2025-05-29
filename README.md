@@ -99,6 +99,6 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 ### 05
 - [Building AI Voice Agents for Production](2025/05/BuildingAIVoiceAgentsforProduction/)
 - [MCP Build Rich-Context AI Appswith Anthropic](2025/05/MCPBuildRichContextAIAppswithAnthropic/)
-- [Reinforcement Fine-Tuning with GRPO](2025/05/ReinforcementFine-TuningwithGRPO/)
+- [Reinforcement Fine-Tuning with GRPO](2025/05/ReinforcementFine-TuningwithGRPO/) / Chat with the course on [HuggingFace Chat](https://huggingface.co/chat/assistant/6837e12a7ea7c9067ba8e6c5).
 
 </details>
