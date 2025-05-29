@@ -1,0 +1,133 @@
+In this lesson, you'll get an overview of structured outputs, why they are important and the different approaches to generating them.
+You'll see how structured outputs allow for scalable software development with LLMs.
+You'll learn how the various approaches to structured outputs will lead you from promptacking to true AI engineering.
+Let's dive in.
+Let's start by saying what we mean when we say structured outputs.
+When we work on an LLM, typically the output of the LLM is in some sort of free form text. There's no particular structure to that. It's just text.
+Structured outputs just mean we have some structure that is adhered to by the model. In this case, JSON. JSON's very common form of structured output, but there are many others.
+An obvious first question when working in structured outputs is, why do we need to use these in the first place?
+If you've been using LLMs for a long time, you're probably very familiar with the common chat interface.
+In this format, the model interacts with us as though it's a human being talking to us, typically an assistant has a prompt.
+We follow up with a question we have, in this case, I'm asking it to provide a response to a social media message I got, and the model follows up with an answer.
+As human beings, it's very easy to parse these responses, understand what the model's telling us, and use that information.
+Let's take a look at this in a programming environment.
+When working with LLMs in code, we use a very similar interface called the Instruct Interface. This mirrors the chat interface, but it's slightly different.
+So we're actually sending in requests to the model and getting a response. This is the same content we had in the last slide, but it's just in a different format.
+And once again, we get the response from the model. So this allows us to work with the model in code, but we still need to work with the response from the model.
+So when we're going to parse out this information that the model has sent back to us, as human beings, it's very easy to do this, but we need to be able to do this programmatically.
+Let's talk a little bit about building systems with LLMs, so we can better understand the need for structured outputs and how they help us build scalable software.
+Let's build an LLM-powered social media agent. This agent is going to take responses we've gotten on social media, and write its own response to them to automate this process of handling our social media accounts.
+This is a very simple application here. We have an LLM with the prompt. We're going to append to it the messages from our users, and we're going to get the response out of the LLM, pass that into our social media API, and then it will post the response on our social media.
+But the question is, how are we going to handle this raw data? Have we mentioned earlier, we need some way to actually pull this data out.
+A naive solution to this problem is to actually just add a layer that parses this. This is a very common first pass, and handling this problem when working with LLMs is we'll just write some simple rules that will allow us to parse out the answer.
+Unfortunately, this is extremely time consuming. If you've ever handwritten a parser like this, you'll know that it takes a long time to write this, and that's partly because the process is very error prone.
+It's very easy to miss things or make mistakes, or find there's outputs you weren't expecting, and this can be very tricky to get right.
+And because of this, it's not easily extendable. To see this, let's look at a different version of our agent.
+So suppose we have a PM that comes in, and requests that we modify our social media agent.
+They want it so that if the response from a user is a complaint, we're going to send that complaint to customer support.
+We don't want our model automatically replying to people that are having a problem. We want to use a human being to make sure we like the response.
+But for all other comments or messages to us, we can go ahead and have our agent respond to them.
+This requires a simple forking of our process. This seems easy to implement, but using our technique from before, we find it gets actually quite messy.
+Now we need to parse out both the is it or is it not a complaint, as well as our original parsing out of the response itself if we need it.
+Clearly, this is not a scalable solution to running software with LLMs.
+But what if we could have predictable JSON in the output? In this case, it's very simple to implement this.
+We have a complaint field and a response field. If the complaint field is true, which we can check just like we check any other JSON, we can send it to customer support.
+If it's not a complaint, we can go ahead and pass the response to our social media API, and it's easy for the API to extract this using JSON.
+The next question is, how do we get structured outputs?
+The easiest way to get started with structured outputs is working with the proprietary APIs you probably already use.
+Every inference provider offers a different solution to how they provide structured outputs. We're going to talk about this a little bit.
+One method of doing this is called loja-based message or constrained decoding. This is when the model itself is modified to only allow tokens to be generated that meet the requirements of the structure.
+We're going to talk more about this at the end of the lesson. Another common practice is called function calling or tool use.
+When doing function calling, the model is provided with a list of functions that it can call or respond with that are usually done in JSON format.
+There is also something called JSON mode where a model is simply fine tuned to return JSON when prompted to do so.
+And of course, there are always maybe some magic we don't understand. This is actually part of the problem with proprietary APIs because we don't have access to what they're doing behind the scenes all the time.
+So let's talk about the pros and cons of working with proprietary structured outputs from APIs.
+The pros are we are working with JSON, which is great. We were working with unstructured text before and we have JSON now. That is a huge leap forward as far as creating reliable systems with LLMs.
+These techniques are also easy to use if you're already using one of these major providers. If you're already using OpenAI for your application, it's not a lot of extra work or code to add support for structure.
+Another benefit is these providers are always working on new techniques to improve the quality of these outputs.
+Getting JSON from OpenAI has already improved tremendously in the last year. There are some drawbacks to these approaches.
+The major one is your code is now tied to a very specific model provider. This means that changing providers can be a major refactor.
+If your code is written to work with OpenAI and you want to try experimenting with Instructor, you may have to write a significant amount of your structured code again.
+Another issue is inconsistent results. This depends on the provider, of course, but some providers do not consistently return the structure you are expecting, which can be a major problem if you're trying to build scalable systems.
+Another issue is the unclear impact on the quality of the output. For many evaluations, there are some people that have found that working with structured outputs from certain providers sometimes hurts the performance on these evaluations.
+This is not universal, and is not necessarily proven, but this is something people have suspected and can be an issue.
+Additionally, there are limited options for the types of structure that you can use. Typically, you're only working with a subset of proper JSON.
+You can get names and fields, but you can't get detailed regular expressions around your field, such as making sure a date matches a certain format.
+One solution to these problems is to use or recall reprompting libraries.
+Providerate models only work with a specific API, but reprompting libraries are designed to work with any major LLM provider.
+Examples of these types of tools are instructor and lung chain.
+Reprompting is very interesting. The way it works is we start with a regular pass to the LLM, we provide a prompt, and the LLM provides an output.
+Additionally, we provide the model with a validator. This is just a description of how we expect the JSON to look.
+If the output of the model conforms to our validator, the data sends straight to us. This is great. But what if it's a problem in the output?
+In this case, we see there's an angle bracket being generated where we expect a curly bracket. This is not valid output.
+The reprompting library will automatically take that information about why this failed to parse, append it to the prompt, and try it again.
+There are many upsides to this approach. One is that now you can work with any LLM API.
+That's a huge step forward in raking great software that can be reused.
+This allows for that structure you wrote code for to be used across APIs, oftentimes switching providers, all it requires is changing the key and the name of the provider.
+We also get greater flexibility in our structure than we do with most proprietary providers. So it's still only JSON, but we're allowed to use red dexies for the field so we can enforce constraints like a specific date format, or making sure that the user's email address is a valid email address.
+There are some drawbacks to this approach as well. The biggest one is that retries can be quite costly both in terms of money and time.
+For many developers of LLM applications, time is a bigger consideration as you're making your users wait for results.
+Following from this, there's not even a guarantee of success. If after a certain number of retries, the library is not succeeded, it will simply fail.
+And once again, while we do have more control over our structure, we still only have JSON as a viable output.
+Structured generation, also known as constrained decoding, is a method for working directly with the model to get the output we want.
+We use the term structured generation because we are actually controlling the generation of the tokens to get our structured output in the end.
+There are many libraries to support this, including outlines by .text, sglang, Microsoft's guidance, and xgrammer.
+To understand how these work, let's refresh a little bit on how LLM's generate tokens.
+We start with the prompt, which is transformed into a bunch of tokens that are passed into the LLM to be processed all at once.
+The LLM then transforms those tokens into a distribution of what the next token is going to be. These weights, called Logit, describe how likely each given token is.
+A token is then sampled from these weights, and appended to the prompt.
+Then tokens are continued to be sampled until we reach the end of the statement token.
+This is how structured generation works behind the scenes.
+Suppose we want to define our structure as only allow strings where each character is in order.
+We'll talk a bit later on in the course about how we actually do that, but for now, just assume that this is the constraint we have.
+Valid strings under this structure would be ABC, AABC, AC, and BBB.
+In all of those cases, each letter is in order.
+In valid examples, would be BAC, or CCCA.
+Both of those have characters that are out of order, and therefore don't follow the rules of our structure.
+So let's walk through how this actually works.
+Look at this distribution of logits here. For our first character, we actually have no constraints, because any character can be a valid first character.
+Let's assume we sample B.
+Now we have new logits that are generated as B is appended to our prompt and the processes we run.
+But these logits do not work for our constraints, because there's a certain amount of probability assigned to A.
+A is not valid according to the rules of our structure, and this is how structure generation works.
+It actually modifies those logits, removing the ones that are invalid, and reweighting the ones that are allowed.
+We then emit another token, AC, and once again have new logits, and have the same problem once again.
+A and B now are not valid next tokens in the sequence.
+So once again, structure generation simply removes those from the possibilities of what can be sampled,
+re-normalizes the probabilities, and we continue this process until we finally generate a string that is guaranteed to adhere to the rules of our structure.
+Let's talk about the pros and cons of structure generation.
+There are many versions of this technique.
+It works with any open LLM out there.
+So if you use models from hugging face, any of those models, including models like vision models, will work with structure generation.
+Because we are working directly with the model, it is extremely fast.
+The cost during inference is basically zero.
+In fact, there is research that it can even be used to improve inference time by taking advantage of structure that is inherent and tokens that can be skipped.
+It provides higher quality results.
+You can check out our blog for more details, but over and over again when we run evaluations head-to-head between structure generation and non-structure generation,
+we have found structure generation improves benchmark performances.
+This also works very well in resource constrained environments.
+Because it's very lightweight and very efficient, even on very small devices that have tiny LLMs, you can still use structure generation to guarantee the outputs of your model.
+And we can produce a huge range of structure, of course JSON, but also regular expressions, or even syntactically correct code.
+There is a drawback to working with structure generation, and because we are using the logids directly, it means you need to have control over those logids.
+So that means either you're working with open models, or you yourself are hosting proprietary model and you control the logids.
+Another way to view the things we've discussed is this is the journey from prompt hacking to AI engineering.
+When we're working with just chat-based interfaces, we are really doing the epitome of prompt hacking.
+We're changing the messages we sent to the LLM, we're interpreting the results, and we keep iterating on this process until we're happy with the output.
+But this is not scalable, this is not even repeatable, so we're very far from real software at this point.
+Moving to proprietary JSON APIs opens up a whole new world of possibility for us.
+We can now start writing real software, we're getting predictable responses from our model that allow us to integrate code using an LLM into other parts of our software.
+But there is a hang-up. Most of our code for doing this is tied to a single provider.
+Reprompting libraries solves this by making it possible for us to create reusable software libraries that can use a variety of different LLM providers.
+This is a huge step forward in creating scalable software that works with LLMs.
+However, there's still a big gap between our code and the model itself.
+We're relying on this clever but limited reprompting trick to get the results we need.
+And that's where structure generation is really arriving at true AI engineering.
+We're working directly with the model to get exactly the results we want.
+We can write code that is easy to understand, easy to scale, and easy to improve.
+So in this lesson, we covered the basics of what structured outputs are.
+We learned why they're useful and how they allow us to write scalable software.
+We also learned about the different varieties of structured outputs there are, including vendor provided APIs,
+Reprompting libraries, and structured generation.
+Lastly, we saw how all this comes together to make it possible to create truly amazing software using LLMs.
+In the next lesson, you'll see how this all works by building a social media agent using OpenAI's structured outputs API.
+Stay tuned and see you at the next lesson.

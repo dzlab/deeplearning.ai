@@ -1,0 +1,311 @@
+In this lesson, you'll learn how outlines is able to be so efficient in its generation,
+and see how structure generation allows for structure far beyond JSON.
+You'll understand how regular expressions can be transformed into finite state machines
+for efficient computation.
+Finally, you'll explore various examples of structure beyond JSON.
+Let's have some fun.
+In the last lesson, we talked about how outlines is able to modify the logits to guarantee
+the output of the generation from the model.
+In this lesson, we're going to dive a bit deeper and understand exactly how outline
+is able to keep track of the structure.
+Outlines uses regular expressions under the hood to model the structure we want to use.
+This allows us to define a much wider range of structure than just JSON alone.
+There's also an interesting relationship between regular expressions and finite state machines.
+We actually use this to take advantage of a way to easily and efficiently process the
+structure as we go through the model.
+First, let's talk a little bit about what regular expressions are and how they work.
+We probably are familiar with them, but just in case you're not, let's do a quick refresher.
+This here is a very simple regular expression that describes the example we talked about
+in the very first lesson.
+This is a series of A, B, and C's that have to be in order.
+Now there can be any number of A's, including zero, any number of B's, any number of C's,
+and then the end of the string.
+So valid strings here would be the empty string, which doesn't violate our constraints,
+has no letters, but that's fine.
+A, B, C, C, C, C. That's also fine.
+The repetition is allowed, and of course, C by itself is also allowed because none of
+the characters before it are in violation of our rejects.
+In valid strings would be B, A, A, A, B, B, C, C, B. It doesn't matter how many times
+we're in order.
+If we're not in order once, it won't be valid, and C, B, A is, of course, obviously,
+not a valid string.
+So let's talk about this relationship between regular expressions and finite state machines.
+We can actually take this regular expression when we just described and transform it into
+this finite state machine you see here on the right.
+Now you may think this is just adding complexity to our problem, but this finite state machine
+actually makes it very easy for programs to keep track of the regular expression.
+Let's walk through a pattern matching example using this finite state machine.
+So given our finite state machine that represents the rejects we described earlier, we have
+this string, A, A, B, C, and we like to see if it matches.
+So we start in a start position and we observe in A. You can see observing this A leads us
+to the A state.
+Now that we're in the A state, we observe another A. See how we loop back into the A state
+again?
+We remain in the A state.
+Next we observe a B. This moves us from the A state to the B state.
+Now we observe a C, and we get to talk about what it means to match a string.
+When we match a string, that means we successfully end in the goal state marked by two circles
+in this diagram, and we have no more string to process.
+So here we are, successfully matching this string.
+Now let's step through an example where we fail to match.
+This string is invalid according to our regular expression.
+Let's see how a finite state machine can be used to prove that.
+So again, we start in our start state, and we observe in A, moving us to the A state.
+Next we observe a C, which moves us to the C state.
+So far, so good, but we also haven't violated any of the rules of our rejects.
+Now we have an A. But as you can see, none of the paths leading out of C have an A, and
+we are not in our N state, so we have failed to match.
+So you may be asking, how is this finite state machine used to match regular expressions
+useful for generating structure?
+Well we can just invert our process.
+When we are using the FSM with outlines, this is how it works behind the scenes, we are
+keeping track of what state we're in, and looking at what paths on or from that state.
+So here we are in the start state, and of course all possible paths are allowed.
+Here's our logis on the right, and we can see the structure doesn't require any changes
+to those logits since all of the tokens we have are admissible.
+But we admit a B, and we move to the B state.
+Now here you can see we don't have all the paths, so even though the model produces
+logit weights for all the options, we know that only paths B, C, and N are allowed, and
+we continue this on as we move through our generation.
+So in this way, but we've been able to invert the process of matching into one of generate.
+Reject is a remarkable, powerful way to represent structure.
+There is much, much more to it than just JSON.
+Simple structure is often enough for most tests that we have.
+For example, class labels.
+If you're building a quick zero or one shot classifier, you may want to limit the output
+of your model to the class labels you have, no need for JSON on top of that.
+Email addresses are another example.
+If you are parsing our email addresses from documents, it would be nice if the LLM could
+consistently output email addresses.
+Likewise, phone numbers can be a very useful regular expression to make sure that the output
+of the LLM matches the phone number.
+It is also important because people can write phone numbers in different ways, so you may
+want to have a consistent format that is applied when phone numbers are parsed.
+You can also output any common document types.
+We've talked a lot about JSON, but of course it's worth pointing out, we can still produce
+JSON.
+We can also write CSV files, or YAML.
+They can also be used to represent context-free grammars.
+Now, for the formal language enthusiast watching this course, you may see it surprise here.
+Ordinary, we think of context-free grammars as explicitly more powerful than regular
+expressions.
+However, we can represent any arbitrary context-free grammar as a regular expression, so
+long as we limit the depth of recursion we allow.
+Now once we have context-free grammars, we can have syntactically correct programming
+languages output, which is a very impressive thing.
+Also, you can basically model any document type you can imagine.
+There is all sorts of structure out there in the world, and with context-free grammars
+available to you, there's really no limit to what you can represent.
+Now let's go see some examples.
+We're going to start by adding these two lines of code we've been adding, so that we
+don't see any unnecessary warnings.
+Next, we're going to add these libraries we'll be using.
+We have a utility template that helps us write prompts easily, we'll also be using
+outlines, and we're going to be using the greedy sample from outlines in some cases
+to make sure we always know exactly what output we'll be getting from the model.
+Next, we'll load our LLM.
+We're going to be using hugging faces, small LM2, the 135 million instruct version.
+This runs very well, even on very resource constrained hardware, so all these examples
+will be actually running on a CPU with about 8GB of RAM, a very impressive accomplishment.
+The first structure we're going to look at is a choice, making a choice is used when
+we want to label something with a finite number of possible labels.
+So in this case, we have a simple request where we want to classify a restaurant review
+as either positive or negative.
+This is a very common pattern for any time we're doing, a one-shot or zero-shot classifier
+with an LLM.
+So we just simply want a class label to be emitted, and there's actually two ways we can
+solve that.
+Since we just talked about regular expressions, it's worth pointing out that this can be
+solved with a regular expression.
+Here's an example of a regular expression that represents this, so there's only two
+possible strings allowed, positive or negative.
+Now, that's not too bad, but it's kind of tedious to have to write regular expressions
+for a more complex model, so we're going to actually be using something else called
+choice.
+Here is the code using outlines choice to create a generator that will only choose between
+positive and negative.
+In this code, you can see, rather than passing the full rejects, we just have to pass in
+a list of the values we want to be emitted from the model, in this case, positive and negative.
+You can add as many of these as you'd like, and this is certainly easier than running
+a regular expression.
+It also allows us to get labels from another source and pump them directly into the model,
+which can be very useful.
+Finally, we will run our new model we have and see what we get.
+And the result is that the review was positive.
+Of course, the reviewer said that the pizza was delicious, and we get the result we were
+looking for.
+In this next example, we'll be looking at a phone number regular expression.
+For this task, we want to extract a phone number from a prompt.
+Now, if you look at this case, we actually want to extract the phone number in a different
+format than it's provided.
+In our format requirements, we would like to have parentheses around the area code, a
+space, the first three local numbers, and then separated by a dash to the last four.
+Here's an example of a number provided, which doesn't match to this.
+This is a very, very useful application of very simple structure for problems for data
+extraction.
+Here's a regular expression you'll be using for this.
+As you can see, it encodes all the properties of the phone number we just described.
+Now all we have to do is take our rejects and use outlines.generate.regics to create
+a phone number generator.
+This will extract phone numbers for us, and exactly the format we were hoping for.
+When we run this, we can see that it's pretty successfully pulled number out we needed,
+and it applied the format we wanted, compared for a moment of different formats we have.
+In the prompt, there was a dash between the area code and no parentheses, and our generator
+was successfully able to pull out the correct format.
+Next we'll do the same thing with email addresses.
+In this case, we will definitely want a regular expression for this, because email addresses
+can be very complicated.
+Now, if you know something about how email addresses can be validated, this is actually
+not the fully perfect email address, but it works for our case.
+For this example, we're just going to ask our model to generate us a random email address
+for someone at Amazon.
+Once again, we just define a simple rejects generator using outlines, and generate the
+email address.
+Next, we're going to do something a bit more sophisticated.
+We'll be using a regular expression to generate an HTML image tag based on a file name we
+provide to it.
+Since we're working with a more complicated regular expression, I want to introduce the
+technique for working with structured generation that can be very helpful.
+Here we have an example of the structure we're hoping to get out of the model.
+This is a very, very useful technique for making sure that the structure you're defining
+is correct.
+And since this is a non-trivial case, we really want to make sure our rejects works.
+Let's take a look at the rejects we're going to be using.
+Here's our image tag rejects.
+This looks good to me, but I would like to be able to verify that this actually matches
+our example before we run our model.
+We're going to import Python's regular expression, library, RE, and we're going to search for
+our image tag in the example we have.
+As you can see, it's successfully found a match.
+This is really strong evidence that we've defined the correct regular expression for
+our task and saves us a lot of time finding errors when we're actually running our LLM.
+Since we can trust that our structure looks good, it's now time to build our generator.
+Now we're using our generator to create the image tag.
+We've given it a prompt saying generate a basic HTML image tag for the file, big underscore
+fish dot png, make sure to include an alt tag.
+Let's inspect the results of this to see if we like what we got.
+Okay, so this is an image tag and the source says big fish dot png and the alt tag says
+data about fish.
+This may be useful if we were creating a blog post and we wanted to make sure that our
+images were findable.
+We don't have to just trust this by looking at it, we can actually render the HTML on the
+page.
+And as we see, our image tag works rendering the picture of our big fish.
+Structure is everywhere.
+We often think of structure strictly as JSON or simple regular expressions and things
+like markdown, but in this example, we're going to generate a tic-tac-toe board.
+Here's our rejects for the tic-tac-toe board.
+It is a bit involved, but this defines the structure of an ASCII tic-tac-toe board.
+Let's go ahead and generate an example.
+But once again, create our generator and we will generate our tic-tac-toe board.
+Notice that in the prompt, I've shown the model an example of what I think this tic-tac-toe
+board should look like.
+Even though we're guaranteed to get the structure we want, it's always helpful to provide examples
+in your prompt of the output you are hoping to get.
+Finally, we can print out our tic-tac-toe board.
+And as you see, we have a tic-tac-toe game in progress generated by our LLM.
+We've talked at length about JSON, but if you're a data scientist or working machine learning,
+you're probably more familiar with CSV as a file problem out of choice.
+In this example, we're going to generate a CSV content straight for the model and pump
+it into a pandas data frame.
+Here is the rejects that we're going to be using to generate this.
+You can see we have three columns, code, amount, and cost, which represent an item code
+for an inventory item, the number of that item we have, and the cost of the item per
+unit.
+And then we've specified some properties of this CSV file that we want to have.
+So for example, we can see here that the code has to be a three character item code.
+Then we have up to two digits for the amount, and we represent cost using more digits
+and a decimal place to make sure we always have a proper dollar value.
+Here is our simple CSV generator, and then we can use this to create our CSV out.
+Notice we just briefly described our CSV file here, and we'll see how well the model
+can do with just that in the prompt.
+Rather than print out the string representation of this result, we can actually pipe this
+directly into pandas using Python's string IO.
+And as you can see, it successfully created a CSV file that we can directly send from
+the LLM to pandas.
+This is incredibly useful if you're doing any kind of data processing that's going to
+be part of a data science workflow.
+In this next part, we're going to talk about implementing structure for GSM8K, which
+is a common LLM evaluation and benchmark that uses grade school questions to see if LLM
+can answer them correctly.
+We're also going to talk about ways we can make rejects easier.
+Here's an example of a common GSM8 type question.
+Tom has three cucumbers, Joe gives him two more, how many does Tom have?
+This is what's provided to the model in the prompt.
+It then follows up with a reasoning step.
+Here's the model thinking about the problem.
+Tom started with three cucumbers, then received two more.
+This means he has five cucumbers.
+Finally, the model is required to answer.
+So the answer is five.
+Notice that even though this is plain text, there's still a very clear structure here.
+We're going to prompt the model with the question and hope that it follows through with
+the correct reasoning, and most importantly, the correct answer, all following this format
+that we can enforce in the model.
+Of course, writing a regular expression for this problem would be very tricky.
+Thankfully in outlines, we have a domain-specific language that allows us to very easily represent
+regular expressions in a language that's easy to understand.
+We can see we're using it by importing sentence and digit from outlines types and the DSL's
+two-regics function.
+Reasoning here starts with the phrase reasoning, just like it does in this example, and then
+we're going to add a sentence that repeats one to two times.
+That means the statement has to start with reasoning, and we're allowing the reasoning
+to go on for one or two sentences, which have already been predefined, so no regular expression
+required from you.
+Then the answer needs to lead with so the answer is colon space, and then we need to have
+a digit that's between one and four digits long.
+See, we use the digit here and it's repeated one to four times.
+Very straightforward.
+Finally, we're going to put this all two rejects to see what it looks like.
+I'm certainly glad I did not have to write that by hand.
+We'll build our rejects generator by passing in this new reject we made just as we have
+before.
+Now, we're ready to test out how smart our model really is.
+We're going to give it this question right here.
+Sally has five apples, then receives two more.
+How many does Sally have?
+Now, we can look at the prompt we're going to use to send this question to the model.
+In the prompt, we explain the structure of the problem.
+We talk about how this is going to work and provide an example, and then we just put
+our question in to template keeping a format with this prompt, so we would expect the next
+natural step would be to output reasoning and then a solution.
+And finally, we can see how the model does.
+As we can see, the model correct the reasons that Sally had five apples, they received two
+more, which means she has five plus two equals seven apples, so the answer is seven.
+All in a structure, we can easily understand in parts.
+Of course, we could have done this in JSON, but it's always worth trying with sort of more
+natural forms of structure we find every day.
+Finally, we're going to leave you with a very fun project.
+You're going to build your very own hot dog versus not a hot dog classifier.
+We're going to start with some basic boilerplate code to get us started.
+This loads in a vision model, which is a multimodal model that allows us to actually use images
+with our prompt, because your task is to add the structure.
+We're going to include very simple use of outlines is dot text method.
+This simply returns an unstructured result from the model, allowing you to complete the rest
+of the work.
+Next, we'll look at our prompts, which will help us understand the task at hand.
+We're going to be instructing our model that is going to be given an image of either a
+hot dog or not a hot dog, and they must correctly label responding only with hot dog or not
+a hot dog.
+Notice that those are both lowercase, and the only options we want from the model are
+hot dog or not a hot dog.
+To help you get started, we're also including some code that will iterate through the images
+in a file and run our model on them to see how well it does.
+Let's go see how well this does unstructured.
+Let's take a look at how well the model did.
+As you can see, it correctly labeled the first image as hot dog, but it didn't exactly
+follow our labeling criterion.
+We wanted it to produce hot dog lowercase with no period.
+Now this might seem like a bit of a nitpick, but if you're building a production classification
+system for hot dog or not hot dog, you absolutely want those labels to be consistent.
+We can quickly scroll through the other results and see that we have similar problems across
+the board.
+Correctly labeled not a hot dog didn't adhere to our guidelines.
+But when we get to this last image here, we can see the model really went off the rails.
+It just describes this as this airplane is flying in the sky.
+Well, a correct description of the image isn't what we wanted.
+Your task is to take what we learned in this lesson and apply it to this problem to see
+if you can get consistent labels for all of these outputs.
+In this lesson, we learned about how outlines is really powered by regular expressions.
+We use this to create a range of different and interesting structures, and we end with
+a really fun exercise for you to try at home.

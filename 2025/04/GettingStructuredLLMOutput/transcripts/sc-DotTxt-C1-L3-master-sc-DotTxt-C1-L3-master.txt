@@ -1,0 +1,198 @@
+In this lesson, you learn how to use the open-source library instructor to generate structured
+output for model providers that don't support formal structured output.
+All right, let's dive into the code.
+Let's talk about instructor.
+Instructor is an open-source reprompting-based structured output library.
+If model output doesn't match the format we requested, we try again.
+Here, we can see our prompt goes into our language model, we get some form of output.
+Then we check whether or not it's valid syntax.
+If it is, we return it to the user.
+If not, we provide the output and the error back to the language model and try to get output
+again until we get valid output.
+Let's talk about some pros and cons of instructor.
+Instructor is simple to use.
+It has a wide range of provider support, like Anthropic, OpenAI, Together.ai, Fireworks.ai,
+et cetera.
+It has consistent APIs across providers, so you can avoid vendor lock-in, and it supports
+everything that PIDANTIC does.
+On the downside, instructor can't fully enforce structure, so parsing failures will occur.
+Retries can unexpectedly increase costs in both money and time.
+Every time there's a parsing failure, you have to recent the entire prompt back to the
+model.
+Instructor is not easily transparent in reprompting and or retries used.
+You have to kind of hack into the internals a little bit to try and understand what's
+going on.
+Instructor only works with instruction tuned models with function calling or tool use
+or JSON mode.
+Other approaches, like outlines, can use any model whether or not they're instruction
+tuned.
+So in this lab, we're going to demonstrate some simple use of instructor to get structured
+output from Together.ai, which doesn't support formal structure generation.
+Then we're going to highlight some limitations of instructor so you can kind of make some
+analysis as to whether it makes sense in your application.
+So let's go to the code.
+Let's start by getting our Together API key.
+As long as you're on the deep learning AI platform, this key will be available to you.
+If you're working on your own platform, you'll need to use your own API key.
+Here's how you connect to the Together AI server.
+We're going to import instructor and then open AI.
+You'll note that we're importing open AI rather than some other Together AI API.
+And the reason for this is that most inference providers use the open AI standard for language
+model inference.
+And what that means is you can use the open AI SDK by just changing the base URL to pointing
+to whatever your language model provider is.
+So when you run this, you'll pull in your Together client.
+To generate unstructured text from Together, you can use the standard open AI tools chat.completions.create.
+Then you provide any model that together.ai serves.
+In this case, we're going to use llama 3.1, the 8 billion parameter model, and the instruction
+tune model.
+If you see instruct in a model name, note that it has nothing to do with instructor.
+Instruct inside of a model name just means that the model has been instruction tuned to
+have catbot-like functionality, like Claude or chat GPT.
+Next, we're going to provide a user prompt, and we're just going to say sub.
+Then when we run this, we'll see that the language model says sub back at you.
+How's your day going so far?
+I would say pretty good robot.
+To use together, all you have to do is wrap whatever your client is in one of instructors.from
+methods.
+For example, here we're using instructor.fromopenai, and then we're passing it art together client.
+This will create a new client called InstructorClient, which will use instructor tools to get
+structured output.
+To try out instructor, let's define a really simple structure.
+In this case, we're going to define greeting here, which just has a field hello, which
+is a strength.
+To use this, we simply call InstructorClient.chat.completions.create.
+As before, we're going to pass the same model name and the same messages, so nothing's changed
+from the unstructured version.
+The only thing that we're adding is response model equals greeting.
+That's the class that we expect to receive.
+If you're using OpenAI's structured output, you'll note that they use response format
+as the keyword argument rather than instructor's response model.
+Make sure you pay attention to that.
+When we run this, we'll see that we get greeting with sup inside of the hello field.
+Let's write a simple calendar event extractor to test instructor out.
+Here what we want to do is provide a rough description of event to the model and then get
+back some kind of structured output containing the name of the event, the date that the event
+is concurring, a list of participants, where the event is occurring, as well as some additional
+andros information like state code and zip code.
+You'll know here that name can be any string.
+Even if calendar event, we have a date field with a date type, which comes from the Python
+standard library.
+OpenAI doesn't support the use of specialized types like this.
+OpenAI would require that you have a string here.
+Instructor is much more general than OpenAI, and so you can use far more of pedantics typing
+support than OpenAI supports.
+If you ended up using OpenAI's structured output tooling, you will get an error if you try
+to use date, at least for the moment.
+Next, we have a list of participants, and this is a list of person, and we have class
+person here with only a name field.
+You'll know here that there's only a name field, so why don't we just make this a list
+of strings?
+Well, the reason for that is that if you have a person class, you can easily extend it
+later with additional information like email address as needed.
+Just following kind of good software engineering practices.
+Then we have address number, street name, city name, nothing complicated there, and then
+the remaining two have a few interesting points we need to address.
+You'll know here that these are equals field.
+This is a tool inside of pedantic.
+You can specify a regular expression that defines the values that state code may take.
+In this case, we're requiring that state code be only exactly two capital letters, such
+as OR, for Oregon, NY, for New York, these are all US state codes.
+This regular expression here requires that anything inside of zip code must have five
+digits.
+We'll learn a little bit more about regular expressions at the end of the course.
+Then let's write an example event description.
+So Alice and Bob are going to Science Fair on Friday.
+Science Fair is hosted at the gymnasium of the Hazeldale Elementary School, which is my
+elementary school growing up.
+Next, let's write a function called generate.
+And generate is going to accept the format that we want to return, the user prompt, and
+then the system prompt if you'd like to change it.
+It will also provide a default model, the 8 billion parameter model.
+But you can change this to use the 70 billion parameter model, if you like.
+We can also set max retries to three, but we'll talk about that in just a second.
+All this function does is it makes it a little more convenient to call the instructor client.
+Now let's actually generate a calendar event.
+Here we specify a system prompt.
+We say make a calendar event, respond in JSON with the event name, date, list of participants
+in the address.
+So here that I've kind of roughly communicated the structure that the model is expected
+to return.
+You don't have to tell it exactly what it's supposed to return, the exact, like, provide
+an example of JSON, but it can help usually.
+Anytime you're requesting structured output, make sure you kind of communicate what the
+model is expected to return, it's generally best practice.
+Then we'll provide a user prompt, which is just event description, plus whatever event
+description you wrote.
+And then we're going to call our generate function here to get an event.
+Now let's take a look at the event that we got back.
+We can see here we got calendar event name, science fair, we got dates, participants with
+the list of people, the address number, the street name, the city name, the state code,
+and the zip code.
+You'll notice here the zip code is 97005, even though we didn't actually specify it inside
+of the prompt.
+This is an example of how you can elicit additional information from your model by providing structure.
+The model was actually able to guess the zip code within a rough distance.
+The correct zip code here is 97005.
+If you change the model to use the 70 billion parameter model, this should probably get
+the exact right zip code of 97007, even though it's not provided in the prompt.
+Why don't you play around with this a little bit by going to change the event description?
+See what else you can get the model to print out.
+Let's talk about retries.
+Instructor can use more tokens than other forms of structured output.
+When an output fails to validate, Instructor will provide feedback to the model and request
+new output until the response parses correctly.
+Instructor doesn't make it super easy to track the number of retries and the number of tokens
+used across retries, so I've provided some utility functions here to track retries and
+token usage.
+Let's extract the same calendar event to see how many attempts it took, and we're going
+to clear the tracker here so that we make sure we're not tracking retries across multiple
+completions.
+When we run this, we see that we get the exact same calendar event.
+But let's detect the number of tokens and retries used.
+Here we see that there was only one retry used, 671 input tokens, and 85 output tokens.
+Great.
+Instructor was able to get the model to produce the output correctly without any retries
+required.
+In cases where the schema is complicated or the prompting is insufficient, the model output
+will require multiple retries and possibly never generate the correct output.
+To see this, let's define a complicated class.
+It's not actually that complicated, but it will be annoying for the model to try to generate.
+We're going to add just an a field which has to be cat, dog, or hat, an integer, and
+a bullion with a, b, and c.
+Next, we're going to try and break instructor to demonstrate retries.
+So this might not reflect common usage, but you should note that parsing failures will
+happen by chance if you're performing hundreds or thousands of language model calls.
+Here we've requested the complicated class.
+We have a user prompt here that says, please write me a short essay on Dolly Parton, and
+then the system prompt, don't give me what I want.
+Note in here, we're actually shooting ourselves in the foot.
+We haven't communicated the structure of complicated to the model, and we're intentionally
+help at asking at this sabotage us.
+We're limiting instructor to three maximum tries here.
+And here we see that it failed to parse.
+We gave our model an opportunity to produce a correct output three times, and it failed
+all three times.
+And this was pretty costly for us, because we had to triple our token usage, didn't get
+the correct output, and still had to wait.
+Here we see that we have 383 input tokens used three times, and three output tokens that
+presumably contain short essays about Dolly Parton.
+We use a total of 2600 tokens, and it required three retries.
+You can imagine this gets very costly for much larger prompts in the order of thousands
+or tens of thousands of tokens.
+So when you take a shot at fixed signals, look at this code here, we're doing the exact
+same thing, all you need to do is modify the user prompt and the system prompt so that
+we get the correct output.
+Take a shot at that now.
+So hopefully you got a chance to play around with this a little bit.
+I was able to fix this by saying, give me a B and C. I didn't communicate too much about
+the structure, and then I said, just give me what I want.
+Nothing complicated.
+But when we run this, we see we get A equals cat, B equals one, C equals true.
+Lastly, we can see that we did this pretty efficiently.
+We required only one retry.
+In this lesson, you learn how to use instructor to get structured output from any model provider,
+and some possible limitations of instructor that you should consider when you're building
+your software.
+In the next lesson, you'll go into the hood of outlines to see how structured generation
+is able to quickly generate reliable structured output with no retries required.

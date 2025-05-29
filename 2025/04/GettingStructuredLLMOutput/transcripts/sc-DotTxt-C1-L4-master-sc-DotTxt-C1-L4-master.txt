@@ -1,0 +1,234 @@
+This lesson is all about how structured generation with outlines works under the hood.
+You'll learn how structured generation works using an LLM's lojits.
+Then you'll dive into the code and see exactly how structured generation chooses the next
+token.
+Let's have some fun.
+Logitech-based structured generation is a much more efficient and flexible method for
+structuring your outputs.
+It's also known as constrained decoding, or it can be just called logic-based methods.
+And recall that while we're doing here, we talked about this briefly in the first lesson,
+what we're doing is actually intercepting the lojits in the model and changing them to
+affect the probabilities that come out of the model.
+Let's quickly refresh on many of the benefits of working with structured generation.
+It modifies the LLM outputs directly.
+This means that you always get the structure you defined.
+Recall that working with proprietary models using their JSON mode and reprompting techniques
+can sometimes fail and result in not getting back the structure you wanted.
+Another huge benefit is that the time cost during inference when working with structured
+generation is basically zero.
+It is very, very lightweight, and you will not notice that you're using it during inference.
+You also get a much wider range of structure.
+We'll talk about this more in the next lesson, but you're not limited to strictly working
+with JSON.
+Now there is one slight catch when working with structured generation to keep in mind.
+Because we're working with the lojits, you need to have access to the lojits.
+This means you're either using an open-weight model, or you are and yourself a proprietary
+model provider.
+Let's refresh on how LLM's generate text.
+You provide the LLM with a prompt that's broken out into two ways of tokens.
+The tokens are fed in all at once into the LLM.
+The LLM then produces a bunch of ways representing the relative probabilities of each possible
+next token.
+A token is sampled and then appended to the prompt, and this process is repeated until
+we eventually reach the end of statement token, terminating generation.
+Additionally, you can set up fixed token limit.
+Let's step through a real task and see how an LLM would generate tokens.
+In this case, we're using a visual language model and we're providing an image along
+with the text prompt.
+Our prompt is asking the model to produce either hotdog or not hotdog using only those labels.
+Here is a feasible distribution of what the initial token lojits might look like for this
+prompt.
+We have H, Ham, Hamburger, Hot, Hotdog, and Not.
+These all make sense because it is an image of a hamburger, even though we asked the model
+to respond only with hotdog or not hotdog, it's quite possible the model is thinking
+that this is a hamburger and so it wants to reply hamburger.
+After the lojits are generated, the token chosen is actually chosen by a sampler not to
+lojits themselves.
+There are many different sampling strategies that can have different impacts on the quality
+of generation.
+Here are two.
+The first one is a greedy sampler, which simply always chooses the highest probability
+token.
+In this case, it's choosing hamburger.
+In the other case, we have a multinomial sampler, which is going to choose from the lojits
+proportion as to how strong the lojits are.
+In this case, we might have chosen Ham.
+But of course, we didn't get the structure we wanted from that case.
+We wanted only hotdog or not hotdog and we were going to choose probably hamburger.
+So let's talk about how structure generation works by modifying these lojits directly.
+Here's the lojits we saw in the last slide, but we only want to use the labels hotdog or
+not hotdog.
+So we're going to remove Ham and Hamburger from these.
+Notice that H is still valid because it's starting of the word hotdog.
+That's OK.
+So we're left with H, hot, hotdog, and not.
+Now we still use the same samples we used before.
+We only changed the lojits themselves, not the sampling process.
+So again, a greedy sampler might choose not in this case and a multinomial sampler might
+choose H.
+Now, let's go see how this works in practice.
+So let's begin by pasting some code in here that's going to ignore some warnings that you
+might see here.
+Next, we're going to load a small local model into memory.
+In order to do so, all you have to do is import outlines and then use outlines dot models dot
+transformers and pick any language model from hugging face.
+In this case, we're going to use hugging faces small LM2 135 million parameter model.
+This is an extremely small model.
+We chose this mostly so it can fit on these notebooks, but you can use any language model
+as long as you have access to the final output layer.
+As per usual, we begin by defining the structure we want our model to generate.
+In this case, we define a person with fields name and age, name may be any string and age
+may be any integer.
+Next, you're going to construct a token generation function.
+A generator in outlines is a function that accepts any string, a prompt, and returns
+an object of the specified structure.
+We can see here we're using outlines dot generate dot JSON.
+We provide the model that we loaded into memory, the object that we wish to receive, and
+then we're going to set the sampler to greedy.
+So we take the most likely token at every step.
+We're doing this mostly so that every person in the course has access to the exact same
+results.
+Lastly, we're going to call track logets.
+Track logets is utility function that allows us to observe the token probabilities at every
+step in the sequence.
+All right, let's generate a random person.
+First, we need to cover what's called prompt templating.
+So language models use specialized tokens to indicate the beginning of a system prompt
+or the beginning of a user prompt and the language models response.
+Most SDKs handle the addition of these tokens for you, but outlines does not.
+This is because managing your prompts at a low level gives you more control over the
+generation process.
+So we've included this handy utility function called template that accepts your model,
+it accepts a prompt, and an optional system prompt.
+When you apply chat templating, you'll see this.
+This is the text that usually goes to a language model.
+It's often hidden.
+We don't usually see the templated text like this, but it's useful to know that this is
+what's happening on the back end.
+So here's how you actually generate a random person.
+We're going to take this prompt and pass it to the generator that we just constructed,
+and then we're going to take a look at the person.
+And it's worth noting here that generator dot logets dot clear removes any previously
+tracked logets.
+If you're going to call this function multiple times, make sure you clear the logets
+tracker each time.
+As we can see here, we got a person named John.
+John is a 30 year old person.
+But how did we get the text that allows us to have a person named John at age 30 that
+we can parse perfectly every time?
+First, let's take a look at the underlying JSON.
+Because person is a pedantic class, we can convert person into its underlying JSON using
+pedantics model dubbed JSON.
+If you set indent equal to two, you can kind of pretty print it so it's nicer to look
+at.
+But the first part of this JSON string has to be exactly this curly brace quote name,
+quote, colon beginning quote name has to be there because it's the very first field
+in the person class that we specified the thing to the right of that can be any string.
+So it has to be enclosed in quotes.
+And then we have to have an age field again, because it's in our person class followed
+by an integer.
+So let's take a look at the probability of each token being generated.
+This code here will show the probabilities of each token at the very first position.
+This is the first token the model wants to generate.
+What you're seeing here is orange bars representing the probability of selecting a token on the
+Y axis after outlines applies constraints.
+The blue bars here indicate the probability of the token being selected as if no constraints
+were applied.
+As you can see here, the curly brace and curly brace quote, both of which are orange bars,
+have very high probabilities under constraints.
+90.8% probability for just the curly brace.
+And then curly brace quote as a 9.2% probability unconstrained.
+The model wants to respond with here, I, and meet, neither of which are permissible under
+the format that we've specified in our JSON structure generation in this case is turning
+off the model's natural propensity to respond to natural language here, I, and meet.
+You try this.
+So try changing the K argument to show a different number of tokens.
+So if I set K equal to 10, I can see the 10 most probable tokens that the model is considering.
+Again, curly brace, both of those are very high probability under constraints, but the
+remaining tokens have a very high probability without constraints being applied, all of
+which are natural language responses.
+We know that the first field name has to be name and that the value of that name can
+be any string.
+So when the model reaches the first field, it has to choose tokens that combine to the
+string name.
+Let's look again at the tokens available at position four.
+When we run this, we'll see that the name token is by far the most likely under constraints
+at 99.7% probability without constraints.
+The model may choose user name with a capital N person or user, but outlines has turned
+off all of these tokens because they're not consistent with the format that we expect.
+You'll note here that this is not 100%, there's a 0.3% probability somewhere else.
+And that's because it's allocated to the remaining tokens, N, N, A, and N, A, M, all of which
+can be combined to make the phrase name.
+So let's take a look at the sequence that we've generated so far.
+We can do this with generator dot logit's process dot sequence.
+And we can see that we have curly brace quote name after this has been sampled.
+We know that the part following has to be quote colon quote, because that's valid
+JSON syntax.
+When we take a look at the available tokens at this point, we see that we have a very
+high probability of anything that would combine to quote colon quote, such as quote colon,
+just a quote quote colon quote, etc.
+You'll notice here that the constrained and unconstrained probabilities are actually
+very close.
+And the reason is that by the time the language model gets to this point, it knows that
+the thing following should probably be quote colon, because most of the time your language
+model has seen a lot of JSON.
+At this point, we have the string like this.
+We now have an open quote, which means that it's time for the model to start generating
+our name.
+So hopefully the thing that gets picked next looks something like a name when we take
+a look at the tokens at this position, we see that the model has a very high probability
+of picking John, seven ish percent probability, E, A, L, and M. John has
+a high enough probability, and we're using greedy sampling.
+So we'll just take John.
+You'll note here that the orange and blue bars are essentially the same.
+That's because within a string field, such as the name field, the constrained and unconstrained
+logits are roughly in agreement.
+We can also take a look at how the model chooses to end the name field by looking at the tokens
+in position seven here.
+But as we can see, the model has a very high percent probability of choosing quote comma.
+This would stop the name field and move on to the next field.
+There's a 26 percent probability of choosing DO, which would probably end up constructing
+the name DOE or Dondeau.
+Let's also quickly take a look at the age tokens.
+So you can see this here, in this case, we're going to look at the positions nine and
+twelve.
+Let me print this out.
+You can see that age will be printed with 100 percent probability under constraints,
+because that's the field name that we requested.
+And then we can see that the first token under age to be generated is going to be a three.
+We know that the one if you add a 13 appear or change 12 to a 13, you can see that the
+next token will be a zero.
+After the name and age has been generated, we know that the remaining tokens have to be
+curly brace, as well as the end of sequence token that indicates that the model's done
+generating.
+So let's take a look.
+Here are the last two token probabilities.
+The first one here is a closing curly brace with a 94 percent probability under constraints.
+And then the other constrained option is a closing curly brace that includes a space
+before it, both of which are valid JSON syntax.
+The unconstrained tokens that are not allowed are comma curly brace comma and then curly
+brace comma preceded by a space.
+Then on the right hand side, you'll see no real tokens.
+But this is because most of these are unprintable white space, including the end of sentence token,
+which is here at the top with 100 percent probability.
+So I want you to experiment with this.
+Try changing the allowed job types inside of this employed person class.
+Here we have class employed person that also has name and age, but we've added a job field,
+which is a literal and literal inside of a dynamic means that the model has to choose
+doctor, basketball player or welder.
+It can't pick anything other than those three.
+Try changing the job titles that you have in here, such as adding dog catcher, something
+like that.
+Then you'll run this code here.
+Once you've modified the job inside of employed person, take a look at the logits that are
+available at this location.
+You can do this by printing it out at positions 20 and 21.
+Make sure that you don't modify the name or age fields.
+Otherwise, these positions won't be accurate.
+Here we can see that software is shut down by our constraints, and the next most likely
+token is doctor.
+So try playing around with that and see what happens when you change the allowed job types.
+In this lesson, you dove into the internals of the model and saw how structured generation
+really works under the hood.
+In the next lesson, you'll extend this to generate other forms of structured output, including
+phone numbers, email addresses, and TikTok tow boards.

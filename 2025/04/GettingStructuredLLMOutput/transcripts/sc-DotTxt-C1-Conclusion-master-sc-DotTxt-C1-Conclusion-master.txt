@@ -1,0 +1,8 @@
+Congratulations on completing this course.
+In this course, you learned about writing reliable software using structured outputs for
+LLMs.
+You used OpenAI structured outputs to build a social media agent.
+You learned how to use re-prompting methods to structure output from any inference provider.
+You opened up an LLM and saw the inner workings of how outlines perform structured generation.
+You saw that structured generation can do so much more than just produce JSON.
+We're looking forward to seeing what you build.

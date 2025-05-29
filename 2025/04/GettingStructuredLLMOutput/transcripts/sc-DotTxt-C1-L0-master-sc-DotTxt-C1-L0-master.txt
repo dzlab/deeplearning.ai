@@ -1,0 +1,49 @@
+Welcome to getting structured on output, those in partnership with .text.
+When working with LMS in a typical chat interface, unstructured text output is fine, but if
+you're building software, it becomes much harder to pause and rely on free form text
+output.
+That's where structured outputs, such as JSON, become very important.
+They provide a clear format that the machine can read and process.
+For example, if you want your own to look at a product review and generate a couple of
+fields, say the product name and whether the sentiment is positive or negative, then
+output in those two fields in JSON, let's downstream software and read and process these
+fields for library.
+In this course, you learn how to obtain structured outputs using several approaches.
+The basic idea is you can turn LMS that you would like to data in a typical format, and
+if you provide the format clearly specifically using what computer scientists call a regx
+or regular expression, then there'll be an efficient way to get an arm to reliably
+generate output in that format, because regx can be used in fourth constraints on the
+next token to be generated one token at a time.
+I'm delighted to introduce the instructors, Wilkert and Karen Feiffer.
+Wilkert is a founding engineer at .tex and Karen is a developer relations engineer,
+and they help developers like you build and integrate reliable structure formats into
+their LMS.
+Thanks, Angel.
+In this course, you will first get structured output from models that support structured
+responses.
+You'll also learn about the limitations of this approach.
+To address some of these limitations, we'll use Instructor, an open-source library that
+reprompts the model until a valid JSON structure is produced.
+You will also learn how constrained decoding works.
+This is the underlying concept behind outlines, our open-source library that you will use
+in this course.
+While learning all the concepts in this course, you'll work on several cool examples and
+use cases, including a social media analysis agent.
+The agent reads user posts, identifies the sentiment, and decides whether or not a response
+is needed.
+You can even generate a customer support ticket if there's an issue, all as a JSON output.
+After working with retry-based methods, you'll learn how you can get the structured output
+from the get-go with outlines, a library that constrains model outputs at the token level.
+By intercepting the logits, the probabilities the model assigns to the next token, outlines
+blocks any tokens that don't fit your defined schema or format.
+This guarantees a valid output without any two overs.
+In the last lesson, you will learn how you can generate beyond normal JSON.
+For example, you will learn how to generate valid phone numbers.
+Or even ask-y-tick-tack-toe boards.
+And basically, any format you can express in a Rejects.
+Many people have worked to create this course.
+I'd like to thank Rami Loof and Andrea Pesso from .tex.
+From deep learning to AI, Edgemail Gagari has also contributed to this course.
+The first lesson will be an introduction to structured output generation.
+That sounds great.
+Let's go on to the next video and let's get structured.
