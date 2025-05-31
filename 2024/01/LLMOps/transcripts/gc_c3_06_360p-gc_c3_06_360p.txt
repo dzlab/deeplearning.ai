@@ -1,0 +1,5 @@
+Congratulations on finishing the course.
+The field of LLM ops is rapidly evolving and there's always more to learn.
+In the notebook of the previous lesson, you will find a link to a notebook that shows
+you how you can run the supervised tuning pipeline yourself.
+I'm excited on what you will build next.

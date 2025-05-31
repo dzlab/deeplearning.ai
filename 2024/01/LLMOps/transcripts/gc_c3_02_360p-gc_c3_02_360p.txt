@@ -1,0 +1,215 @@
+In this lesson, you will learn about the concepts and ideas of LLM ops and how it's similar
+and different to ML ops.
+In this first lesson, you will learn about concepts like data management, automation and
+deployment.
+Let's dive into it.
+Let's start with what is machine learning operations.
+ML ops is an ML engineering culture and practice that aims at unifying ML development,
+and ML operations ops.
+Automation and monitoring at all steps of the ML system is crucial.
+With automating meaning, maybe if you have a use case where you want to deploy a large
+language model, you want to automate the process of data engineering, training or tuning
+our model, and deploying it as an API in production.
+Once you have an introduction, of course, you want to monitor how your LLM performs
+in production.
+At all of these steps of constructing an ML system, you need to think about things like
+how do we integrate these steps?
+So how do I go, for example, from data engineering to tuning a model and to deploying it?
+How do I test not only my end to end workflow, but also each of these steps?
+How do I release a model or my code?
+How do I deploy it as an API?
+And if you want to train or tune my own custom model and I want to use specific hardware,
+a GPUs or a GPUs, how do I manage this?
+Let's dive a bit deeper into what does a machine-long operations workflow look like.
+Let's have a look at the ML ops framework that you might be familiar with.
+When building an ML use case, maybe being a large language model into production,
+you have to go through different steps.
+First, you might want to think about data ingestion.
+How do I take data from my application databases or other databases that I have?
+How do I validate this data?
+Maybe check if there's any missing data or anything wrong with my data that I have to fix
+in the data transformation step.
+Data transforming, meaning maybe I'll take my text data and convert it into a format
+that the large language model can understand or deal with missing values.
+Then you might want to train your model or tune your model.
+You need to do model analysis.
+So you need to evaluate your model and understand how it performs on your data.
+Then you need to think through how to do model serving and what fits for your use case.
+And of course, you want to lock all the metrics related to your modeling production.
+We'll focus on the ones in blue in this course.
+You might think now when you build a workflow like this,
+that you don't want to run through each of these steps manually,
+meaning that you don't want to execute each step manually yourself,
+and then go to the next step and execute that one and so on, so forth.
+That is very time consuming and not very efficient.
+So how can we help with this?
+So this is where automation and orchestration can help.
+Orchestration, meaning you telling the system which step needs to be executed first,
+which one after and so on, so forth.
+So meaning that you go from data ingestion to data validation
+all the way to serving your model,
+auto-waining, meaning that you automate this process.
+You can understand that this is a very one-dimensional process.
+So per use case, so let's say you want to build a large language model
+that does summarization.
+For that use case, you will build a workflow like this.
+So it's very one-dimensional.
+How are things different when it comes to ML ops for large language models?
+Well, there are two things that are different.
+First, ML ops for LLMs, also called LLM ops,
+is focused more narrowly on everything related to the LLM development
+and how to get it running smoothly in production.
+LLM system design is looking at the entire application,
+which may include things that the front end, back end, data engineers,
+and mobile app developers may build.
+Let's go through a few examples of what are these difference
+between ML ops for LLMs and LLM system design.
+When dealing with ML ops for LLMs,
+you might have to think through how do you do experimentation.
+There's many great models out there.
+There's many great foundation models out there,
+like Palm or Lama.
+You might want to experiment with multiple foundation models
+to understand which one is a good fit for your use case.
+Let's say summarization.
+Then you might design multiple prompts,
+and then you have to think through how do you manage these prompts
+during experimentation, but also when you use prompts in production.
+You might want to use supervised tuning.
+So let's say you want to tune your own model
+for your summarization use case.
+Maybe the Palm API works out of the box for you,
+but you want to improve it by using supervised fine tuning on summaries.
+Of course, we also need to think through monitoring our LLMs in production,
+and how do we evaluate LLMs?
+Evaluating LLMs is still a topic where there's a lot of research.
+So the way you evaluate your LLM might change over time.
+When we look at LLM system design,
+there's other things that we have to think about.
+Like if we're building a summarization use case,
+how are we going to chain multiple steps together?
+So let's say we have a lot of documents we want to summarize.
+Too much for the LLM to process at once.
+So we have to summarize in batches.
+So we have to change multiple steps together.
+Maybe we also want to do grounding to make sure our LLM has additional information
+to get you the output that you desire.
+And maybe we want to track history.
+What are some of the summaries we created in the past and how did they perform?
+All of this is related to LLM system design.
+Let's look at a high level example of a LLM driven application.
+Everything starts with a user interface.
+So how does a user interact with the application?
+The user input goes to your backhand.
+So what happens behind the scenes?
+So what you can do is you might take the user input and do some preprocessing.
+Let's take the example of summarizations here.
+Let's say it's a lot of information you need to summarize.
+You might want to chunk it in smaller pieces and send it bird chunk into your LLM.
+This is where you can use preprocessing.
+When you're done your preprocessing,
+you might want to use some grounding.
+So grounding your LLM in some facts.
+These facts you can include in your prompt.
+And your prompt goes into your model.
+You might want to use a foundation model out of the box like the PALM API or a LOMA model.
+When you get the response of your LLM,
+you might want to do some grounding again.
+So check the response against the facts that you have.
+Once we have done our grounding, you might want to do some post-processing.
+You maybe want to clean up the response and give it a structure that is user-friendly.
+You might also want to include and think about responsible AI.
+You want to make sure that we build AI responsible.
+Maybe you want to check for toxicity or any bias in the response of the LLM.
+Anything that's important to you and your use case.
+Once we have output we're happy with,
+this is what goes back to the user and the user sees the final up.
+Maybe you want to tune your own custom model.
+So you want to do model customization.
+When we do model customization,
+you have to go through the process of data preparation, tuning a model,
+and of course, evaluating and understanding
+how your tuned model is performing on your use case.
+And of course, this is an iterative process.
+You might want to do this a couple of times
+until you have a summarization model that you're happy with.
+Once you have a model you're happy with,
+you can deploy that model into your production environment
+and you have a fine-tuned model you can use
+in your LLM driven application.
+This is an example workflow.
+And of course, depending on your use case,
+maybe you have something else in summarization.
+Depending on your requirements and your use case,
+you might have a different use case than summarization.
+You can take a different approach.
+So this can look totally different for your use case.
+In this course we'll focus on the ones that are in green.
+So we'll focus on how do we operate
+and build a model customization workflow
+and how do we deploy that into production
+and how do we send a prompt
+and consume the output of that model.
+Let's look at that in a bit more detail.
+Let's look at a LLM ops pipeline
+and let's use the example that we're going to build in this course.
+Of course, everything starts with data.
+We're going to start with preparing our data sets
+and we're going to version our data sets
+so that we can keep track of the data sets
+that we created.
+Next, we're going to design a pipeline
+that's going to do supervised tuning
+of a large language model for us.
+And this might look like a simple box.
+A lot of great things happen in this pipeline
+and that is automated for us.
+Next, we're going to generate an artifact.
+Just see this as a file.
+And this file has information on our configuration and workflow.
+Basically, the workflow is the steps of our pipeline.
+First step A and step B and step C, so on, so forth.
+The configuration is the configuration
+or the parameters that we're going to use
+to execute the workflow.
+For example, which data set are we going to use
+for this supervised fine tuning?
+This could be one of our configuration parameters.
+Once we have generated our artifact,
+we can go and execute a pipeline.
+This pipeline will also deploy a model for us.
+It will deploy the LLM.
+Once we have the LLM deployed, we can get predictions from it.
+So we can use prompts to get a response from the LLM.
+Once we have the response of the LLM,
+we can use responsible AI to check the safety
+using safety scores.
+Two essential topics for LLM hubs are orchestration.
+So we're going to talk about how you can orchestrate a pipeline,
+meaning maybe you want to do data preparation
+and prepare a dataset first before you do supervised tuning
+before you deploy a model.
+So you're going to orchestrate the steps in your pipeline.
+Now, once we have that pipeline,
+secondly, we want to talk about automation
+and how we can automate our pipeline
+to make our life easier as developers.
+This LLM ops pipeline is a simplified diagram,
+depending on your use case, on your requirements,
+this can differ.
+LLM topics beyond the scope of this course.
+There's things we can't cover in this course,
+things like prompt design and prompt management.
+So how do you deal with your prompts
+when you're experimenting
+and how do you deal with prompts in production?
+How do we evaluate a large language model
+when we're experimenting or when we have any production?
+We'll briefly talk about model evaluation,
+but we'll not go in extensive detail.
+How do we monitor our LLM in production
+or how do we do testing of our LLM system or application?
+These are some of the topics you can look into after this course.
+As mentioned, we're going to start with data preparation.
+So the next lesson, we're going to prepare our datasets.
+See you in the next lesson.

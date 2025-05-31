@@ -6,7 +6,7 @@ Dear learner,
 
  
 
-Announcing LLMOps, a new short course built in collaboration with Google Cloud, and taught by Erwin Huizenga, Machine Learning Technical Lead at Google.
+Announcing [LLMOps](https://learn.deeplearning.ai/llmops), a new short course built in collaboration with Google Cloud, and taught by Erwin Huizenga, Machine Learning Technical Lead at Google.
 
  
 
@@ -32,7 +32,7 @@ The tools you’ll practice with include BigQuery data warehouse, the open-sourc
 
 Prepare to tune an LLM while you work with and build an LLMOps pipeline.
 
-https://learn.deeplearning.ai/llmops
+
 
 Learn LLMOps best practices as you design and automate the steps to tune an LLM for a specific task and deploy it as a callable API. In the course, you'll tune an LLM to act as a question-answering coding expert. You can apply the methods learned here to tune your own LLM for other use cases.
 
@@ -43,3 +43,13 @@ Learn LLMOps best practices as you design and automate the steps to tune an LLM 
 - Level: Beginner
 - Instructor: Erwin Huizenga
 - Prerequisite recommendation: Basic Python
+
+
+|Lesson|Video|Code|
+|-|-|-|
+|Introduction|[video](https://learn.deeplearning.ai/courses/llmops/lesson/jupuw/introduction)||
+|The Fundamentals|[video](https://learn.deeplearning.ai/courses/llmops/lesson/oqpbl/the-fundamentals)||
+|Data Preparation|[video](https://learn.deeplearning.ai/courses/llmops/lesson/o4bov/data-preparation)|[code](./Lesson2/)|
+|Automation and Orchestration with Pipelines|[video](https://learn.deeplearning.ai/courses/llmops/lesson/eqyz4/automation-and-orchestration-with-pipelines)|[code](./Lesson3/)|
+|Prediction, Prompts, Safety|[video](https://learn.deeplearning.ai/courses/llmops/lesson/z8nnt/prediction,-prompts,-safety)|[code](./Lesson4/)|
+|Conclusion|[video](https://learn.deeplearning.ai/courses/llmops/lesson/yebsu/conclusion)||

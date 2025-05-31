@@ -1,0 +1,158 @@
+Now that you have your data, it's time to tune a LLM.
+Keep in mind that you might need to tune a model multiple times to develop one that works for your use case.
+Experimentation is more critical when it comes to LLM's because we are still learning wall works.
+You want to automate the process of running experiments to make your life easier.
+In this lesson, you will learn how to build a machine learning pipeline to tune and deploy your model using an open source framework.
+Okay, before we go into the code, let's talk a bit about ML ops workflows for large language models.
+I've talked about system design for LLM's and I've also talked about these workflows that are more one-dimensional.
+Let's say you want to train or tune a model.
+The process you typically go through is you get some training data, you do training, you do evaluation,
+you do evaluation during the training or tuning process as we talked about in the previous lab.
+And then as a result, you will have a trained model which could be something like a TensorFlow saved model format.
+So once you have a trained model, what you will do is you will take your trained model and you will put it in your production environment.
+Because in the end we want to ship our model and integrate it with our use case.
+Once you have your trained model in your production environment, this could be a rest API or a batch process is that you take production data
+and you generate predictions.
+And again, you do evaluation as often as needed.
+And based on your evaluation, you can of course update your training data and run your workflow again.
+There's a few key things here that I want to talk about.
+There's orchestration, automation and deployment.
+Orchestration meaning is that you specify which step needs to be run first and then what is the next step, so on, so forth.
+Automation meaning is that you automate this workflow.
+This helps you, for example, that if you want to train a new model, you can rerun the end to end workflow again.
+And deployment I talked about, this means it's taking your trained model and putting it into your production environment.
+Okay, so just about orchestration, it's about orchestrating the sequence of steps.
+Where automating is about making sure that you as a person don't need to run the script yourself, you automate the execution of the code.
+For example, if you have multiple Python files, you don't want to manually go in and execute maybe your data preparation and then the file for your model training.
+No, you want to orchestrate them. You want to say first the data preparation and then the model training and you want to automate that process so that you don't need to execute one file after another.
+Let's dive into the code. For orchestration and automation, you can use different frameworks, for example,
+for example, a bunch of airflow and Q-fold pipelines are both popular for building machine learning workflows that help you with this orchestration and automation.
+This notebook we're going to use Q-fold pipelines. So we're going to import the Q-fold pipelines package.
+Q-fold pipelines is a open source framework and you use it for constructing like a kit for building machine learning pipelines to make it easy to do orchestration and automation.
+So first I'm going to import the DSL. So the DSL we're going to use say we're going to use like a drawing board to sort of design our pipeline.
+And then also we're going to use a compiler. I will talk about that later.
+Okay, so let's say we want to orchestrate a very simple example first because I want to teach you about orchestration and automation.
+So let's say we're going to take a Python function that is say hello, that will take a name, which is going to be a string.
+And then it's going to take a name as inputs and going to add hello, so hello, and then my name, so hello, and then this is going to return hello text.
+Okay, so important here is that Q-fold pipelines has two key concepts.
+There's components and there's pipelines. A pipeline is like a self-contained set of code like this code that we see here.
+And this is one step or could be one step in your workflow to map this to machine learning workflow.
+So the first step could be data processing or data engineering. The second step could be model training. So each component is a step in your workflow.
+In the role of machine learning, we often talk about pipelines, but building and managing these pipelines can become complex and time consuming.
+That's where Q-flow pipelines comes in. A powerful tool that helps us automate and orchestrate our ML ops workflow, but Q-flow doesn't speak plain English.
+Also, it doesn't speak Dutch. It uses a specialized language called a DSL DSL stands for domain specific language.
+Think of it as a set of instructions tailored specifically for building ML ops pipelines.
+The open source framework Q-flow pipelines provides its own DSL library, which lets you define your pipeline steps and execution logic, also referred to configuration in a clear and concise way.
+No more juggling code in different languages. With the KFP pipeline DSL, you can focus on the what of your pipeline.
+The tasks you need to perform and let Q-flow take care of the how Q-flow pipelines DSL we can use for building ML and pipelines.
+So how do we make sure that this code, this pipeline function, that we know that this is a component in our machine learning workflow?
+This is where the DSL comes in. So we're going to use the DSL to tell the system that this is a component.
+So this code will run in a containerized environment. You may have not heard about a container.
+So containers are like a contained environment that have your dependencies and your software code.
+The advantage of containers is that you don't need to manage a server, install your OS, install your dependencies there, and your software on the server.
+It lives in this bubble where you have an OS that's already available for you.
+You install only the dependencies that you can use for your software. Put your software in the container.
+And then you can take the container and maybe come somewhere else. You can execute it on environment A or B or C. It doesn't matter.
+You're not dependent on the hardware underneath. In an ML workflow, we often want to orchestrate multiple steps.
+So we have our first step, which is a component. Let's now write another one.
+Again, we're going to take a Python function called how are you?
+Which is also going to take a string as input. So we're going to take hello text.
+We're going to use the output of the first component as input for the second component.
+So that means the second component is dependent on the first component.
+So we have to run the first component as the first step and then the second component.
+Because it's dependent on the output. So the output goes downstream.
+So let's say your first step generates files that contain training data like we've done in the previous lab.
+The second step might be training a model that takes these files to train the model.
+So it takes this data to train the model. And how you pass data from one component to another can be done in different ways.
+So you can say the first component hands over the data files to the second one and then sell on so forth.
+But typically what you do and the best practice that we see a lot is that you pass the path to the location of files into the next step.
+So let's say you stored your training files as we discussed in the previous lab in a cloud bucket.
+What you do is you tell the second component, hey, the training files are in this bucket instead of passing the training files into the component.
+Why that is important is that if you're dealing with large data, you don't want to put all of the data in one step in one container.
+Because then you're dependent on that memory and we talked about that. We want to build our pipelines in a scalable way.
+So you pass the uniform resource identifier like the path example I just gave for this Python function.
+We also need the DSL decorator, so the component decorator to tell the system that this is a Qflow pipeline component.
+So now we have two components. Now it's time to draw a workflow or to sort of decide how we're going to execute these steps, these components.
+We're going to build our pipeline. So for this, again, it's just a Python function and let's call it hello pipeline.
+And this one is going to take a recipient again, a string and within this function, we're going to tell the system which step we want to execute first.
+As discussed, our first Python function, our first component is the one we're going to execute first.
+So this is the say hello component. And this is the one we're going to execute first. And this is going to take the recipient, which is a string.
+So the name of a person as input and injected into our component when we're going to execute this.
+The second step, and you probably guessed it already, is that we're going to execute our second component.
+How are you? And this component is going to take the output of the first component as input.
+So the hello text is going as input in our second step. So here we're telling the system, the output of hello task should go as a parameter in the how are you component.
+And then we're going to return how task outputs.
+So the output of the second step, now we have to tell the system that this function is our pipeline.
+So our sequence of steps, we're going to use the decorator to tell this is a pipeline.
+Next, we're going to implement our pipeline. A pipeline is a set of components that you orchestrate.
+A pipeline also lets you define the order of execution and also lets you tell how data flows from one step to another.
+So basically data can go downstream in a pipeline.
+Okay, remember when I talked about importing the compiler. We now have specified one or components to our pipeline.
+Now it's time to compile our pipeline in a file that you can execute. For this, we're going to use the compiler.
+The compiler lets us generate a YAMO file. A YAMO files are human readable, used for storing your configuration and the sequence of steps of your pipeline.
+The YAMO file also contains information on your components, their dependencies and the order of execution.
+So last thing we need to do is that as you remember, we don't have a name yet.
+So a name needs to go into our pipeline when we execute. We're saying hello name, how are you?
+So we need to define our arguments. These arguments are injected into our pipeline during execution.
+This is a pipeline argument and here we have the recipient and we're going to use world.
+Once you've generated the pipeline of YAMO file, you can have a look at the YAMO file.
+So let's run cat pipeline with YAMO and you can see for example here the components that we specified.
+There's all sorts of other information that's related to the pipeline execution and dependencies as well in this YAMO file.
+Let's continue for now. We now have a YAMO file. Once we have a YAMO file, you can execute it on different environments.
+We've talked about Kubernetes. When you run a Kubernetes cluster, you have to manage it and operate it in production, which is a lot of work.
+You can also use a managed environment like vertex AI pipelines that executes the YAMO file for you in a serverless environment.
+For this, you can use the Cloud AI platform library and import pipeline job.
+Next, you have to specify your pipeline job. There's a few things that we need to set.
+First of all, we need to say to the system that we're going to use the pipeline YAMO for execution.
+Secondly, give it a name. Then we have the pipeline arguments. These arguments go into the pipeline during execution and then we specify a region.
+We talked about regions in the previous lab. The pipeline route is where temporary files are being stored by the execution engine.
+Then it's as simple as job.submit and you can run it. For classroom restrictions, we're not going to execute the job now, but you can take the code and execute it in your own environment.
+You can execute this on Google Cloud using vertex AI pipelines, which is a serverless layer on top of Kubernetes.
+We don't need to worry about managing machines like VMs or a Kubernetes cluster.
+We just sent the YAMO file and Google Cloud takes care of the execution. Vertex AI pipelines.
+This is where I see the execution. We have the two steps, the two components that we just created.
+Say hello and how are you? Here you can also see the parameters. You can see that type and the value.
+If you go to the second component, we can also see the output. It says, Hello World, how are you?
+This is where you typically see the execution of your pipeline, but also see the parameters and the output of the components.
+We just built a Hello World example of the pipeline. You're now familiar with the concepts.
+Let's now look at a real-life example of a machine learning workflow, a machine learning pipeline.
+The advantage or one of the advantages of a pipeline is that you're able to reuse it.
+Once you build a pipeline, you can reuse it so maybe you can share it with a colleague.
+Let's say you've built a Q&A language model and you build a pipeline that processes the data, trains a Q&A language model and then outputs a trained model file.
+Maybe your colleague also has a Q&A use case. Your colleague comes to you saying, Can I reuse your pipeline for my use case?
+Reusability of pipelines is an important advantage.
+In the next example, we're going to reuse an open source cube for pipelines that lets us do supervised fine tuning of a foundation model from Google called POM2.
+The advantage of reusing a pipeline is that we don't need to build it from scratch. We only have to specify some of the parameters.
+Remember that we generated two files in the previous lab. So we have our training data and we have our evaluation data.
+The JSONL files we talked about. So we're going to use these two files to fine tune a POM model.
+We're going to use these two files to do supervised fine tuning. So reusability of pipelines is a big advantage.
+And as I mentioned, we're going to use an open source pipeline that's part of Qflow. Here you see the path through the pipeline file.
+So remember the YAML file we generated. This is where we can find the YAML file for this pipeline.
+In order to execute the pipeline, we need to set up some configurations. Basically we need to specify our arguments.
+First of all, let's come up with a model name. In the previous lab, we talked about versioning and how important versioning is.
+So here as well, we're going to use a date timestamp to keep track of the model that we generate.
+We have to specify a model name and we're going to add the date to it. So at least we can always go back in time and see which model was trained with.
+There's also some other parameters that we can tweak. I want to highlight two. So first of all, we have training steps.
+Training steps, meaning the number of steps to use when tuning the model. As mentioned, this pipeline was parameter efficient fine tuning.
+A single training step is the process of feeding a batch of data into the model when you do your training. It updates the internal parameters and it will calculate the loss or error.
+Do not confuse it with e-box, which is a full pass of the data set. For extractive Q&A, you can set it between 100 and 500.
+This is the best practice for this Palm model. For now, I just chose the number 200. And as you remember, when you run a pipeline, see it as one experiment.
+So you can tweak a parameter and run it again and see how it impacts the performance of the model. Also, we're going to set an evaluation interval.
+We generate an evaluation data set, the interval that specifies the frequency at which a trained model is evaluated against the evaluation set that we created.
+Default will set to 20. You can play around with this as well. Just like we've done for our hello world pipeline, we have to specify arguments that the pipeline will use during execution.
+Two of the arguments that we're going to use are a project ID and a region. Just as you remember from first lab, this is that we have to specify the project ID and the region where we're going to run this job.
+Again, we're going with us central one. Next, we're going to specify the arguments. The arguments are being used by the system during runtime. So when the pipeline is executed, the arguments are ingested into the pipeline.
+So the pipeline arguments for this open source pipelines are our model name that we just specified. The region where we're executing the workflow and, of course, the model that we're going to use for our parameter efficient fine tuning.
+This is a palm family model. It's called text bison, which is a great model for question and answering. 001 is the version of this model project ID.
+The training steps that we just specified that are set to 200, where our training data sits, our evaluation interval, and our evaluation data you write. So where are evaluation data sets?
+These arguments go into our pipeline when it's being executed. You can imagine when you create a pipeline, you can include arguments.
+Arguments can be changed. So that means is that when you have the pipeline, you can run it with a different set of arguments.
+So let's say you have a new data set that you want to use. You just have to update the argument to the data set. Or maybe you want to use a different type of model for the tuning.
+You just update that parameter. So it makes it very easy to take an existing pipeline and to make minor changes to the pipeline and rerun it.
+Next we also have to specify our pipeline route. As you remember, this is where the artifacts are stored during execution.
+And then we specify a pipeline job, which tells the system how the pipeline should be executed with which arguments.
+The enabled caching to true means is that if we're going to rerun the pipeline, if we use caching, which means is that if we already executed a step previously, it will not execute it again.
+Only if we updated the code or one of the arguments, it will rerun that step. Then it's time to do a job submit.
+We're not going to execute this pipeline now because if we have to run it, it might take a whole day to execute. Also, it's quite expensive to run this pipeline because you need accelerators like GPUs or TPUs.
+In the next lab, we're going to talk about deployment. So once we tuned a model, of course, we also have to deploy it in order to use it in our LLM system.
+And see you in the next lesson.

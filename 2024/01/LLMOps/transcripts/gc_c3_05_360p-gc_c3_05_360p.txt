@@ -1,0 +1,393 @@
+So now you will actually get used to choose model to make predictions.
+The team has deployed one for you.
+But there are still more to do in order to integrate this safely into a real-life application.
+We will need to make sure the model will work the same in production,
+but also that it can be safer and more responsible.
+So you will first want to make sure production data has the same format as the data used in training.
+You look into the response and how to get insights on safety attributes
+and are there any sources that the response is based on?
+Okay, welcome to the last lab of this course.
+Today we're going to talk about predictions, prompts and safety scores.
+Just like with the other labs, we have to run some of our setup code.
+Again, we need to get credentials and our project ID.
+We're going to use the same region as we did before.
+We're going to use US Central 1.
+And also in this lab, we're going to use the Vertix AI SDK.
+We're going to use the text generation model that we just tuned.
+Let's also initialize the Vertix AI SDK right away so that we can use it
+with the project ID, region and credentials.
+Let's talk about deployment.
+In the previous lab, we talked about building an end-to-end machine link pipeline
+that takes training data, chooses a model, does evaluation,
+and then generates a trained model that you can deploy.
+As we talked about, deployment can mean different things.
+Take your model, doing batch predictions,
+or it can mean creating a REST API that you integrate with your services.
+When deploying your model, you have multiple options,
+meaning the way you deploy your model and integrate it into your use case.
+The two main ones are batch and REST.
+I'll explain both of them.
+Batch meaning is that you take your trained model
+and you might have a batch use case.
+So let's say you get customer reviews.
+Maybe about products, and every week you want to score those reviews
+if they're positive or negative.
+So there's no need to do this in real time.
+You maybe want to do it once a week and share it with the marketing people.
+You can take your trained model and take all of the reviews,
+the product reviews for that week,
+and then send them to your trained model and run a dot predict on all of these reviews.
+So what you're going to do is that for each of these reviews,
+you're going to send it to the model and get a prediction if it's positive or negative.
+So it's an offline process that doesn't need to be in real time.
+And you batch all of the examples and you run the predictions in batch.
+A REST API means is that we take our model and we deploy our model as an API.
+This means that it's online and you can access it from a service.
+So let's say you have a chat application that lets you stack overflow type of questions.
+So when I come into the application, I ask a question.
+The request goes to the API, the API.
+So the model behind the API does a prediction and the prediction goes back into the user interface.
+And I see the result.
+So this is a more real time use case.
+You need to get the response with a low latency.
+There's different ways you can deploy a model as a REST API.
+If you have, let's say, a TensorFlow model or a PyTorch model,
+you might want to package it up using the Flask library or FAST APIs.
+These libraries help you with packaging these models as an API.
+Then you can take that API and put it in the container that we talked about in the previous lab.
+If you're not familiar with Flask or FAST API, don't worry.
+You don't need to know to finish this lab.
+In this case, we deployed the model as an API.
+So we've taken the trained model, package it up in a container as a REST API.
+You can take the production data, send it to the API and get a prediction.
+Let's go back to the code.
+In order to call our API, we have to run a few lines of code.
+We want to retrieve the endpoint of our model.
+With endpoint, I mean the REST API.
+So the model has been packaged up and deployed as a REST API on the cloud platform.
+In order to get a response, we have to specify which model we want to use for predictions.
+Remember that we tuned a text generation model, the text by some model.
+This was one of the parameters used set in your pipeline.
+Using the SDK, we can retrieve a list of models that are deployed.
+Let's use the model list tuned model names to retrieve the endpoints of the tuned models that we have.
+We ran the pipeline a couple of times.
+So we have multiple endpoints.
+Let's print out the endpoints that are available for us.
+As you can see within our project, we have three endpoints that live in the US Central One region that you specified.
+We deployed multiple models to make sure we can spread all of the traffic over the three models.
+We're going to use a very basic form of load balancing to choose one of the endpoints to send our prompt to and get a prediction.
+So we're going to use the random library.
+And we're going to choose from our list randomly one endpoint that you're going to use to get a prediction from.
+Once we randomly selected one of the deployed models, we can load this model so that we can use it to get predictions.
+Getting predictions means we're going to send the prompt to the API and get a response from the model based on the prompt.
+So we're going to load one of the models.
+And next we can write a prompt.
+So let's write a prompt.
+And since we've done tuning on the stack overflow data set, I think we should ask it a Python question because we selected all of the Python questions from the stack overflow data set.
+We want to stay as close as to what we trained on as possible.
+And I'll talk about this later as well why this is important.
+Let me ask a straightforward question.
+How can I load a CSV file using pandas?
+This is something we've done in the first lab.
+We have our prompt.
+We've loaded the API.
+Now we can send our prompt to the API and get our response.
+For this we can use the vertex AI SDK.
+And we're just going to run a dot predict on the deployed model.
+And we take the prompt into the dot predict.
+So the prompt goes to the API.
+Of course large language models are large.
+And depending on the size of your model, depending on the size of your prompt, latency can differ for your model.
+Meaning is it can differ how long it takes before you get a response.
+Larger models typically take longer to get a response.
+If you have larger prompts, it takes longer to do a prediction.
+So depending on your use case, that can be different latency.
+Let's first print our response and see how it looks like.
+Well, looking at this, you can see that it is not very readable.
+This is a lot of information we're getting from the model as a response.
+So let's clear this for now and let's do some formatting.
+For this we're going to use pretty print.
+So from pretty print, we're going to import pretty print.
+And let's unpack that response for a bit.
+So when you have an API, you can send multiple prompts to get multiple predictions from the API.
+We only send one prompt.
+So we're only getting one response.
+Let's have a look at that.
+And let's use the pretty print to format this response.
+Since we only send one prompt, we're only getting one response.
+This response consists of a lot of information.
+We have citations with scores.
+I'll talk about citations and safety attributes later on.
+Let's unpack the response a bit more and look at this exact object.
+If we print this output, you can see that it only has one object.
+In the output, you can see that there's multiple keys.
+We have content, safety attributes.
+Content is the answer, the answer on the questions that we asked.
+So basically the response on our prompt.
+Let's now extract the content.
+So the response on our prompt basically answer to our question from the output.
+We're going to use content as a key to extract response from the model.
+Let's now print the final output, the answer to our question.
+Here you can see the answer to our question.
+So this is a response of our model.
+Okay, so we talked about the different options of deploying a model.
+Remember, batch and rest API.
+When deploying models, there's also other things you have to take into account.
+And other things that are important when running production machine learning workloads.
+I've talked about packaging, deploying and versioning your model.
+But there's also other things that we have to take into consideration by doing model monitoring.
+There's different ways you can monitor your model.
+First of all, there's the operational metrics.
+Let's say how often do you send the prediction to the API?
+Of course, you also want to evaluate the performance of your model in production.
+So how is my model performing?
+What's the evaluation metrics of this model in production?
+Maybe you want to generate some scores.
+Also, we want to consider safety.
+So is there any bias or any harmful language in the output of the model?
+And we'll talk about this later.
+Also, you want to think about scalability.
+You might want to do a load test on your API,
+meaning sending a lot of predictions at the same time to see how your model behaves or how your API behaves.
+And then when rolling out this in production, you want to do this slowly.
+So let's say maybe you first want to have only 5% of your traffic going to your model instead of all of your users.
+We call this a controlled rollout.
+Also, discuss with all of your stakeholders what is a permissible latency?
+So when you discuss with your stakeholders about what is permissible latency?
+Have a discussion about what's the actual number?
+For example, is two seconds of latency okay for a user experience?
+So let's say going back to the Q&A system that you're building for stack-oval questions,
+you have a UI, is it okay if the user waits one, two, three seconds,
+or do you want it to be like a hundred milliseconds?
+All of this is something you discuss with your stakeholders,
+and you decide on what is permissible.
+But what can you do if your latency is too high?
+There are multiple options you can explore.
+You might want to choose for a smaller language model.
+Smaller models often have lower latency.
+You can also explore deploying your language model on GPUs,
+or maybe you'll deploy your model in a different region.
+So let's say your application runs in the Singapore region,
+you can deploy the model also in the Singapore region,
+so that the model and the application are close together.
+But hold on, didn't we in the previous lab did some data processing
+and create a new feature where we combined an instruction with a question?
+In the example we just ran, we only send a question to the API.
+This means is that the model that we trained was trained on data
+that has an instruction and a question.
+But now in production we're only sending the question.
+So there's a mismatch what we trained on,
+versus what we had available in production.
+There's a skew between the two.
+It's very important that your production data
+is very much the same as the data that you trained on.
+If there's a difference between the data,
+it can influence the performance of the model.
+So we need to add an instruction to our question
+before we send it to the model.
+In other words, we want to add the same instruction
+that we had in our training data.
+Let's do that first.
+Let's take the instruction that we created earlier.
+And then take a question.
+Let's go with a new question.
+So we have the instruction.
+We have the Stack Overflow question.
+Now we want to combine it to and create a prompt.
+So we have instruction, question, and taking it to
+we're going to generate a prompt.
+If we print the prompt,
+we can see that now our instruction and question are combined.
+So we have our instruction.
+And we have our question.
+We can now take this new prompt that is consistent with the data
+that we trained on and send this to the API.
+We'll do this in the same way.
+We'll get a deploy model to a product
+and take the prompt that we just created.
+From this response,
+let's use the content key again
+to get the answer on our question.
+Let's print this output
+and have a look at the response of the model on our question.
+We see that the output,
+the response of the model has a very nice structure
+and it answers our Stack Overflow question
+like it's a developer.
+So remember when we had the output of the model,
+all of the output.
+In this object,
+we also have safety attributes.
+The thing with large language models is that they can generate output
+that you don't expect,
+including text that can be offensive, insensitive,
+or maybe factually incorrect.
+What's more, the incredible firstility of large language models
+is also what it makes difficult to predict exactly what kind of unintended
+or unforeseen outputs they might produce.
+So it's important for you as a developer practitioner
+to understand and test these models
+to make sure you deploy them safely and responsibly.
+This is where we can leverage the safety attributes of this model.
+The Palm API that we tuned has safety attributes scoring
+to understand the output
+and define confidence thresholds,
+meaning that you can take these safety attributes
+and define your own thresholds.
+I'll talk about that later on how you can use that
+and how you can think about these thresholds.
+Let's unpack this a bit more and write some ago.
+So from a response,
+we're going to use a different key now.
+We're going to use the key safety attributes.
+And from the safety attributes,
+we can first check if there was anything
+that was blocked by the responsible AI service.
+So in our response,
+we have safety attributes.
+We can also check if the response was blocked.
+What you often see with model providers
+is that before returning the response to you
+as a developer or practitioner,
+there should check if there's an issue with the safety attributes.
+If there is, then the response might be blocked.
+Let's check if it's blocked.
+So we're going to print the blocked.
+Well,
+a second layer of checking
+if there's any issues with safety attributes
+can be done by you as a developer.
+In the response,
+you will find probabilities for each category.
+And you can use these probabilities
+to design your own threshold.
+By using these thresholds,
+you can take comprehensive measures
+to detect possible harmful topics.
+So the confidential scores are predictions only.
+And you shouldn't depend on the scores only
+for your reliability or accuracy.
+It's one of the measures you can take.
+So the second level
+is where you as a practitioner
+and the developer
+can use safety attributes and safety scores
+to set up your own thresholds.
+Let's have a look at the safety attributes
+to get a better understanding of them.
+So from our response,
+we're going to use the key safety attributes
+to retrieve the safety attributes and the scores.
+We're going to use pretty print again.
+To print our safety attributes.
+Okay.
+What you see here
+is a couple of things
+that I would like to talk you through.
+First of all, you can see
+if the response was blocked
+or not.
+In this case, it wasn't.
+Then we have some of these safety categories.
+Like finance,
+politics,
+we also have the safety ratings
+with different categories.
+You can also see here
+the probability scores.
+So each safety attribute
+is associated with a confident score,
+like a probability score between 0 and 1,
+and is rounded to one decimal place,
+reflecting the likelihood
+of the content being unsafe.
+So it scores for each category.
+You can see here
+that the probability score
+for most categories is 0.1.
+I mentioned that the probability score
+can be between 0 and 1.
+So 0.1 is very low.
+You see also here
+a severity score.
+Safety filter confidence scores
+are based on the probability of content being unsafe
+and not the severity.
+This is important to consider
+because some content can have
+a low probability of being unsafe,
+even though the severity of harm
+could be high.
+In the output you've seen
+there's probability and severity.
+Let's talk about
+what is the difference
+between the two using two sentences.
+The first one, the panda pinned me down.
+The second one, the panda beat me.
+The first example can have
+a higher probability of being unsafe
+is because the panda has pinned me down.
+Where the second sentence
+is more ambiguous
+and we don't know if it wasn't
+unsafe situation.
+I might have been racing the panda
+for some bamboo
+and the panda beat me in the race.
+But the second one could be more severe
+because it also can mean
+that the panda has beaten me,
+punched me multiple times.
+So as a user,
+you can leverage these scores.
+The probability score,
+the severity score,
+to set up your own thresholds.
+For example, if the probability score
+is 0.5,
+you can decide if that's
+an acceptable score for you
+or if you want to filter out that response.
+Deciding what is a good threshold
+is up to you.
+And it depends on your requirements,
+type of users you're working with,
+and other requirements.
+There's not one probability score,
+one threshold that could work for everyone.
+It's very much their first per use case.
+So you have to look at your own data
+and the responses with your data
+and decide if that's an acceptable threshold for you
+or not.
+When dealing with generative AI,
+you want to produce original content.
+And preferably not replicate existing content at length.
+So you want to design your systems
+to limit the chance of this occurring.
+In the response, you have something
+that's called citation metadata.
+Meaning you can check if there's any citations.
+From the model response,
+we can take the citation metadata
+and from citation metadata,
+we can take the citations
+to check if the response is citated somewhere.
+Let's use pretty print again
+to see if there's any citation in the response.
+That's good.
+The response is not citated somewhere.
+If there is a citation,
+the model will return a page
+from where it's cited from.
+Like a website,
+we don't have any citation.
+In this example,
+try out your own prompt to see
+if you can trigger a citation.
+Maybe something from Shakespeare
+to be or not to be.
+Try a few prompts yourself.
+I'll see you in the next video
+where we will wrap up the course.

@@ -1,0 +1,62 @@
+Welcome to LLMOps, built in partnership with Google Cloud and taught by
+Irvin Hauserna. Say you design and deploy one LLM-based use case,
+such as summarizing customer emails, and it takes you a few ways to do that.
+That probably took a bunch of work to select the large language model to build on,
+which by me trying a few to see what works best,
+then tuning the prompts and set the evaluation framework,
+deploying and then monitoring performance.
+As you build an application, having automated ways to deploy and monitor will make your life easier.
+And if you need to update this application,
+maybe because the LLM provider is deprecating the model you had built on,
+and so you need to switch to a new LLM,
+having tools that help you migrate and test will also simplify your workflow.
+Now that you've built your first application,
+what if a team is so impressed with your summarization application that they come back
+and asked for five more use cases, like classifying emails, routing emails, and so on,
+where you have to do five times the work of the original project.
+OBS, which is an extension of MLOps or machine learning operations
+to applications built on large language models,
+destroyed the processes and tools to automate the cycle of
+data preparation, model tuning, deployment, maintenance, and monitoring.
+Take just the example of prompt management.
+When designing prompts, it can be very helpful to have an automated way of
+evaluating and comparing the performance of different prompts,
+and also updating the prompt if needed,
+such as if the underlying LLM changes.
+In addition, if your application uses multiple LLM calls,
+for example, chaining multiple steps of processing together,
+maybe using an orchestration framework like LLM chain,
+then managing the dependencies also as additional complexity.
+In this course, you learn the latest best practices for how to manage all this complexity.
+Delighted to introduce the instructor for this course,
+Irvin Hausner, who is a developer advocate in machine learning at Google Cloud,
+and has deep experience with LLMOps.
+Thanks, Andrew. I am excited to work with you and your team on this.
+In this course, you learn how to build and end-to-end workflow
+for your large language model based application.
+Specifically, you learn how to prepare data for tuning a large language model,
+say using some sort of path or parameter efficient fine tuning.
+You also learn how to automate and orchestrate the LLM tuning workflow
+for multiple use cases, including when you have huge text datasets that might be too large
+to fit in memory. You learn how to deploy your model as a REST API and call the API.
+If you don't know where the REST API is, don't worry about it. Irvin will cover that too.
+You also learn how to build an overall LLMOps workflow. Irvin will go through how to use
+SQL for data preparation, open source tools for orchestration and automation,
+and vertex AI to deploy your model for production.
+The rapid advancements in generative AI and large language models have ignited a search of
+creativity and innovation with Tendi developer community. This means more and more use cases that
+developers have to build and manage. Effective management and operational strategies become
+really important if you want to ship your code to real users and do so efficiently.
+Building AI applications has become easier thanks to developments like foundation models as APIs
+and open source LLMs. Now it's possible to build many different use cases quickly,
+so rather than carefully planning out something, you might even build multiple use cases.
+But this complexity or dare I say pain of managing and scaling multiple
+projects can be quite high unless you have good LLMOps tooling and processes to make them efficient.
+So through this course I hope you also be able to manage your AI production use cases more
+efficiently. No prior LLMOps knowledge needed. Many people have worked to create this course.
+I'd like to thank on the Google Cloud side, Nikita Namjushi, who's taught other short courses with us
+and Dave Elliott. And from the deep line with the AI team, Ed Issue has also contributed to this course.
+In the next video, Irvin will give an overview of the key ideas of LLMOps. If you've heard of
+MLOps before and it's fine if you haven't, you also see what the key differences are and why
+LLMOps is pushing us beyond what machine learning had previously done before large language models.
+Let's go on to the next video to get started.
