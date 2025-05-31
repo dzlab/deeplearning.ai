@@ -1,0 +1,250 @@
+In this lesson, we're going to learn a little bit about some of the pitfalls of retrieval with vectors.
+I want to show you some cases where simple vector search really isn't enough
+to make retrieval work for your AI application.
+Just because things are semantically close as vectors under a particular embedding model,
+doesn't always mean you're going to get good results right out of the box.
+Let's take a look.
+First thing we need to do is just get set up.
+Our helper utilities this time will let us load up everything we need to load
+from Chroma, have the right embedding function ready to go,
+and we're just going to do a little bit of setup.
+So again, we're going to create the same embedding function,
+and we're going to use our helper function this time to load our Chroma collection,
+and we're just going to output the count to make sure we've got the right number of vectors in there.
+And again, don't worry about any of these warnings you might see.
+So yep, that's the right output.
+There are 349 chunks embedded in Chroma.
+So one thing that I personally find useful is to visualize the embedding space.
+Remember that embeddings and their vectors are a geometric data structure,
+and you can reason about them spatially.
+Obviously embeddings are very high-dimensional,
+sentence-transform embeddings have 348 dimensions like we talked about,
+but we can project them down into two dimensions,
+which humans can visualize,
+and this can be useful for reasoning about the structure of a embedding space.
+To do that, we're going to use something called UMAP.
+UMAP is uniform manifold approximation,
+and it's an open-source library that you can use exactly for projecting high-dimensional data
+down into two dimensions or three dimensions so that you can visualize it.
+This is a similar technique to something like PCA or Teesney,
+except UMAP explicitly tries to preserve the structure of the data in terms of the distances
+between points as much as it can, unlike, for example, PCA,
+which just tries to find the dominant directions and project data down in that way.
+So we're going to import UMAP, and we'll grab NumPy,
+and we'll grab TQDM.
+If you don't know what TQDM is,
+it's the little thing that basically shows you a percentage bar.
+When you have some long-running process,
+I like to use this so that I know how long the iterations are taking
+and how much longer I might be waiting.
+And we're going to grab all of the embeddings out of the Chroma collection.
+And what we're going to do is we're going to fit a UMAP transform.
+So again, UMAP is basically a model which fits a manifold to your data
+to project it down into two dimensions.
+We're setting the random seed to zero here,
+just so that we can get reproducible results and we get the same projection every time.
+So let's go ahead and fit that transform.
+And again, don't worry about any warnings you might get here.
+Now, in this next step, now that we've fitted the transform,
+we're going to use the transform to project the embeddings.
+And we're going to define a function that does that.
+We're going to call it project embeddings,
+and it takes as input an array of embeddings,
+and it takes the transform itself.
+And we're going to start by declaring an empty array,
+empty NumPy array of the same length of as our embeddings array,
+but with dimension two, because we're just going to get two-dimensional projections out.
+And what we're going to do is we're going to project the embeddings one by one.
+The reason to do it one by one is just so that we get consistent behavior from UMAP.
+The way that UMAP does projection is somewhat sensitive to its inputs.
+So to ensure that we have reproducible results,
+we're just going to project one at a time instead of in batches.
+And then of course, we're just going to return the result of the function,
+just the way that you would expect.
+Having defined the function, let's run it.
+On our data set, and this will take a minute.
+Great.
+So now that process is finished,
+let's project the embeddings and actually take a look at them.
+So we're going to grab mapplotlib,
+and probably most of your fairly familiar with mapplotlib,
+I know we're going to make a figure.
+And we're just going to do a scatterplot of the projected embeddings now.
+So you can see we have projected data set embeddings.
+First element of each one and the second element of each one.
+And we're going to make them size 10 just because it's visually pleasing.
+We're going to set some other properties of our axes.
+And there we go.
+And this is what our data set looks like inside Chroma,
+projected down to two dimensions.
+And you can see that we preserve some structure.
+A little bit more advanced visualization would allow you to sort of hover over each of these dots
+and see what's actually in there.
+And you would see that things with similar meetings end up next to each other even in the projection.
+Sometimes there are a little bit unusual structures
+because a two-dimensional projection cannot
+represent all of the structure of the higher-dimensional space.
+But as I said, it is useful for visualization.
+And one thing that it's useful for
+is to bring your own thinking into a more sort of geometric setting
+and actually think about vectors and points,
+which is what embedding space retrieval is really all about.
+So what evaluating the quality and performance of a retrieval system is all about
+is actually relevancy and distraction.
+So let's take a look at our original query again,
+the one that we used in our rag example.
+What's the total revenue?
+And we're going to do just the same thing as we did last time.
+We're going to query the Chroma collection using this query,
+ask for five results.
+And we're going to include the documents and the embeddings
+because we'd like to use those embeddings for visualization.
+And so we're going to grab our retrieved documents out of the results again
+and let's print them out.
+And we see again the same results as we saw before.
+The retrieval is deterministic in this case.
+And we see that there are several revenue-related documents.
+But also there are things that here that might not be directly related to revenue.
+And we see things like potentially costs,
+things that are to do with money, but not necessarily revenue.
+So let's take a look at how this query actually looks when visualized.
+So what we're going to do is grab the embedding for our query using the embedding function.
+And we're going to grab our retrieved embeddings as well,
+which we get from our result.
+And what we're going to do is use our projection function
+to project both of these down to two dimensions.
+And then now that we've got the projections, we can visualize them.
+And we can visualize them against the projection of the data set.
+So I'll just copy paste this in.
+But it's again a scatter plot of the data set embeddings of the query embedding
+and of the retrieved embedding.
+And we're going to set the query embedding to be a red X.
+And we're going to see the selected or retrieved embeddings
+as empty circles, which are green.
+So let's go ahead and see what that looks like.
+And here we are.
+So this is the visualization of the query and the retrieved embedding.
+So you can see the query here is this red X and the
+green circles basically circle those data points that we actually end up retrieving.
+Notice that it doesn't look in the projection
+like these are the actually nearest neighbors.
+But remember, we're trying to squash down
+many, many higher dimensions into this two-dimensional representation.
+So it's not always going to be perfect.
+But the important thing is to basically look at the structure of these results.
+And you can see some are more outlier than others, right?
+And this is actually the heart of the entire issue.
+The embedding model that we use to embed queries and embed our data
+does not have any knowledge of the task
+or query we're trying to answer at the time we actually retrieve the information.
+So the reason that a retrieval system may not perform the way that we expect
+is because we're asking it to perform a specific task
+using only a general representation.
+And that makes things more complicated.
+Let's try visualizing a couple of other queries in a similar way.
+So here I'm just going to copy paste the whole thing.
+But the query now is what's the strategy around artificial intelligence that is AI?
+So let's run and see where results we get.
+And you see here that AI is mentioned in most of these documents.
+And this is sort of vaguely related to AI.
+We have a commitment to responsible AI development.
+But then we have something about this information about a database
+which is not directly related to AI.
+And here we're talking about mixed reality applications and metaverse
+which is tangentially related to technology investments
+but not necessarily directly AI related.
+So let's visualize.
+First we'll project the same way as we did in previous query.
+And then we will plot.
+Let's take a look.
+Here's our query and our related results.
+And they're all coming from the same part of the data set.
+But you can see that some of the results that we get,
+and here this point appears to be bang on where our query landed.
+So it's super, super relevant.
+So you can see that obviously there's where the query lands
+in the spaces geometric meaning and we're pulling in related results.
+But again, what's related is from the general purpose
+embedding model not from the specific tasks that we're performing.
+So let's take a look at another query.
+What has been the investment in research and development?
+This is a very general query and it should be reflected in the annual statement.
+So let's see what kind of documents we get back.
+We see that we start with general ideas about investments.
+Some of it is about research and development.
+For example, this document research and development expenses
+can include a third party development and programming costs.
+But we see that there are also distractors in this result.
+So a distractor is a result that is not actually relevant to the query.
+And it's called a distractor because if you pass this information
+to the large language model to complete your rag loop,
+the model tends to get distracted by this information
+and outputs sub-optimal results.
+And the reason this is really important
+is that bad behavior from the model due to distractors
+is very difficult to diagnose and debug both for the user
+but also for developers and engineers building these types of systems.
+So it's very important to make your retrieval system robust
+and return relevant results and no distracting results to the model.
+So again, let's take a look at the projection.
+I always find it very, very helpful to visualize.
+And again, because this is a geometric type of data,
+I find visualization is a great way to develop intuitions.
+So there's our projection and let's plot it.
+So here we see the results that we're getting are a lot more spread out.
+And the way you can imagine this is imagine all your data
+is a cloud of points sitting in this high-dimensional space.
+A query that lands inside the cloud is likely to find nearest neighbors
+that are sort of densely packed and close together inside the cloud.
+But a query that lands outside the cloud is likely to find nearest neighbors
+from a lot of different parts of that cloud
+so they tend to be more spread out.
+It's a geometrical intuition.
+So finally, I think it's really important to understand
+what happens when we put an irrelevant query
+into our retrieval system.
+So let's find out what Michael Jordan has done for us lately
+in terms of the Microsoft annual report from 2022.
+Obviously, this is, I would be very surprised
+if this was at all a relevant query.
+And when we look at the results, of course,
+none of them have anything to do with Michael Jordan.
+This doesn't mention him at all
+and neither do any of these documents,
+neither do any of these results.
+And that's what we should expect.
+But remember, if we're using a retrieval system as part of a rag loop,
+you're guaranteed to return the nearest neighbors.
+In this case, your context window is going to be made up entirely of distractors,
+which, as I mentioned earlier,
+can be very, very difficult to understand a debug
+from the application user's perspective
+and from the application developers' perspective.
+So we need a way to deal with irrelevant queries
+as well as irrelevant results.
+And again, let's take a look at the projection.
+Let's see if there's something we can understand.
+Great, we've projected.
+And let's plot.
+And you can see that the results about Michael Jordan
+are really all over the place,
+which I guess shouldn't surprise us,
+given that the queries totally irrelevant
+to any of the data that we have in our data set.
+Try visualizing some of your own queries
+in the way that we've done here.
+And see how they influence the structure of the return results.
+See if you can get queries to land
+in different parts of the data set.
+And see what the return results say about the information
+that might be contained in that part of it.
+In this lab, you've learned how a simple
+embedding space retrieval system might return
+distracting or irrelevant results,
+even for simple queries.
+And you've learned how to visualize this data
+so you can gain some intuition
+about why and how the results are being returned.
+In the next lab, we'll show you some techniques
+to basically improve the quality of your queries using LLMs
+by using a technique called query expansion.

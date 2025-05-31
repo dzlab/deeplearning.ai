@@ -1,0 +1,227 @@
+In the last couple of lessons, we've
+looked at how we can use query augmentation and cross-encoder
+re-ranking to improve retrieval results.
+In this lesson, I'm going to show you
+how we can use user feedback about the relevancy
+of retrieval results to automatically improve
+the performance of the retrieval system using a technique
+called embedding adapters.
+Let me show you how it works.
+Embedding adapters are a way to alter the embedding of a query
+directly in order to produce better retrieval results.
+In effect, we insert an additional stage
+in the retrieval system, called an embedding adapter,
+which happens after the embedding model,
+but before we retrieve the most relevant results,
+we train the embedding adapter using user feedback
+on the relevancy of our retrieval results
+for a set of queries.
+Let's get into it.
+So the first thing we do is grab our helper functions
+as before.
+One special thing here is we're going to need torch
+because we're going to effectively train a model,
+but a very lightweight one.
+And we create our embedding function
+and load everything into Chroma.
+And again, we project all of our data.
+So the first thing we need for this approach is a data set.
+We don't have one ready because we haven't really had users
+using our RAAG application,
+but we can use a model to generate a data set for us.
+And once again, this is all about creating right prompt.
+So we're going to use GPT again,
+and essentially we're prompting the model as an expert,
+helpful financial research assistant,
+and it should suggest 10 to 15 short questions
+that are important to ask when analyzing an annual report.
+And with some guidelines about what the algorithm should be like.
+And this will generate some queries that users
+might actually have run against our system.
+So let's ask them to generate those queries.
+We see that these are fairly reasonable questions
+to ask about any companies, financial statements.
+So we're going to get the results from Chroma.
+And what we're going to do,
+and we'll get the retrieved documents associated
+with the results.
+And what we're going to do is also ask the model
+to evaluate the results.
+In a RIO RAAG system, you can easily ask your users
+to give a thumbs up with thumbs down on the generated output,
+and then reference that with the retrieved results
+to give a signal about what results were actually relevant
+in which weren't.
+In this case, we don't quite have that,
+but we can use a model to evaluate the relevancy
+of the retrieved results for each query.
+And again, this is just about prompting the model.
+So we're going to ask our helpful expert financial assistant
+to tell us whether a given statement is relevant
+to the given query.
+And we're going to ask it to output only yes or no.
+And then we're going to essentially transform yes
+as to once and knows to negative once.
+And I'll explain why I just did it.
+But that's the prompt.
+And then what we're going to do is we
+are going to get our retrieved embeddings
+and our query embeddings.
+And we're going to start making a data set
+to train our embedding adapter.
+And the way we're going to do it is like this.
+We're going to have our adapter query embeddings,
+adapter doc embeddings, and our adapter labels.
+Now, the adapter prefix just means
+we're going to use this in a data set.
+They're not special in any way.
+They're just the embeddings of our queries
+and the embeddings of our documents.
+The labels we're going to get from our evaluation model.
+The label is going to be plus 1 or minus 1,
+depending on whether the document is relevant or not
+to the given query.
+So we're just going to loop over everything
+to create these triples.
+So the model is performing an evaluation for us.
+Now, it's no mistake that our labels are plus 1 and minus 1.
+Because what we're going to do when we're training our
+embedding adapter model is use these values
+as our loss function for cosine distance.
+When two vectors are identical, the cosine similarity
+between them is 1.
+When two vectors are opposite, the cosine similarity
+between them is negative 1.
+In other words, we want relevant results
+to point in the same direction as vectors.
+And we want irrelevant results to point in the opposite direction
+from a given query.
+And this is the model that we're going to train.
+That's exactly what it's going to try to do.
+All right, and let's check out the length of our data set.
+Great.
+150.
+So that's 15 queries with 10 results each, with each one labeled
+for relevancy.
+So the next thing we need to do, because we're
+using torch to train our embedding adapter,
+is we need to transform our data set
+into a torch tensor data set.
+So we're just going to do some data manipulation here
+to transform these into torch tensor types.
+And finally, we're going to pack everything
+into a torch data set.
+So let's set up our embedding adapter model.
+The first thing is to set up the model itself.
+And the model is fairly straightforward.
+It takes, as input, a query embedding, a document embedding
+and an adapter matrix.
+We compute an updated query embedding
+by multiplying our original query embedding
+by the adapter matrix.
+And then we compute the cosine similarity
+between our updated query embedding and our document embedding.
+Next, let's define our loss function.
+Again, our loss takes a query embedding,
+document embedding, adapter matrix, and label.
+And we run the model to compute the cosine similarity.
+And we compute the mean squared error
+between the cosine similarity and the label.
+And you'll notice, again, that the plus 1 label
+means that the cosine similarity
+says that the vectors are pointing in the same direction
+and a negative 1 label means they
+should be pointing in the opposite direction.
+In this way, we want our queries
+to be pointing in the same direction as relevant documents
+and in the opposite direction to irrelevant documents.
+And this is what we're training our adapter matrix to do.
+We initialize our adapter matrix for training.
+You might recognize this is very similar
+to a linear layer in a traditional neural network.
+And that's really all we're doing.
+Next, let's set up our training loop.
+We set our minimum loss and our best matrix
+as things to keep track of.
+Let's train for 100 epochs.
+For each query embedding, document embedding,
+and label in our torque data set,
+we compute our loss.
+If the loss that we computed is better than our previous loss,
+we'll keep track of that as the best matrix so far.
+And then we back propagate.
+And let's run our training loop.
+And you can see, it's very, very fast.
+Because again, this is exactly the same thing
+as if we were training a single linear layer
+of a traditional neural network.
+So let's take a look at the best loss that we got.
+This is pretty good.
+A loss of 0.5 is pretty good.
+It means we've got pretty much a halfway improvement
+in terms of where we started from.
+So one thing we'd like to take a look at is how
+the adapter matrix influences our query vector.
+To do that, we can construct a test vector consisting
+of all ones.
+And we can multiply that test vector by our best matrix.
+And what this will tell us is which dimensions of our vectors
+get scaled by what amount?
+You can think of an embedding adapter
+as stretching space and squeezing space
+for the dimensions which are most relevant to the particular queries
+that we have while reducing the dimensions
+that are not relevant to our query.
+You'll also notice that it can reverse dimensions.
+So let's plot what that looks like.
+And here you can see how each dimension of our test vector,
+which consists only of ones, has been stretched and squeezed.
+Some have been elongated a lot, while others
+have been made to be almost 0.
+And so what this means is our embedding adapter
+has basically decided, OK, these dimensions are more relevant.
+These are less relevant.
+These are actually opposite to the things that we want to find.
+And these things are actually more relevant
+to the things that we want to find.
+And let's take a look at what effect this actually
+has on our queries.
+So let's do as we did before.
+We take our generated queries and embed them.
+And let's compute our also our adapted query embeddings.
+And then we project them.
+And let's plot what we get against our data set.
+Now, as you can see, our original queries
+were quite scattered around, but our new queries
+concentrated in a certain part of the data set,
+which is most relevant to our queries.
+You can see how the red queries have
+been adapted through the embedding adapter
+to transform them into the green queries,
+to push them into a particular part of the space.
+So as you can see, an embedding adapter
+is a simple but powerful technique
+for customizing query embeddings to your specific application.
+In order to make this work, you need
+to collect the data set, either a synthetic one,
+like the one we've generated here,
+or else one that's based on user data.
+User data usually works best because it actually
+means that people are using your retrieval system
+for their specific tasks.
+Again, because this approach involves prompting
+and because it involves the use of a large language model,
+it's worth experimenting with the prompts.
+And it's also worth experimenting
+with different initializations of the adapter matrix,
+even maybe consider using a full lightweight neural network
+and training that instead of a simple matrix instead.
+You might want to tune the hyper parameters
+of the embedding adapter trading process,
+or you might want to collect more specific data
+and try this out with a specific application in mind,
+rather than a very general one of trying
+to understand a financial statement.
+In the next lesson, we'll cover some other techniques, which
+are just now emerging from research,
+to improve embedding based retrieval systems.
