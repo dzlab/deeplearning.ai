@@ -1,0 +1,24 @@
+Thank you for staying with me all the way to the end of the course.
+I hope you had so much fun getting to know the Lama models and I hope you are excited to try
+to use Lama model in your day-to-day life and work. You wrote a birthday card for a friend
+while formatting your prompts in the recommended way with instruction and stock dives.
+You asked the model for advice on fun things to do and use prompting methods for multi-tone
+to enable you to ask follow-up questions. You classified the sentiment of text messages
+and summarized an email while applying prompt engineering best practices.
+Some of these include giving examples of how you want the model to respond
+called in context learning. You also applied and refined chain of thought reasoning by asking
+the model to think step by step. Next you compare the small 7B, medium 13B and the large 70B
+Lama models on the same task and even prompted the large model to compare and evaluate the
+performance of the three models. You asked Godelama for help with writing, learning and refining code
+and you even made use of Godelama's really long context window to perform non-coding tasks
+that need to take in a very long prompt. Finally you checked a restaurant review to verify if it's
+safe by using Lama Guard which is part of the purple Lama project for AI safety. All of the Lama
+models are available for free use with an open commercial license. That means you can use any
+Lama model in your applications without licensing restrictions. You have the flexibility to fine-tune
+the model, host it in your infrastructure and resell the fine-tune model. Finally my colleagues
+at Meta and I would love to hear your feedback about Lama and your experiences using it in your
+work. The Lama models are made for the AI community so your feedback and contributions will help
+all your other fellow developers who use these models. For more ideas of fun things to do with
+these models, please check out our Lama recipes GitHub repo. Thanks again for joining me. I really
+hope that you'll use what you have learned in this course and build some great applications.
+Oh hi Ahmed. How to share? I was wondering where my llamas went. Oh they just showed up.

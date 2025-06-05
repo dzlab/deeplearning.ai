@@ -1,0 +1,51 @@
+As Andrew mentioned in the introduction, Lama isn't a single model.
+It's actually a collection of models of varying sizes and training strategies.
+To set the scene for the rest of the course, I want to give you more details
+about the various models and how they were trained. Let's dive in.
+Lama models built by Meta's research teams are large-language models based on the transformer
+architecture. Lama comes in three different sizes. There's a small 7 billion parameter model,
+a medium-sized 13 billion parameter model, and a large 70 billion parameter model.
+In general, the larger a model is, the more capacity it has to learn from its training data.
+However, larger models are also more computationally expensive to train and deploy
+than the smaller models. Each of these models can be used for different application scenarios
+and purposes. The instruction tuned models are created by taking the base models,
+also called foundation models, and running them through additional training called instruction
+tuning. This enables instruction tuned models to better follow human language instructions,
+such as summarize this or tell me a joke. These three instruction tuned Lama models are called
+Lama Chat models. Depending on your use case, you can take any of these models and further fine-tune
+them for your application needs, although it's been more common to use the base foundation models
+for fine-tuning. With all the large-language models out there, you may be wondering,
+how does Lama fit in? Lama 2 has pretty comparable performance to other popular models,
+such as Falcon 40B and GPT 3.5. It's also worth noting how you are able to access these
+large-language models. Lama 2 is free to download on your personal computer, or you can host it in
+your cloud environment, or you can access it from third-party services, same with Falcon 40B and
+other open-source models. This may be helpful if you have certain privacy requirements for yourself,
+or if you're building an application for users who have certain privacy and security requirements.
+GPT 3.5 is accessible through API calls to OpenAI, which may also be fine for many of your use cases.
+Another cool thing about Lama models is the ecosystem of open-source libraries and tools that the
+developer community is building around it. For example, some wonderful developers developed a
+library that makes the small Lama 2 model fit and run on a typical personal computer. It's called
+Lama CPP. In August of 2023, we released yet another Lama, CodeLama. CodeLama was created to help
+more people write code and also learn to code more easily. It was created by taking the Lama 2 model
+and training it for coding tasks. CodeLama also comes in three sizes, a small 7 billion,
+medium 13 billion, and a large 34 billion parameter model. For each size, there is a base version
+and also an instruct version. The base code Lama models are derived from the non-chat Lama models.
+They primarily generate code and so they can be used for autocomplete or filling in existing code.
+In contrast, the code Lama instruct models were created by training the Lama chat models,
+so the code Lama instruct models like the Lama chat models exhibit more human-like behavior. They
+can respond to human instructions, such as help me write some code to build a web page or please
+debug the following code that I just wrote. The CodeLama chat models generate code too, but are also
+able to write human explanations of what that code is doing. So, which languages do CodeLama and
+CodeLama instructs support? Pretty much all the most popular languages, including Python,
+JavaScript, C++, Java, HTML, and more. And there's one more Lama, CodeLama Python, which is
+specialized for Python coding. Purple Lama is an umbrella project that brings together tools and
+evaluation benchmarks to help the community build responsibly with generative AI. Currently,
+Purple Lama includes two key projects. One, to ensure that AI-generated code is safe
+against cyber security attacks. And one, that checks if LLM inputs and outputs are safe,
+honest, and harmless. The first is called CyberSec Eval. It's a set of tools and also a benchmark
+data set that many are using to check if their code completion tools are generating secure code
+that guards against viruses or cyber threats. The other is yet another Lama model called Lama Guard,
+which checks the input and output of any large language model to detect harmful or toxic content.
+Again, Purple Lama is an initiative to help developers build responsible generative AI applications,
+and we, at Meta, plan to contribute more projects such as these two in the near future. In the next
+lesson, you'll get to start using the Lama models. Let's go on to the next lesson.

@@ -1,0 +1,93 @@
+As you saw earlier, if you ask a model a follow-up question,
+it won't remember what you asked or how it answered your earlier question.
+To get a large language model such as Lama to act like a chatbot and remember your conversations,
+you'll practice prompting for multi-turn conversations.
+You'll get to ask the model to suggest fun things that you can do on the weekend,
+and then you'll be able to ask follow-up questions based on the fun activities that it proposes.
+Let's try it out. As we have seen in the previous lessons, we'll first import Lama
+from our utils package, so let's do that.
+And we are going to ask a simple question to our Lama model, and let's create that.
+I'm going to put in what are some of the fun activities I can do this weekend.
+And let's see the response from our model.
+So Lama has responded with a bunch of nice activities I can do this weekend,
+outdoor activities, cultural events.
+My favorite would be spending a day at a spa with massage. But as you can see, the response is
+pretty good. Now, let's add another prompt, and I'm going to number this as problem number two.
+I'm going to ask Lama, which of these would be good for my health.
+I'm going to run this. Now, what do you think will happen?
+As you can see the output, the output says it talks about caffeine, it talks about alcohol,
+and it gives me a very generic output taking into account like, what is good for my health?
+But what it did not do is it did not take into account these. These was related to the fun activities
+I was going to do this weekend. So here's what we did. You asked the model for some fun ideas
+to do this weekend. It generated a response with lots of good ideas, including hiking spa,
+day, and so on. Next, you asked a follow-up question, which of these activities is good for my health?
+This time, Lama gave an answer that seems to have changed the topic. It's not referring back
+to its previous list of ideas, and instead talks about how caffeine alcohol are bad for health.
+Why did Lama change the topic? Because it doesn't remember what you just asked it. The model is
+stateless. So what do you need to do to get the Lama to follow the conversation and chat with you?
+So since the model isn't keeping track of our previous conversation, you can keep track of those
+prior prompts and responses. To help Lama keep track, we need to build up the context of the conversation.
+This means explicitly stating what has happened in previous turns of the chat. Let's call the
+original question you asked as prompt one, and the response that Lama generated as response one.
+Now let's call the new question prompt two. To get Lama to give the response that understands the
+previous turn, we pass prompt one, response one, and prompt two to the model all as a single prompt.
+Now with all the context, Lama generates a sensible answer that has stayed on topic, letting us know
+that hiking is the healthy option. So this is how chatting with Lama works. You need to keep track
+of all the back and forth of the conversation and pass it to Lama with each new prompt. Let's take a
+look at the general form of a chat prompt. You can see that the oral prompt is built up of a set
+of prompt response pairs. The chat prompt always finishes with the latest prompt from the user,
+letting the model know it should respond. Note that you're always passing a single prompt consisting
+of multiple parts. And with each turn, you'll add in a new prompt response pair. For Lama chat
+you have to use some special tags, as you did with a single prompt. As before, you wrap this
+user prompt in instruction tags. So here you see the instruction tag which we learned in previous
+lesson in square brackets. Remember that a chat prompt ends with the latest input from the user.
+So you'll wrap that with an instruction tags too. Then you wrap each prompt response pair with
+a new set of factors called start and end tags. You open this last prompt with a start tag,
+but this time you don't close with an end tag. That's because the turn isn't over. You want the
+model to respond. Let's go back to the notebook and try this chat prompt format out in the code.
+So let's implement this in the code. Here's our prompt one and our response
+to prompt one. And let's run this. Here's our prompt two.
+Now let's create our chat prompt.
+And we have to make sure that we are putting the right tags in place.
+We'll put the prompt one here and it with our instruction tags.
+And we'll get the response from our prompt one and then we'll end it with our start tag.
+And for our next turn, we will again start with a new tag. We'll start tag an instruction tag
+and we'll add our prompt two. So let's print this prompt and see what do we get.
+So we got the full prompt which we will now pass to the LLM. But you can see our request prompt has
+instruction tags. It has a start tag and this is the response which we get from the model.
+And this is the end tag. So this is the end of our first turn. And this is the start of our
+second turn. And we are asking sending a prompt to our LLM model. Now let's send this chat prompt
+to the model. So the reason why we are sending add and let's go inst as false is because our helper
+function has instruction tags already inbuilt. But those are for single turn chat. And here we are
+constructing the prompt for multi turn chat. So we want to turn off the instruction tags
+addition from our helper function. And we will add verbose equals to true so that we can see our prompt.
+So what we are seeing here is our well-formatted prompt. Here's the input prompt to the model.
+Here's the response and here's the end of our single turn. And then here's our second prompt
+to the model. Okay, so now let's print out the response and see what happens. So here's the response
+and you can see that the response is pretty good. It's related to our first prompt and it stores
+the previous context. And some of these actors look really good and maybe you can try out with your
+friends over the weekend. Now let's move on to building a helper function for our multi turn chats.
+For this lesson, we have provided a second helper function that will format your chat history
+and prompt. And we are calling this as lama chat. So let's import lama chat from utils.
+And let's try to use that helper function here. We will create the same prompt.
+What we did before. And let's create our prompt to
+the helper function takes in a list of prompts and responses. And so let's create that first.
+Now as you can see, our number of prompts will always be one greater than the response
+because we are passing the prompt response pairs to the model and expecting a response back.
+Okay, now let's create our response to
+and we will pass in the prompts and responses.
+And we'll turn on the verbose true so that we can see the response.
+So we are setting the verbose equals to true so that we can see the prompt.
+And here's the prompt which looks pretty accurate based on everything we have learned so far.
+And let's print the response.
+Great. Now we can see that we are getting a similar response with using our
+lama chat helper function. Okay, as a next step, I would like you to try this yourself.
+Try adding a follow-up query to this conversation so you can add additional query right here,
+additional prompt. You can ask like which of these activities would be fun with friends or any
+other question you might want to. So I'm going to give you some starter code and you can try it by
+yourself. So here's our prompt three which of these activities would be fun with friends.
+And as you can see, I've added additional prompt three in my list and we have now added a response
+which we got response to when we had called it prior to this running this cell. And so I want
+you to try this and run it and see what response you get. In the next lesson, we will go over prompt
+engineering best practices that will help you prompt the LLM to perform a range of tasks,
+including summarization and much more. So let's go on to the next lesson.

@@ -1,0 +1,228 @@
+Do you need to write some code?
+There's a Lama model for that.
+It's called code Lama.
+It's a collection of code Lama models which you will get to explore next.
+Whether you are an experienced software engineer or just learning to code,
+you can ask code Lama to help write, debug, and explain code.
+Code Lama can take a much larger input text than the regular Lama model,
+more than 20 times the input size.
+So if you are a developer, you can send your entire program to code Lama and ask it to review.
+And even if you're not coding, but need a model that can take in a lot of text,
+you can consider one of the code Lama models as well,
+because they can also handle non-coding tasks.
+Let's get coding.
+Here is a reminder of the code Lama collection of models.
+Code Lama models are variations of Lama 2 models that you have been using in the course.
+The models have undergone additional specialized training to make them useful for writing,
+analyzing, and debugging computer code.
+Note again that the largest code Lama model is currently 34 billion parameter,
+rather than 70b.
+Different combinations of fine tuning are used to create three varieties of code Lama models.
+The base Lama models, the code Lama models, instruct models,
+which are good at generating code based on instructions you provide,
+and code Lama Python, which has had additional training in the Python language.
+If you only code in Python and not in other languages,
+this is the model you would want to work with.
+All of the code Lama models are available as part of the Together.ai API service.
+You can specify which model to use using the names here.
+We'll also provide these in the notebook,
+so that you can try out different models and compare their results.
+If you're using a different API service,
+be sure to check out how to specify your model selection in the services documentation.
+Code Lama models also expect prompts to be structured in a certain way,
+as you saw for the Lama to chat models.
+If you're working with code Lama instruct models,
+you need to wrap your prompt in instruction tags,
+just as you did earlier in the course.
+You'll take your prompt and wrap it in a pair of instruction tags as you see here.
+The other two varieties of code Lama models,
+code Lama and code Lama Python,
+don't require any tags in the prompt.
+You can just include the text of your prompt as is.
+Let's try out these models and explore some best practices
+for working with code Lama in the notebook.
+As we have seen in the previous lessons,
+the first thing we need to do is import Lama and code Lama from Utils package.
+So as you can see here,
+we have a new function code Lama in our Utils package
+and it uses the smallest 7 billion parameter model for code Lama.
+Now, let's start with a simple math problem and see how does code Lama do.
+So I'm going to start with two lists.
+One is a list of all the temperatures and these are minimum temperatures.
+And then I'll have another list which will show a list of all the maximum temperatures.
+And then I'm going to write a prompt where I will add my minimum temperature list
+and I will also add my maximum temperature list.
+And then I'm going to ask the model which day has the lowest temperature.
+So let's type that down.
+And let's make a call to our model.
+So again, we are creating a prompt where we are passing in two lists,
+temperature minimum and temperature maximum.
+And then we are asking the model which day has the lowest temperature.
+So the model has to look through these lists and tell us which one has the lowest temperature.
+Okay, so I'm going to run this.
+And the output says the lowest temperature is 47 degree.
+Now, let's see whether this is true.
+So I see there is a lower temperature than 47 degree, which is 42 degrees.
+So this is incorrect.
+The output is not right.
+So rather than going to the larger model, let's ask code Lama to write us some code
+to help us answer this question with code.
+So I'm going to start writing another prompt.
+And I'm going to ask in natural language to code Lama to write a Python code
+that can calculate the minimum of the list temperature minimum
+and the maximum of the list of temperature maximum.
+So let's see what we are doing here.
+We are asking code Lama to write Python code that can give us the minimum
+from our list of minimum temp underscore min and give us the max of the list temp underscore max.
+And let's see if it is able to write Python code for that.
+All right, so it did write the Python code as you can see in this square brackets.
+That's the code and it defined a function get min max pass into less and return the minimum
+of temperature minimum and max of temperature max.
+And it also wrote the test cases for us, which is great.
+Now, let's try out this code.
+So I'm going to take this code.
+OK, so I'm going to supply my two lists, which I'm going to copy from top here.
+So I'm calling get min max function passing in as parameters my two lists temp underscore min and temp underscore max.
+And then I'll print the results.
+And let's see if this is getting us what we want.
+All right, so it got us 42.
+So I found the minimum from our first list, which looks to be correct.
+And then it found 65, which seems to be the highest number in the second list.
+So it was able to generate code and we were able to validate this code and run it.
+So rather than asking Lama to do math, it may be easier and more robust to ask it to write code that can help you do that same calculation.
+One great use case for the code Lama models is code completion, where you use the model to finish partial code that you have started in your prompt.
+Lama accepts another special token, especially for this purpose, the fill token denoted by the word fill between angular brackets.
+You can use the fill token in your prompt to indicate to the model that it should complete whatever code you have.
+So the general format of a prompt using the token would look like this.
+You start off by writing some code.
+This can be a single line of code or multiple lines.
+Then you include fill tokens wherever you want the model to complete the code for you.
+So here you can see two different sections surrounded by other code that you want the model to fill in.
+Let's take a look at a simple example.
+I'm going to start by writing my prompt.
+I'm going to define a function called start rating.
+This function returns a rating given the number n, where n is an integers from one to five.
+So let's write the code for this.
+If n equals to one, rating is poor, else if n equals to five, rating is excellent, and we have added a fill token, and we expect good lama to fill that section with code.
+We will call this with our standard seven B code lama model, and we will make verbose equals to true.
+So we can see the prompt as well.
+So let's run this, and you can see our prompt.
+It has instruction tags like we learned in previous lesson, and it has an entire function wrapped into it.
+Now let's print the response.
+All right, so we clearly see our fill token was replaced by this code right here.
+Excellent.
+And everything before and after is still there.
+So looks like it filled in the code properly while keeping the code before and after that was provided.
+Our code lama models can do multiple things.
+It can write code, it can debug code, it can explain code,
+and it can make our code more efficient.
+So let's look at writing a Fibonacci sequence.
+Now, if you don't know what Fibonacci sequence is, don't worry about it.
+I'll show it to you.
+So as you can see here, the sequence is just a list of numbers.
+Now this number one is basically addition of the previous two numbers.
+So 0 plus 1 is 1, 2 is 1 plus 1, 3 is 2 plus 1, 5 is 3 plus 2.
+So as you can see, you take any number, you have to add the previous two numbers to get to the value of that number.
+And we will write a function to calculate the nth Fibonacci number.
+This is a classic computer science question.
+And it's used to demonstrate how an inefficient implementation can be quite costly.
+So we'll write this function now.
+So let's start with a simple prompt.
+And we'll ask code lama to write in natural language exactly what we want.
+And we'll keep the verbose equals to true.
+So we can see our prompt.
+And we will use the code lama 7B instruct model, which is the default model.
+OK, so let's go ahead and run this.
+So let's print the response.
+So as you can see, we have actually coded.
+We are code lama has coded the entire function for us.
+And it's using recursion.
+It's calling recursively the same method.
+And it has also provided us the test cases.
+And when you pass 0, 0, when you pass 6, which is a sixth number.
+And let's see in our sequence what that is.
+So 0, 1, 2, 3, 4, 5, 6.
+And the answer is 8, which is what the Fibonacci test case is telling us.
+And if you have not come across recursion,
+don't worry if you don't know what recursion is.
+This is usually what you would learn in an intro to algorithms class.
+An elegant looking method of implementing this math calculation
+would take even a modern computer a very long time to run.
+But there is a better way to do it.
+Let's see how we can make this code more efficient.
+So I'm going to first get our code and put it in this text.
+So here's our code, which I'm going to copy and put it here.
+And now I'm going to create a prompt.
+And I'm going to ask the model whether this particular code is efficient.
+So for the following code, and I'm going to wrap code in this curly braces.
+I'm going to ask if this implementation is efficient.
+And these explain.
+Now let's type in the response.
+So let's see our prompt and now let's print our response.
+Remember, it was response one.
+OK, the model appears to answer correctly that it's original suggestion.
+The recursive method is inefficient and explains why correctly as well.
+It also provides a more efficient implementation, which is interesting.
+So it's showing us how to implement it.
+So our code can be more efficient.
+So why does the LNM output the inefficient version first?
+It's likely that since this recursive implementation is so commonly used in course material
+that explains the importance of efficient algorithms.
+That the recursive version of Calculary Fibonacci shows up quite often in the training data
+of the LAMO2 model.
+And likely for most other LNMs as well.
+Let's check both implementation and see if they work.
+So I'm going to copy the first implementation, which we had.
+And I'm also going to copy the second implementation here.
+And I'm going to name it as more efficient once.
+So I'm going to name it as fast.
+And I'm going to run these both and see how this looks.
+And I'm going to write a prompt that writes code to calculate the runtime of a Python function call.
+Let's see what it outputs.
+It should return back a function call.
+All right.
+So it says here's an example of how you can calculate the runtime of Python function call
+using the time module.
+And we have to import time.
+It is writing a function.
+It's showing start time, the function call in n time, the runtime, which is n time minus start.
+This is great.
+So we can actually use this for testing which function is more efficient.
+So I'm going to add this in my new function, which I call.
+So let's write that.
+And so we are basically setting n equals to 40.
+And we're passing that number for Fibonacci.
+And so this, as you can see, this is the 40th number in the sequence.
+And we recommend this to keep this number below or equal to 40.
+And underscore time is time dot time.
+And we will print n time minus start time, which will give us exactly the time taken to execute this.
+So let's run this and see how much time it takes.
+So it took about 19 seconds to run this.
+Now, let's call our Fibonacci fast function.
+And we'll basically copy all of this because it should remain the same.
+And just call change this to call the fast function.
+And see how much time does it take.
+So it took a fraction of a second to run this function.
+So as you can see, it was significantly faster than our recursive function.
+Now let's look at codelama's context window.
+codelama can take in much longer text codelama can take in an input prompt.
+That's over 20 times larger than the regular lama models.
+If you're a software developer, that means you could upload your entire code for an application
+and ask the model to review.
+But even if you're not coding, you can make use of this longer context window to do other tasks.
+If you might remember from earlier in the course,
+you saw how the regular lama model was not able to summarize the text of velveteen rabbit
+because it exceeded the input window of 4000 tokens or 4096 tokens.
+So I'm going to copy this code from our prior lesson and run it
+just to see what happens with our input tokens.
+As you can see, it gives an error message and mentions how the number of input tokens exceeds the 4097.
+That is possible for the lama model.
+Now let's ask codelama to do the same task and see what the results are.
+I'm going to again copy that code and instead of lama, I'm going to use codelama.
+All right, we did get a response.
+So if you have a task, whether it's a coding task or not a coding task at all,
+and need to input much more text than a regular lama model can handle,
+you can try using codelama.
+So far, you've seen the use of many different lama two and codelama models.
+The only remaining one that is part of the current lama family of models is lama guard.
+One of the two major components of purple lama, which you will learn in the next lesson.

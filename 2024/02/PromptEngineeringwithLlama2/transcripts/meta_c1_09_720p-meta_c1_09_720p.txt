@@ -1,0 +1,41 @@
+You may be wondering what's happening inside that nifty helper function that we have been using.
+Here's a step-by-step walk through the code.
+You can also find it by looking at the utils.py file.
+First, this is the URL that we are using to access the together.ai API.
+Let's run some code that enables us to get the API key from our computer.
+Don't worry, if this seems kind of mysterious.
+The .enb library lets you access sensitive information such as API access keys more easily.
+But you don't need to know more about this or see this again for the rest of the course.
+To access the service, you get an API key which lets the hosting service know who you are.
+Note that if you print out this variable in the classroom, you won't get a real API key.
+We have hidden the real one for security.
+But if you wanted to use this service on your own computer outside the classroom, you
+can sign up for an account and get your own API key from together.ai's website.
+You can put this API key into this Python dictionary.
+You'll also set the content type to application JSA.
+Next, choose the model.
+Let's choose the small 7B Lamachat model.
+And here's your prompt.
+Let's add those instruction tags.
+And let's set that temperature.
+Let's set max tokens to 1024.
+And you'll put the model prompt, temperature, and max tokens into a Python dictionary called data.
+Now, finally, you'll pass in the URL headers and data into a call to request.posts.
+This request.posts function call is what's sending your prompt and other details of which model you want to use
+over the internet to the hosted API service.
+Now, let's print out the response.
+You can't see much here.
+The response object has a function called .json.
+Let's call that.
+This looks like a dictionary.
+It may be hard to read, but if you look closely, you'll see that the text is stored somewhere within the output key.
+Let's access the subset of the dictionary by getting the output key.
+This is a bit less than the cat.
+There's another key called choices.
+Let's access the choices within the output.
+So we'll copy this, add it here, and now add choices to it.
+So this is a Python list, and let's make sure that is true, and it's a list of just one item.
+So let's get that one item at index 0, and we will copy the response here.
+Finally, let's access the text key.
+Okay, so we are able to finally get the text.
+All right, and finally, this is the exact same thing that your helper function outputs.

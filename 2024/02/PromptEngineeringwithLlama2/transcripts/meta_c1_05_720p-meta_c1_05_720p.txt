@@ -1,0 +1,191 @@
+As you may have noticed by now, the words you choose when you prompt the model affect how it
+responds. Prompt engineering is the science and the art of communicating with a large language model
+so that it responds or behaves in a way that's useful for you. You'll use some tips and tricks
+for prompting, such as giving the model examples of how you would like it to behave.
+You can also add additional information to help it answer fact-based questions.
+One thing that I think is really cool is prompting the model to perform well on complex
+reasoning tasks. You'll apply these best practices when you ask Lama to classify, explain,
+and summarize text, messages, and emails. I'm excited. I hope you are too. Let's dive in.
+Lama models can make use of information you include in your prompt when generating text.
+You can guide the model to improve its response for your task by including different kinds of
+information or context in your prompt. For example, you can provide examples of the task that you are
+trying to carry out to help the model understand what you are asking it to do. This is known as
+in-context learning. Another type of prompt engineering technique is where you can specify how
+you want the model to format its response. You can ask the model to assume a role or persona so that
+it will respond to you with a certain voice or personality. This is a really fun thing to
+explore with LLNs. Lastly, you can include additional information in the prompt, like private data,
+to make its response specific to your task. This is also how you can overcome the fact that model's
+knowledge of the word cuts off at the moment of its training. Like in earlier lessons, we imported
+Lama function from UtilsPacket. We'll do that here as well. Along with Lama, we will also import
+Lama chat, which we saw earlier. Here is an example of a standard prompt
+and I'm going to ask the model to tell me what the sentiment is. Let's type the response
+and see what our model returns back.
+So our model responded by saying the sentiment of the message is positive and it also explains why
+it is positive. A pretty good explanation on that. In this case, the model's response looks
+pretty decent. You don't always have to explicitly state the instructions. One of the most
+fascinating abilities of LLNs is to infer the tasks you're asking them to do from the structure
+of the prompt. For example, here is a way to ask the LLN to carry out the same sentiment analysis
+tasks you just saw, but without including the full English language request. So you include the
+message to classify and the sentiment line implies that the model should fill in the sentiment.
+When you pass this to a model, it may understand what is going on and return the answer you expect.
+Here it says sentiment is positive, which is what you want. A prompt of this form is called zero
+short prompt because it doesn't include a full example. Some LLNs won't be able to do this.
+For example, a model may respond with its base behavior and just continue generating text like the
+one you're seeing here. So you can build upon zero short prompting by including one or more
+examples of what you're asking the model to do. This can help the model infer the task. So here,
+you are going to add a complete example of sentiment classification before the message you want
+the model to classify. The prompt starts with an example message that you are 20 minutes late for
+my piano recital. Now this is typically with the message I get from my daughters when I'm usually
+late for their piano recital classes. This is followed by a completed sentiment. In this case,
+the message is obviously negative. Then you finish the prompt with a new message that you want the
+model to classify. With the addition of the example, the model now completes the task successfully,
+giving a response that mimics the structure of the example. Prompting with a single example is
+called one short prompting. You can include more examples if you need to. Two or more examples are
+called few short or n short prompting where n is the number of examples. Now let's go back to the
+notebook and see this in action. Here is how you would structure your prompt for zero short prompting.
+Let's copy the previous cell and modify the prompt.
+So I'm going to include message saying, hi, I'm it. Thanks for the thoughtful birthday card.
+And then I'm going to add a sentiment with a question mark. So here's the response we are getting
+from our zero short prompting. The response is saying appreciation and gratitude, but it's not
+really telling us whether the sentiment is positive or negative. Now what if we want the sentiment
+to be either positive, negative or certain kind of format? By giving examples to our LLM, this
+may help the model understand the expected output format. So let's give additional examples.
+Here's my first message. Hi dad, you're 20 minutes late to piano recital, which the sentiment is negative.
+I'll add one more message to it, which is can't wait to add a piece of a tonight. The sentiment
+is positive because my kids love the pizza on a Friday evening. And I'll add one more
+message with a question mark to the sentiment. And I want the model to tell me what the sentiment is.
+So let's create the response and let's print the response.
+And let's see what our model does. Great. So our model is able to give us the right sentiment.
+It looks like the LLM is still repeating the n examples and then choosing the sentiment for
+the past text. Now what if we want to get the entire response in just one single word? I just need
+the sentiment for my last prompt. So let's see if we can do that. Let me copy this prompt.
+And let me make a small change or addition here, which tells the model to give the response in a single word.
+As we can see here, our model is not able to give us the right sentiment. In fact,
+what it spit out is not even useful for us. We are using the 7 billion parameter model.
+Maybe we can try a larger model and see whether we are getting a better response. So let's take the
+this same code and put it in our cell. But now we will select our 10 billion parameter model.
+And now let's see whether we get the right response. All right. So this looks much better.
+We got a one word response, which is positive. The large 70 billion parameter model appears to
+follow the instruction and give us a response in one word. But we want the prompt to work with our
+smaller model as well. So let's try and modify our prompt to make it work with our smaller models.
+So instead of giving a one word response, what if we ask the model to respond with
+positive, positive, negative on neutral. All right. So we are getting the right sentiment. It is
+repeating the sentiment and prompt what we had entered. But it is giving us the last sentiment
+where we had question mark. It is coming as positive. In a later lesson, you will get to try out
+the small medium and large size Lama 2 models to learn when it makes sense to go with a larger model.
+Okay. So let's talk about role prompting. Roads give context to the LLM on what type of answers
+are desired. And Lama 2 often gives more consistent responses when given a role. So let's try this out.
+Let me add a prompt, which says how can I answer this question from my friend? What is the meaning of
+life? And let's see what it responds back. Nice. It has given us a pretty detailed response,
+giving different perspectives of life. Now, what if we give the LLM a particular
+role with areas of expertise and also a tone of voice? Let's see whether the LLM is able to
+respect that and give us a more refined answer. So I'm going to type in a prompt here where I'm
+going to say your role is a life coach who gives advice to people about living good life. And you
+attempt to provide unbiased advice and you respond in the tone of a English pilot, which is
+pretty interesting. So we need to wrap this up into our prompt. So let's do that. And we'll put
+it in our curly braces, the role text, which we created. And then we will
+append this with our question, the same proud which we did before.
+And now let's see the response. All right. So you can see the response is quite different than
+what we saw before. And the tone and the style is because we asked it to be an English pilot.
+So as you can see, our LLM, our Lama model is able to respect the role and is able to give us a
+response back in that tone. Now, let's go and see our next use case, which is summarization.
+Summarization is a common and helpful use for LLMs because these days we just have so many emails
+and documents to read. For example, my friend Andrew sends me a personal email every Wednesday
+where he tells me how he thinks about some topic usually related to AI. If I'm in a hurry,
+I might ask Lama model to summarize Andrews later to me. So let's write this in a code. So I'm
+going to copy my email, which Andrew sends to me. And I'm going to create the prompt. So here,
+I'm telling the model to summarize this email and extract some key points. And I'm also asking
+the model to tell me what did the author say about Lama models specifically. And I'm
+appending the text here, the email, which I just wrote into my prompt. Now, let's see what the
+response is. Let's print it. All right. So it's able to give us a full summary of the email.
+It's talking about specifically about Lama models. And it's talking about prompting, allowing
+developers to build a prototype in minutes and hours without a training set. And you can see right
+here, it says the author also mentions that a member of deep learning AI team has been trying to
+find a model to sound like them, which they find a music. So our response included and respected
+everything we basically asked it to do. Let's move on to other things which our models can do.
+One thing to note that our models are not like search engines. These models are typically trained
+on data that ends on a particular date. And beyond that date, they don't have any information
+about what is happening. Okay. Lama was launched on July 18th of 2023. So let's take an example
+where an event happened after July 18th. So I'm going to have a prompt here which says who won the
+2023 Women's World Cup. And I think the Women's World Cup happened in late July. So let's run this
+example and see what we get. All right. So our model assumes that Women's World Cup has not yet
+taken place. So how do we get this kind of information into our prompts? Now there is a Wikipedia
+article which talks about 2023 FIFA Women's World Cup. So we can copy that context and add it to our
+prompt. So let me do that. So here's where it talks about Spain had won the World Cup and talks
+about different teams and so forth. And let's add the prompt. So we'll basically ask the model
+given the following context. Who won the 2023 Women's World Cup.
+And we will add the context here in curly braces like we did before.
+And now print the response. All right. Now as you can see it is able to give us the right answer,
+Spain won the 2023 World Cup. So what is happening here? We are actually appending the context,
+getting it from Wikipedia and sending it to our model. And model is able to take that context into
+account and give us a response. So even though the data the model was trained on is older than
+July 2023, it is still able to extract additional context from the prompt and give us a better response.
+So it would be great if you can try a few things here as well. I'll give you a sample code here.
+And you can paste in the context here. You can write your own query and see what the Lama models
+returns back. Another cool thing we can do with our models is ask them to solve complex reasoning
+problems. But to do that well, we have to provide good instructions to our models. Just like people
+Alliance can sometimes perform complex tasks better when they are broken down into smaller steps.
+Writing instructions in your problem that asks the model to reason through a problem
+in multiple steps is known as chain of thought prompting. To get Lama to respond in this way,
+you can try phrases like think step by step or explain your reasoning. This guides the model to
+break the problem down into smaller chunks and to tackle them one at a time. Chain of thought
+prompting is a powerful technique that can really improve the performance of LLMs at reasoning
+and problems that involve carrying out multiple math operations. So let's head back to the notebook
+so you can see how this works for yourself. Here we are going to give a prompt which will be a
+complex word problem. So let's see the word problem. So here's our prompt which says 15 of us want
+to go to a restaurant. Two of them have cars. Each car can seat five people. Two of us have
+motorcycles. Each motorcycle can fit two people. Can we all get to the restaurant by car or motorcycle?
+That's the question we are asking our model. Now let's see what it responds back.
+So it says yes all 15 people can get to the restaurant by car and here's how. So it's showing us
+different steps. But as you can see each car seats five people and we have two cars. So 10 people
+and then two motorcycles each can fit two people. So at the most you can have 14 people go to the
+restaurant. So our model is able to calculate correctly that it's total 14 people but then it's
+saying the remaining one person can either walk or find another mode of transport. This is not
+something which we ask the model to do. So what if we modify our prompt to think step by step?
+So let's add that and let's see what it responds back.
+Okay so now it has done a further detail breakdown but unfortunately it says you have three more
+people who want to go to the restaurant. So it gets the math wrong when we ask it to think step by
+step. So let's rephrase the request to be more specific and we can change our previous prompt
+itself and let's add some more instructions. So we basically add explain each intermediate step
+and we also tell only when you are done with all your steps.
+provide the answer based on your intermediate steps. So we are probably more instructions to
+the model and let's see what it does. So it again gives a pretty long answer. Does some
+logical reasoning and it seems like it got the right answer because it says 14 people can fit in
+the car and the motorcycle and it does say that it is not possible to accommodate all 15 people
+by car or motorcycle and the answer is no it is not possible to take all people. So it gets the
+math correct. It understands that the cars and motorcycle can fit 14 people. It understands that
+14 is less than 15. It remembers that the question is whether all 15 can go by car or motorcycle
+and it correctly states that not all 15 can go by car or motorcycle. So that was much better.
+So giving more instructions in your prompt can lead to better desirable results. Now what if we
+ask it to answer first and explain later. So let's modify our prompt a little bit more. So I'm going
+to copy our prompt into a new cell and I'm going to change a few things here. I'm going to keep
+things step by step but I'm going to change a few things here. I'm going to say
+provide the answer as a single
+yes no answer first then explain each intermediate steps. So we are asking the model to give me an
+answer before calculating all the intermediate steps and let's see whether it gives us the right
+answer. It's giving us the answer first yes all 15 people can go to the restaurant which is
+not correct and then it's giving us step by step instructions and then it's giving us the
+conclusion. So it first answers yes and then things through step by step it gets a lot of math
+correct actually. In the end it still concludes with its initial incorrect response. So the key
+takeover here is that the element predicts its response one token at a time. If we ask the model
+to give the answer first then it will give that answer but any of the work and the step by step
+thinking that it does after giving the answer can no longer influence the answer that it already gave.
+So ask the model to think step by step explain the intermediate steps and only then give its answer
+based on its intermediate steps. So as you saw in all of the examples in this lesson prompting is
+spot science and part art. It's helpful to think of prompting as an iterative process where you end
+up with the best prompt for your particular task through trial and error. It may take several tries
+to get the model to respond in the way you want. This diagram shows one way you can think through
+this process based on what you are trying to do you start by coming up with an idea of prompt
+that you think might work then you just try it. Pass your prompt to Lama then see how the model
+responds. Next take a close look at that response from the model and assess if it has completed the
+task in the way you wanted it to. If it has fantastic you can use the output or use the prompt
+response pair in a multi-ton chat prompt. If it didn't respond in the way you were expecting try
+changing the prompt try making your instruction a little bit clearer or being more specific about the
+output format you would like from the model. Try including an example to help the model understand
+what you want to do. Once you have come up with a revised prompt pass it to the model again and
+continue working through the steps. This is the part that makes prompt engineering and art. There is
+no single prompt that works for all situations or all models. So explore try revise and eventually
+you will find something that works. So that's an overview of prompt engineering. One thing we haven't
+discussed in detail yet is the importance of the model size in determining how well prompt
+engineering will work. In the next lesson you'll see a more detailed comparison of Lama 2 and
+code Lama models of different sizes to have a better understanding of when to use which model.

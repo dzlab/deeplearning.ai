@@ -1,0 +1,254 @@
+Remember that there is not just one but a collection of LANA models.
+A question you may have is, which one should I use?
+That's what you will explore in this lesson.
+You'll try out the small, medium, and large models
+and compare how they perform on the same task.
+One of the tasks will be to summarize an email.
+Another will be to solve a reasoning problem.
+Comparing how models perform is in itself an art
+because you are comparing free-form responses to open-ended questions.
+In fact, you can ask the model for help with that too.
+You will ask it to compare the responses of the three models
+and explain how each performs.
+Let's see how this works.
+As you saw earlier in the course, LANA 2 models come in three different sizes,
+7 billion, 13 billion, and 70 billion.
+These numbers indicate the number of parameters in each model.
+Each model also comes in two versions, a base model,
+which has been trained with using a trillion tokens of text
+so that it can predict the next word and a chat model
+which has undergone an additional round of training
+called instruction tuning to make it better at following instructions.
+This table gives you a high-level comparison of the different models.
+All LANA models are very large and require a lot of this space to store.
+The weights alone require 13.5 gigabytes
+for the 7 billion parameter model
+to almost 140 gigabytes for the 70 billion model.
+Models of this size are hard to manage
+and use on consumer hardware like your home computer or laptop.
+This is why Hostel API services like the two-gather.AI service
+that you are using in this course are so important and really make it
+much easier to get started using LANA models.
+So you might be wondering how you compare the performance of one LLM to another.
+In general, the research teams who develop the models
+use sets of benchmarks to grade LLMs.
+These benchmarks consist of many tasks,
+often expressed in the form of questions with known correct answers,
+which the LLM is asked to complete.
+The models outputs are compared to the correct answer
+and a score is determined.
+This table shows you three tasks that assess the models
+common sense reasoning, world knowledge,
+and reading comprehension skills.
+The score out of 100 is shown for each model size.
+As you can see, the larger model, the higher the score,
+all the differences vary by task.
+One of the main differences between the models
+is how much knowledge they have of the world.
+So far in the course, we have mostly been using the chat models.
+These models have undergone additional training called instruction tuning
+to make them better at following instructions.
+This training also increases the safety and reliability of the models
+compared to their base versions.
+Here you can see the scores on two benchmarks
+that are used to assess the honesty and toxicity of LLMs.
+The truthful QA benchmark measures whether the LLM generates
+truthful answers to questions.
+The toxician score indicates what percentage of models responses
+can be harmful and toxic.
+As you can see, the chat models are more truthful
+than the base models.
+Perhaps most strikingly, they are also significantly less toxic.
+So much so that these models will almost never generate a toxic response.
+For this reason, we at MATA recommend the chat models
+for most use cases.
+But if your application needs a fine tune model,
+then we recommend that you start with one of the base models.
+Let's head back to the notebook
+so you can explore more of these differences for yourself.
+As you have seen in previous courses,
+we start with importing our LAMA and LAMA chat functions from UTLs.
+So let's make sure we do that.
+Okay, so I'm going to put in my prompt
+which I had used previously.
+And the prompt says three different messages
+with three different sentiments.
+And I'm asking the model to give me a word and word response.
+So let's see how this behaves.
+And I'm going to use the 7 billion parameter model.
+And let's print this.
+So it gave us a one word response,
+but it's incorrect because we were expecting either positive or negative or neutral.
+And it said hungry.
+Now let's see how does this same prompt
+works with 7 billion parameter model.
+So I'm going to change it here to 7 billion
+and I'm going to rewind this and let's see.
+Okay, so we got a right sentiment.
+And this clearly shows that our
+7 billion parameter model is able to find the sentiment
+or able to guess the sentiment better
+than our 7 billion parameter model.
+So let's look at summarization tasks.
+So I'm going to copy my email which Andrew sent me.
+And you can see it's rather long.
+But he talks about LLMs.
+He talks about trumpeting.
+He talks about fine tuning, pre-training.
+And he also has a fun fact.
+So let's ask our model to summarize this.
+So I'm going to start.
+And I'm also going to ask my model
+to give me specific information.
+So I'm going to ask what did the author
+say about LLMA models.
+And I'm going to include the email.
+And then I'm going to ask my 7 billion parameter chat model.
+And then print the response.
+All right, so we got a pretty good detailed response.
+And it seems like a good summary.
+Now let's look at how does this compare
+to our 13b model.
+So all we will do is we'll copy from here
+and paste it in this new cell and just change our response to 13b.
+And let's see what the response looks like.
+Okay, so here we are
+getting two different sections.
+One is summary summarizing what was in the email.
+And then we are getting some key points.
+So this also looks pretty good.
+Now let's see how does our 70 billion parameter model
+gives us a response.
+So I'm going to again copy this.
+Change our response variable.
+And change our model to 70b.
+And make sure that we print the right response.
+And let's see what happens.
+All right, so here the one difference I can see
+is it's mentioning the author of the name of the author,
+which in this case, Andrew.
+And it's also mentioning the fun fact,
+which Andrew wrote in his email.
+So that's pretty cool.
+It gives me a lot more details.
+Now you can see that we can manually compare this,
+but it's hard to know which one is the best summarization
+amongst all these three models.
+So you can ask an LLM to evaluate the responses of other LLMs.
+This is called model graded evaluation.
+Let's use the large 70b model to evaluate these three responses.
+So how do we do that?
+So we'll have to write another prompt,
+instructing our 70b model to evaluate these three responses.
+So let's do that.
+So we are going to first ask, given the original text,
+denoted by email and the name of several models,
+we are going to provide the summary,
+which was output by each model.
+And we are going to ask the model with few questions.
+So here are the three questions we'll ask.
+Does it summarize the original text?
+Well, does it follow the instructions of the prompt?
+Are there any other interesting characteristics of the models upward?
+Then we'll add in the prompt asking,
+let's compare the models based on the evaluation
+and recommend the models that perform the best.
+And we will then add our original email,
+which Andrew wrote to us,
+we'll add the responses from each of the models,
+which we got in our earlier execution.
+So we added the email, we added the model name,
+and then we are adding the summary,
+which we got from the previous execution,
+the response from 7 billion parameter model.
+And we'll do that same thing for 13b and 70b models as well.
+And now we will remember to use the 70b model.
+We want the largest model to evaluate and compare the responses
+from the previous models and we'll print the output.
+Okay, so let's see what this does and what kind of comparison it gives us.
+Okay, so it seems that all three models
+were able to capture the main points of the email.
+However, there are some differences in the way information is presented
+and the level of detail provided.
+So here's the information about 7b model,
+is the shortest and most concise,
+focusing on the key points of the email.
+It does not provide any additional information insights beyond what is mentioned in the email.
+Here's the summary from chat.
+13b model is slightly longer and provides more context,
+including author's recommendation.
+And here the 70b's chat summary is the longest and the most detailed,
+providing a comprehensive overview of email's content.
+It includes all the key points mentioned in the other two summaries and so forth.
+And then we get a full summary,
+or all three models seem to have performed well in summarizing model,
+but it seems like 70b performed the best,
+providing the most comprehensive and informative summary.
+So it seems like the 70b model was best.
+Note that it's still best for you to include your own judgment
+when evaluating these models.
+Asking an LLM to evaluate the output of LLMs can give you insights into what criteria
+you are looking for when evaluating them yourself.
+Okay, let's move on to reasoning tasks.
+Humans can perform reasoning tasks without needing many examples of similar tasks,
+but reasoning has always been a challenging task for AI models to perform.
+So let's take an example.
+I'm going to write a simple prompt.
+Jeff and Tommy are neighbors.
+Tommy and Eddie are not neighbors.
+And I'm going to ask a query to our model,
+our Jeff and Eddie neighbors.
+Now what do you think?
+Our Jeff and Eddie neighbors?
+Let's ask our LLM that question.
+Okay.
+So we'll write a prompt, given this context.
+And please notice the syntax in how I'm appending text into my prompt.
+So this time I'll append the query, which we created before.
+So I'm going to ask, please answer the questions in the query and explain your reasoning,
+because we want to understand how the models think.
+And I'm also going to ask the model, if there's not information to answer,
+please say I do not have enough information to answer this question.
+So we are basically asking the model explicitly to be truthful.
+Okay.
+So let's run this and see what the output is.
+Here it looks like the small 7 billion model concludes that Jeff and Eddie are not neighbors.
+So it's making that assumption that when people are neighbors,
+they live near each other.
+And when they are not neighbors, they live far apart.
+The medium-sized 13B model says it doesn't have enough information.
+So we can see that the model is not making the assumption that Jeff and Eddie
+can or cannot be neighbors.
+In real life, this may be the case as well.
+The point is, looks like the 13B model is not making the same assumptions as the smaller 7B model.
+The large 70B model concludes that Jeff and Eddie are not neighbors.
+So similar to our small 7B model, the large 70B model makes an assumption that neighbors
+live near each other and non-nabers live far apart.
+So now I'm going to ask our model to compare the three responses.
+And I'm going to write the prompt for that, like the way we have done it in the past,
+given the context,
+and also given the query, like we did before.
+We are going to ask the model to evaluate the responses.
+And so we are going to ask some questions to the model.
+Then we will add context, and then we will
+copy paste from previous prompt, our three models, and the response format.
+Okay, so this looks good.
+Now let's move forward and make a call to our Lama model.
+Let's use the 70B model and let's print the response and see what do we get.
+Okay, so we get evaluation for each model's response.
+And you can see that for 7B, it does say that the response accurately answers the query,
+and the reasoning provided is clear and correct.
+For 13B does not answer the query directly stating that there's not enough
+information to determine whether Jeff and Eddie are neighbors,
+and 70B model response accurately as well.
+And then it's giving us the comparison of the models based on the evaluation,
+which looks pretty good.
+So as we concluded before, by giving more instructions,
+7B and 70B are the top performing models here.
+They both accurately answered the query using logical reasoning,
+and 13B did not provide a direct answer to the query.
+So far, you've seen how these models can perform basic reasoning and logic tasks.
+Oftentimes, it's probably more reliable to do these tasks with code.
+But wait, there's a Lama for that too.
+It's called code Lama, and that's what you'll see next.
+Let's go on to the next lesson.

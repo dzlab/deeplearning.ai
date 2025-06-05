@@ -1,0 +1,49 @@
+Welcome to Prom Engineering with Lama 2, built in partnership with Meta.
+I'm in Tsangani, Director of Partner Engine at Meta is the instructor of this course.
+It's great to have you here, Alme.
+Thank you, Andrew. It's great to be here.
+I'm excited to introduce you to all the exciting capabilities and use cases of Lama collection of models.
+Lama has been a game changer for AI developers because Meta has published the model ways online
+so that anyone can download, modify, play with and work on applications using them.
+This is in contrast to the close source models, which can also be very powerful and very useful,
+but that you can access only via API calls.
+Many teams in big and small companies as well as just individuals building cool applications
+have been using Lama as a result.
+Because Lama weights are freely available, many people including me also run it routinely
+on a personal laptops. In this course, you learn directly from Meta's on it.
+That's practices for developing applications using Lama.
+That's right, Andrew. The models are free to download so that everyone in the AI community
+can use them for building generative AI applications, modify them and carry out additional training
+and therefore drive research and innovation. We are seeing millions of downloads and
+I'm grateful to all the developers using Lama to build amazing things for other people.
+Lama is in the single model, is actually a collection of models of varying sizes and different
+intended use cases. First, there's a set of base models. These are elements that have been trained
+to repeatedly predict the next word based on, say, internet text but haven't received any additional
+training to modify their behavior. These base models are useful to developers who want to continue
+training models to perform well on specific tasks. Then, there's a set of chat models which
+have been further trained to further instructions and behavior in a safe way rather than just predict
+the next word on the internet. These chat models are ideal for powering chat bots and for following
+your instructions to get questions answered or to get tasks done. The last set of models have
+received additional training specifically to make them good at understanding and writing computer
+codes. While these models may seem like the most useful for software engineers,
+they're also making it easier for many people to write debug and learn code on their own.
+And you'll get to try out all of these different Lama models as you progress through the course.
+You'll start off by prompting a Lama model to help you write a birthday card.
+In the process, you'll learn the details of how LLM inputs are actually formatted.
+For example, with start and end tokens for different parts of the input.
+You'll also prompt Lama to help you classify the sentiment of text messages and summarize an
+email. You'll also learn about prompt engineering, including an important technique called
+Few Shot Learning in context learning. Specifically, by giving the model one or two examples of how
+you would like it to respond to a prompt, you can get a model to give its response in a similar way.
+You'll also learn about chain of thought prompting and also how to use code-specific Lama models.
+Many developers are using code Lama to help with their coding and become more efficient
+developers as a result. And in this course, you will learn a lot of tips for doing so.
+For example, using code Lama to write and explain code.
+Lastly, you'll also learn about Lama Guard, which is a special model that helps you
+make sure your content isn't harmful or toxic. This is a key step for many businesses wanting
+to deploy elements. So this sounds like a very great fall of the Lama models and how you can
+use them. We'd like to acknowledge some of the people who worked to put this course together.
+From the meta team, we'd like to thank Jeff Tang and from the deep learning.ai team, Eddie Schuh,
+and Tommy Nelson. And with that, let's move on to the next video and get started.
+So the after this course, if someone asks you about using meta models, I hope you will say
+no problem.
