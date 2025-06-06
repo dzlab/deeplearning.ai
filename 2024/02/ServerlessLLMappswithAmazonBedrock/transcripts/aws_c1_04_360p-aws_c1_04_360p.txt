@@ -1,0 +1,165 @@
+So far in this course, you've started to integrate LLMs and other AI capabilities.
+Part of developing and managing a deployed application is addressing security, audit and compliance.
+And one of the key tools for auditing your compliance is logging.
+In this lesson, you'll learn how to enable logging for all of the calls that you make to LLMs
+that are within Amazon Bedrock and how to review these logs. This is extremely powerful for
+audit and compliance, and you'll use this to monitor for error conditions. So let's take a look.
+So it would be completely possible to put in lots of logging code into your application stack and
+start to push out various bits and pieces of what you're sending to and getting back from the
+large language model in there. But sometimes that's not as easy as all that, especially if you're
+using libraries such as Langchain, for example, and Amazon Bedrock does work natively with Langchain.
+And so one of the things I certainly found with Langchain as brilliant as it is, is it can sometimes
+be a little bit tricky to know what's happening behind the scenes with all of that prompt engineering
+it's doing and sending data to and fro from the large language model. And so what we can do here
+is we can actually set up Amazon Bedrock to globally log all of the calls which are made to and the
+responses you get back from the model when it's making its generation. So let's have a look at how
+we can do just that. So the first thing I'm going to do is just import a bunch of stuff that we're
+going to need for this particular lesson. And it's all stuff that we've seen before. And so we can
+just go a little bit faster through this. So importing boat 03 Jason and OS again so we can get our
+environment variables and then we're going to go ahead and create ourselves a bedrock client.
+So this is not a bedrock runtime client. It's a bedrock client because we're now going to be
+looking at and configuring the Amazon Bedrock service itself rather than making a generation
+just in the first instance. So let's run that cell so that we've got all of that up and running.
+We then have this other cell as well and you'll see this in the code that we've supplied over on
+the other side of the screen. But we've got these helper files and I've just written a quick
+cloud watch helper. So Amazon cloud watch is the service which deals with logs and metrics and
+just the general health and the what's going on inside of your AWS account. And just to make it a
+bit easier to work with I've created some helper functions here and in this particular case it's
+a cloud watch helper function to help us see what's going on inside of cloud watch. You can also see
+what's going on inside of cloud watch through the console as well. And that's probably the more
+logical place to go. We're going to have a look at both of those. Okay, so now that we've got everything
+set up we can start to write some code. And the first thing that I'm going to do is I'm going to
+define for us a log group name. So inside of cloud watch logs it has these log groups and you get
+to define what that naming structure looks like so that you can save essentially where we want to send
+our log files to. So in this particular case I'm going to send it to this log group name of my
+Amazon bedrock logs. Now it is important actually for this particular lesson to use that specific name.
+And a reason for that is because we've got some permissions set up inside of this account and
+the permissions are expecting to work with this particular log group name. So if you do want to change
+it you can but you'll just need to change those permissions as well if you're running this inside
+of your own account. Now just a word on what those permissions are. They are IAM permissions IAM
+stands for identity and access management which give the Amazon bedrock service the ability to put
+logs or to create log streams and to put log events into cloud watch cloud watch is the part of AWS
+that aggregates all the logging and metrics and logging and you can use it to add monitoring and
+logging to your applications. So let's take a bit of a look at that quickly just with this slide overlay.
+So this is the JSON structure of what the permissions look like and you can see here that they have
+this statement structure where we have the effect of allow and the action here that we're going to allow
+is to create log stream and to put log events and you can see here that we got it's locked down
+to this particular resource. So in other words we're allowing the Amazon bedrock service and only the
+bedrock service model invocations here to go ahead and put those logs into the log stream.
+And so the other part to this then is the trust policy and just quickly this trust policy basically
+means that this policy can be assumed by the bedrock service. So both of these things have been created
+for us already inside of this account and this is just a quick note to what we've already done
+and the fact that this role exists. So now that we've defined our log group name of course this is
+just a string. I'm going to go ahead and use my helper function which we've loaded in as a cloud
+watch here and we're going to call this command here to create the log group. So this is just going
+to send an API call off to the cloud watch service to create the log group called my Amazon bedrock
+logs. And you can see it's just returned back here that that's being created for us successfully.
+Now that's really easy to do inside of the AWS console and so that's why we've not gone into
+that in a great deal of depth. What I wanted to show you is how we configure Amazon bedrock to send
+those logs into cloud watch logs. So let's have a look at how we do that. So we're going to create
+ourselves a dictionary of parameters that was going to be essentially be our logging configuration.
+And we're going to send this into Amazon bedrock. So let's do this now. Let's just say this is all
+going to be our logging configuration. So the first thing that we need to do is set up a cloud watch
+config. So let's go ourselves a dictionary for that. And then we're going to have our log group name
+that we pass in. So this is defined as we have already here with log group name of my Amazon bedrock
+logs. So this is telling Amazon bedrock where to put those logs. And then we need to tell it about
+the role. So this is the role that we saw the outline of just a moment ago. And there was an
+environment variable inside of this notebook currently running, which will point us to the ARN or
+the Amazon resource name for that particular role that's already been set up. So we've got that
+there. And then we can define how we want to deliver particularly large objects. Now this is
+because Amazon cloud watch it's really good at storing sort of log entries. So text entries. But
+imagine for a moment that we've got a massive generation, which has been created or if we've used one
+of the text to image models, so we're actually generating some images. Well, if we want to log all of
+that, then we're going to need to give it an output location, which isn't just cloud watch,
+something which is capable of storing larger objects. And the clue there is in the name objects,
+we're going to put this inside of s3. So let's go and paste in this configuration here and just
+have a look through this. This is the large data delivery s3 config. And we're giving it the location
+of a bucket that we want to use to store those large objects. And we can also give it here a key
+prefix as well. So inside of that bucket, let's give it a particular prefix. So it's all
+sectioned off into a particular area. In other words, this is a bit like having a folder called
+Amazon bedrock large data delivery. You could call that whatever you want. And in this particular case,
+again, we've got a bucket, a logging bucket, which we've got the name of that bucket defined
+inside of our environment already. So that is the cloud watch config there. Now with the Amazon
+bedrock logging options, we have the choice of being able to put logs into cloud watch then also
+with a large objects going to s3. But we could instead put things straight into s3 and not use
+cloud watch at all. So it's just another one of the options. And we can do that with this configuration
+here. So in a similar way to having cloud watch config, we can have s3 config. And so we can go
+ahead and put the logs directly into s3. So this is different from this section up here. This section
+is just where to deliver large things, which relate to the cloud watch logs. This is where we're
+going to put just anything. And in this particular case, with both of these things enabled,
+it means it will put the data inside of cloud watch and inside of s3. So we're just doing both
+just for the sake of it in this particular lesson. Then we get to say what kind of data that we
+want to have logged. In this particular case, we're working with text data. So we'll say the text
+data delivery is enabled. And we'll set that to true. And that is our logging configuration.
+So I can go ahead and run that. Of course, that won't do anything at this point. It's just
+a dictionary, which has been defined. But I can now go ahead and call on our bedrock client agent
+that we had before. And I'm going to call a much longer method name than we've called before. So
+this by the time it's going to be called put model invocation logging configuration. And then we
+are going to pass in our logging configuration in there. And so we can do that just by passing in,
+the logging config is the logging config. So in other words, we're going to point the logging config
+to this data structure that we just had up there. So that's all we need to do now to go and apply
+that logging configuration to Amazon bedrock. So let's run that. And then we get a response back. And
+the response is code 200. So it's all positive. It's been applied. Now while we're reviewing the
+different calls that we can make to the bedrock client, let's have a go at this. So bedrock get
+model invocation logging configuration. So as opposed to put, so this should return to us the
+actual logging configuration and what it looks like. So if we scroll down here, then indeed we see
+all of those values that we sent up into the model. And in my particular case, I've got bucket names
+which relate to the environment variables that I have inside of my account and yours will be
+different. So with the logging enabled, it's now enabled globally across our entire account for
+any invocations that we make to those text models inside of our account. So let's have a go at
+making a text generation so that we can see what it looks like. And I've just pasted the entire line
+in here. We've seen it many times before. This is the bedrock runtime client that I've created inside
+of us west two. So let's run that cell and I'm sure you can guess what's going to come next. Well
+almost I'm just going to paste it in in one cell because we've seen it so many times before. Here's
+our prompt. In this case, write an article about the fictional planet Fubar. Then we have our keyword
+arguments. Much as we've seen before, oh, the temperature is a bit low. Let's set that temperature
+a bit higher because we are doing something a bit more creative here. And then we're going to go
+get a response, the response body, the generation, and then we're going to print the generation out.
+And before we move on, take a look at this code and make some adjustments to it. So play around
+with it, tweak it a little bit and see what you can make it do. So maybe pause the video here
+and have an experiment. Of course, the reason why we're doing this is because we want to perform
+some generation so that we can then go and have a look in the log files and we should be able to
+see that it's in there. So once this is finished writing, it's awesome article about the fictional
+planet Fubar. I've got one more thing inside of the helper functions that we created in order to
+help us see what's turned up in the logs. Now, we do need to wait just a moment before we run this.
+So this is just the helper function, the cloud watch helper function that we've got inside the lab.
+And then it says print recent logs. What this is going to do by default is it will look in our log
+group name, which is defined up above. And it will pull back all of the entries from the last five
+minutes. So if you are running this multiple times, then if you're not seeing things, then it's
+because it's only pulling back things from the last five minutes, just to keep things sort of simple.
+But let's go ahead and run that now. And fantastic. We actually get to see the output. Now we'll go and
+take a look at this inside of cloud watch itself in the console in just a moment. But this string here,
+permissions are correctly set for Amazon bedrock logs. This is actually something which is sent into
+the logs by the backend system. So when we're giving it the ARN and ARN stands for Amazon resource
+name. And these are unique identifiers to every instance of a resource inside of AWS. So in your
+account, all of the instances of things have individual ARNs for the role that needs to be able to
+perform the logging. And then we set those logging parameters and that logging configuration. The first
+thing that Amazon bedrock the service will do even before any generation is made is just go and check
+to make sure that all works. And so that's all that string is there. You'll see that once and then
+it will disappear in the logs and you'll never have to see it again unless you set it up another time.
+So I then just do this quick line so we can see the difference between the different lines here.
+And here is the entire JSON structure of the particular call that was made to the service. And you
+can see here the input text write an article about the fictional planet Fubar. You can see all of the
+parameters that were sent in as well. Super super useful for debug super useful and maybe essential
+for audit and compliance. You can see the input token count and the output token count. And of course
+you can see the output text as well. So there is a chance that this output could get quite large,
+especially if you're doing things other than text based models. But this is super useful for
+being able to log globally. What's happening inside of your AWS account using Amazon
+bedrock. And for me, more than anything else, this is really, really useful for debugging all sorts
+of applications, no matter what libraries you're using, no matter what architectures you are using.
+So if I want to see those logs inside of the AWS console, well, it's probably a little bit
+easier to see than it is inside of a notebook. So I can go to my AWS console page and you can do that
+by following the link that's provided in the notebook environment. I can click on the magnifying
+glass here and I can type in cloud watch. Now you'll notice that this is quite narrow on the screen
+here. So you'll probably see more than this if you're doing this inside of a completely separate
+window. But let's navigate to cloud watch. And then inside of cloud watch, I can go to log groups here.
+So if I click log groups, the menu should collapse away. And then I'll get a list of all of the log
+groups that I have. And here you can see my Amazon bedrock logs, which was the log groups that we
+created just a moment ago. And if I navigate into there, then I will be able to see the log streams
+right down the bottom here. And if I click here, I've got AWS bedrock model invocations. And so there
+I have exactly the same view as we were looking at before. So here are the model invocations which have
+arrived into cloud watch logs inside of the console. So that's how to log. So in the next lesson,
+we're going to get back to our event driven pipeline. We're going to put together all of the code
+that we've been doing inside the notebook now in the cloud in serverless managed services. And
+it's going to be a fully automated data pipeline working on our transcript. So when you're ready,
+I'll see you in the next lesson.

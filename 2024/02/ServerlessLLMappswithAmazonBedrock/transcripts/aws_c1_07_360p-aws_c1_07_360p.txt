@@ -1,0 +1,22 @@
+In this course, you've seen how to use Amazon Bedrock with a simple and powerful
+event-driven pipeline to use LLMs to process the recordings of customer interactions.
+This architecture can be extended and adapted in many ways to work with your specific requirements.
+And what we've seen so far only scratches the surface of what you can do with Amazon Bedrock.
+You can also deploy more sophisticated architectures such as Agents. Agents allow LLM-powered
+applications to interact with external systems such as your other applications and third-party
+services. You could extend this architecture from this course so that the LLM-powered agent
+could automatically update customer records in a CRM or send an escalation email to management.
+Amazon Bedrock enables you to build Agents in Lambda functions just like the ones we saw in this
+course so that the agent workflows are all hosted in the cloud and work at scale.
+Amazon Bedrock also supports retrieval augmented generation or RAG. Using a service known as
+knowledge base, you can set up RAG in just a few clicks. You can integrate customer support
+documentation into the application, enabling LLMs to find relevant and up-to-date information
+quickly. To find out more about these architectures and Amazon Bedrock in general,
+take a look at the resources at the end of the previous lesson. So it just remains for me to thank
+everyone who is involved in putting this course together, the awesome team at Amazon,
+here at deeplearning.ai, and of course you for spending your time with me. I can't wait to see
+what you build with this technology and Amazon Bedrock, so please reach out and let me know.
+Thank you and goodbye.
+Great. Are you sure you don't want some tea?
+Go on then.
+You have some too.

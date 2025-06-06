@@ -1,0 +1,468 @@
+In this lesson, you'll learn about AWS Lambda functions, a serverless type of compute,
+and one of the easiest ways to manage code. You'll see how you can use them to run your LLM
+powered workloads. Let's jump right in. And by now, maybe just now, you've realized
+how long this lesson is. Yes, it is quite long because there's a lot for us to go through. So
+in a break from tradition, let's actually take a look at what we're going to cover in bullet
+points in this particular lesson. And what you can do is you can skip to the bit you want,
+or maybe more practically, you can stop at some point and come back later if you want to.
+You've got all of the code, of course, as per all of the other lessons, it's already there in
+the notebook. So if you want to, you can just rapidly run through some of the cells and progress
+forward if you're coming back after having taken a break. So in this lesson, we're going to,
+first of all, take a look at some of the helper functions we've got available.
+So I have written help helper functions that will help us get some things done faster. Yeah,
+believe it or not, that's a shortcut. So once we've got those, then we go to take take a look at
+some of the data that we're going to be deploying into our Lambda function. So we'll take a look at
+the prompt and the prompt template and how that's been set up for us. Then we'll take a look at
+the Lambda function itself. And this is going to be the majority of this lesson. So we take a look
+at the Lambda function and piece by piece will build the Lambda function up and we'll look at the
+different code and how it works and why it's been structured in the way it's been structured.
+So that will take the significant amount of time. Again, you've got all of the code right there.
+So if you don't want that detailed walkthrough, you don't have to have it. Or if you want to come
+back to the lesson another time, then you can always go into more detail at that point.
+Once we've got the Lambda function defined, we deploy it and then basically we're going to do a test.
+And so we're going to see the Lambda function working and then we're done with this lesson
+and we can move to the next lesson. In the next lesson, then we bring it all together into the
+overall pipeline. And it's a much quicker lesson because we've kind of built this foundation if you
+like inside of this one. Okay, so if that's all good with you, let's get started. Now as you'll
+notice from the code over on the left hand side, there's a bunch of helpers and things that we've
+got to help us through with this so that we don't have to do complicated deployments and things
+inside of the Jupyter Notebook. I've got some helperscripts. But let's start off with the usual.
+So we're going to import Boto3. I'm also going to import the OS, the operating system library from
+Python so that we can get access to environment variables and things like that. So let's shift
+enter on that, run that cell so we've got the necessary libraries there installed. Now I'm going
+to import the helpers. So these helpers here, I'm just going to paste them in. These are scripts
+that I've written to help us inside of the Jupyter Notebook environment to do more complicated
+things easier so that we can focus and concentrate on the things that we're really interested in.
+So I'm just going to import these but we do also have to create instances of each of these as well.
+And so let me do that and I'll explain what each of them do so there's no hidden surprises or
+anything. So first of all we've got the Lambda helper here. So what we're going to be doing in the
+detail of this code is we're going to be deploying a Lambda function into the AWS account that we're
+currently working on. Now there's lots of different ways to do that. You can do it through the AWS
+console, you can do it through cloud formation or terraform or many, many different ways that
+more than I can list here. And it's not necessarily that usual to do it from a Jupyter Notebook but
+you can do it and I'm going to do it here and we're going to use this helper function that I've
+written to do it. So we're going to create an instance of the Lambda helper and just to let you know
+there are a couple of different methods that we can call on this. So we've got deploy function
+and add Lambda trigger and we'll see what they do in more detail when we actually go ahead and use
+them. So I'm just going to run that cell. So I've got myself an instance of the Lambda helper.
+The next helper that we've got is the S3 helper. And so S3 is the simple storage service. It's the
+most cost effective place to be able to store data. It's very, very simple. It's in the name,
+right? Simple storage service. And this is just going to help us do this too. So if you read the
+Boto3 documentation interacting with S3 is not that hard, but this just abstracts us away from
+having to do some of this. So we've got a method to upload a file to download an object from S3
+and to list objects that are in there. And again, that's just going to help us. If you are
+experimenting with this in your own environment, you might choose to do this through the AWS console
+or through the AWS command line. So once that's run, the last one for us to just create an instance of
+is this one, which is the display helper. So this is a set of helper functions that I've created
+to help us to be able to display large text documents inside of a Jupyter notebook environment.
+And there's a couple of different methods that we can call. We've got text file and JSON file.
+I think in this we're only actually going to call JSON file. We used text file earlier on in this
+course. You may remember. Okay, so I've got all the helper functions set up. They're just sort of
+now out the way. These are extra tools that we can use just to make it easier for us when we're
+deploying our code. And the last thing that we need to do is just go and grab ourselves the name of
+the S3 bucket, which has been created for us as part of this lab environment. So if I just
+paste in this line here, we're just using the operating system library from Python. We're getting
+an environment variable called learner S3 bucket name text. So it doesn't really matter what it's
+called, but it's grabbing the name of a bucket, which has been already created for us in this lab
+environment. And each bucket is going to be called something slightly different. So if you do see
+this bucket name in my output, it will be different to yours because S3 buckets need to have a
+globally unique name across all AWS accounts. So no two buckets will have the same name. And so this
+just is a way that we can set that up for this lab environment. So once that's set up, we've got
+basically everything that we need to get started. And we can deploy our Lambda function that can
+integrate with Amazon bedrock. And you're going to construct the prompt in the way that you did
+earlier in the course, which makes it easier to swap in new prompt templates when you're deploying
+this into the production environment. So what I'm going to do is I'm going to create a text file
+here. And we can do that inside of the Jupyter notebook environment. We're going to use this
+sort of magic syntax of a couple of different percent signs. Then we're going to say right file
+and then the name of a file. And now anything that we type in this cell, when we run this cell,
+it's going to create that text file in the operating system in the file system of this Jupyter
+notebook environment. So by running this cell, it's not going to run the code as such. And it's not
+any code anyway. It's just some text, but it's going to save this text out to the disk.
+So let's paste in my prompt that I'm suggesting that we use. And of course, you get to change this
+if you want an experiment around with this. But let's use this for the moment. So this is the text
+prompt that I want to use for the summarization of the transcript between the in the conversation
+that we have from our audio file. So I need to summarize a conversation. The transcript of the
+conversation is between the data XML tags. We've seen things like this before. But this is a special
+piece of syntax here. This is the ginger templating syntax. This basically is a placeholder
+for where the transcript will go. And then we have more information about what we want from the
+output. And here we have an example output. So we're saying this is what we want to see as the
+output. We want to see some JSON format. And we've set it up like we might have specified
+by our application development team or if it's ourselves by what we want to see coming out of this
+analysis of the phone call. And so we want an overall sentiment, sort of statement about sentiment
+of the overall conversation. And then we want a list of any of the issues which have been detected
+in there. And so post processing, whatever is going to pick this information up after we've
+finished processing the data, can summarize or can extract this knowledge out of the phone
+conversation. And of course, if we're doing that at scale across many different phone conversations
+from a call center, then this becomes really valuable analytical insight as to what's happening
+in those phone calls. And so we've got that. We're also going to add in something here. We're going
+to say that we're interested in issues which align with a certain list of topics. And so these
+topics again are something that we can actually insert into the template. So we've got this iterative
+for loop written in Python. The percent symbols here are special syntax that the ginger library
+recognizes so that the Python code will loop through the variable topic, which is itself a list
+and each item of the list will get put into the final string of the prompt for topic in topics.
+So when we pass this to ginger, we pass a list of topics and it will render each of those in this
+sort of bullet list inside of this section of the prompt. And then it's going to say here,
+write the JSON output and nothing more. Here is the JSON output. So this is prompting techniques to
+be able to get the large language model to output the kind of text that we want. So I'm going to suggest
+that that's the template we're going to use for now. And we're going to provide this to the Lambda
+function and package it up with the Lambda function and deploy it into the serverless compute
+environment into the Lambda environment in AWS. So for now, I'm going to run that cell. And so now
+I've run that cell. We've now got this prompt template dot TXT file saved on the disk of this
+Jupiter notebook environment. In fact, we could go ahead and actually print this out to the screen.
+Why not? Let's go and use a display helper function that we defined a little bit earlier. So let's
+say display helper. And then we can use the text file method on there. And then we're just going
+to ask it to print out our file that we've just created just to prove the fact that it has actually
+just created it for us. So here it's saying this is the file and here's all the data. So exactly
+as you would imagine, but it just shows that we've actually just created that file and saved it to
+disk. If you run this lab again, this lesson again, try running that beforehand. It won't work
+because the file hasn't been created. So trust me, yes, we've just created this file. There is
+our prompt template. Okay, now let's go ahead and create the Lambda function itself. Of course,
+this is the main part of this lesson is looking at Lambda functions and how they work. Now we're
+going to be writing some code here. But again, we're not going to be executing this code inside of
+the Jupiter notebook environment. We're going to be defining it here just like we did with the
+text file and then we're going to upload the code and we're going to execute it inside of AWS
+in the serverless compute environment, which is Lambda. So we're going to do the same thing as we
+did before and we're going to basically write a text file, but this text file will actually be a
+Python file, a Python function that we can upload. So the first part that I've gotten here, I'm just
+going to paste this in again here because I think it's useful and of course you'll see it as well
+in the code that's been supplied. It's just a reminder that this isn't going to run here. This is
+just a text file that we're creating. All right, let's get into the architecture then of the Lambda
+function itself. Now the Lambda function is essentially yes, it's a Python file and the Lambda
+environment, the execution environment will look for a specific function name to call. Now you can
+change this, but very often, not quite default, but very often that's called the Lambda handler.
+So we create a function definition inside of our file, call the Lambda handler and this is our
+entry point. This is what will be called. Okay, so before we get too deep into that, let's include
+some of the imports that we need. So we're going to need, oops, we're going to need to import
+Boto3 because again, this code will execute somewhere else. So we need to in that environment include
+Boto3. We're going to need to import JSON and we're also going to need to import the ginger to
+templating library. As we saw before, we're using ginger to template. So let's import that now
+so that we've got all of that set up. The next thing that I'm going to do as well, outside of the
+actual function handler itself is set up an s3 client so I can get access to objects which are inside
+of s3 again from this function. So let's do that. I'm going to call it an s3 client. That will then
+be available sort of globally for everything that runs inside of this Lambda function and we're going
+to call the client and we're going to build it up just as we've done many times before and there's
+our Boto3 client for s3 and then we're also going to need our bedrock runtime as well. So I'll paste
+that in because we've typed it many times before, but there's our bedrock runtime. It's the Boto3
+client for bedrock runtime in the particular region that we're working in. So now we've got all
+those set up. Then we can start to look at making use out of those. So let's fill out the rest of
+the Lambda handler. Now if you do accidentally run this cell, it's fine. You can just re-run it again.
+So I'll do it right now. So I just press run. It's written Lambda function. In fact, it's already
+it's overriding Lambda function because I've already done this mistake several times of running this
+cell. That's fine. We can just keep adding text to it and when we're ready, we can just finish it
+there and we don't have to write anymore into it. All right. So let's put some content into here.
+Now when the Lambda handler gets called from the execution environment, from the Lambda environment,
+it gets passed a couple of different variables here, one called event and one called context. And we
+rarely do anything with context. It's a vent that we're interested in because event carries with it
+the payload, which is basically what caused this Lambda function to run. And there are many reasons
+why Lambda function might get called. You might call it directly and to say I want it to run,
+passing it some variables. And if you do so, those variables will arrive through event. But it might
+be that it's an API gateway, which is being extended to be able to work with a Lambda function. Or
+it might be that an event has occurred somewhere else inside of AWS, such as an object or a file
+being put into s3. And that's what we're going to be working with here. So when this Lambda function
+is called, it's going to be as a result of a file being put into s3. You'll hear me say file and object
+sometimes interchangeably. When a file is uploaded into an s3 bucket, it becomes an object. So data
+that's inside of an s3 bucket, that's called an object. So we're going to have an event triggered
+when the object has been placed inside of s3. And we're going to get those details inside of this
+event variable right here. So we can use that and extract out of that the information that we're
+interested in. And we're going to be interested in knowing which bucket was it. So where was this
+data put? And we're also going to be interested in knowing the name of it, which is the key of the
+object, the file name, if you want, or the key of the object, which is inside of s3. So we can go and
+grab both of those things. So let's first of all go and grab the bucket. And it's going to be inside
+of event. An event is essentially a dictionary. So we can look up inside of there. We can go and
+look at the records. And of course, if you want to, you can experiment around with this and just
+maybe even print the events out so that you can get a sense of what the event looks like. But I'm
+going to explain to you exactly where these values will be stored. So inside of event inside of
+records, there's a list. We get the first one in the list because we're only going to be triggered
+by one thing. And then we look inside of a key called s3. And then we look inside of bucket. And
+then we grab from that the name. And of course, there's lots of other information inside of that
+structure that you might want to get as well. But that's how to get the bucket name out of the event.
+The other thing that we want to get is the key. And in a very similar way, we can get the key out
+of that event out of the records out of the same part, the same list in s3. But this time we're going
+to get the object key. And remember the item that's inside of s3 is called an object and the key is
+the name. So if the file is in the root of the s3 bucket, then that's just going to be literally
+just the file name of that object. Okay, so we've got now access to the location of the object that
+which has been placed inside of s3, which caused this lambda function to run and to be executed
+rather. So now we can go ahead and actually open up that file, take out the contents of that file
+and use that for our generation. So let's add in some more code. You'll notice actually on the code
+that's been supplied, the stuff that we're going through, I've got some big blocks of code here.
+There's a lot of code here. So I will paste some of it in sort of directly and we'll talk about
+what it does and why it's been included. And this is the first part that I'll include. And it's
+got a comment in there actually, which also explains what this is for. This is essentially just a
+small piece of error checking really to make sure that the object that we're responding to is the
+object that we actually want to respond to. And so as you'll see later on in the architecture that
+we put together over the next couple of lessons, the file that we're going to respond to has hyphen
+transcript.json. It's going to have something before that, which is going to be a unique name.
+And if it doesn't have that, if the file name doesn't end in that, then I don't want to run because
+there's challenges with that, right? We don't want to get given like an image file or an audio file.
+We just need to get rid of that. Okay, we're not working with that. So that's just a quick check
+to make sure that we're doing the right thing. And so once that's done, we can now go ahead and grab
+the actual content of the transcription.json file. And you'll notice that it is a JSON file. It's not a
+text file. This is going to be the raw output from the transcription service from Amazon Transcribe.
+So previously we've worked with that and we sort of saw that working at a high level.
+Now we're going to get a little bit more in depth and we'll see what that looks like in a moment
+or two. So let's go and set up a try block. So we've got some error handling here. And we're going
+to, first of all, create a location for where the file content is going to live. So because we are
+basically want to load this in as a string. So let's set up somewhere that it can be. And then
+we're going to use the S3 client that we set up before to grab the data out of that S3 object.
+So I can call that much in the same way as you've seen other things being called from Boto3.
+So we've got a response that we're setting up and we're basically saying with our client,
+we want to get object. What object do we want to get? We want to get the object, which is at this
+bucket location and this key location. It's as easy as that. And once we do that, we get this
+response object back and we're going to unpack that in much the same way as we've done with other
+things, for example, with Amazon bedrock. So let me grab what that looks like and I'll paste that in
+trying to get my indentation right. And so the file content, which is of course what we were setting
+up before is inside of the response. It's at this point body. We're going to read it and we're
+going to decode it. So in a similar kind of way to when we were working with Amazon bedrock and
+we had to read the streaming body object response that we got back after a generation. So once we've
+done that, now we've got the file content. So we've got the content of this JSON file now in
+string format ready for us to do something with it. Now if you remember when we were at our earlier
+lesson and we were working with the transcribed service, it actually responded back with a JSON
+object, which is this JSON object. And that was quite let's say complex. It has a lot of data inside
+of it with all of the different detections. It's got a just a block where we've got the basic
+transcription. And then it's got each individual word broken out with who actually said it.
+And we needed to scan through all of that file, pass through all of that file and create the
+transcript, which was more human readable, I'll say, but it's readable for the large language model.
+So we need to do that here again. Now I don't want to do that inside the lambda handler. I would
+like to try and keep things a little bit organized. So let's go and create a quick function and this
+function is going to do that manipulation for us. And it's going to use exactly the same code
+that we looked at in the earlier lesson when we were dealing with the response from transcribed.
+So for that reason, I'm just going to paste it in here. We will talk about it, but I'm not going
+to build it up slowly. So I've just pasted it in here. Now I'm calling this function extract,
+transcript from Textract. We didn't have that function defined before, but we did have this code.
+So this function is going to accept some file content, which is going to be this file content in a
+moment. And let's make a little bit of bigger gap there so we can see the difference. So this
+function will take that raw JSON string in. And the first thing that it'll do is it'll use JSON
+loads to actually load the content from that file into a Python object that we can then actually
+do something with. And so that's going to be called transcript JSON. So from there, this is exactly
+from the previous lesson where we basically iterate through that particular JSON file. We're looking
+at the structure of it and we're constructing a line by line transcript of first person said this,
+second person said this, first person said this, second person said this all the way through to
+the end. And it's going to output here, this output text. That's obviously a string. And it's
+going to pass that back obviously to whoever called extract transcript from Textract. I guess this
+is abstract transcript from Textract formatted file, but this name of this function is already
+getting pretty long. Now we've got that in our file. We can go and call that and bring the response
+back so that we've now got a pure transcript that we can send off to our large language model.
+So let's call this. So I'm going to paste this in. So this is now our transcript. So we're going
+through the processing. We've started off with it raw. And then we've gone and done this conversion.
+And so now our transcript text, it's calling that function with the original file contents. And
+now we have a string of that transcript, which is great. Now I'm keen on having some kind of
+logging. This is something that you can check and have a look at inside of CloudWatch logs.
+Just as we did before, when we were looking at CloudWatch logs with Amazon Transcribe, you can also
+do that with the running Lambda function. And so having an occasional logging line can be super
+useful. Maybe we also want to print pass in here or log in here. What the transcript actually is.
+So let's log that out as well. And if we wanted to, we could have a look at that. Now, of course,
+you need to think carefully about what you log and what you don't log and have maybe a more
+comprehensive logging policy than just printing everything out because it could be confidential
+information in there that you don't want to have in the logs. But for now, for this particular demo,
+I think this is going to work fine. Okay, so now we've got that set up. We need to send that off
+to Amazon Bedrock to do that summarization of the text. And again, I'm going to create a separate
+function for that. So that's an interesting distinction here. I keep talking about how a Lambda
+function actually can contain multiple functions. But there's just going to be one entry point.
+So we have this. This is our entry point. And it can go ahead and call multiple other functions if
+you want to. So let's define another function. And for this function, I'm going to call it
+Bedrock summarization. And the code that we're going to put in here will look very similar to
+code that we've seen multiple times before inside of this course. And it's going to use the
+ginger template. So the majority of this code really is going to be about sort of hydrating.
+I think that's the terminology putting our data into that ginger template. So let's go ahead and
+do that. This is pretty simple. You will see different ways that you could definitely
+extend on this and make it better. But first of all, we just need to open up the text file
+that's being created. So it's going to open up prompt template. Now, for the keen IUD amongst you,
+obviously, this isn't running on this server. As we've said a few times, this is going to be running
+inside of the Lambda service in the serverless environment up inside of AWS. So when we send our
+Lambda function, we also need to package up at the same time, the prompt template and send them
+both. And we absolutely will do that. And so when we do that, when the Lambda function runs,
+prompt template.txt will be saved on disk or in the file system right next to this Lambda function.
+So it's fine to do this. And we can just open up this text file and go ahead and grab ourselves
+the template string. So that's going to be a text string holding that template as we've defined
+before. So then we need to hydrate it. We need to put the data into the template. So to do that,
+I'm going to create a dictionary called data. And then I'm going to load this up with the data
+that's required by the template. Now, if we scroll back, I'm just going to scroll quickly. You
+don't necessarily have to do this. I'm scroll back to look at the actual template that we created.
+There are a couple of variables. We have transcript that needs to be inserted into the template. And
+we have topics. And inside of those topics, they're going to be a list of individual topics. So we
+need topics and transcript. That's what we need to pass in. And that's what we need our Lambda function
+to pass in on our behalf. So let's set up transcript. And into transcript, of course, we're going to
+pass in the string, which has been sent into this function. So that's super easy. And then we need
+to pass in some topics. And this is really just a sample. So let's go and write a list of topics
+directly into here. And so I've experimented around with these to see what works kind of well.
+So let me paste in this list and put my colon back in there. So charges, location, availability,
+these are the topics that we're interested in having an itemized breakdown of what's happened
+inside of the transcript. And so you could put more in here. You could have less in here. Or you could
+have a different way of setting up your template if you wanted to. So that's our data that we have
+ready to insert into our template. And so then the next set of lines, it's really just about the
+ginger process. And so this is using the ginger templating library. We have to set up this template
+object. So template here is the template object from ginger. So if you scroll back up for a second
+through a half completed code, you'll see here that we're calling this this template object here.
+And so we're creating a version of that. We're passing in the template string as it wants in
+its creator. And so we'll have this template to ginger template object here. And then we can
+use that to create our prompt. So we can type in prompt and we can call template, which is this
+variable here, this object here. And we're going to render it. That's the terminology from ginger,
+hydrate, render. And we're going to pass the data in. So that's all we need to do. And by the end
+of this, this prompt variable here will contain a text string. And that text string will be our
+prompt template, which has been populated with all of our data. Now obviously that's a very simple
+version of this. You can see how you could use ginger to do something more comprehensive,
+potentially, and even doing things like version control of prompt templates and all kinds of
+things like that, which can be super useful, especially in this sort of new era of large language
+models where the prompts are really important. And they contain essentially business logic inside
+of those prompts. So being out of version control, those is really handy. Okay, so we've got our
+prompt set up now. Again, we can do some quick logging. If we want, let's print that prompt out.
+We probably won't see that this time around. But again, if we needed to debug, then it's going to
+now be inside of our cloud watch logs. And now it's just a case of sending this prompt off to Amazon
+bedrock to the Titan text express model is the one we're going to use here and go and grab our
+generation back. And so as we've seen many times before, we're going to set ourselves up. Yeah,
+some keyword arguments. So let's say that these are our keyword arguments here. And it'll look very
+similar to many times that we've used this before. But let's just cover it one more time. We're calling
+the particular model that we want. And then the key things in here are that the prompt gets passed
+into this text input. And then we've got our generation configuration options here with maximum
+tokens, stop sequences, temperature and top P. Notice how the temperature is really low here. So
+we're not necessarily interested in the model being particularly creative setting temperature to zero
+will make the model more consistent, meaning that for the same transcript and for the same set of
+topics, you'd expect the model to generate nearly the same response. So again, you can experiment around
+with these parameters. You could expose them out to environment variables. There's lots of things
+you could do. But for now, I think these variables are reasonably set. So then we just go ahead and
+call our response back from the model, which we've done many times before. And we can go ahead and
+return the summary that we get. And so let me again save you having to watch me write it one more
+time. Here is our summary where we're going to do some JSON loads. We're doing it all in one line
+here from our response. We're going into the body. We're reading. We're getting results. We're getting
+the output text and we're returning that in the string here summary. Okay, so that is the bedrock
+summarization function that we've added inside of our overall lambda function. So we're making great
+progress here. There's not much more to go with this lambda function. And I do appreciate that we
+are building up a whole bunch of code. And we're not actually running it here. So it's just a way
+for us to step through it step by step. And you can see what's happening. All right, let's go back
+to our lambda handler where essentially following the stages of the execution of this function,
+we're almost there. We now have the ability to do our summarization using Amazon bedrock. So we
+just have to go and call for it. So let's go and grab a summary back from bedrock summarization
+where we passed in transcript. And that's going to do all of those things for us. It's going to
+populate the template and then actually do the generation and then pass it back in summary. So
+this should be at this point, the JSON return that we want to see that we've asked to have
+returned from our generation from Amazon bedrock. And what do we want to do with the output? So
+where do we want to put that? Now, we could just print that out. But if we did that, it would just
+end up inside of cloud watch logs. And that's not very useful. Nothing that's actually called the
+service will actually be able to see that output. So, and you know, a reasonably common way of
+outputting from a pipeline function like this is to save the output to s3. And so you'll notice that
+with this we put an object into s3 and then we process it and we save an object back out to s3.
+s3 really can be used as this sort of staging point for data manipulation like this in an event
+driven architecture. So let's go and do that. We've got an s3 client that we've already created
+and we can go and use that client again to upload the object back into s3. And so we can do that.
+I'm going to paste that in here. So this is s3 client. We're using put object and we're going to put
+it into the bucket. We're going to write a specific key here, of course, because we don't want to
+overwrite the JSON file. And we're going to call this results dot txt. Obviously that's reasonably
+hard coded and probably would need to be extended. But for now, it will be fine. In the body, we're
+going to put the summary. So that's the actual data itself goes into the body. And it's a plain
+text file. So we've got a mind type there when we call the s3 client put object. So that line
+on its own, of course, it's multi line, but that single command there will upload our result
+into our s3 bucket. And so it's going to put it back into the s3 bucket that we originally got
+something from. For this example, since you're looking for the transcript file and also writing
+the summary to the same bucket, if you don't have some code to check what type of file is being
+added to the bucket, then the Lambda function may get stuck in an infinite loop. What I mean is when
+the Lambda function writes its summary text file to the bucket, this will trigger the Lambda function
+to run again. If you don't check that the file name and the file type is not what you're looking for,
+then the Lambda function may attempt to summarize its previous summary. So to avoid this loop,
+we can add this statement and make sure that the Lambda function only proceeds when a new
+transcript.json file is added to the bucket and not when the summary is or anything else is
+uploaded to the bucket. Okay, let's finish off this tri block that we've got here. I'm just going
+to do that. It's boilerplate Python really at this point. So we're going to have an exception. We're
+going to log the exception if it does occur. Otherwise, we're going to return with a status code
+200. This return block here is what you would see if you were calling this Lambda function.
+Now as it happens, it's going to get called by the event that happens on the s3 bucket. But if you
+were to extend this and run this in a different way, then you would get this output coming back,
+saying hopefully everything's run successfully. And so at this point, the code should be complete.
+We have our whole Lambda function there. And at this point, all we've done again is we've just
+populated this cell. But if we just review through all of that and make sure it looks fine,
+you can just take the code that's already there and just run it. You don't have to build it up
+step by step. It's up to you. But I'm going to press shift and enter on here. And that should
+now write this Lambda function out to the disk. And obviously it's overwritten it because,
+you know, I've already I've already done that once. So now our Lambda function has been written.
+The next part of this is now super easy because we've got all of those helper functions. So we're
+going to use the helper functions to actually upload this as a Lambda function and start to
+actually see it working before we move to the next lesson where we tie all of it together into a
+fully automated pipeline. So to use the Lambda helper, let's go ahead and call the Lambda helper
+and deploy function. Do have to spell it correctly. And the things that we pass into here,
+well, we're going to pass in everything that we want to have sent to the Lambda service.
+And so we have a list of files. And so we have the Lambda function.py. Let's go and break this
+out over a couple of lines so that we can actually see what we're doing. So the first thing that we've
+got here is a list. And this is just a list of all of the files that we want to upload and actually
+zips these up actually. So it takes the Lambda function itself and our prompt template it zips it
+up and sends that to the Lambda service. And we also need to have in here the name of the function.
+So this just makes the code a little bit more portable. So we've got a function name and we're
+going to call this the Lambda function summarize because that's what this Lambda function does.
+Okay, so that's literally all we need. And if we run that so shift enter, you'll see it's
+sort of going through the various stages. So it's zipping up the function. But what it does is actually
+looks to see if the function already exists because it's compatible essentially with you re-uploading
+and doing it again. So if you want to experiment with the code alter the code then you can do and then
+you can just run this code again. And rather than creating a new function it'll just update the code
+from the function that's already been created. So it'll do all that kind of stuff for us. So in this
+particular case it didn't exist because we've not run it before. So it goes ahead and creates it
+and it says done. So thumbs up everything's looking great. Now the next thing that we have to do with
+this point we have a Lambda function inside of AWS. It's sat there. It's ready to be run. It needs to
+be told to be run. Now we've written the code in such a way that it will work when it's been triggered
+by this object being passed to S3. But we actually have to set that trigger up. Now that the function
+exists we need to tell the Lambda function to be triggered whenever something is uploaded into
+that S3 bucket. Now it's an S3 bucket which is already being created for us inside of this lab
+environment. And if I scroll back up seems like quite a long way now we have this this this bucket
+here this bucket name text this is the actual bucket that we actually want to put the trigger on.
+So whenever the object is put into this bucket we want to trigger our code and we can do that again
+with the Lambda helper. So if I just call Lambda helper and this time we're going to add the Lambda
+trigger and we pass it in the name of the bucket. And just before we run that don't run it yet
+just just before we run that I also would need to do to set something else up for the Lambda trigger.
+I just want to set up this this is the filter rules suffix. So remember before I'm setting how we
+have multiple safeguards to make sure that the trigger only works under certain circumstances. So
+to prevent this trigger from working when a text file is uploaded as this Lambda function actually
+will do to itself we're setting the trigger to only work with JSON files. So that's going to pass
+configuration parameter into this Lambda trigger and now we can run it. Okay so again this is just
+the helper function doing this for us and once we've done that we get back to here it says trigger
+has been added so everything's successful there. Now if you do have an error message after you've
+run this it's possible that you run this too quickly after deploying the function it does need
+just literally half a second in between deploying the function and deploying the trigger maybe
+a couple of seconds. So just just wait just a beat just before running all of these cells and
+you should find it's fine you can just rerun it a number of times and it will it'll work eventually.
+Okay so now we've got our trigger set up so now we're ready we're actually done if we upload a JSON
+object into that bucket it will actually go through and it'll do the summarization for us. Now
+realize that we're actually uploading the result here that transcribe will make for us so we've only
+done half of it and we will complete this in the next lesson but let's prove that what we've done
+here does actually work and so to do that we've got a demo transcript sat on the file system here
+let me actually just use the display helper again this time using JSON file which will hopefully
+nicely print out this data to the screen for us. Now this is enormous by the way so we're not
+going to scroll through all of this and in fact what I'll probably do is I will comment out this
+line and run it again so that we sort of get rid of it and get more space back I just want to show
+you that this is here so if I just run this yeah this oh it's put it into this sort of sliding box
+here so you can see this is the demo transcript or JSON or the job name of when it was originally done
+this is an example that I ran on my own machine a while ago and we can use this just to show if
+you like that the Lambda function works and so you can see all of the bits and pieces in here and
+this goes on forever and ever and ever and ever and there's all the different parts of the speech
+and who said it and the start time and the end time and this is essentially what we're passing through
+with that code that we looked at before to extract out something more readable which has actually got
+the you know speaker one speaker two speaker one speaker two I just wanted to show you that it was
+there I'm going to comment that out and run it's just a useful way of getting rid of all that
+output so what we need to do is we need to upload that JSON file into our text bucket that we had
+and we can use our handy little helper functions to do that we're just going to call upload file we're
+going to tell it the bucket that we want to put it in and we're going to tell it the file which is
+local to us that we want to upload so let's go and run that and it says that it's been uploaded and
+there's a nice big typo in there we'll fix that up at some point let's then use the next
+helper from the s3 helper which is to list objects so if I just run that and then we can see here
+we've got what we have just uploaded their demo transcript and we can also see already results.txt
+and the reason why that's there with a timestamp which is very close by you notice it took three
+seconds I'm sorry six seconds so this results.txt is the result from our lambda function
+hooray it worked okay so our lambda function has been uploaded and it's actually been triggered
+and it's actually worked and so essentially this is the end of the pipeline again in the next
+lesson we're going to come back and put in place the beginning of the pipeline and you'll see
+everything working back to back or all the way through is that's what I mean to say so let's go
+and grab that so if I just run the s3 helper again we're going to download the object again if
+you were doing this inside of maybe your own account you might just go to the s3 console and just
+download the object but this is going to be download results.txt which is this object there and it's
+going to make it into a file when it downloads it yep bucket downloaded it was successful that's
+all good so now it's just a case of showing that file and yeah let's use a helper again we could
+write something but let's use display helper so display helper and this is what this is a text file
+and we just pass in results.txt so wait a minute what are we expecting to see here we've passed
+in the transcription data from the audio transcription and we've asked it to produce a json output
+highlighting anything that might be of concern or of interest inside of the phone call so now let's
+look at what we got and here we go so we've got a nicely formatted json structure we've got a
+sentiment which is positive and it says yeah there's this topic of charges the preauthorization
+is a standard procedure to cover any incidental expenses you may carry on your stay however
+it is only a hold and not an actual charge so it's picking that out of the actual conversation of
+an issue of a topic of charges and if you were to experiment around with the prompt and with the
+different topics that you want out you could get it to do different kinds of things of course
+there are other models that you can use with amazon bedrock as well but that's a really good example
+of how we can create the end part anyway of this pipeline that we're going to put together
+in the next lesson we'll complete all of this now and we'll add in the automated transcription
+component and see it working end to end.

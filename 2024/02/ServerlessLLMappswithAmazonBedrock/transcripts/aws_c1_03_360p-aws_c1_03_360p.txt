@@ -1,0 +1,323 @@
+In this lesson, you'll see and hear how to take audiophiles of conversations between two people,
+in this case between a customer and a company representative, and transcribe them.
+You'll then process this transcription and use an LLM to analyse the conversation.
+This architecture could be adapted to work with other audio sources, such as recordings of meetings
+or presentations, or to transcribe audio from video files. So let's tune in.
+And before we get going with the actual code, let's just step through the process that we're
+going to follow in this lesson. So we're going to use Boto3 again, and we're going to set ourselves
+up with a couple of different clients. So not initially the Amazon Bedrock client, we're going to
+connect to S3, and we're going to connect to transcribe. And these services are going to form
+a very important part of the data processing pipeline that we set up. So with those services set up,
+we can transcribe our audio file. We're going to do that. We're going to create a unique name for
+that. We're going to then transcribe that audio file into a text output. Then we're going to need
+to take that text output and convert it into a text format that we can use inside of the prompt
+and then send it to the large language model. So it's a form of prompt engineering that we're doing
+where we're converting the data ready to put into that prompt. And in this lesson, we will
+actually send the transcription off to the large language model just to see the kinds of outputs
+that we can have. And then in the subsequent lessons, we're going to start building that
+further and further into our fully automated pipeline. So let's just remind ourselves of the
+audio file that we're working with. And I'll re-import the library that we used in the last lesson.
+So that's the ipython display audio control. So I'm just going to run that line and then run
+a couple more lines that we've lifted again directly out of the last lesson where we're going to
+put a widget inside of our notebook, which allows us to play dialog.mp3. So running both of those
+lines, exactly the same lines as we had before, little widget loads up and just really quickly,
+let's remind ourselves what that audio sounded like. Hi, is this the Crystal Heights Hotel and Singapore?
+Yes, it is. Good afternoon. Okay, so it's the dialog between a customer calling up the hotel,
+and then the hotel staff working on that call and working with that customer. So we've got this
+audio file. And again, this is inside of our local environment, so this is running inside of the
+notebook server that we're using. But what we want to do is we want to start moving to the cloud. We
+want to start moving to a serverless architecture, which is running for us in managed services inside
+of the cloud. And so the first thing that we're going to do is we're going to upload this object,
+or so this file, into the simple storage service. So AWS is S3 service, the simple storage service.
+So we do that using Boto3 again. So I'm just going to import that now. So the Boto3 library again
+is the SDK for AWS that runs in Python. So let's run that cell so that it's defined. And then we can
+go ahead and create ourselves some clients again. Again, if you remember from the last lesson,
+we do Boto3 client. And then using that notation, we can create a client, which will connect us to
+the various services, which run inside of AWS. Last time we did it for Amazon Bedrock. And in this
+particular instance here, we're going to create a client for S3. And in the same way that we did last
+time, we're going to point it to a specific region for this particular API endpoint. And we're going to
+say the region name of US west two, just to keep everything consistent with the way that we're
+running these notebooks. So let's store that in this S3 client object here. So we've got S3 client
+and let's run that. So now we have an S3 client to find. Okay. So let's go ahead and upload the
+dialog MP3 into S3. We've got an environment variable that is being set. And we can use the name
+that's setting that environment variable to get access to an S3 bucket, which is already being
+created for us in this course notebook. So I'm just going to import OS into Python so that I've got
+access to the environment variables in this particular environment. And the way we get access to
+those environment variables is to call on OS dot environment and then ask for a specific name
+inside of the environment variables that it's got access to. In this particular case, we're going
+to look for resource S3 bucket name. And this is just going to bring back a string. So let's go
+ahead and store that string in this location at bucket name. Of course, all we're doing here is
+just pulling the environment variable out of the notebook environment. And of course, if you're
+writing your own code, then you can go ahead and have this as a hard code string or your own
+environment variable or wherever you want to get the bucket name from. So let's go ahead and run
+that. And now that's defined. So the value that I have in here right now will probably be different
+from the one that you have in your running environment. But as long as we've got the valid bucket
+name stored in there, then we're happy. So from there, let's go and define a file name for our object
+that we're going to upload. So file name in this case, again, it's just a string. It's dialogue
+dot MP3. So we've got that defined for when we upload the object. And it's simply this. So we're
+going to take the S3 client. So let's say S3 client, which is the client object we created before,
+we're going to call upload underscore file. And then into there, we can add the file name,
+the bucket name, and then the file name again. And the reason why we're doing this is because we're
+pointing to the local file, then the bucket name, and then the name we want to give the object
+once it's uploaded into S3. So we can go ahead and run this cell. And so now our object is uploaded
+into S3. So now we're starting to have a cloud-based architecture. All right, now we can
+create and perform a transcription of this audio file. And to do that, we're going to create ourselves
+a another client object. So for this client object, we'll go to photo 3 again, we'll load up our
+client. And this time, we're going to create a transcribe client. So transcribe, so Amazon transcribe
+is the name of the service. And then we'll have a region name once more pointing to
+US west two. And again, we're just going to store that in a variable name. And that variable name
+can be transcribe client, just trying to keep some consistency there. And I'll run that. And now I've
+got my client defined. And so now I'm going to use this service and send it a command, an API
+command asking it to transcribe our audio file. And we're going to tell it the location of that
+audio file inside of S3. So the transcription job needs a unique name. So I'm going to use UUID
+in order to provide that for me. UUID stands for universal unique identifier. It's a unique
+string of letters and numbers. And that's what this UUID library helps us to generate. So let's just
+import that library. And so then let's create a string using UUID. So we can build this up. So
+we're going to have UUID and we're going to use UUID4. UUID4 is one of five methods for generating
+these unique identifiers. UUID4 is good enough for what we need in this particular application.
+This will output a long and hopefully completely unique set of characters before we can't use it
+like that though. So we want to wrap that up in string so that we've got something a little bit
+more usable yet again. And so this is getting useful. We could use this kind of approach to get a
+unique name for the transcription job. So what I'm just going to do is just put in the beginning of
+this that we want our job name to be transcription job, hyphen, and then whatever this is. Lots and
+lots of different ways of concatenating strings together inside of Python. This one will do for now.
+So if we take a quick look at our job name, then we've got a unique name that we can give to
+the transcription job. All right, so let's get into the guts of how we actually call this. And so
+we're going to call the transcribe client and then we're going to call the method on that which is
+start transcription job. So if we just give ourselves some space here to put in some arguments so
+we can pass some details about this job. So the first thing that we're going to do is we're going
+to pass in the name that we've defined. So we're going to say that add transcription job name is
+job name up above. Then we're going to give it the audio file that we want it to work with. Now this
+audio file has been uploaded again into s3. And we've got a bunch of variables that we've set previously
+about the location in s3. So if I just paste in this command here, we're pointing to where the
+media is and we're saying it's a media file URI. And then we're doing this formatted Python string
+here to show the location inside of s3. So this s3 colon forward slash forward slash the bucket name
+and then the file name or the object key is the way that we can specify exactly where that
+piece of media is. So once we've got that, we can add in a couple more settings here. So this is
+our way of telling it the media format. So we're sending it an MP3 file and then giving it an
+idea about the language. So it is possible for it to detect the language automatically. But we
+just make it easier for it if we're telling it. So we're going to tell it that this is US English.
+And then we supply a bucket name for the output bucket. In this particular case, we're going to
+use the same bucket as the input bucket for the output bucket. So this is where we're going to
+deposit the output of the transcription job. And it's really useful to define where the output of
+this job goes so that we can start to look at event-based architectures later on in the course.
+And then finally, we're going to put in a couple of settings here for the AI model itself. So it's
+going to identify different speakers who are speaking inside of this transcription. So we're
+basically telling it that we know that there's going to be more than one speaker and we want it to
+label those different speakers when it finds them. And we're telling it to look for a maximum of
+two. The transcription service can look for a maximum of 10. But just putting into here means
+because we know it's going to be a conversation between two different people. Okay, so this is all
+pretty much set up. We want to grab the response out from this call to this service. So let's go and
+store the output from all of this in response. And then we can go ahead and run this cell. And before
+we move on, take a look at this code and make some adjustments to it. So play around with it, tweak
+it a little bit and see what you can make it do. So maybe pause the video here and have an experiment.
+So it took us a while to go through the process of building up that transcription job. And you might
+notice that it actually returns immediately. But it hasn't necessarily finished yet. So let me go ahead
+and paste the whole of this next cell in. I'm going to run it and then we're going to talk about
+what it has. It's already finished by the time I've managed to do it. But if you just run this cell,
+all this is doing is it's basically waiting every two seconds and going to check that transcription
+job to see if it's actually complete or potentially if it's failed for some reason. So when we start
+the transcription job, it's sending a command to the service to go ahead and transcribe the file.
+But it's not coming back with the actual output in response. It's coming back with a pointer to
+the ongoing job. Now this particular audio file isn't very long. And so in the time it took me to go
+and copy and paste this piece of code in here, it had already finished. But you can see the point
+if this is going to be a much longer transcription job, then we want you to give it just a few more
+seconds or a minute or two to run through all of that. So this is just a simple loop, as I say,
+just pausing every two seconds to go through and look for the status. And it gets the status by just
+looking at the client and then asking for get transcription job. And then we pass in the name
+of the transcription job that we created previously. And so it just goes through there and looks to see
+if it's finished or not. Anyway, it has. So we can go ahead and carry on with our code. And we can
+take a look at the output of that transcription. So let's import Jason so that we've got some Jason
+that we can work with. So we've got the Jason library that we can work with. And let's go and grab
+back the text from the transcription. So I'm just going to build up some code here. And this is
+why I spent essentially I'm going to paste this first line here. So I'm basically going to check one
+more time to make sure that it's complete. That means that if we do run this code in the future,
+then it'll only run if it's actually going to work if you see what I mean. So let's then go and
+put in some values here. I'm just going to paste in a block here. And there we go. And this block is
+going to derive the transcription key. In other words, the file name that's inside of s3 that
+will have been created. And the naming format is the job name and then dot Jason. So again, another
+reason why we have that unique file name. And then it's going to grab the actual object itself using
+our s3 client. It's going to use get object. And we're going to tell it which bucket and which key,
+in other words, which file name. And it's going to be able to go and grab that particular object
+for us. And then we can read that object. So we're not even saving it to disk or anything. We're
+just going to read it using that dot read that we looked at before from the streaming body return.
+The similar thing that we saw in the last lesson. And we're also going to run decode on it as well.
+And then we should have our text there. Of course, that text then is going to be a Jason structure.
+So we're going to load that. And then finally, we're going to have the transcript Jason object here.
+So let's run that and then take a quick look just by dumping this into the cell and running it.
+And we should see there we go. We have the output from our transcription job. And you'll notice
+that there's actually a lot of information in here. And so we've got the again, the job name.
+And then we've got the status that it's completed. And then we've got the results itself. And so we
+got transcripts here. And this is all of the text. You'll notice how there is no differentiation
+between who's speaking in this particular part. If we scroll down and down and down and down,
+then we start to see some more information here. So we've got speaker labels. And we can see the
+different speakers. So we have speaker zero. And all of these different timestamps from when they
+were talking, speaker one and timestamps for them as well. If we scroll down even further,
+then we start to see a different kind of data. Here we go. So you can see the individual
+words. So let's have a look. Hi. Is this the crystal heights hotel? And those words there
+are coming from speaker label. There we go. So speaker zero initially, speaker zero said this
+and this and this and this and this. So using this part of the output, which is inside of items,
+then we can get the particular word and who said it. And we can start to build up the transcript
+in a format that we want to see and we want to use. So let's go ahead and do that. Let me just get
+rid of this for one second. And let's expand out this code that we were working on. We saw
+in there that the information we were interested in was items, which is inside of results. So let's
+go ahead and pull out just the items. And then let's just go and loop through those items. So let's
+say for item in items, we're going to go and print the item. So this should get us a little bit
+closer to what we're after. So I just run that and now we're straight into just this section of
+the document where we've got the individual words and who said them. So this is getting us a lot
+closer to what we want. So instead of this, let's go and pull out the speaker label. So the speaker
+label is here and we've also got the content itself and the content is the word. So we want the
+content, the word high and the speaker label of who it is. So those are things that are useful to
+grab. So let's instead of printing that, let's remove that and set up some a couple of variables
+for ourselves. So speaker label and content where we're getting that speaker label out, we're getting
+the content, which is actually inside of alternatives. As you can see, it's the first one in the list
+and then content. So that will give us the speaker label and the word, which is said. So that's
+useful. Again, let's step by step through this, make sure that we're getting what we want to see.
+So let's just print that in a formatted string. And yeah, so we can see we're getting what we want
+here. So the speaker and what he said, we want to have just speaker zero and then the entire thing
+that speaker zero has said and then speaker one and the entire sentence that speaker one said. So
+we just need to do a little bit more formatting of this code and then we can get that. So let's set
+ourselves up a couple of variables up here before we get to the passing. We're going to set up the
+output text. So this is somewhere we can store the final output and we'll store the current speaker
+as well. So we know who it is that's currently speaking and we can just traverse through this list
+and concatenate together the string for us. So let's go and replace this line here with some code
+here, which is going to look at the speaker label that's come through and see if it is the same as
+the current speaker or not. And if it isn't the same as the current speaker, then we'll set it to
+the current speaker and we'll start that output line by using this formatted string and saying,
+okay, well, this is the current speaker here. And then obviously what we'll need to do is concatenate
+the rest of that content. So we can do that by just pasting in this line here. So output text,
+we're adding to the end of that output text, the content. So this is going to loop through all of
+these lines. It's going to look for a speaker whether it's different or not and it's just going to
+start concatenating these strings together. Now, the other thing that I'm just going to add in here,
+and it's one of those things that I'm just going to add in, it's sort of like trust me, this will
+help just to make sure that the formatting is nice is just something to deal with some punctuation.
+So you might have noticed when we looked through the different item types before, we have got the
+words, but we've also got some punctuation. And so we're just going to strip the output from that
+and remove the trailing space. And it's probably not entirely necessary actually seeing as we're
+passing this to a large language model, but for the sake of making it easier for us to read, then
+let's do that. All right, so with all of that together, if we run that cell again and now look at
+output text, then we should see that we've got our transcription looking more or less like it's
+in order. Now it's not printed out very nicely, so let's just do some print brackets around that
+like this. And now we can see our transcription coming together. So speaker zero says what they say,
+speaker one, then speaker zero, and through it goes. So this is looking pretty good. The only
+thing that we want to do now is we want to save this transcripts to a file because we don't want to
+just print it down on the screen. So just by using the open command from Python, we're going to save
+this into a text file locally, and we'll use the job name again as a unique identifier locally for
+this particular text file. So let's run that. So with this code, obviously there are bits in here
+that we could actually change. So if you'd like to have a go at doing that, then pause the video now,
+change some of those bits inside of the code, see what difference it makes. And when you've had
+enough, then I'm pause the video and I'll see you in a moment. We're going to call
+Boto3, we're going to go to client, and we're going to go ahead and load the bedrock run time
+so that we can make some inference or make some generations with our model. Let's remember to put
+in our region name, and we're going to put in us west two, of course, again, and we're going to save
+all of that into a bedrock run time variable. So let's do that and run that. Okay, so now we have a
+bedrock run time client ready, but we do need to actually sort of following through as though we
+hadn't saved it to the disk, I suppose, or so we're working with this as a sort of standalone
+piece of code. I'm going to just put some standard Python in here to open up that file name and
+read that file in to a variable that we're going to call transcript. So again, just sort of like
+simulating, if you like, that we hadn't done the previous step or that previous step had happened
+at a different time. So we've now got our transcript loaded in. Okay, so let's go ahead and prompt
+with this. Now we looked at a way of doing that in the last lesson where we just did some fairly
+simple string concatenation to put a simple prompt together and get a summary of this transcription.
+But this particular case, I want to do something a little bit more sophisticated than that.
+So in previous examples, you've created prompts within strings within your code,
+and there are many ways to do that in Python, such as basic string concatenation and F strings.
+But for production cases, such as here in this serverless cloud architecture and in this course,
+it can be more helpful or more manageable to define a template in a separate file. In this case,
+we're going to use ginger, the ginger templating library. And by doing this and defining the template
+in a separate file, you can look to apply version control specifically to the template. And by
+doing so, separate out the prompt, which might be being code developed by the business user
+from your application code. This makes it possible to modify the prompt and to swap in different
+prompts during production. So whilst the code's actually live. And so what I'm going to do is I'm
+going to use this magic notation with Jupiter notebooks. And we'll see this again in a later
+lesson as well, where we're using this right file. And then we're giving it a file name. And so
+if we do that, then any text which we enter into this part of the cell down here, when we run
+this cell, it will save that text into the file name, which is written here. In this case,
+would be prompt template.text. So I don't want it to be just text. I want this to be the,
+obviously, the template for my prompt. So I'm going to paste in something here and we can
+step through this and take a look at the way it fits and where it works. So this template,
+this prompt template that I've got, again, it will be saved as a text file here. And I can just
+put a couple of line breaks in here so we can read it a bit better. So I need to summarize a conversation.
+The transcript of the conversation is between the data XML-like tags. And there we have the data
+XML-like tags and the notation, which we'll add transcript in here. And so we're going to have a
+look at a slightly different way of doing our prompt templating using the ginger library. And then
+I've got some more instructions here. The summary must contain a one word sentiment analysis and
+a list of issues, problems or causes of friction during the conversation. The output must be provided
+in JSON format shown in the following example. And then we give an example of the actual output
+that we'd like. And then we say write the JSON output and nothing more. And then I say here is
+the JSON output. And so we're hoping that our next token predictions will build up an output
+from the LLM, which will give us exactly what we want in this kind of format here. So that's a summary
+of how this particular prompt will work. And it's outputting our summarization or it's outputting
+information about our transcript in a slightly more system usable format in this JSON structure.
+So let's run that. And by doing that, you can see that it will, in this particular case, it's
+overwriting it because in this environment, I've already done this to make sure it'll work.
+But it should say that it's written the text file for you there. And if you decide that you'd like
+to make some changes to this particular prompt, then you can go ahead and do that inside of the
+Jupyter Notebook, run this cell again. And it will overwrite it for you as well. And overwrite
+the prompt template.txt. So once we've got that, we can use the ginger library, in the case ginger
+two, in this particular case, to fill out the information in this template. Now it's a little
+bit overkill because this is such a simple template that we've got. But it's a useful technique to
+be able to do this. And it's a very capable templating library. And so we can use it, and we will
+use it a little bit later in the course as well. So let's import ginger two and import template
+from ginger two. And then we are going to need to open up the template that we've just saved.
+So all of this that we just typed in here saved this template out to prompt template.txt. So
+again, with our standard Python notation to load in prompt template.txt and load that into a template
+string. So let's run that. And again, if we look at the template string, it'll be exactly as we
+think there is the template as defined up above. So let's get rid of that.
+Okay, so the next thing that we need to do is we need to define the data that we're going to
+insert into our template. And in this particular case, there is only one thing that we want to put
+in there. But we're still going to define it in the same way as I would do if we had a lot more
+data. So let's go ahead and say that we're going to create a data dictionary and we're going to
+transcript. So this is basically pointing to this particular name here. So I'll copy and paste
+it to make sure it's exactly the same. And we want to put into there the transcript that we have
+loaded out of our file before, which happens to be called transcript. So let's go and use that
+and put that there. So now we have our data dictionary ready to insert into our template.
+So I can go ahead and run that. So that's defined. And then I can call on template and I can
+load template with template string. So this is the ginger to template object here. And we're
+going to create one of those using the template string. So that's the format that we've got. And we
+will call that template so that we can go ahead and use that. So let's define that. And then we
+just call render on that template. So we can say template dot render. And then we pass in that
+data. And that's all you have to do. I do want to, of course, save the output of that somewhere
+or just have that stored somewhere. So let's store that inside of a string called prompt.
+Okay, so a lot of different lines to do something fairly straightforward. But the architecture
+there is super powerful. So we'll be using that later on as well. If we take a look at prompt
+now and print that out. In fact, let's just go ahead and print it out rather than dumping it out
+raw. And then there we go. There is our current prompt. So exactly as we saw before with the data tag,
+then all of our transcripts going in there. And then the end of the data tag and the rest of our
+instructions all set out for us in our prompt. So all that now remains for us to do is to pass that
+into the Titan text model using Amazon bedrock and take a look at what the output is going to be.
+So let's go straight in and paste in the keyword arguments exactly as we've seen in the last
+lesson. So we're calling on the particular model we're going to use. In this case, it's the Titan
+text Express V1. Everything else should look similar from the last lesson. In this case, though,
+I've turned the temperature right down to zero. And that's because I don't particularly want
+this to be creative in its output. And I want to try and ensure that it's going to get a nice
+syntactically correct JSON output. So by turning the temperature down, we stand a good chance of
+that working for us. So let's run that. So we've got that defined our keyword arguments. And we'll
+just put the boilerplate code in that we've seen before. So bedrock runtime invoke model passing in
+those keyword arguments. We get our response back. And you'll notice this is taking just a moment
+or two to run. And while it's running, let's get the next code ready to go. So we're just going to go
+again, we're going to go into the response. We're going to get the body out. We're going to read it.
+We're going to load the JSON out of there all in one line. Get the response body. And then inside
+of that response body will get results zero and output text. It is worth noting actually, while I
+mentioned this, that the response body format will be slightly different depending on which of the
+large language models you use from Amazon bedrock. In this particular case, because it's the
+Titan model, then we know the location of the output is like this with results zero and output text.
+But if you use something like the Claude models or the AI21 labs models, then the output and the
+location of the output text or the generated text will be wherever it has been defined by those
+development teams. So let's run this. So we get our generation and just print our generation out
+and take a look at what we've got. And we should have, in indeed, we do have our JSON structure,
+which provides us with a single word sentiment analysis. So it's positive. Overall, the transcription
+was positive. And then we have a list of all of the issues which have been identified. And at the
+moment, it's pulled out a whole bunch of different issues, talking about what speaker one has done.
+And in most of these cases, they seem relatively positive. We can filter this more by being a bit
+more specific in our prompt templating and also in our prompt writing. And we'll have a look at
+how to do that in a later lesson inside of this course. But for now, what we've done is we've
+used Amazon transcribe to transcribe the audio file using serverless services inside of the cloud.
+We've stored the actual audio file in S3 in the first place. And then we've used Amazon bedrock
+again, serverless service, fully managed service with that large language model, the Titan model
+to come out with this generation. And so we're really pulling together the different building blocks
+that we need here to be able to implement this fully serverless, event driven architecture,
+data processing pipeline. Now, we've looked at the code in some detail here, including the prompts
+that we're using. And we've printed them out to screens so that we can see them too. What you
+want for that is an effective logging solution. So for audit and compliance and for the all
+important debug logging is super useful. And that's what we're going to have a look at in the next lesson.

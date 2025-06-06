@@ -30,7 +30,6 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 ## 2024
 - [Automated Testing for LLMOps](./2024/AutomatedTestingforLLMOps)
 - [Building Applications with Vector Databases](./2024/BuildingApplicationswithVectorDatabases)
-- [Serverless LLM apps with Amazon Bedrock](./2024/ServerlessLLMappswithAmazonBedrock)
 
 - [Open Source Models with Hugging Face](./2024/OpenSourceModelswithHuggingFace)
 - [Knowledge Graphs for RAG](./2024/KnowledgeGraphsforRAG)
@@ -46,6 +45,7 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 
 ### 02
 - [Prompt Engineering with Llama 2](./2024/02/PromptEngineeringwithLlama2)
+- [Serverless LLM apps with Amazon Bedrock](./2024/02/ServerlessLLMappswithAmazonBedrock)
 
 ### 05
 - [Quantization in Depth]()

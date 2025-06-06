@@ -1,0 +1,19 @@
+Hi, and welcome to this short course on serverless LOM apps with Amazon bedrock built in partnership with AWS and tied by Mike Chambers.
+Thanks, Andrew. It's great to be here.
+Let's say you're working to prototype an LOM based service to help a customer service department to sunrise is customer phone calls.
+This is actually a real application and a common use case that many companies have been working on.
+When building the initial prototype, you might manually download an audio recording of a call that's been recorded with permission, then run automatic speech recognition or ASR software to transcribe it to text file and send that text to an LOM to summarize it and finally slow that summary in the searchable database.
+But there's a lot of work to manually connect all these steps together and this is also a repetitive process that you might want to automate so as to have your software be automatically triggered to run whenever a new customer service call comes in.
+This is as opposed to constantly rerunning your code by hand each time a new call comes in.
+To connect AI services like ASR to your LOM application and also to automate this workflow, you can use event driven triggers that will run the workflow whenever new audio files get uploaded and deploy this entire workflow so that it runs on its own.
+That's right, in this course you'll connect an LOM to other AI services in this case automatic speech recognition to enable the LOM to process data that isn't already text such as audio recordings of dialogues between customers and your customer service representatives and you'll deploy this with a serverless architecture as opposed to a traditional server based architecture.
+Usually you'd have to do a lot of work beyond building the app to deploy and maintain the app like spinning up machines and installing dependencies.
+Then there's even more work with the ongoing maintenance of that system adding security patches updating the dependencies and so on.
+By starting off with a serverless architecture you can save yourself a lot of time and effort as you iterate on your app.
+You'll use Amazon Bedrock which gives you access to a wide range of foundation models and also the ASR service Amazon Transcribe.
+You'll connect these services into a workflow that triggers an LOM via AWS Lambda to automatically run once new files are uploaded to the cloud storage service S3.
+The audio summarization use case is just one example but you really use the tools and concepts in this course to integrate your LOM with other AI services into a pipeline that can essentially run on the zone as input data comes in.
+Many people have worked to make this course possible. I'd like to thank on the AWS site Aunty above Joe Fontaine, Chandler Martha Brutham and Benjamin Gruer.
+And from Volcarium, who helped with the Jupyter notebooks, David Lin, finally from deepland.ai, Eddie shoe and the other entity have also contributed to this course.
+In the first lesson, you'll get started with prompting an LLM using Amazon Bedrock and explore how it can be integrated with other AI services.
+That sounds great. Let's go on to the next video and get started.

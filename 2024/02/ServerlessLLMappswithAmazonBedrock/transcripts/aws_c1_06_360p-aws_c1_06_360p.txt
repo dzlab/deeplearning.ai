@@ -1,0 +1,159 @@
+Now that you've deployed your code into a Lambda function,
+in order to automatically trigger it whenever an audio file is uploaded,
+you can set up an event-driven architecture.
+So let's do that. So you're doing really well,
+congratulations in getting this far. Let's complete this code off and
+include the beginning of our pipeline so that we've got something end to end.
+Now inside of this lesson environment, you probably don't have any longer
+the Lambda functions we deployed from the last lesson. So go back and do it all
+over again. Now I'm only kidding, I'm kidding. We don't have to do it again,
+already deployed inside of this environment to the same functions that we did before
+with the template and all that kind of stuff. So you can just carry on from where we left off,
+all that stuff is there for us. So let's rapidly get into this and get this up and running and working.
+And the first block of code is just to import the libraries much in the same way as we did before.
+So we've got bow to three and OS so that we can get hold of our environment variables.
+Then we've got a Lambda helpers, which we used so much in the last lesson and we are going to
+grab ourselves a couple of different environment variables for the same reason as last time.
+All S3 buckets need to have unique names globally. So mine will be a different name to yours.
+And this just allows us to be able to create these buckets inside of the lab environment and then
+have a standard name for them that we can use a reference. So let's go ahead and run that cell.
+And once we've got that, well, we're back now into deploying Lambda functions.
+And the reason for that is that we need a Lambda function to be triggered when the audio file is
+uploaded. So if we look at this from an architectural perspective, we're going to have our audio file
+and the system that creates those or in this particular case, it's going to be us is going to
+upload that into an initial audio S3 bucket. And so that S3 bucket is where those audio files
+and then when that happens, when the object gets placed into the bucket, it's going to cause
+an event to trigger and that event will call a Lambda function. Now it's exactly the same
+architecture if you like as the last lesson, but this time it's going to call a Lambda function,
+which is going to find the location of that object in the same way that we did before. And this
+time it's going to pass it to the Amazon transcribe service. We did this by ourselves by hand if you
+like inside of the Jupiter environment. Now we're going to get a Lambda function to do that for us
+so that it's fully automated and we don't have to have obviously running code set in front of us.
+It's serverless. It's all happening for us and it can run at scale inside of the AWS cloud
+environment. So that's what happened so that that Lambda function does that. Now what it's going to do
+is it's going to provide the configuration for transcribe to say once you've done that, once you've
+finished, put the transcription Jason file in this next bucket, which is the text bucket. And from
+that point, it's going to get picked up by what we deployed in the last lesson. So we're putting
+on the beginning of our pipeline here and we are splitting this across multiple S3 buckets. In this
+case, two different S3 buckets, one which contains our audio files and the other which contains our
+text files. Yep, we need to write another Lambda function. And so we're going to use the same method
+that we did before where we're going to basically create this text file inside of this cell. And
+this time, as this code is a lot less to specifically to do with generative AI, let's paste the
+function in and let's just step through it. So again, I've just included this section at the top
+so that whenever it's seen, yes, this isn't running inside of this notebook, we're creating the
+file inside of this notebook. So we import when it's being run inside of the Lambda environment,
+we import Jason, both three UUID and OS. So OS again, because we want to have access to
+environment variables inside of the Lambda environment, UUID, because we want to be able to make a
+unique name for the transcription job as we did before. We're going to create an S3 client,
+and this time we're going to create a transcribe client. So there's no Amazon bedrock here.
+It's using the Amazon transcribe service, which is a pre-trained AI model for doing the transcription
+job for us. And so with those clients created, we're now going to go ahead and create our Lambda
+handler. And if you remember, this is the entry point for this code. When it's run inside of the
+Lambda environment, this is what's going to get called. And as well, if you remember, it's the
+event, which is going to contain the information about the event that caused the Lambda function to
+be run. And so we can go into that, we can inspect that, we can grab out of there the information
+about the object, which has been placed into S3. So we can grab the bucket, so the bucket name.
+And of course, that means that this Lambda function could be triggered by objects being
+uploaded to different buckets, like it would be, it would work. It's not just tied to a single bucket.
+Anyway, so we get the bucket in this particular case and the key or the file name in this particular
+case. And again, we're only going to work here with dialog.mp3. When we could change that and say
+if it's only MP3 files, et cetera, we're only looking for dialog.mp3, which is the audio file,
+which we've been playing around with earlier in this course. So it's the same one. Of course,
+you could use a different one. And so with that, we have our object as long as it is dialog.mp3,
+then we're happy to move forward. And then we can call our transcription job. And we've seen
+this code run before in a previous lesson, but now it's wrapped up inside of our Lambda function.
+So we create a unique transcription job name using the UUID, because it needs to be unique for
+the transcription service. And then we call start transcription job using the transcribe client.
+And we pass into that the name of the transcription job that we've just created where the media is.
+So we know where the media is. It's in this bucket location here. Notice that we're not downloading it,
+like we did before. We downloaded the JSON object and manipulated it. We don't need to do that here.
+We just need to know where it is so that we can tell transcription to where it is, the transcribe
+service where it is. And so that's what we do here. It's in this bucket location. It's in this
+key. We give it the media format. We give it some help about which language it's got to look at.
+And then here's the key part. So this is the output bucket name. And we're going to pass in an
+environment variable. So this is actually an environment variable inside of the Lambda environment.
+So this is an environment variable we need to set up alongside our Lambda function. So we'll use
+that with the Lambda helper will help us do that. And then we have an output key. And so this
+will hopefully will be familiar from the last lesson and from the code that we deployed in our last
+Lambda function. We're going to output the transcription as the job name that we defined with the UID.
+And then hyphen transcript.json so that it will pass the necessary filters and checks inside of
+the other code that we created. And we're going to ask it to show the speakers and we're going to
+look for two different speakers inside of this conversation. And then we're going to have some
+error exception handling kind of stuff down the bottom as is reasonably good practice.
+I'm not claiming my code is the best code ever but it's not too bad. So let's go ahead and shift
+enter on that. So we've run that and we've run that Lambda function. And now we can get into
+deploying this code using the Lambda helper of course. Let's go ahead and do that. Let's step through
+it line at a time. And again, the Lambda helper is going to abstract us away from some of the
+complexity but what it's doing is important to know. So let's paste this line in here.
+So this is the Lambda helper which is actually going to create some Lambda environment variables.
+It doesn't actually create them at this point but it sets the values of them for when
+the function gets created. And so we're going to set something called bucket name text and then
+we're going to pass in the value that we've got loaded into our environment. And if I scroll up
+then you can see of course that's the same as this. So we're creating an environment variable
+inside of the Lambda environment which is called this and it's going to have the name of our bucket.
+And so it's just a way of passing that information along. Rather than having to pass it into the
+event somehow, we can define this as an environment variable for our Lambda function. So once that's
+set, let's paste in the next line as well and run these both at the same time. Let me just paste
+that in there. Okay, so this is again the deploy function and we only have one file to pass this time.
+So it's a list of just one. We don't have any prompts or anything here this time and then we're
+going to give it a name Lambda function transcribe and that's that. So let's just run that shift
+enter and yep, the Lambda function does not exist. It's fine if it does because you're just
+re-running it again. It will work just fine and it's just deployed our Lambda function for us.
+So it's just taken the code that we wrote above, packaged it up, sent it to Lambda and it's now
+sat there waiting to run. And exactly as we did in the last one, it's now needs to be triggered.
+So we're going to trigger it. We're going to set up our filter. We're going to only run this trigger
+if it detects an MP3 file because that's the only time we want it to run. We don't need it to run
+if it sees a JSON file, a text file or anything else. So a file with at least the extension MP3 and
+then we are going to actually go ahead and create that trigger then. And so here we go. Lambda helper,
+add Lambda trigger and we're going to add the trigger on the bucket, the audio bucket and we're
+going to trigger our Lambda function transcribe function which of course is what we've just defined
+above. So let's go ahead and run that and it's worked successfully again as per the last one.
+If you race through this and then run this cell above and then immediately run this cell,
+you might find that it's got an error. So just give it a few beats and then run this and it should
+be fine. Okay, so now we are set up with our architecture. So we have everything set up. We've got our
+audio bucket which has got a trigger on it where that trigger is fired. It's going to cause our Lambda
+function to run that Lambda function is going to call the transcribe service and the transcribe service.
+It's going to do its thing. It's going to listen to the audio file and do the transcription into
+that JSON format which it will dump into our text bucket. The fact that that has been dropped into
+that text bucket will cause the event to run which causes our summarization function to run which
+uses Amazon bedrock. So it will go and look at the transcript JSON data. It will create a text
+version of that output. It will then put it into the prompt. It will then send it to the large
+language model and it will then get its response and it will put that response into the S3 bucket.
+So enough talking. Let's see it actually working. So we have our MP3 file set on the file system
+here along with us. So we're going to use S3 helper to upload it to the audio bucket that we have.
+So let's run that and hopefully it comes back with something looking successful again with
+our typo. We'll change that. So there the file has been uploaded. So it's uploaded that successfully.
+So we can go and check to make sure that the files there are going to take a look. So let's use
+our list objects on the audio bucket and indeed it's there. So there's our dialog.mp3 and it's
+just been uploaded. Now that's all that's going to happen inside this bucket. Nothing else will
+happen here. What's happened is it's triggered that lambda function. And so the next thing we should
+see is inside of the text bucket. That's the next evidence that we'll see that it's working.
+So let's call list objects on the text bucket. Right. So there are a few things in here. We've got
+right access check file temp. This is actually something that transcribe creates just to make sure.
+Before it starts to do the transcription, does it have the right access to be able to write to
+this bucket? It did. So it moved on to the next part. Now what can we see here? We've got this
+transcription job with this UID name here. Transcript.json. So that is the transcript that got created
+by the lambda function that we've just created earlier in this lesson. So that's successfully
+worked. And then we can also see that just a few seconds later it has finished and created results.txt
+which is the output from our summarization. It's the output from our generative AI. So let's go
+ahead and take a look at that. I can call my s3 helper and I can say that I want to download
+an object. We need to get it from where do we need to get it from? We need to get it from the
+text bucket. And we want to call what do we want to get? We want to get results.txt. So let's place that
+in here. Let's run that. Excellent. That's downloaded. And we can use the display helper to show
+that. But we didn't actually load in the display helper. So let's just do that quickly here.
+So let's load display helper. And we need to get ourselves an instance of display helper.
+So that's going to be a display helper there. Right now we can use display helper. Obviously
+you could just download this file as well. So display helper. It's text file, isn't it? That's
+what we have to call. And we're going to call text file on results.txt which should be downloaded
+into our file space. Okay. And there we have it. Very similar output of course to the last time
+that we ran this in the previous lesson. But this time we've actually seen it all the way through
+end to end working from the actual original input which just up here just a moment ago
+was actually the MP3 file. So we've gone in this pipeline all the way through from our MP3 audio
+recording. It's been transcribed and we've taken it all the way through to our summarization
+the end. Now of course this architecture is there to be manipulated and changed and you could do
+all kinds of things with it. You could apply it to your own particular kind of business problem
+that you have. And there's many different ways that you can extend this much in the same way.
+As there is many different things you can do with Amazon Bedrock. We've really just scratched
+the service here. And so here is a set of resources you can connect to to be able to see some of
+the latest things you can do with Amazon Bedrock. Okay. We've made it to the end. So let's go to
+the next video.
