@@ -1,0 +1,103 @@
+So far, you've used fast rules-based evaluations that are suitable for running frequently
+on every commit.
+For stages of development leading up to deployment, more robust and comprehensive evaluation
+methods can help you better ensure overall quality before you deploy the app to users.
+One such method is model-graded evaluation where you'll use an LLM to evaluate the LLM
+app.
+Let's take a look at this kind of Eval and how to automate this as part of your testing
+pipeline.
+OK, until now, we've been using rules-based Evales to make sure our models follow the
+guidelines we set up in our prompt and stick to the facts we provided in our data set.
+But in order to have full confidence in our application, we also need to be sure our
+model is generating high-quality, contextually appropriate responses.
+Evaluating LLM output can be tricky because a good response to a query is subjective.
+We could try and write custom rules like we did for our initial Evales to make sure
+that expected data is in the output, but this gets more and more complicated and more and
+more fragile as the application grows.
+One approach to checking the output of an LLM is to use another LLM as a grader.
+This is referred to as model-graded evaluation.
+We'll show a quick example to make sure our model is actually producing output as a quiz.
+We aren't concerned with the content just yet, only that the LLM is giving back responses
+that look like a set of quiz questions.
+We'll look more closely at the quality of output in our next lesson.
+So in this lesson, we're going to focus on judging whether the responses in the desired
+format, and then in our next lesson, we'll look at things like hallucination and adherence.
+So let's jump right in and write a passing and a failing test case to see how this works.
+First off, we need to establish our keys again as we did in the previous lesson.
+So we'll do that now.
+For the purposes of adding model-graded Evales, we're going to continue to use the application
+that we generated in the last lesson.
+So let's take another look at that just to remember what we're working on.
+Again, you can use the Cat command if you want to see the contents of one of these files
+on your local file system.
+They're all included with the lab that you have.
+Now let's look at what it looks like to build a model-graded Eval.
+This is going to look similar to the work that we did to build the quiz assistant, except
+in this case, we are building a prompt that tells the LLM to evaluate the output of the
+quiz assistant.
+So you can see here that we are giving specific instructions to the LLM to tell it the role
+that it plays in evaluating the work of the quiz assistant.
+Before evaluating an actual quiz assistant, we are going to simulate this by writing an
+LLM response as if it came from the quiz assistant and using our Eval to determine if that response
+would pass the test that we're looking to make.
+As you can see here, the full message or prompt for the Eval is telling the LLM to evaluate
+a generated quiz based on the context and determine whether or not it looks like a quiz
+or test.
+It is not meant to evaluate whether the information is correct.
+Then it is told specifically to output a Y if the response is a quiz and N if the response
+does not look like a quiz.
+Now we are going to use lane chain to build the familiar chain that we saw in the previous
+lesson, except this time we're building a chain specifically to do the evaluation.
+So first we have our chat prompt template as we built previously.
+Next we select our LLM, which also we did in the previous lesson and again we're using
+GPT 3.5 Turbo.
+And finally we select an output parser, which again is the STR output parser to take the
+response from the LLM and generate a basic string.
+We chain these together as we did previously, but to recap we take the Eval prompt, we pipe
+it to the LLM, we take that response and pipe it to the output parser to get the string
+that we're looking for.
+So now we've built a basic Eval chain using a known good LLM response, which we showed
+earlier, and we can prove that we get a positive result by invoking that Eval chain against
+that known text as if it were the response from an LLM.
+And as you can see in this case, we get a Y, which means the known good response that
+we put in is believed by the LLM to look like a quiz in the format that's expected.
+However, we also want to ensure that it will fail if it doesn't look like a quiz.
+In order to do that, we'll first store all of the Eval chain creation code as a utility
+function so we can use it repeatedly.
+Next we store a known bad result so that we can pass it into a new Eval chain.
+And now we invoke this new Eval chain and see that we get the correct response, which
+is an N to indicate that the text does not look like a quiz.
+Now we're going to take our newly created, model graded Eval capability and incorporate
+it into the tests that we're running inside of our continuous integration pipeline.
+So we have two files for testing on the file system in the lab.
+The first is testassistant.py, which you can see here and is what we were running previously.
+The second is testreleaseevales.py, which is a rollup of all of the work we just did
+to show how to create a model graded Eval and execute it against OpenAI.
+OK, so now that we have the release Evales, which are the model graded Evales stored
+in the testreleaseevales.py file, along with the previous files we had the test assistant
+and the app where we stored our original code, we're going to push all of that to GitHub
+and then to circle CI so that we can evaluate our application including the model graded
+Evales.
+Now in this particular case, we are using the full evaluation for the positive case,
+but intentionally passing the known bad result to the negative case to show what it looks
+like when there's a failure in the continuous integration pipeline.
+We are also only going to trigger the releaseevales job on circle CI so that we don't do as
+much testing for this particular example.
+We do this through this function trigger releaseevales, which uses a parameter passed to the
+workflow.
+We hear that the only job that is running is the run pre-releaseevales because that
+was the one we specifically selected through that parameter.
+So as you can see, we ran the model graded Evales in this run and we did get a failure
+because we intentionally passed the known bad content.
+Great.
+So you can see that your pre-releaseevales run when you merge your application changes
+to the main branch in a real-world development scenario.
+This would happen after you've made changes on your dev branch and run your per commit
+evales.
+You're setting up a system to progressively increase our confidence in the application
+as we get closer to releasing it to users.
+In our next lesson, we'll look at ways that you can make the pre-release checks even
+more robust, including running evaluations on multiple data points, writing evaluations
+to detect hallucinations in your application, and storing evaluation results for human
+review in circle CI.
+I'll see you in the next lesson.

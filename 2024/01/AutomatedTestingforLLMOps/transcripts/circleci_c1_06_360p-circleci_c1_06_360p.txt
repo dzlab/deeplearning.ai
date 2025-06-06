@@ -1,0 +1,12 @@
+Congratulations.
+In this course, you've learned some amazing things.
+You've looked at eVals, how to use them effectively,
+and then how to automate them in a comprehensive pipeline.
+So you can work together with a large group
+and build amazing technology quickly and confidently.
+This is an emerging space.
+Combining eVals with CI pipelines brings together
+a lot of core learnings and is changing rapidly.
+So I'm excited that you're at the front of that
+and learning everything that you've learned here in this course.
+I'm also really excited to see what you'll build next.

@@ -1,0 +1,75 @@
+Now we'll look at techniques for expanding and enhancing your evaluation pipeline to give you a comprehensive testing framework for your LLM apps.
+You'll learn how to write evaluations to detect hallucinations in your application, run evaluations on multiple data points, and store evaluation results for review in CircleCI.
+Let's get started.
+One common problem with LLMs is hallucinations, which happen when the model provides an answer that is false output.
+hallucinations are a side effect of current LLMs being next token predictors.
+In other words, the model will always provide some output that is statistically likely, but there is no built-in way to ensure that the model is producing correct output.
+In our application, this might look like the agent creating a quiz with facts that are not in our database.
+For example, we could get an inaccurate response, like a user asking, what is the capital of Brazil and getting the answer cell Paulo, when the correct answer is Brasilia.
+We could get an irrelevant answer, again asking, what is the capital of Brazil, and getting the answer, the capital of Canada is Ottawa.
+In this case, the statement that the LLM produced is actually factually correct, but has nothing to do with the question that the user is asking.
+Or we could get a contradictory or nonsensical answer, such as asking, what are the major cities of the USA from largest to smallest by population, and getting New York, Los Angeles, Chicago, and New York?
+One way to detect hallucinations is to create a model-graded e-val that accepts some ground-truth data that the model should produce and compare it to the actual output.
+Writing an e-val to detect hallucinations does not guarantee that the model never hallucinates, but it is a useful tool to detect if a prompt does not have guardrails to prevent the model from guessing outside of the provided context.
+In our application, an example of a guardrail might be modifying the prompt to ask the model to tell the user it can't create quizzes for subjects, not in the quiz bank.
+Let's take a look at putting this into practice.
+Before we get started, as always, we are going to reload our keys so we can use all of our third-party services. Let's do that now.
+As noted in a previous lesson, a much more sustainable way to manage the quiz bank is to put it in a text file or maybe even store that data in a database.
+In this case, we're using a text file and loading that into memory when we want to use it.
+If you want to see the contents, you can print that out in the notebook.
+In order to demonstrate the hallucination detection, first we will quickly rebuild the quiz generator that we used previously.
+Now we have the prompt to build the quiz and the assistant chain that puts those pieces together, now we'll move on to creating a modulated e-val that explicitly looks for hallucination.
+As you can see, for the purposes of the modulated e-val, we've put a lot of energy into expressing how important it is that quizzes only contain facts from the question bank.
+For example, here it is stated that the primary concern is making sure that only facts available are used and quizzes that contain facts outside the question bank are bad quizzes and harmful to the student.
+Down below, this is highlighted again. Remember, the quizzes need to only include facts the assistant is aware of.
+It is dangerous to allow made up facts.
+And then, similar to our previous e-vals, we will output why if the quiz is correct, meaning it only contains facts from the question bank and N if it contains facts that are not in the question bank.
+Now, we'll define a function to test our modulated e-val to check what happens when we have hallucinations.
+Using the previously stored quiz bank, we'll pass it to our new modulated e-val and check for hallucination.
+In the modulated e-val test function, we ask for a quiz about books, which is not included in our quiz bank.
+However, in its attempts to be very helpful, the LLM has returned a quiz about books. Our modulated e-val, however, knows that its job is to detect quizzes that contain information that's not in the quiz bank.
+And so, in this case, we get an N stating that this is not an acceptable quiz.
+What might be causing these hallucinations? If you review our prompt, we're telling the assistant to make the quiz interesting.
+This might be a good attribute of a quiz. Education should be engaging, but it is causing our model to hallucinate responses.
+Fortunately, our evaluation is detecting these hallucinations so we can go back and correct the prompt.
+We're going to move on to the next section, but in our future prompts, we will remove the piece that asks for interesting facts.
+As your application grows and changes over time, you will want to add new functionality. For our quiz, this might mean supporting new subjects or adding facts about existing subjects.
+To do this, we can create data sets of questions where we know how the model should behave and run tests on each example in the data set.
+Let's walk through an example of testing with the data set with our application code. We'll update our application code a bit to prevent the hallucinations.
+So far, we've used evaluations as an automated test suite.
+This is a good way to catch obvious errors and regressions and to rapidly iterate on your application.
+But when working with AI models, it is important to get comfortable manually inspecting and curating data.
+Being willing to dig into the data is something the AI and ML engineers that we've worked with say is critical for working effectively in the field.
+This is sometimes referred to as error analysis or performance auditing.
+In this example, we'll show a way to store evaluation results in CircleCI as an artifact that you can review and share with your team to make sure your application and test suite are behaving exactly as you expect.
+First, we're going to rebuild our evaluator to provide not just a response or a decision, but an explanation of why that decision was made.
+As you can see in this version of the prompt, we're asking for the decision and the explanation to be separated in a particular format.
+Here's an example provided as part of the prompt to ensure that we get the useful information that we need back for later human evaluation.
+So now we've rebuilt the chat prompt template with the new prompt and we're going to build a data set so that we can run multiple tests against our new prompt.
+As you can see, this test data set includes multiple different prompts from the user or inputs from the user along with some expected responses.
+Next, we create a function that will loop through our data set to invoke our quiz generator and evaluate the response for each entry in the data set.
+Next, we'll make sure that we have access to all of the functions that we need in order to generate the report that we want based on our data set.
+Now we write the wrapper that you're familiar with to create the eval chain that we're going to use through all of our evaluations.
+And finally, we take advantage of some tools from pandas to create a data frame across all of our evaluations and the results which will allow us to easily generate a report.
+Great, so now you can see the formatted table with multiple results for the different quizzes that we've generated and the responses from the greater.
+The first was a quiz about science and the decision is over here. The decision is yes, it's an appropriate quiz and the quiz only references information from the question bank.
+There's more details included here, including what specifically is in the quiz and where it's found in the question bank.
+The second one is about geography and similarly, the decision is yes, the quiz only references information from the question bank and then goes on to explain what information was taken from the question bank to get these questions.
+Now for item three, the quiz about Italy, the decision is also yes, and this is interesting because the quiz does reference information from the question bank and the facts are from the question bank, but the model of a quiz about Italy doesn't specifically map to the categories.
+And this is why you want to have human evaluation so you can make the determination of whether this is the type of quiz that you want generated or whether you want a different result, which is maybe to say I don't know how to generate quizzes about Italy, which is the actual topic or subject that's outlined to begin with.
+So from here, you could maybe change your prompt or decide to do something differently based on the information that you collected and again involving a human to evaluate at a high level whether all of the pieces of the system are working and where you expect is a great outcome for us here.
+Now we're going to take that structure and put it back into CI so that it runs in an automated fashion, but creates the artifact of this report so that you can review it on a regular basis.
+In order to run it in continuous integration, we have one additional file save eval artifacts, which generates and stores the output report that you just saw, except as part of the workflow process.
+Here's the content of that file which you can look at yourself.
+So now we're going to run our evals again against that same data set, but in the continuous integration pipeline to show what it would be like to work with this on a regular basis as we continue to work and grow.
+And so we're going to trigger the eval report using the save eval artifacts file along with our original application and the quiz bank TXT file where we stored the full content of the quiz bank.
+So now you can see that our evals passed in circle CI and we were able to store a formatted version of the output as you saw it previously in the notebook.
+But now it's in an HTML file that is easily retrieved so that you can look at it later, the outcomes and descriptions decisions and explanations are similar to what they were before, but stored in a manner that anyone on the team can come and look at them instead of being local in a notebook.
+So in a production application, you might share those results with a colleague to review, help debug unexpected outcomes.
+This feedback loop enables you to not only address immediate concerns, but also gives you tools you can use to implement strategic updates to your model and evaluation process.
+With this enhanced visibility, you and your development team can make data driven decisions, streamline the debugging process and proactively address potential issues.
+Having a holistic understanding of user interactions, model responses and evaluation outcomes is an important part of building robust and reliable LLM apps that meet and exceed your user's expectations.
+So that's the end of this lesson.
+Again, in this lesson, you learned about hallucinations and how to detect hallucinations using model graded evaluation.
+You also learned about data sets and human evaluation on top of model graded emails to ensure that the quality of the output you're getting is exactly what you want for your users.
+If you want more details on how to configure all these things in CircleCI and your continuous integration pipeline, there's an additional notebook included that shows the core pieces of that and how to set it up for your ongoing projects.

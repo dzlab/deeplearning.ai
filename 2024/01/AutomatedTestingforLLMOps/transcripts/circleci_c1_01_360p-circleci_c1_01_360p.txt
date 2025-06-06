@@ -1,0 +1,80 @@
+Welcome to the short course Automate Testing for LLMOps,
+built in partnership with CircleCI.
+Software Testing helps you identify bugs
+and security vulnerabilities in your applications.
+And Automate Testing frees up your time and energy further
+so you can focus on the creative parts of designing
+and building your application.
+In this course, you learn modern software engineering practices,
+focus on testing for the practical development
+and deployment of LLM-based applications.
+Two kinds of LLM evaluations that you implement in this course
+are Ruby's evaluations and modern graded evaluations.
+Ruby's e-vails use string or pattern matching,
+for example, regular expression matching
+and a fast and cost effective to run.
+I use these whenever I want to evaluate outputs
+to have a clear right answer,
+such as sentiment classification
+and if say you have ground truth labels.
+Ruby's e-vails are quick and cheap to run
+so you can run these tests every time you commit a code change
+to get fast feedback on the whole of your application.
+Modern graded evaluations are relevant for applications
+where there are many possible good or bad outputs.
+For example, if you ask an LLM to write text content for you,
+there can be more than one high-quality response.
+Here, you might prompt an evaluation LLM
+to have it assess the quality of the outputs
+of your application LLM.
+In other words, you use an LLM to evaluate the outputs
+of another LLM.
+Modern graded e-vails take more time and cost more
+but it allow you to assess more complex outputs.
+Delighted to introduce our instructor for this course,
+Rob Zuber, Chief Technology Officer for CircleCI.
+Rob has spent decades leading engineering teams
+and also hoping customers scale up their software
+to re-practice by making processes repeatable, scalable,
+and reliable.
+He'll show you how to do this
+but your applications as well with an emphasis on testing.
+Thanks, Andrew.
+In your software development process,
+you and your teammates may commit code updates
+or bug fixes multiple times per day.
+In this course, you'll learn to set triggers
+that automatically run your evaluations
+whenever you or your teammates commit code changes
+to the repository.
+Your team may also release updated versions of the app
+on a broader cadence, perhaps once every two weeks.
+Before deploying to users,
+you can also automate more holistic,
+comprehensive, pre-release evaluations.
+For per commit e-vails, you can include rules-based
+evaluations because they're fast and cheap to run.
+And for those pre-release e-vails,
+it may be very helpful to use model-graded e-vails
+to do more thorough testing before deployment.
+By the end of the course,
+you will combine per commit and pre-release e-vails
+into an automated testing suite.
+And for this course,
+you'll design tests to detect hallucinations
+in LLM responses.
+Many people have worked to make this course possible.
+I'd like to thank on the Circle CI side,
+Michael Webster, Jacob Schmidt, and Emma Web
+from deep learning.ai, Ed Issue,
+and Edgemail Gagari have also contributed to this course.
+The first lesson will be a quick overview
+of continuous integration terms and technologies
+that will use as the foundation
+for building our automated LLM testing pipeline.
+And when you finish this course,
+that will be a real test event to your dedication
+to building good applications.
+Or if you're not sure how much you'll use these ideas,
+you can still test the waters.
+So let's go on to the next video to get started.
