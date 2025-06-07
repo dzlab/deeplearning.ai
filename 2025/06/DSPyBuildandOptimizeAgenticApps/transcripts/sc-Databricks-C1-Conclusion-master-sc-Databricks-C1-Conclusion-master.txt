@@ -1,0 +1,14 @@
+Congratulations on completing this course.
+In this course, you'll learn that DSP is a lightweight,
+flexible, GNI and authoring framework that
+simplifies interaction with our arms and aging development.
+It also provides automatic program optimization through DSP optimizers,
+and has native MLflow tracing integration for easy development.
+You use the DSPIDAL signature to define inputs and outputs,
+and DSPIDAL module to wrap the customer logic.
+After building a program, you'll learn how to prepare a small data set,
+and a metric function to use the DSP optimizer
+to improve the quality of the AI program.
+And finally, you use the MLflow tracing
+by adding MLflow.DSPID.autolog.
+I'm looking forward to seeing what you have built on your own.

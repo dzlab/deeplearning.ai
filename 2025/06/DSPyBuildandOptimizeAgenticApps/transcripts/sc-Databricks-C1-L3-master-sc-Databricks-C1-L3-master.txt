@@ -1,0 +1,168 @@
+In this lesson, you'll learn about how to use MLflow tracing to help debug the DSP
+program.
+All right, let's go.
+This lesson comes with a lab.
+In a lab, you will go into build a DSP agent with the help of MLflow tracing.
+As a demo, we'll build an airline customer service agent that helps users book and manage
+the flights.
+Let's dive in.
+So what is tracing and why do you need tracing?
+Tracing basically means recording the inputs and outputs of the intermediate function inside
+your AI program.
+And the capture is a hierarchical calling stack, like module A cos module B.
+Generous applications can be very complex internally, while only the final output is exposed.
+So when something is going off, it's hard to trace back to the root cause.
+For example, if you have built a DSP program consisting of five cell modules, then if one
+non-arm cause fails, due to not being able to understand the prompt, even though DSP
+provides in Spark history to check out our own cause, it's hard to trace back.
+Tracing provides an easy way for interpretability and debugging.
+And what is MLflow?
+MLflow is an open source AI ops package that streamlines your GNI app development.
+MLflow helps with a full-life cycle of building GNI applications, ensuring that each
+phase is traceable and reproducible.
+Both MLflow server and clients have fully open source.
+You can easily set it up.
+To get started with tracing a DSP program with MLflow, you only need to add one line to
+a program, which is MLflow.DSP.autolog, or simply MLflow.autolog.
+After that, your program will be automatically traced and the trace will be saved in the
+MLflow server that you can access anytime after being generated.
+Let's talk about what is getting traced.
+In MLflow, which has four things inside your DSP program, which has every module call,
+no matter if that's a top module or internal modules, we also trace how the cause to the
+adapter, from which you can see how the adapter formats the user query, and process the
+alarm response.
+We also trace the cause to the alarm so that you can inspect the actual prompt and the actual
+alarm response.
+DSP.autol, which is the wrapper over DSP.autolog calling, is also traced.
+With MLflow tracing, not only we can interpret the input and output of some module of the
+DSP program, we can also see the hierarchy of these modules, together with some other
+important information like time consumption.
+When something is going wrong, there will be a cross mark that points out to the program
+module.
+The screenshot in the slide is a real trace of a React module.
+Let's map it to the components we trace.
+React is our top-level module, which causes a few submodules represented as predict.
+And we can see both React and the predicts are getting traced.
+Inside the predictor call, the chat adapter format and parse carries the trace for the
+adapter.
+And the alarm trace in the middle has the actual prompt and response from BLM.
+At the bottom, we can also see the trace of the tool calling, and in this case, tool
+calling files, so there is a red mark next to that.
+In the previous lesson, we have seen how to use DSP inspired history API to check out
+the actual prompt.
+With MLflow tracing, now it will be even easier.
+Click on the alarm trace, and you can see the actual prompt and alarm response.
+Let's get started with coding, similar to the previous lab, when to set up the API key.
+And additionally, when to set up the MLflow environment, to import MLflow, we need to
+pull that to the MLflow tracking UI.
+In this lab, we have set up the MLflow tracking server for you, so you can get a tracking
+UI and set it up with our helper functions.
+And now let's give the experiment a unique identifier, just call it DSPY lesson 3.
+And as we call in the slides, we can turn on the tracing feature, but one line, MLflow
+dot DSP dot auto log.
+Then we can choose how I am, as we did in the previous lab.
+Now let's get started with building an airline customer service agent with DSPY React,
+and use MLflow tracing to help with the process.
+So this agent will be able to take user requests and book fly for the users, and can also modify
+the artillery for the users.
+We first need to define the data in real production, that will be a database schema.
+It will have user profile, we have fly information, antenna or information, and customer service
+support ticket.
+Now we have the dummy data and data format.
+Let's define a few tools in the module we use.
+We need some of the faster fly information, based on date, origin, destination, with the
+fashion and ternary, and we need to be able to pick the flight out of a few candidates.
+And we need to be able to book an artillery on behalf of the user, and we need to be able
+to cancel a ternary and pull user information, or fill a customer ticket if we cannot resolve
+the issue automatically.
+To define tools or functions with DSPY contacts, you need to specify a dog string to describe
+what this function can do, and provide typings for input arcs so that the alarm can help
+set the arguments.
+Now we have the tools and data.
+Let's define a signature so that we know what is input and output to expect from this
+program.
+The input will be a single string, representing a user request, and the output is a process
+result, which is a message 18 tells the user.
+If that's a successful booking, now we'll have the confirmation number, or like a number
+to a ticket, if we cannot resolve the issue.
+Now we have the signature and the tools, we can combine them into a DSPY or React.
+So what is React?
+React stands for reasoning and act.
+So basically, we give the alarm the signature, which is the end goal of this program, along
+with the list of tools, and the alarm can decide if that wants to call the tools to get
+actual information and answer user questions.
+If it doesn't need actual information, it can just answer the question.
+Now we have built a React instance.
+Let's invoke it.
+We can simply put the user request into user request, can book a flight from a several
+to JFK on a certain date, which we have a flight there, and tell the agent the name.
+Let's run that.
+Cool.
+Now we'll get back the result, along with the MLflow tracing.
+Here is the MLflow trace UI.
+We can see what has been traced and the attributes of the trace.
+So let's take a look at the attributes of the trace.
+We capture the inputs and outputs, along with the attributes, which is the arguments to
+a function call.
+In the alarm, there will be the temperature, max token, and other configurable attributes.
+The event tab will hold the error message if there is any error.
+And we can see that the top module React is being traced, and the input output is our
+end input and end output.
+Can see that the inputs is our user query.
+And the final output, the final representing as our output field process result, says,
+has successfully booked a flight, and here is a confirmation number.
+And we can look into some modules to see what happens in the process.
+So when we talk to the alarm, we'll give that a user request and ask for the next
+thought.
+Could be a tool calling, could be the end of the process.
+At the origin, they will just say, I want to fast-fly information, because I don't have
+any information right now.
+And it also determines arguments of the function calling to give the provided date we want
+to fast-fly it.
+After receiving that, we go ahead and call the tool, fast-fly information, which has the
+inputs decided by the alarm, has a date, origin, destination, and then we have faster list
+of flights matching the request.
+We get two out there.
+When we grab all the information, like the two candidate flights, along with the tool
+calling information, send them back to the alarm to decide the next tool calling, or we
+can wrap up the process.
+So we represent all the things in the trajectory field.
+We have the last tool calling arguments, and the result.
+And the alarm says, okay, I have a bunch of flights, we need to pick the best flight.
+If the argument has a flight candidates, and we call it to over-pick the flight, we have
+pretty fine logic for this paid flight.
+We always pick the shortest flight, if that's the same duration, we pick the cheapest one.
+So here we get the flights information and inputs, and we pick a flight heart out of that.
+And we grab all the information to call the alarm again.
+The alarm, this time, see, okay, we have the flights, and we can pull the user information
+so that I can book the flight on behalf of the user.
+Then we get the user information, and send all the things to the alarm again.
+And next, the thought will be, have all the information, I can just call a book of flight.
+Then we call book the flight.
+Then we write things into a database, and we recall the alarm.
+And this time, the alarm says, okay, this seems to be complete.
+So we can call the finish with a dummy tool in DSP, marking the end of the reactor tool
+calling.
+And after all the process, we still need to find a way to fulfill the process result,
+which is output filled.
+So we just call a channel of that, give that all the tool calling history, and the user
+request to form the final output.
+Then after that, we wrap up the process.
+We can see clearly with MLflow tracing, how we interpret what's happening inside
+a reactor module with a very complex multi-help calling.
+And if there's anything going wrong, we can click on that certain module, and
+find the input output to decide how we debug.
+By the way, MLflow is also integrated with a LAN chain, Lama index, and other frameworks.
+You can get the auto tracing feature with other frameworks as well.
+In the lab, we set up an MLflow server for you, and in actual development, you will
+need to do it by yourself.
+If you don't have time to set up your own MLflow server, or want to explore more features,
+Databricks provides managed MLflow service, and you can simply connect it to it to
+get started.
+You can try now through Databricks Lighthouse, which provides free trial.
+Give it a try, and sign up at dot databricks.com.
+In this lesson, you have used MLflow tracing to build a complex reactor module for a airline
+customer service.
+In the next lesson, you will learn how to use DSP Optimizer to automatically optimize
+the program's quality.
+See you there.

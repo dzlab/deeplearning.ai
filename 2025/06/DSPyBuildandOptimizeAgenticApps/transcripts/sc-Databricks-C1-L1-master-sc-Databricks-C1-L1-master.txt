@@ -1,0 +1,111 @@
+In this lesson, you will learn about what DSP is,
+and more importantly, what is special about DSP,
+and why many developers are using DSP
+to build their Gen A apps, let's type it.
+So, what is DSP?
+At a very high level,
+DSP is in Gen A authoring framework that
+simplifies the development of Gen A applications.
+You can use it to build a rock system to agent.
+But as a user, I would ask this very natural question,
+are we reinventing the wheels?
+We already have so many options over there.
+The answer is no, let's explore together.
+Before we learn about the specialty of DSP,
+let's talk about the problems we're facing.
+Since late 2022, you do the success of Gen A models,
+there came the rise of Compound AI system.
+Here, you can see a question answering system
+and also a co-generator.
+Compound AI system is a system that has multiple modules.
+Each module handles a sub-task,
+which can make how I'm cause,
+or could just be a regular tool colleague.
+Combining all these modules together,
+we form a big and powerful AI system
+that can handle complex tasks.
+Like retrieval augmented generation,
+we're co-generator as you see in the picture.
+When building a Compound AI system,
+we are all facing a problem from prompt engineering.
+We do prompt engineering because we know that
+with a better prompt, we'll get a better result
+from the language model.
+But prompt engineering could be very messy
+because we are tweaking the strings
+and we don't really know what changes make actual difference.
+In practice, that usually means
+we end up iterating over 50, 100, or even more prompts.
+And each prompt could be very long
+like tens of thousands of words.
+Making that even worse, if we switch the model,
+then we need to start over
+because prompt engineering is heavily biased
+towards the language model.
+As a summary, prompt engineering is both brittle
+and time-consuming.
+The other problem comes from the framework itself.
+Frameworks are very powerful because they simplify
+and standardize the experience of building things
+like agents or rack and so on.
+But there have been more and more complaints
+that I don't like the user frameworks
+because instead of value, I'm seeing more trouble.
+One very solid concern is that I'm being forced
+to learn the framework contract,
+which sometimes means on a necessary overhead for me,
+rather than keeping me focused on the logics.
+And it's really hard to migrate off the framework
+on your existing code if I decide to switch over to another one.
+To address both problems, there came the DSPI.
+Now let's answer the question,
+what is DSPI again with more details?
+DSPI is a flexible lightweight framework
+that simplifies the interaction with our own
+and provides automatic program optimization,
+including prompt optimization,
+and our own weights fine 20 through the DSPI optimizer.
+DSPI also provides seamless productization support,
+extreme async and so on.
+We provide you with a building blocks
+for AI applications in DSPI,
+but we don't restrict the way you build applications.
+It's both easy to migrate to DSPI and migrate off DSPI.
+We have three special things inside DSPI.
+And the first one is our own agnostic programming
+instead of our own bias prompting.
+Basically, instead of the impromptu engineering,
+DSPI interacts with our own
+by defining input fields and the output fields.
+In DSPI context, you can treat our own endpoint
+as a well engineered rest for API,
+but different from traditional APIs,
+the input and output are defined as client side.
+Don't worry if this is not fully clear yet.
+We'll cover this right in the next lesson.
+The second part is a seamless productization
+through both native DSPI features,
+extreme cache and also through the closed integration
+when the mouthflow.
+MLflow is an ML and AI ops tool
+that streamlines end-to-end development of AI applications.
+For example, helps debugging AI programs
+by MLflow tracing,
+tracking development by MLflow experiments
+and deployed application with MLflow deployments
+or learn more about it in lesson three.
+And in lesson four,
+you will learn about automatic program optimization
+after you build your AI applications with DSPI.
+You can create a DSP optimizer
+and apply it on your program
+and automatically get quality improvements.
+DSPI is trusted by industry.
+We have managed successful integration
+with lots of enterprise users.
+Please check it out more at DSPI.AI slash community
+slash use cases.
+That's all about this lesson.
+In next lesson, you will learn
+how to build your DNA applications in DSPI.
+See you there.

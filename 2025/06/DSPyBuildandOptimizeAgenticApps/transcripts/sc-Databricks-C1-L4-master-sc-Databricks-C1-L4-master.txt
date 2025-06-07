@@ -1,0 +1,156 @@
+In this lesson, you will learn about how to use the DSP optimizer to automatically improve your DSP program's quality.
+Let's get coding.
+This lesson comes with a lab.
+In a lab, you will get a hands-on experience of using DSP optimizer to automatically improve the quality of an energetic rock,
+which uses Wikipedia as a data source.
+After the optimization, you will see our rock has a big quality boost.
+Let's dive in.
+Before talking about DSP optimizer, let's think about what optimization means when we talk about generate applications.
+Mostly, it can be three things.
+It can mean optimizing a prompt template could also mean building high-quality future examples.
+These two parts both belong to the concept of prompt optimization or prompt engineering.
+Optimization could also mean fine-tune LOM weights in DSP with support all of the three parts.
+Now let's take an overview at how to use the DSP optimizer.
+First, you need to pick an optimizer.
+For how to pick the optimizer, please refer to our documentation site at DSP.AI.
+For this lesson and lab, we will use the MiPRO video optimizer,
+which is a good optimizer for prompt template optimization and building future examples.
+After you pick an optimizer, you need to tell the optimizer the evaluation metric function
+and also the training and the validation data set.
+The core idea of the requirement is the optimizer has to know what is a good program and what is a bad program.
+Different from normal machine learning job, the data set can be as small as 20 records.
+If you don't have a validation data set, the optimizer will split part of the data to be the validation data set.
+Let's talk about how optimizers work.
+In this lesson, we'll focus on prompt engineering and demonstrate by MiPRO video optimizer.
+For how to do fine training with DSP optimizer and how other optimizers work,
+please read on our documentation page at DSP.AI slash tutorials.
+So from a very high level, we first build multiple sets of future examples.
+We will talk about how to build that in the next slide.
+Then based on the future examples and your program information,
+we let our arm generate multiple prompt template candidates,
+which map to the instruction of the signature if you use a class-based signature.
+If you use a class-based signature, that means the dog string of it.
+Then we sample from both directions the future example set and the instruction set
+to form the candidate program and run evaluations on the candidate program.
+The evaluation is based on a metric function and validation data set.
+We pick data from validation data set and run against the program,
+compare the program output against the golden labels using a user defined metric function.
+The final program score is the average over all pick data.
+Along the process, we continuously pick the candidate of the highest score.
+And importantly, in our optimizer, when neither do you prove for search,
+nor try all the combos, instead, we use a statistical way called Bayesian sample length
+to intelligently sample towards optimal combo.
+Now we have seen optimization flow at a high level.
+Let's talk about how we generate the future examples and the instruction candidates.
+Future examples are generated through the process couple-strapping, which is very simple.
+We grab data from a training data set
+and fit that into a DSP program, which can be one module or multiple modules.
+Then, if according to the metric function, that's a score over the threshold set by the user.
+We grab the trace, which is the input and output of its module,
+to make that as a future example candidate for that module.
+Please note that one data can generate multiple traces
+because we are randomness to each call via certain temperature to non-zero.
+Now let's talk about how we build the instruction candidates.
+We grab the program code and description along with the future examples
+and some arbitrary tips like being comprehensive or being concise
+and send all of them to the LOM through something called DSP proposal
+and generate a bunch of instruction candidates.
+Now we have the candidates of both instruction, which is prompt template,
+and future examples.
+We can start generating candidate programs by picking one future example candidate
+and one instruction candidate and combine them.
+And then we can evaluate the candidate program
+and keep simply for the number of trials user-specified.
+We have done thorough experiments on the performance of the MiPROVITY optimizer.
+We see that MiPROVITY outperforms the original prompt by large margin in multiple tasks.
+For more details, please check out the paper,
+optimizing instructions and demonstrations for multi-stage language model programs.
+We can also utilize MLflow to interpret optimization process.
+Simply turn on the autolog by setting a few more flags to two in MLflow.dsPilot autolog,
+then the optimization process will be tracked.
+As we said, when we try the candidate program, we do evaluation on that
+and all these evaluations along with the candidate program's information
+like what's the instruction, what's the future example, or be saved to MLflow
+so get a full track of what's been tried across the process.
+Now let's get some coding to see how optimizer works.
+As we did in previous labs, we do set up a API key
+and we need to set up a MLflow truck and server.
+And we need to give data a unique identifier.
+Let's call that DSPiCourse2.
+And we can set up the autolog in and turn on a few more flags than before
+so that we can track the optimization process.
+And we need to specify the MLflow, let's continue using the GPT-4L meaning.
+For this ROG agent, it will be based on Wikipedia data
+and then we use an agentic ROG instead of like fixed a number of knowledge source code.
+Agentic ROG basically means we'll let the MLflow decide if we still need more data
+from knowledge source before we get to the final answer.
+Let's first define our tool, which is such a Wikipedia.
+We use co-birth V2, which is public available interface for quantum Wikipedia data.
+And the return value will be the chunk faster from Wikipedia data source.
+And we still use the DSPiL React as our program.
+And this time, the input output is very simple, just question answer.
+So we use a stream-based signature and has only one tool is a search Wikipedia.
+Now let's recap what we need to have to optimize it wrong.
+We need to have data set, training data set, and validation data set.
+So, let's load data set.
+We have prepared the data set for you, which is the subset of the hop-up QA data set,
+which is the question and answer in data set based on Wikipedia data.
+After loading the data, let's take a look at what the data looks like.
+So it's very simple.
+It has a question, has an answer, and input case will be the question.
+Okay, it's time to create our optimizer.
+We'll use a MiproV2 optimizer.
+And, as we said, we need to prepare a metric function so that the optimizer knows
+how to evaluate our candidate program.
+And for this task, we'll just use the answer exact match.
+And to configure the optimizer, we'll recommend you use the auto mode,
+which has three modes, light, medium, and heavy, which are carefully trained for good performance.
+But if you want to customize a MiproV2 optimizer, you can find our available options on our documentation side
+and in the search box search for DSPID on MiproV2.
+Now you will go and find all the available configurations.
+The optimization process can take quite a while.
+So in order to speed up the process, we have recorded the cache for you.
+So the optimization will hit the cache to be much faster.
+In real production, you don't need to require any cache.
+Just make our own calls.
+Now, let's kick off the optimization process.
+We use the optimizer.compile function and send the program to it,
+specify a training set and validation set.
+All right, the optimization is done.
+We can take a look at the login.
+So basically, we're continuously getting a candidate program
+and run evaluation over that.
+And we finally picked the basic program out of the process.
+Let's take a look of what is getting changed along with the process.
+So if you remember the original signature,
+it's just a very simple input to a question to answer
+and the react module will not have any instructions.
+But after the optimization process,
+the reaction module will have a very comprehensive instruction populated.
+And to also have a few future examples built into that,
+represented as a list in the demo attributes.
+Let's first evaluate the non-optimizer react, our RIG application.
+We get a score of 31,
+and we can see some example input and output gear in the table.
+Cool, let's now evaluate the optimizer react and get our score.
+Okay, the score of 54.
+You can see that without adding human interaction
+just by simply using the optimizer,
+we get a score boost from 31 to 54.
+That is the power of DSP optimizer.
+As we mentioned in slides,
+we track the optimization process with MLflow
+and you can view that in the MLflow UI.
+Go into the UI.
+The optimization run shows up as a natural run.
+And each child maps to a evaluation of the candidate program.
+Click into the run.
+You can see the attributes of the candidate program,
+like future examples, instruction,
+along with other attributes,
+and the evaluation score of the candidate.
+So you keep track of the full record of the optimization process.
+In this lesson, you'll have learned how to use DSP optimizer
+to optimize your DSP program.
+And we have seen how powerful the DSP optimizer is
+through optimizing the ROG application with Wikipedia data.

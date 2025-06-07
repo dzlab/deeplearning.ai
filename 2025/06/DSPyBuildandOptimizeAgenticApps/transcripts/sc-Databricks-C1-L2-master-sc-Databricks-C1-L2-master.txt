@@ -1,0 +1,401 @@
+In this lesson, you will learn how to build AI applications with DSP.
+Let's dive into the code. This lesson comes with a lab.
+In the lab, you will learn DSP fundamentals by building a simple sentiment analysis program
+with DSP building modules, and you will also learn how to build a custom-imagined with DSP,
+with a demo of building the name of the celebrity game.
+It's a very simple game where the player one thinks about celebrity name,
+and player 2 starts asking you a sooner question until finding the name or use up all the question code.
+DSP programming has two important abstractions, signature and module.
+Signature is where you define the input and output contract of your alarm cause,
+and DSP module is the interface of talking to the alarm with custom logic.
+Let's look at them one by one. As we mentioned in lesson one, that in DSP context,
+interaction with the alarm is similar to calling a REST4 API that has a wild defined input and output format.
+But this data format definition happens on client side instead of the server side, like a normal REST4 API.
+The definition is through DSP signature, ensure language.
+Signature defines input and output fields along with types and annotations.
+There are two ways of defining a DSP signature, class-based signature and stream-based signature.
+The first way is class-based signature. All you need to do is sub-classing from DSP title signature,
+and marker input fields by DSP title input field, and output fields by DSP title output field.
+And optionally, you can provide type and annotation to his field.
+There are five important parts of a class-based signature.
+The red box, which is the dog string of the signature class,
+is a signature instruction which defines the purpose of the alarm call.
+Like a brief overview of your task, this usually only requires a few sentences,
+but if you already have an existing prompt and don't want to simplify,
+you can paste the whole prompt into the dog string.
+The orange box is the field name.
+You will use this name to carry input data and access the output data.
+The blue box simply tells a program if that's an input field or output field.
+And the purple box carries actual information about the field,
+and it's useful when the field name is not self-explanable.
+Lastly, the green box carries the type information,
+which could be unimprimited Python types,
+or be adding custom class with identity models.
+This is mostly useful for output fields.
+If you specify the type, when you access the output fields,
+the value will automatically be of the type you desire.
+DSP also supports a lighter way of signature definition,
+costume-based signature.
+You just write the input fields before the arrow,
+and write the output fields after the arrow, and separate fields by comma.
+This is good for prototyping, but for general usage,
+we recommend go with a class-based signature for flexibility and more powerful support.
+Now we have defined input and upper format,
+but we still only have static information,
+and we need to define a way to utilize the signature to talk to the L1.
+That is the purpose of DSP module.
+Module is a minimal building block of a DSP program,
+and in most situations, has signature attached.
+The simplest module is DSP at a predict,
+which formats a user query to L1 prompt,
+and parses L1 response according to the attached signature.
+Modules have configurable attributes assigned from the signature.
+For example, attribute demo carries a future examples.
+DSP modules can be customized for implementing custom logic,
+and that module can consist of submodules.
+DSP provides a list of building modules
+that makes it easy for users to get started,
+and the most important one is DSP predict,
+which simply does our interaction,
+and it is a building block for all the complex modules.
+Channel thought is also commonly used,
+aside from the plan response,
+that also asks for reasoning behind the answer.
+React, stand for reasoning and act,
+will be used in a next lesson,
+which is a common standard for building AI agents.
+DSP program of thought, similar to React,
+but the tool calling is just a code, and DSP refine.
+With that, users can set a reward function and threshold,
+if the threshold is on met, which is issue-richwise
+with our own feedback.
+That's a definition of DSP module,
+as talk about usage right now.
+To use the building modules,
+simply pass a signature to the building modules,
+and invoke the building modules through input fields
+by setting the keyword argument.
+For example, in a slide,
+you create a channel after our instance,
+which has a single input field called question,
+then when you invoke the module,
+you just pass a value into the question.
+We have a complete list of building modules
+available on documentation site,
+please read out more there.
+But more commonly,
+you have complex logic that cannot be fully covered
+by previous modules.
+In those case,
+you will need to write a custom module
+to define a custom logic.
+This is very similar to PyTorch.
+You subclass from the DSPada module class,
+and implement the forward method
+with your custom logic.
+You create a module instance,
+and the instance is a callable
+similar to previous modules.
+This is very flexible.
+You can call adding Python function
+within your adding frameworks,
+a LAN chain, or Lama in-depth,
+or adding tools like SQL or file system handler.
+As long as that is the Python program,
+you are allowed to put that in the forward method.
+That's a lot of contacts.
+Let's do some coding to get a better sense
+of how this module signature system works.
+Let's get started with the coding.
+So before we start,
+when you set up the API key,
+and don't worry,
+in this lab,
+we have set up the key for you.
+Simply call our helper function
+can open the API key
+and set it as an environment variable
+that you are good to go.
+The first step of DSPada programming
+is choosing your LAN.
+In this lab,
+or I used a GPT-4 mini,
+and to change our own,
+I'm simply changing the string here.
+It is following a form
+at a provider name,
+followed by a model name.
+Provider name is like openAI,
+anthropic,
+and the model name is actual model name,
+like GPT-4 or that's mini,
+or GPT-4L.
+Now let's start building a sentiment classifier
+to see how the module signature system works.
+As we're mentioning a slide,
+we recommend going with a class-based signature,
+and here we start from DSPada signature,
+and write the task description in a dog string.
+An input will be a single string
+called text of type string
+with some actual information,
+marked as DSPada input field.
+An output field will just be a sentiment of type integer,
+marked as DSPada output field,
+some actual information,
+and restricted in the range of 0 to 10.
+This part is called pendante constraints,
+which is fully supported in DSPada.
+We can also use a string-based signature,
+just to write an input.
+Before the arrow,
+an output after the arrow,
+we can see that this is clean,
+but losing some information
+from class-based signature.
+Now we have the signature,
+which is the static information about input and output,
+we need to create a module
+to actually interact with EL1.
+Let's use the very basic DSP module,
+DSP predict,
+which is a feed-to-signature
+into DSPada predict,
+and create an instance.
+Now it's time to invoke an instance,
+and we only have one input field text
+to specify the value for a text,
+and call that,
+and let's see the print.
+The output is a DSPada prediction,
+which is similar to a dictionary,
+but allows both keyword accessor and dog accessor,
+has only one value
+with maps to our output field sentiment
+of type integer in the runs of 0 to 10.
+Let's see how we access the sentiment field,
+we can use both keyword accessor,
+word dog accessor,
+which will give you the same value.
+Let's see how to change the arrow I'm behind the scene.
+To do that,
+simply call DSPada configure,
+and change the arrow I'm instance,
+here let's change that to be GPT40,
+and let's feed the same input
+to see if that can generate a different value,
+we'll give the same value.
+Alright, that gives us the same value.
+Now let's change back to the arrow I'm to be for a minute.
+Now a lot of people may ask this question,
+where is my prompt?
+This looks a clay,
+but there is definitely some prompt,
+somewhere when we talk to the arrow I'm.
+To answer this question,
+in DSP,
+we provide an API call inspect history,
+and the end number here determines how many entries
+you want to pull from the memory,
+let's run that.
+The console output is a pretty print
+of the multi turn message,
+and our response.
+The system message maps to the
+system roles message,
+has the sequential information,
+like the input fields,
+output fields,
+patented constraints,
+and also determines the input output format
+we talked to the LM.
+And the user message carries actual user input,
+and is formatted according to the format we define above.
+And the response section is our response,
+which is also formatted according to the format we defined.
+Let's now try a different building modules.
+We use the channel of our module,
+and see what will happen for the output.
+You can see that in addition to a sentiment field,
+we solve the same values before,
+we also include a reasoning part in the output.
+And let's see why we get a different output.
+We can check the LLM interaction history
+by calling the DSP in Spark history.
+And we can see that the output fields,
+in addition to the sentiment,
+include a reasoning field,
+and has a specific format.
+And the response can tend to field,
+reasoning, and get parsed by the module.
+Let's see what's happening behind the scene,
+and explain by the minimum DSP module,
+DSP at our predict.
+DSP at our predict has signature
+and other information like demos attached to itself,
+when we receive the user input.
+In the fourth method,
+we can add all the information
+to something called DSP adapter,
+which talks to the LLM.
+After receiving all the information,
+including signature,
+user queries, and other attributes,
+the adapter formats the actual prompt,
+combining all this information,
+and sends the prompt to the LLM.
+The prompt tells the LLM about response format,
+according to the adapter type we use.
+We will show in a lab how to change the adapter
+based on a language model,
+you can write DSP automatically selected for you.
+Let's type deep into the prompt.
+We can see the fields information are at the top.
+Then we define input and output data format,
+where the default adapter is a section header followed by the value.
+Then the user question is formatted according to its defined format
+in the user message.
+The output format is very important,
+because only if we know the data format,
+we can extract the field's value automatically.
+The output flow is just a reverse.
+The LLM gives back response in our defined format.
+Then the adapter parses it into the output fields,
+and send back to the module.
+Because the response comes in the format,
+we define in the prompt.
+The adapter knows how to parse it into the required fields.
+The parser result is wrapped in the spada prediction,
+which is similar to dict,
+but allows both dot accessor and key accessor.
+To summarize in concise language,
+DSP combines the signature and the module information
+and actual inputs into a multi-term prompt,
+and parses the LLM response according to the signature.
+So the LLM functions like a restable API
+with a well-defined inputs and outputs.
+Now let's build a complex program
+by customizing DSP module.
+Let's first talk about how to use a different adapter.
+To do that, simply call PSPodelConfigure
+and send an adapter to be your favorite adapter class.
+And here we use JSON adapter,
+which is a good adapter if your model supports struct output,
+like GPT-40, GPT-4 whole meaning.
+Let's invoke the same channel after all instance
+with the same input,
+and let's see what happens with a different adapter.
+We can see that in addition to the original ones,
+we ask the outputs to be in a JSON format
+instead of the section highly followed by the value.
+And the response will be formatted as a JSON object
+and so that adapter can parse it.
+Now let's start building the name of the celebrity game
+by customizing a DSP module.
+Let's recap what the game is doing.
+Player 1 is us, thinking about celebrity name,
+and the player 2 is the LOM.
+Starts ask a useful known question
+until find the name or use of all the coders,
+we give 20 for this game.
+Now let's build a build a module.
+Before we talk about what happened inside module
+and how we build that,
+let's play with that to get a sense of how it works.
+We think about celebrity name
+and type the name, use a brown James.
+It's starting to ask a yes or no question.
+And we just answer that, not an actor,
+not a musician, sports figure,
+possible yes,
+current player yes,
+lakeers yes,
+brown James yes.
+So get to the answer.
+Let's take a look of how we write this module.
+So we start class from DSP out of module
+and we have two sound modules.
+The first one is a question generator,
+which generates a yes or no question.
+And it is a channel thought module
+with this question generator signature.
+Let's take a look at the signature.
+The signature has two input fields,
+which is passive questions and passive answers,
+and starts with empty list.
+And it has two output,
+a new question for the yes or no question,
+and gas made indicating if that's a generic gas,
+or let's say the record gas on the name.
+The second sub module is a reflection module.
+After we wrap up the game,
+we want to do a self-reflection,
+which takes in the correct celebrity name,
+and the final gasser,
+and the passive question and answers,
+and helper will be a single string
+for the reflection process,
+what's going on, good, what's going on.
+We define the customer logic in a forward method.
+We first get a user to enter a name.
+And we're starting a cumulative question
+and in the for loop,
+we'll keep generating a question
+and keep asking user for the answer
+and keep that in the record.
+Until we reach the correct gas,
+or we use up all the quotas,
+when the process has started doing self-reflection,
+and which maps to the log of this running process.
+The demo is just a four-funk.
+But I want to explain with this demo
+how flexible it is to use DSPY module.
+Basically, you can write an input function
+inside this for a method.
+We don't have adding restriction,
+so it's easy to migrate to DSP
+and migrate off DSPY.
+And we can also see how the signature system
+makes it easy to interact with our arm.
+Because we have the signature system,
+and explicitly for the output new question and gas made,
+we don't need to worry about parsing the fields
+out of the arm response.
+And we don't need to worry about if the gas made
+can indicate that like,
+indicate if that's a generic answer,
+general question,
+or direct a name gas robustly.
+The last thing I want to show with this lab
+is how to save and load a DSPY module.
+DSPY provides two ways of saving and loading.
+The first way is state-only saving,
+only saves internal state after DSPY module.
+And to do that,
+set a path to adjacent file
+and set the flag of save program equal to false.
+In order to load that back,
+you need to recreate the instance,
+or if you have an existing instance,
+and call the load on your module to load that back.
+DSPY also supports whole program saving
+through cloud pickle.
+You can worry about dependency
+until you recreate the instance.
+To do that,
+give data directory as a path
+and set the same program equal to two,
+then call save.
+To load that back,
+use DSPY to load
+and give the same path,
+and it will be loaded as a new instance.
+After you load back the program,
+you can call that as if that's an original program,
+and that will restart the game process.
+That's all about this lesson.
+You have learned how to program with DSPY.
+In the next lesson,
+you will use MLflow tracing
+to debug your DSPY program.
+See you there.

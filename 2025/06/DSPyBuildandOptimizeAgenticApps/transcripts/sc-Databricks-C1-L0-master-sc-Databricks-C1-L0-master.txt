@@ -1,0 +1,44 @@
+Welcome to DSPY, Build and Optimize Ajectic Apps built in partnership with Databricks.
+In this course, you learn how to build and optimize your GENIAR application using DSPY.
+When you start building configs in your apps, one per challenge is writing good prompts
+for NLR.
+Our often tried dozens of prompts tweaking whereas changing formats hoping to get better
+results.
+This process takes a lot of time and the prompts often even break when you change the underlying
+ON.
+DSPY's streamlines and authorizes this whole process.
+You define what inputs your model needs and what outputs it should return and also provide
+a dataset of inputs and design outputs.
+DSPY can then optimize your AR programs to get better performance with much less manual
+work.
+I'm delighted to teach the UC instructor, Jenschen, who is a software engineer at Databricks
+and copies the developments of DSPY.
+To exchange you, in this course, you will learn how to build AI programs with DSPY.
+DSPY has two main building blocks, signature and a module.
+When you are trying to build a component of an application, specifying the signature
+tells the system where inputs and outputs should expect from them all component.
+For example, a sentiment analysis program will have a string text has an input and an
+integer representing a sentiment has the output.
+A module then uses those signatures to actually call a language model and get results.
+Sometimes an app doesn't work, but we are not sure why.
+In this course, you will also learn to use an workflow tracing to help you see exactly
+what's going on in each step of the application.
+What data was used, what tools were called, what the model returned, and where things
+broke.
+With just one line of code, you can turn on this tracing feature for your app.
+When we use a DSPY, it's an optimizing agent to work those.
+It will have a complex workflow that takes an input and uses multiple steps of processing
+to generate the outputs, maybe using an RM on multiple of these steps.
+When DSPY's optimizer can take your agents as well as an evaluation data sets and metric,
+and based on that, automatically search for better prompts for all steps.
+Our scene is sometimes though really high quality fuel shop prompts on your data, that
+the way that it's far better than I as a human could likely have achieved by hand.
+In this course, you use DSPY's optimizer to optimize prompts in a rag app that answers
+Wikipedia questions.
+Many people have worked to create this course.
+I'd like to thank Omar Katal, Kha'i Yin, Trishster Opsalon, and Tobu Hirata for Databricks.
+From T-Blend.ui, Ashmeu Gagari and Brendan Brown also contributed to this course.
+The first lesson will be an introduction to DSPY.
+One surprising thing about DSPY is how fuelizer code it takes to implement and added essentially
+autobase the prompt engineering process.
+If you've gone to the next video to see how this works.
