@@ -28,7 +28,6 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 <summary>Courses from 2024</summary>
 
 ## 2024
-- [Automated Testing for LLMOps](./2024/AutomatedTestingforLLMOps)
 - [Building Applications with Vector Databases](./2024/BuildingApplicationswithVectorDatabases)
 
 - [Open Source Models with Hugging Face](./2024/OpenSourceModelswithHuggingFace)
@@ -42,6 +41,7 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 ### 01
 - [LLMOps](./01/2024/LLMOps)
 - [Advanced Retrieval for AI with Chroma](./01/2024/AdvancedRetrievalforAIwithChroma)
+- [Automated Testing for LLMOps](./01/2024/AutomatedTestingforLLMOps)
 
 ### 02
 - [Prompt Engineering with Llama 2](./2024/02/PromptEngineeringwithLlama2)
@@ -103,5 +103,6 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Building AI Voice Agents for Production](2025/05/BuildingAIVoiceAgentsforProduction/)
 - [MCP Build Rich-Context AI Appswith Anthropic](2025/05/MCPBuildRichContextAIAppswithAnthropic/)
 - [Reinforcement Fine-Tuning with GRPO](2025/05/ReinforcementFine-TuningwithGRPO/) / Chat with the course on [HuggingFace Chat](https://huggingface.co/chat/assistant/6837e12a7ea7c9067ba8e6c5).
+- [DSPy: Build and Optimize Agentic Apps](2025/06/DSPyBuildandOptimizeAgenticApps/)
 
 </details>

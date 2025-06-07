@@ -1,0 +1,5 @@
+python-dotenv==1.0.0
+dspy==2.6.23
+mlflow==2.21.3
+openai==1.61.0
+pydantic==2.11.3

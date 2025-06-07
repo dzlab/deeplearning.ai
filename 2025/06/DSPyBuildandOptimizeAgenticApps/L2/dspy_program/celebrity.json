@@ -1,0 +1,75 @@
+{
+  "question_generator.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature": {
+      "instructions": "Generate a yes or no question in order to guess the celebrity name in users' mind. You can ask in general or directly guess the name if you think the signal is enough. You should never ask the same question in the past_questions.",
+      "fields": [
+        {
+          "prefix": "Past Questions:",
+          "description": "past questions asked"
+        },
+        {
+          "prefix": "Past Answers:",
+          "description": "past answers"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "New Question:",
+          "description": "new question that can help narrow down the celebrity name"
+        },
+        {
+          "prefix": "Guess Made:",
+          "description": "If the new_question is the celebrity name guess, set to True, if it is still a general question set to False"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "reflection.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature": {
+      "instructions": "Provide reflection on the guessing process",
+      "fields": [
+        {
+          "prefix": "Correct Celebrity Name:",
+          "description": "the celebrity name in user's mind"
+        },
+        {
+          "prefix": "Final Guessor Question:",
+          "description": "the final guess or question LM made"
+        },
+        {
+          "prefix": "Past Questions:",
+          "description": "past questions asked"
+        },
+        {
+          "prefix": "Past Answers:",
+          "description": "past answers"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Reflection:",
+          "description": "reflection on the guessing process, including what was done well and what can be improved"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "metadata": {
+    "dependency_versions": {
+      "python": "3.11",
+      "dspy": "2.6.23",
+      "cloudpickle": "3.1"
+    }
+  }
+}
