@@ -1,0 +1,27 @@
+Hi, and welcome to the short course Quality and Safety for LL applications built upon a shift with wide apps.
+When building an LL powered app, you often want to use metrics to ensure it can handle inappropriate upwards
+and to ensure the quality and safety of this upwards.
+What I've seen in many countries is that the LL app proof of concept can be quick to build.
+Maybe you can throw stuff together in days or weeks.
+But the process of then understanding it is safe to deploy, then holds up is getting into actual usage.
+This short course goes over the most common ways an LL application can grow raw.
+You hear about crop projections, hallucinations, data leakage, and toxicity, plus tools to mitigate the risk.
+I'm delighted to introduce the instructor for this course, Bernice Rundin, who has seen it in the scientists at YNABS.
+Bernice has worked with last six years on evaluation and metrics for AI systems.
+And our pandemic pleasure of collaborating with her a few times already says why that is the portfolio company of my team where I fund.
+Thanks, Andrew. I've been seeing a lot of LLM safety and quality issues across a lot of companies.
+And I'm excited to share best practices from the field.
+In this course, you learn to look for data leakage where personal information such as names and EU addresses might appear in either the input prompts or the output responses of YNABS.
+You also learn to detect prompt injections where prompt attempts to get an LLM to output response that it is supposed to refuse, for example reviewing instructions for causing harm.
+One such method that you use is an implicit toxicity model.
+A implicit toxicity models go beyond identifying toxic worse and could detect more subtle forms of toxicity, whether worse is sound innocent, but a mean is not.
+You also identify when responses are more likely to be hallucinations using the self-checked GPD framework, which prompts in the hospital multiple times to check for consistency to determine is really confident about something that's safe.
+But these would go through how to detect, measure, and mitigate these issues using open source piping packages, blankets, and YNABS, as well as some hugging fix teams.
+Practitioners and researchers have been experimenting with countless LLM applications that could benefit society, but measuring how well the system works is a necessary step to the development process.
+In fact, even after a system is deployed, ensuring quality and safety of your AI application will continue to be an ongoing process.
+Ensuring your system works long-term requires techniques that work at scale, and in this course you'll see some of these techniques that will make LLM powered apps safer.
+Many people have worked to make this course possible.
+I'd like to thank on the why that side, Maria Karayanova, Kelsey O'Meam, Philippe Atachi, and Alyssian Bisneck.
+From deepline.ai, an issue at Teala as a team had also contributed to this course.
+The first lesson will give you a hands-on overview of methods and tools that you'll see throughout the course to help you detect data leakage, jail breaks, and hallucinations.
+That sounds great. Let's go on to the next video. I guess started.

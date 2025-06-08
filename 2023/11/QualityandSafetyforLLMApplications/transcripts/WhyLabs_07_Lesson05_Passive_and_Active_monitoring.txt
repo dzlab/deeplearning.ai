@@ -1,0 +1,227 @@
+To ensure safety and quality, you can use the metrics in this course on collected data from
+your LLM application, what we call passive monitoring, or apply them in real time as the
+app is running called active monitoring. Let's take a look at both of these.
+Now let's translate the skills and the metrics that we created into a more realistic setting.
+First, let's do some setup.
+Next, let's install a number of default metrics from the LLM kit library.
+To initialize the metrics, we need to use the init function.
+I highly suggest that we copy some of the metrics from earlier lessons into this one.
+Let me show you how that's done. First, we'll import our register data set UDF,
+decorator. Then feel free to copy any of the metrics that we had earlier into the next cells.
+One thing to note is that we want to make sure that those cells return lists of values.
+Sometimes in the past, we've used pandas-specific ways of calculating things such as the .str
+functionality. This may not work when we're not passing in painless data frames, so take care.
+Now we'll import our UDF schema function, and we'll use UDF schema to capture all of the metrics
+that we've registered. So in the past, we've used LLM schema or any name equals our UDF.
+schema, like this. But what we can do, especially in production settings, is create a new logger.
+So by creating a logger that contains these schema settings and other settings,
+it makes further calls to YLogs much simpler. So let's do that here. We'll make a very simple
+logger. We'll call LLM logger, and we'll just use Y.logger,
+and then pass in a schema. So in our case, we'll do schema equals UDF schema.
+For streaming applications and realistic applications, we may not always have a full set of
+data every time we log. In those cases, what we may want to do is instead of logging each individual
+data point into their own separate profiles, we want to combine them and summarize them as they're
+intended. So here's an example of a logger that's a rolling logger that over time will compress our data.
+So you'll notice here I have an interval of one for every hour. So on every hour, in this example
+logger, we will compress all of the data seen in that hour into a single profile. Okay, let's move
+forward and think about two types of monitoring. So the first type of monitoring is what we've done in
+all of the previous lessons in this course. And this is passive monitoring. So passive monitoring is
+done after the interactions with the LLM application have completed. So not only just calling our LLM
+model, which may be our own or maybe third party, but also all of the responses that we give to users of
+our system. After we've done that action, we can look at all of the combined data and analyze it.
+Let's go back into the Y.logs platform where we earlier saw many of these metrics and insights
+related to those metrics. Now let's go look at some other example data that's more realistic and
+pushed over time. So first we'll go to project dashboard here. And instead of our guest organization,
+we are going to switch over to our demo organization that everyone has access to.
+Here, we'll be in read only mode for some demos that YLABs gives. We want to look at the LLM chat
+demo. And let's click on dashboards. Okay. So what we can see here are a number of dashboards
+related to LLMs. We see a number of familiar metrics. So things like has patterns, where we have
+a particular date that has some social security numbers, email addresses, and credit card numbers.
+We see things like sentiment moving through time, jailbreak similarity, and so on and so forth.
+So this data, unlike the data that we've had before, is not all compressed into a single profile,
+but instead profiled over time. These are hourly profiles. So we see some at six o'clock,
+some at seven o'clock, so on and so forth. This way of looking at the data after the process has
+happened for our application, and then analyzing to find potential issues or understand the usage is
+called passive monitoring. So we might do things like look and see that there's an increase in
+refusals and toxicity on this particular date, as well as other things, other toxicity and so forth.
+And determine that we need to reset our model or change something about our application.
+We can also do things like add different monitors. So in addition to just seeing these values,
+add applying threshold on these values so that we can alert others, keep track of what's happening
+in our application. I won't show too much detail about how to do that. You can click on a monitor
+manager here to get started on adding more. Instead, let's jump into the concept of active
+monitoring. So active monitoring, unlike passive monitoring, can still happen in real time,
+but this is during the process of our LLM application. So I have an example here. We have a user
+that user may submit a prompt or request to our system, and we may do things such as auditing
+that message before we even call an LLM. We can pass those logs over to our system, such as
+YLabs. And then we can filter those systems. So depending on the requests that's made, we may
+decide to not go any further. But we can instead go on, pass things through the LLM, receive a
+response from the LLM and also log that information while a single process is happening.
+Then we may decide to make a response from that and pass it back in our application.
+So having multiple touchpoints within the process is really helpful. This allows us to filter
+responses, change our decisions about what will send the user during their interaction.
+Now we'll create a semi-realistic example inside of our notebook here. So we're going to use
+OpenAI, although you can use any LLM. So for that, we'll import OpenAI.
+And then we need an OpenAI key. Those should be available to us, and we already have helper functions
+to help grab those. So let's do that here.
+And let's set this in the OpenAI.
+Okay. So now that we've done that, let's think about how to set up a very simple logger.
+First, we'll start with a very simple one, and then we'll increase this. Let's call this
+Active LLM logger. And since we'll replace it, let's just go ahead and leave this blank.
+Okay. So now, thinking about our application, we have a number of steps that we want to take.
+First, we want to ask the user for a request. In our case, in thinking we want to do something
+like a recipe application. So a user will give an item, and we will use an LLM to create a simple
+recipe for that item. So we'll take in a user request. The second thing we'll do is prompt the LLM
+and get a response with possibly a transformed version of that request. Then, depending on successor
+failure of that response, we can pass back what the LLM has responded, or we might pass back a custom
+message. Let's go ahead and create four functions for this, and I'll walk you through them.
+So the first is user request. And what we do here is we take in a request using the input
+functionality. Let's go ahead and take this. Okay. Then, just in case the request is quit, we'll go
+ahead and capture that and raise a keyboard interrupt. This is a common exception you see when you
+close a cell in the middle of running or close a Python function in the middle of running.
+And then, as we talked about, we are going to log throughout this process. So the first time,
+we'll log just the request information that we have. So the text that the user has passed in.
+Second, we'll go ahead and prompt our LLM using this prompt LLM function. I'll walk you through it.
+So the first thing we'll do is we'll transform that request that the user is made into a prompt we
+can pass the LLM. So this here we're asking for a short recipe using up to six steps with
+a limitation on the number of characters. Then again, we'll log our prompt using this active LLM
+logger object. Then, we will call open AI with our request and the prompt we have. We'll take that
+response and we'll log that response and then return it. Next, we should decide what we do when
+we succeed. So for that, we'll use user reply success function that I've created.
+And what's happening here is we take the request and the response and we basically return this
+to the user. I will go ahead and format this
+just so we can all see it on the same screens.
+Okay, and then we log that reply as well. And then finally, what do we do when this fails?
+I'll scroll up here. We will take our user reply failure function where we take in a request.
+I also have a default for that request. And we will give an unfortunate message saying, hey,
+we weren't able to provide a recipe. Sorry, this goes a little long, but this just says four.
+A request at this time. Please try the name of my model recipe creator 900 in the future.
+And then we also log this reply.
+Okay, so now we have our four functions. How will our application run? Well, there's a number of
+ways we can think about the logic for this. But I am going to go with an approach that uses
+exceptions. So first, I want to create a new custom exception. It's nice to have them just in case.
+So we understand what we've created and what other exceptions are there. So I'll make a class,
+call it LLM, application, validation error. And I'm going to make this a value error. Okay.
+And we don't need to pass anything in or do anything really. So I'm just going to put a pass here.
+But we've at least created this class. So how will our logic work? Well, since we have some
+exceptions that we may use, let's write a function that loops through and creates sort of a prompt.
+So we'll save while true. Now, of course, be careful with while true. We may have to cancel this
+ourselves if this runs too long. Let's throw this into a try. Then we'll say request equals
+our user request our first function. Then we'll find the response. And that will be from our prompt
+LLM function to chase the requests. Then we'll use user reply success, assuming everything went
+well. Okay. But what if it doesn't go well? Well, in one case, we might have a keyboard interrupt.
+So maybe the user manually or using our user request function types quit. And a keyboard interrupt
+is raced. The other accept that we might have is our LLM application validation error.
+And we're not really using these. So I could have easily kept these off. Maybe I will.
+Okay. So then what this is going to do is we will continue to loop through until we get either
+a keyboard interrupt or this LLM application validation error. You might be tempted to capture
+all exceptions. Oh, I apologize. One thing we're missing here. So in that case, we want to use our
+user reply failure and pass in the request. Okay. So what will happen is we user requests. We do
+the prompting. If it succeeds, we're still in the try. And we'll run it success. If any time
+within here, we fail, we'll jump down to either this exception or this exception, where we'll just
+exit out. Okay. Let's run this. And now we have something in front of us. So let's go ahead and
+call this. Let's ask for a recipe something like spaghetti. Okay. So looks like we had some success.
+Here's a recipe for success spaghetti. And we pass in six instructions. Great. Let's go ahead and quit.
+So this is really exciting and helpful. But the question is, is when might we have other issues?
+When might we want to break our process as a result of some of the metrics that we've created?
+Okay. So let's look into that. So the first thing that I want to do is I want to replicate some
+of the thresholds that we've created in the prior lessons. We're going to do this in a slightly
+different way, though. We are going to use y-locks. So I want to make three imports here.
+And these are all related to creating a validator and conditions. So we won't talk too much
+about validators broadly. We'll just use this specific example. So what a validator does is we
+for a particular condition for each row of data that is logged, we're going to look to see if some
+condition is met. If that condition fails, if it's not met, we might want to take some sort
+of action. So in a realistic setting, something we may want to do is, well, change our functionality
+of our prompt system as we want to do here. But we may also want to send an alert to the data
+scientists to note that we've had this really bad issue. Or we may want to email the user and say,
+sorry, you've used this application incorrectly or in a way we didn't inspect. Here's some
+instructions. Here's some additional things. Or we may want to log some of the information that we
+have. More information than we're logging continually. Lots of different actions that we may want to
+take during the process of the LLM. We may want to even send our data out to a human to make a final
+judgment where we're not confident about the LLM's quality. So in our case, we're going to keep it
+very simple. We're going to just raise an exception, the same exception that we just created.
+So to do this, I'm going to create a new function. I'm going to call it raise error.
+Maybe not the best name, but we'll stick with that. And then for validators, it takes three arguments.
+So it takes a validator name, which is a string, takes a condition name, also a string,
+and it takes a value. That value can take on a lot of different types.
+Okay. In our raise error, we're going to do something pretty simple. We're just going to raise
+our LLM application, validation error. And we're going to pass back a message. We'll say
+something like failed, validator name, with value value. Okay. Finally, we can close this off.
+And we're done. Okay. So now we have our action that we want to take. Whenever we have a failure,
+we want to use this raise error. Let's go ahead and define the conditions that we want this to
+happen. So let's give it a name. I just want to call it low condition.
+And we're going to pass in dictionary of all of the conditions that we want for a particular
+validator. So in this case, let's give this a name for the key. We're going to say less than 0.3.
+And the condition is going to be that the value is less than 0.3.
+So YLUX has a number of conditions. I'm feel free to look through the documentation and find
+those. I will focus on just this one actually for two use cases. So the first use case is for
+toxicity. So we'll make a toxicity validator. Although you can name it whatever you'd like,
+we will make a condition validator. And that takes in three arguments. So first is a name for
+this validator. So we'll just call it toxic. Then we need a dictionary of our conditions.
+Well, we've just created that. So we'll say conditions equals low condition.
+And then finally, we need the actions that we want to do. So we're going to raise error.
+So we'll say actions equals raise error. Great. Now we're going to do this one more time.
+So in addition to toxicity, we also want to raise an error if we have a refusal.
+So let's go ahead and just copy our toxicity validator. And let's go ahead and call this refusal.
+Validator. We'll rename this. And in our case, we're actually okay with the conditions being
+exactly the same. So we're going to use two metrics. One metric, which gives a toxicity score.
+And score greater than 0.3, we might consider to be toxic, maybe 0.5 or 0.6. But in our application,
+we'll be squeaky clean and we'll look for 0.3. And same for refusals. So the refusal's
+metric that we'll use has a value that is one for similarity to refusals in our data set.
+And zero if it's not very similar. So we're also going to want very low values. So we don't think
+that they're refusals. So I'm going to pick 0.3. They'll free to play around with that number
+as we kind of continue on with this process. Okay. So now that we've defined our two validators,
+we need to go ahead and pass a dictionary of the two in. We want to determine which metrics
+of these validators to apply to. So I'm going to go ahead and call this LLM validators.
+And the first, we're going to apply to prompt dot toxicity.
+It's spelled correctly. And the only validator that we'll have for prompt toxicity is the one
+here, toxicity validator. Then we're going to apply another metric to response dot response
+or sorry, refusal similarity. So this is a metric that comes out of the themes module inside
+of link it, but it's also packaged automatically with the LLM metric module.
+Okay. So this will take the refusal validator.
+And we'll close off our dictionary. Okay. So finally, we have all of these. And our last step is
+to create a new logger and new schema that includes these validators. So let's do that here.
+So we'll give it the same name that we used above active underscore LLM underscore logger.
+This will be a rolling logger every five minutes. It has a base name just for naming purposes.
+And then we'll pass in a schema that is UDX schema. So again, this is our function that grabs
+all of the metrics that we've already defined, including the LLM metrics. But we'll pass in an argument
+with the validators that we just created. So a dictionary of the validators where the key is the
+metric name that we want to apply them to. And the value is the list of validators.
+Okay. So now we have all we need. So now when we log using this active LLM logger,
+we should run all of this code that we've just written. So we will log the data, but we'll also
+look at that data compared to the condition. And if it doesn't meet that condition,
+we will take the actions that were specified, which in our case are throwing an exception.
+Okay. Let's go ahead and try this on a couple examples. So we'll use active LLM logger.log.
+And we're going to use a different format. So often we've passed in a pandas data frame for our data
+when we're logging. But now we're going to do this kind of one at a time. So you can also use a
+dictionary format. So the first thing I might do is we're just going to do an example outside of
+our application. Let's say we logged a response in that response. That's something like I'm sorry,
+but I can't answer that. Okay. Let's go ahead and fit this all on the screen here. Okay. So
+this is something that when we log this response, we already know that one of our metrics,
+well, several metrics will look for the response column and apply metrics on top of that. So one
+of the metrics that will apply is the refusal similarity metric where it compares these
+sentence embedding distance between this sentence and the refusals that we included in our config.
+After this happens, we'll run the validators and there's a validator on that particular metric.
+And that metric should give us an exception if the refusal value is greater than 0.3.
+So fails are less than 0.3. So greater than or equal to 0.3. So when we run this, we get exactly that.
+So we get our LLM application validation error and we can skip the stack trace.
+But the thing that's important here is that it failed our refusal validator with a value of 0.578.
+Okay. So let's scroll and keep going. Okay. So this is really exciting. Now we have our logger. So
+without any additional if statements or things like this, we can just using Y logs capture any
+of these issues that come up with the metrics that we log with Y logs and take actions.
+Okay. So finally, what I'll do is I'll copy the same code that we had earlier
+into a new cell so that we can run and play with our new application with the validation.
+Okay. So let's think of things that we want to make a recipe of.
+So I am apparently in an Italian mood. So let's do carbonara.
+Enter. Takes a little bit of time. But we had success. Here's a recipe for carbonara.
+This is what the LLM returned as a recipe. Looks pretty good to me. Okay. Let's do another one.
+Let's say a recipe for success. We hit return and it goes through this process and it goes from here.
+Now let's go ahead and check that either of our interrupts work or exceptions. So we had one
+for toxicity. I'll let you do that on your own just because I don't want to type anything
+toxic in. But let's go ahead and test our second one, which is a refusal. So maybe we will ask a
+recipe for something, let's say making a bomb. Hopefully the LLM will refuse this.
+We'll see. So we get our unfortunately we're not able to provide a recipe for making a bomb at this
+time. Please try our recipe creator 900 in the future. And this was our custom response for our
+application. So what happened is we caught that exception and then we passed in our custom
+response. Great. This is awesome. So that's it for this lesson and for this whole course,
+thank you so much for staying with us and seeing how to not only create metrics that relate both
+quality and to security, but then applying them in this final lesson.
