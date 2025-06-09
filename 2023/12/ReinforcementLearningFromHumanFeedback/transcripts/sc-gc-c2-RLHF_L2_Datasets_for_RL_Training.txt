@@ -1,0 +1,96 @@
+Before we can tune a large language model, we need to prepare our data.
+Arleigh Jeff requires two datasets, a preference dataset and a prompt dataset.
+In this course, we're going to be tuning the OSS Lama 2 model on a summarization task.
+Each example and our dataset is a post from Reddit and a corresponding summary.
+So let's take a look at the data.
+Let's start by taking a look at the preference dataset. As a quick reminder,
+this is the dataset that's used to tune the reward model and it's often one of the trickiest
+parts of Arleigh Jeff because it's the dataset that's been annotated by humans and different people
+have different preferences. There's usually a lot of work that goes into creating one of these
+datasets, but for this course, we're going to use a dataset that's already been created and
+pre-processed. So let's start by defining the path to this dataset. I've gone ahead and created
+a dataset for you called sample preference dot JSON L. This is a small version of the dataset
+that we're actually going to tune the model on. For best results, we recommend a dataset of around
+5,000 to 10,000 examples, but since we're just doing a bit of data exploration, we're just going
+to load in a tiny sample of the data into memory. So first, I'm going to import JSON, so that way we
+can load this data and then we'll create an empty list called preference data. The next thing we're
+going to do is we're going to loop over this JSON L file and as we loop over this file, we are going
+to append the data to our preference data list. So let's execute the cell and then we can take a
+look at what the data looks like. So I'm going to define sample one and that will be the first element
+in this preference data list. So if we look at the type, we can see that this is a dictionary.
+And if we look at the keys, so as you can see, this dictionary has four keys. There's input text,
+candidate zero, candidate one, and choice. So let's take a look at each of these one at a time.
+So I will extract the key input text from our sample and we can print this and this right here
+is our prompt. So the prompt here says I live right next to a huge university. I've been playing
+for a variety of jobs, et cetera, et cetera. You'll notice that if you get to the end of this prompt,
+it ends with this bracket summary, close bracket colon. And in fact, all of the samples in this data
+set actually end this way. So if we look at a different sample in our original preference data list,
+we can extract out the key input text. And we'll just look at the last few characters.
+And if we print this, you can see that this prompt also ends with summary colon. And it's
+bumped this index one more time. So we're going to take a look at another sample in this data set.
+And this one also ends with summary colon. So all of our examples in this data set, all of the
+prompts end this way. And the reason this is important is because you need your data set examples
+to match your expected production traffic. So during training, this data set here contains the
+specific formatting or specific keyword or instruction of summary. And it's important that at
+inference time, our data set should be formatted in the same way and contain the same instructions.
+So later when we look at inference data, when we actually use this tune model, we'll see that we
+include the same summary indicator there. And this is so that the model can recognize the pattern.
+All right, so this is our first key here. It's input text and input text is our prompt. So let's
+take a look at the next two keys in our dictionary, which are candidate zero and candidate one.
+So I'm going to go ahead and print out both of these.
+So we'll print candidate zero and candidate one. And these are two possible completions for
+the same prompt. So the task was to summarize this input text and candidate zero summary is
+when applying through a massive job portal, is it just one HR person seeing all of them? And
+candidate one is when applying to many jobs through a single university jobs portal,
+is it just one HR person reading all my applications? So the human labeler was shown
+both of these candidates and they were asked to pick which one they prefer. And we can see the
+preference in the final key of the dictionary, which is the choice. So let's go ahead and print out
+the final key, which is choice. And if we do that, you'll see that the value for this choice
+key is one. So that means that the labeler preferred candidate one. They thought that this summary
+right here was a better summary than candidate zero. So in this case, we would refer to candidate one
+as being the winning candidate and we would call candidate zero the losing candidate.
+Since candidate one was preferred by the human labeler. So this is what the labeler of this
+particular example thought was the better summary, but you might have a different preference.
+So take a minute and read through this entire input text here and see if you agree.
+You can also take a look at the other samples in this preference data set and look at the
+corresponding summaries and see if you agree with the lablers. And remember that it's okay if you
+have a different opinion, picking the right lablers and making sure you provide the right criteria
+for your specific problem is difficult and it depends a lot on your use case. But this is
+essentially what the preference data set looks like. We're going to train our reward model on these
+triplets of our input text, which again is the prompt and then the winning candidate and the losing
+candidate. And when we do that, we'll get a scalar value indicating how good the completion is.
+But we'll look at that a little bit more deeply in the next lesson. For now, let's take a look at
+the second data set that we need it. This is the prompt data set. So once the reward model has
+been trained, we're going to use it in the reinforcement learning loop to tune the base
+large language model. This process requires a prompt data set, which consists of sample prompts.
+So let's take a look at this prompt data set. Like before, I have created a smaller version of
+this data set, which we will load into memory and take a look at in this notebook. So first,
+we will define a path to this small data set. I've called this sample prompt.jsonl. So we can create
+this. And then again, we'll make an empty list. And we will then loop over this JSON
+L file. And each time we loop, we will append the information to this prompt data list.
+And when we do that, we can actually take a look at how big this list is. And you'll see that
+it's very tiny. So we're just loading in six examples of our much larger prompt data set that
+we'll use in the next lesson when we actually tune the base large language model. Now a quick
+note on your prompts in this data set, it is important that the prompts and the preference
+data set and this prompt data set come from the same distribution. In this case, all the prompts
+are a data set of Reddit posts. So they do come from the same distribution. So now we can take a
+look at some examples in this data set. To help us visualize this data, I'm going to define this
+function called print d. So printing the dictionary. And what we'll do is we'll take the key and
+value. And we will just print out the text key and then along with the actual key. And then the
+text value and its corresponding value. So this will just help us to visualize the information in
+this prompt data list a little better. So let's define this function. And then we can use print d
+to print out the first element in our prompt data list. So we will extract the first element
+and execute the cell. And you can see here that we have the key input text. And then the value
+is I noticed this the very first day. I take a picture to see if it was one of my friends, etc,
+etc. And you might notice that this ends again in the same summary colon indicator. So this looks
+fairly similar to the preference data set. But we just have one single key, which is the input
+text field aka the prompt. So if we take a look at another example in this data set, we can use
+the same print d function. And this time we'll just extract the second element in this list. And
+if we print this again, you can see that there's only one key and that key is called input text.
+And the corresponding value is a prompt. So no, I loved my health class. My teacher was amazing.
+Most days we just went outside, etc, etc. And it also ends with the summary colon. So that is our
+prompt data set. It's just a data set of prompts. So I encourage you to take a look at the other
+samples in this prompt data set and also again in the preference data set. But essentially these are
+the two main data sets that we're going to need in our RLHF tuning workflow. So in the next lesson,
+we are going to use both of these data sets to actually tune our base large language model.
+So I will see you there.

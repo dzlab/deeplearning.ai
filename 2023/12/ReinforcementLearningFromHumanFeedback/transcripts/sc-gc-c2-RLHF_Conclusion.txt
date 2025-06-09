@@ -1,0 +1,8 @@
+Congratulations on finishing the short course on RLHF.
+We started off with a conceptual overview
+of how RLHF works and the different data sets involved.
+Then you saw how to tune the OSS Lama 2 model
+using an ML pipeline and how to evaluate the results.
+I hope this prepares you for when
+you're ready to tune your own models with RLHF,
+and I am so excited to see what you build.

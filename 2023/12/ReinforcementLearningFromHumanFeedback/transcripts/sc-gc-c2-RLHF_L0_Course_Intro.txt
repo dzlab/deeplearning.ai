@@ -1,0 +1,86 @@
+Welcome to reinforcement learning from human feedback or ROHF,
+both in partnership with Google Cloud.
+And OM trained from public internet data
+would mirror the tone of the internet
+so it can generate information that is harmful, false,
+or unhelpful.
+ROHF is an important tuning technique
+that has been critical to align an OM's output
+with human preferences and values.
+This algorithm is, I think, a big deal
+and has been a central part to the rise of OM's.
+And it turns out that ROHF can be useful to you,
+even if you're not training an OM from scratch,
+rather instead building an application whose values you want to set.
+While fine tuning could be one way to do this,
+as you learn in this course, for many cases,
+ROHF can be more efficient.
+For example, there are many valid ways in which an OM can respond
+to a prompt such as, what is the capital of friends?
+It could reply with, Paris is the capital of friends,
+or it could even more simply reply, Paris.
+Some of these responses were few more natural than others,
+and so ROHF is a method for gathering human feedback
+on which responses they prefer
+in order to train the model
+to generate more responses that humans prefer.
+In this process, you start off with an OM
+that's already been trained with instruction tuning,
+so it's already learned to follow instructions.
+You then gather a data set that indicates
+a human labeless preferences
+between multiple completions of the same prompt,
+and use this data set as a reward signal
+or to create a reward signal to fine tune
+an instruction tuned OM.
+The result is a tuned large language model
+that generates completions or outputs
+that better lines with the preferences of the human labeless.
+I am delighted to introduce the instructor,
+Nikita Namjashi, who is developer advocate
+for GENTAVII on Google Cloud.
+She's a regular speaker and GENTAVII developer events,
+and has helped many people build GENTAVI applications.
+I look forward to her sharing her deep experience,
+her deep practical experience with GENTAVII
+and with ROHF with us here.
+Thank you, Andrew.
+I'm really excited to work with you and your team on this.
+In this course, you learn about the ROHF process
+and also GENTAVII's hands-on practice
+exploring sample data sets for ROHF,
+tuning the Lama II model using ROHF
+and then also evaluating the newly tuned model.
+The key to go through these concepts
+using Google Cloud's machine learning platform, Vertix AI.
+What really excites me about ROHF
+is that it helps us to improve
+and LLM's ability to solve tasks
+where the desired output is difficult to explain or describe.
+In other words, problems where there's no single correct answer.
+And in a lot of problems we naturally want to use LLM's for,
+there really is no one correct answer.
+It's such an interesting way of thinking
+about training machine learning models
+and it's different from supervised fine tuning,
+which you may already be familiar with.
+ROHF doesn't solve all of the problems of truthfulness
+and toxicity and large language models,
+but it's really been a key part
+of improving the quality of these models.
+And I think we're going to continue to see more techniques
+like this in the future as the field evolves.
+So I'm really, really excited to share with you
+just how it works and I'm happy to say,
+you don't need to know any reinforcement learning
+to get started.
+Many people have worked to create this course.
+I'd like to thank on the Google Cloud side, Bethany Wan,
+Mehu and Yarek Cosmeer Chalk.
+From deep learning to AI, Ed Hishu and Leslie Zermah
+had also contributed to this course.
+So with that, let's go on to the next video
+where the Kita will present a overview of ROHF
+so you can see all the pieces of high works
+and how they fit together.
+Let's go on to the next video.

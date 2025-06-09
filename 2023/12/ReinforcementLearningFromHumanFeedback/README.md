@@ -6,7 +6,7 @@ Dear learner,
 
  
 
-We're thrilled to announce a new course on **Reinforcement Learning from Human Feedback (RLHF)** built in collaboration with Google Cloud. 
+We're thrilled to announce a new course on [**Reinforcement Learning from Human Feedback (RLHF)**](https://learn.deeplearning.ai/reinforcement-learning-from-human-feedback) built in collaboration with Google Cloud. 
 
  
 
@@ -21,7 +21,6 @@ Use the open source Google Cloud Pipeline Components Library to fine-tune the Ll
 Assess the tuned LLM against the original base model by comparing loss curves and using the “Side-by-Side (SxS)” method.
 Join instructor Nikita Namjoshi, Developer Advocate for Generative AI at Google Cloud, to learn this exciting technique you can use in building your own applications.
 
-https://learn.deeplearning.ai/reinforcement-learning-from-human-feedback
 
 A conceptual and hands-on introduction to tuning and evaluating large language models (LLMs) using Reinforcement Learning from Human Feedback.
 

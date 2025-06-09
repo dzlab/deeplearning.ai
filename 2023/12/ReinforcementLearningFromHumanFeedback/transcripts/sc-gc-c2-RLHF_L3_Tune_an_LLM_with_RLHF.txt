@@ -1,0 +1,242 @@
+Now that we've covered some of the basic concepts of RLHF and we've taken a look at the data,
+we're finally ready to kick off that RLHF workflow and tune a large language model.
+To do all of this, we're going to be using Vertex AI, which is Google Cloud's machine learning
+platform. Let's get started. RLHF tuning jobs on Vertex AI run as Vertex AI pipelines.
+In machine learning, pipelines are portable and scalable machine learning workflows that are
+based on containers. Each step of your workflow, like preparing a dataset, training a model,
+evaluating that model, these are all components in your pipeline. Now as we've talked about,
+RLHF is made up of a lot of different steps. You've got more than one dataset,
+you're training more than one model, and a pipeline turns out to be a convenient way of encapsulating
+all of these many steps into one single object to help you automate and reproduce your machine
+learning workflow. Now, I'm not going to spend too much time talking about pipelines here,
+since you don't need to write your own pipeline, you're just using an existing pipeline.
+But to make things a little more concrete, here is a basic machine learning pipeline.
+The orange boxes are components or steps of your machine learning workflow. This is where some code
+is executed. The blue boxes are the artifacts produced by these components. By artifacts,
+I just mean anything that's created in a step of the machine learning workflow. So in this case,
+a dataset and a trained model and some metrics. So to run through this pipeline, the first thing we do
+is we execute this create dataset step. This results in a dataset indicated by the dark blue box.
+And then this dataset is used in the trained model step, which outputs a trained model and some
+metrics that help us to evaluate how well that model performs. A reinforcement learning from
+human feedback pipeline is a little more complicated. It might look something like this. We first create
+a preference dataset. That preference dataset is used to train a reward model. The reward model is
+used with the prompt dataset to tune the base large language model with reinforcement learning.
+And then we get a tuned large language model and some output and training curves as well.
+In reality, the pipeline that we're going to execute has a lot more steps, but more on that
+shortly. The RLHF pipeline exists in the OSS Google Cloud Pipelines components library.
+So to run this pipeline, you'll first import it, then you'll compile it, and then execute it.
+So we'll need to make sure that we have a few different libraries installed. These are installed
+for you already. But if you are in your own environment, you'll run on PIP install, and then
+Google Cloud Pipeline components. And you'll also need to make sure that you have the
+CubeSlow Pipelines library installed as well. So that is KFP. But these are already included in
+the environment for you right now. So the first thing that we're going to do is go ahead and import
+the pipeline from the Cloud Pipeline components library. So note that right now this exists in preview.
+That's because RLHF is currently in preview. But eventually when it moves to GA, this will probably
+move out of the preview folder here. This pipeline has been written using the CubeSlow Pipelines OSS
+library. So the next thing we need to do is import the compiler from the KFP or CubeSlow Pipelines
+library. So we'll say from KFP import compiler. And if this seems a little confusing, don't worry,
+we're going to use all of these different elements in just a minute. So compiling a pipeline,
+what I mean by this is we're going to create a YAML file. So before we can create that YAML file,
+we're just going to define a name for the YAML file. So let's define the path to this file.
+We'll call it RLHF pipeline package path. And we're going to call this file RLHF pipeline.YAML.
+So once we've defined this, we can now execute the compile function. So this uses the compiler.
+This is what we imported from CubeSlow Pipelines up here. And then we call compiler and we call
+the compile function. So a whole lot of compiling here. But what we're really doing here is we're
+passing in two elements to this compile function. The first is RLHF pipeline. And that is the pipeline
+that we imported earlier from the Google Cloud Pipeline Components library. The next thing we pass
+in is the package path right here, which is the path to our YAML file. So if we execute the cell,
+what happens is compiling the pipeline creates a YAML file. So we can now take a look at this
+new YAML file that's been created. So I'm just going to take a look at the first few lines.
+But if you wanted to look at the whole thing, you could instead of saying head, you could say
+exclamation point cat. And that would show you everything in this file, but it's pretty long.
+So we're just going to look at the very beginning. What you can see here is that this YAML file
+includes all of the information needed to execute a pipeline. It's basically a really long
+description in natural language of this pipeline. It's got a name. It's got a description of what
+it does. And then it's got all of these different inputs. So what does this pipeline actually look
+like? Well, Vertex AI provides you with a visualization tool where you can see all of the components
+of your pipeline. And this is what the RLHF pipeline that we're going to execute actually looks at.
+It's pretty difficult to see this all on one single slide here. There are a bunch of steps.
+And it probably just looks like a bunch of small boxes and lines connecting them. But we can zoom in
+on one specific part of the pipeline over here on the right. And if we do that, we'll see that
+this section looks a little bit like this. There are these boxes with these blue cubes on them and
+these are components. Again, a component is where some code is executed. And then we have these
+other boxes with these yellow triangles and these are the artifacts. This is anything that is
+created as a result of our pipeline. And if you look closely, you'll see that there's the
+word system artifact over here and the words component over here. So this might start to look
+a little bit familiar. There is this component that says reward model trainer. This is the step
+of our pipeline that trains the reward model. Underneath that, you can see a component called
+reinforcer. And this is the reinforcement learning loop that tunes the base language model.
+You can also see that the reward model trainer component outputs some metrics, which are indicated
+here in this tensor board metrics artifact. And we will take a look at that in the next lesson.
+So again, this pipeline looks pretty complicated, but it's already been written for you.
+So even for your own projects, you won't be editing this RLHF pipeline component or the corresponding
+YAML file. The pipeline has already been authored by the Vertex team and it's optimized for the
+platform and for RLHF. And the YAML file is something that's auto generated. So you don't need to
+go in and edit anything in it. You just need to use it as is. So now that we have this YAML file,
+we can define a Vertex AI pipeline job and I'll explain what all of that means in just a minute.
+But at a high level, this will take in the YAML file and it will also take in all of the parameters
+that are specific to our use case. So let's take a look at the parameters that we're going to
+pass to this pipeline. The first thing I'm going to do is make a dictionary called parameter values.
+Now, there are a lot of different parameters that we're going to need. So we will take a look at them
+one by one. The first three parameters here are the paths to our preference data set,
+our prompt data set, and then also this evaluation data set. So we didn't talk about the Eval data
+set in the previous lesson, but the Vertex AI RLHF pipeline allows you to pass in an optional
+evaluation data set. What this means is that once tuning is complete, this evaluation data set will
+be used to perform a batch inference job where a bunch of completions will be created for a bunch of
+prompts. We will take a look at that in detail in the next lesson, but for now, all you need to know
+is that we have three data sets that we are passing into this pipeline. So in the previous lesson,
+when we took a look at these different data sets, we were just loading in small JSONL files directly
+into memory. But for this actual pipeline, our data sets are much larger and they need to exist
+somewhere called Google Cloud Storage. Cloud Storage is Google Cloud's object storage. That means
+that you can store images, CSV files, text files, save model artifacts, JSONL files, just about
+anything. And you'll notice that these are Google Cloud Storage paths because they start with
+GS colon slash slash. So anytime you see that, that means that this is a path to an object stored in
+Google Cloud Storage. Cloud Storage also has the concept of a bucket, and this is just what holds
+your data. Everything you store in Cloud Storage needs to be contained in a bucket, but within a bucket,
+you can create additional folders to help you organize your data. And then lastly, for text AI
+requires that all three of these data sets be in the JSON lines format. So if we look back at the
+notebook, you can see that for all three of these data sets, they start with this GS colon slash slash,
+which again indicates that these are paths and Google Cloud Storage. And then they are all in this
+bucket called vertex AI. This bucket has been created for you and is a publicly accessible bucket.
+Within this bucket, there are additional folders for each of the different data sets. So for your
+own projects, you'll need to make sure that your three data sets are stored in a Google Cloud Storage
+bucket. And if you want some more details on how to do that, you can check out the optional lab
+at the end of this course, which we'll show you how to create a bucket and how to upload data
+there, as well as how to figure out what the specific path is that starts with GS colon slash slash.
+For now, we can just use these data sets that I have uploaded for you already. The next parameter
+we're going to set is called large model reference. So in this case, we are going to set this to
+llama27b. Large model reference specifies which large language model we want to tune. Again,
+in this case, we're using the open source llama2 model, but there are other supported values as well,
+including textbison and the t5x family of models. So as a reminder, there are two different
+models that get trained in this RLHF process. The reward model train steps sets the number of steps
+to use when training your reward model. The value to set here depends on the size of your preference
+data set. From experimentation, we found that the model ideally should train over the preference
+data set from around 20 to 30 epochs for best results. And then reinforcement learning train steps
+is the parameter that sets the number of reinforcement learning steps to perform when
+tuning the base model. This depends on the size of your prompt data set and from experimentation.
+In this case, we found that the model should train over the prompt data set for around 10 to 20 epochs.
+Now, one thing to note is that I was giving these recommendations of how many epochs to train over
+these different data sets, but this parameter here takes in a number of steps. So if you need a
+handy heuristic to help you go from epochs to steps, I can show you that in the notebook.
+The first thing you'll do is set the size of your data set. And this could be for the preference
+data set or the prompt data set. So let's say to make this a little bit easier to understand,
+let's say that our data set size is 128. Then we'll need to set the size of our batches. And again,
+this means sending our data in batches instead of everything all at once. And reinforcement learning
+from human feedback on vertex AI currently uses a fixed batch size of 64. So you'll need to set
+this number to be 64. You can't actually adjust the number of batches. But once we have both
+these set, we can determine the steps per epoch by seeing how many batches it will take to complete
+our full data set of 128. So we'll import math. And that's so we can use a rounding function.
+And then we can say steps per epoch equals math dot seal. And this will just round up if these
+numbers don't divide evenly. We'll take our size of our data set and we will divide it by our batch size.
+And if we print this number, we'll see that that is two because 64 times two is 128. So we'll take
+two steps with the batch size of 64 to make it through our full data set of 128.
+Once we have our steps per epoch, we can then set the number of epochs that we want to train for.
+So let's say that we set this to 10, we can then determine the total number of training steps
+that we'll need by multiplying our steps per epoch by the number of epochs that we want to train for.
+And if we do that and we print out the number, we'll see that this will be two times 10. So we'll
+need to train for a total of 20 steps. You can use this handy heuristic for your own use case.
+You'll just set the size of your preference data set or your prompt data set. You'll set a fixed
+batch size of 64. And then you'll set the number of epochs to train over and you can use the
+guidelines that I mentioned earlier. So I'm going to go ahead and update the training steps here
+for both the reward model and the reinforcement learning loop to correspond to the size of my
+actual data sets here. So I'm actually not using the entire reddit data set. It's a good best practice
+to execute the pipeline on a smaller subset of the data. The first time around, just to make sure
+that the pipeline executes correctly. These pipelines run for many hours. So running them first on a
+small amount of data is just a useful thing to do. So in this case, my preference data set was size 3000
+and the batch size is of course fixed at 64. So that helped me get my steps per epoch and then
+I decided to train over 30 epochs. So once I had that, I knew that my number of training steps
+for the reward model was 1410. The size of my prompt data set was 2000 and the batch size is again
+fixed at 64 and this helped me to determine the steps per epoch and I decided to train over 10 epochs
+for the reinforcement learning loop. And that is how I got to 320. So again, this is still a
+smaller amount of the full reddit data set, but in the next lab, we'll take a look at results from
+training on all of the data. So the next three parameters are the learning rate multipliers and
+the KL coefficients. I would say that these are maybe a little bit more advanced of parameters
+and maybe not something you would set on your first try with this. You can set these to the default,
+but as you start really tuning the pipeline for your use case, you might want to adjust these a
+little bit. And I have the defaults set here already. That's one for both of the multipliers and
+0.1 for the KL coefficient. The reward model learning rate multiplier and reinforcement learning
+rate multipliers are constants that you can use to adjust the base learning rate when either
+training the reward model or during the reinforcement learning loop. You can't actually adjust the
+learning rate itself and that's because generally you want the learning rate to match the learning
+rate that was used to train the base large language model and you might not know that off the top of
+your head. So the learning rate is fixed for you by the pipeline, but you can't adjust these multipliers.
+So what that means is if you multiply by a number greater than one, you're going to increase the
+magnitude of gradient updates applied at each training step. But if you multiply by a number less
+than one, you'll decrease the magnitude of these updates. Next, we have the KL coefficient. This
+is a regularization term that helps to prevent something called reward hacking. So for example,
+let's say that our reward model tends to give higher rewards for completions that contain positive
+words like excellent superb, great. During the reinforcement learning loop, our base large language
+model might learn that if it generates completions that are filled with positive terms but don't
+actually make a whole lot of sense, it will still result in higher rewards. So for example,
+our base large language model might start learning to produce completions that just have all of these
+positive words in it like excellent, fantastic, awesome, great. And it doesn't really make a lot of
+sense to a human reading these responses, but the reward model is still giving high rewards.
+This is known as reward hacking and the KL coefficient essentially helps to prevent reward hacking
+by preventing the model from diverging too far from the original model. So the tuned model essentially
+is penalized if it starts to diverge too far from its initial distribution and break the functionality
+of the original large language model. If you set this KL coefficient to zero, there is no penalty
+at all and the larger you set this coefficient, the more the tuned model will be penalized for diverging
+from the original large language model. Okay, we are on to our final parameter and this is the
+instruction, which I've set here to be summarize and less than 50 words. The instruction lets the
+model know what task it needs to perform. So this text is going to get prepended to each prompt in
+your data set, both the preference and prompt data sets. So you only want to set this parameter if
+you don't already have the instruction included in your prompts. So if you recall in the previous
+lesson, when we took a look at the input text keys in our data sets, none of them had an instruction
+that said to summarize the text in less than 50 words. If we did include this instruction already
+in our data set, we wouldn't need to set this instruction parameter because these base models have
+been trained over a large variety of different instructions. You can make this instruction parameter
+a simple and intuitive description of the task that you want the model to complete. But with that,
+we have wrapped up all of the parameter values that we need and we are ready to actually execute
+this pipeline. So in this example, we are summarizing Reddit posts, but given the information that you
+have about RLHF, can you think of some other tasks and instructions that would be well suited to
+reinforcement learning from human feedback? For example, write a response to the following text,
+and in that case, your text that you might have could be the Reddit post. Now that we have all
+of our parameter values defined, we are ready to create a pipeline job. What this means is that this
+reinforcement learning from human feedback pipeline is going to execute on vertex AI. So it's not
+going to run locally here in our notebook, but it's going to run on some server on Google Cloud.
+In order to do this, we first need to authenticate to Google Cloud and initialize the vertex AI
+Python SDK. For this course, we've done that setup for you. But if you want to learn how to do this
+for yourself and your own projects, you can take a look at the optional lab included at the end of
+this course. So I'm importing an authenticate function that we have already written in this Udl
+file. When I run this authenticate function, it's going to return the credentials, which is how we
+communicate with vertex AI, and then the name of our project where all of these services are running,
+as well as the name of a bucket, where we can store some generated artifacts from our pipeline.
+The last variable we'll need to set is the region, and this is the location of the data center
+where we're actually going to run this pipeline. Some services are only available in a certain set
+of regions, and this reinforcement learning from human feedback pipeline is available in this
+Europe West for region. So that's why I've set that here as this value. Next, we need to import and
+initialize the vertex AI pipeline SDK, and if you're writing this in your own environment,
+you will need to pip install Google Cloud AI platform, but we have done that already in this
+environment here. So I'm just going to import that library now, and then once I've done that,
+we can initialize AI platform, so we'll call the initialization function.
+And this is just something you need to do anytime you want to use this AI platform SDK.
+So we'll set a couple of different variables here. We'll set the project ID, which we loaded
+earlier in the authenticate function. We'll set the location to be the Europe West for region
+that we just set in the previous cell, and then we will specify our credentials.
+And if we execute the cell, we would have initialized the Python SDK. So once we've done that,
+our second to last step here is to create our pipeline job. And so I'm going to call this
+job, and we'll call AI platform dot pipeline job. And to this pipeline job, I'm going to pass
+in a few key parameters. So the first thing we'll pass in is a display name, and this is just any
+string name for what you want to call this pipeline job. So here I'm calling it tutorial,
+RLHF tuning, but you could change this to be anything you like. After we've done that, we need to
+pass in a staging bucket. And so this is the pipeline root parameter. And basically what this
+means is that our RLHF pipeline is going to create a bunch of artifacts along the way. It's going
+to output some different files, and we just need some central location to store all of those things
+that are going to be created. So I'm just going to store all of that in a Google Cloud storage bucket
+that is saved in this variable staging bucket. Now we set the template path. And if you recall,
+at the very beginning of this lesson, we created a YAML file. So if I print this, this is the path
+to our YAML file. And that was the YAML file that defined all of the information about our pipeline
+that we want to execute. The very last parameter we'll pass in is parameter values. And this is that
+big dictionary we created up here of all of the parameters that were specific to our reinforcement
+learning from human feedback that were specific to our Reddit use case. So once we have defined all
+of these parameters here, we can create this job. Now we take a look at that. This creates this
+AI platform pipeline jobs object. And the very last step here is to run the job. And we do that by
+calling job.run. Now this job is going to take several hours and it's going to require a lot of
+hardware. So for the purposes of this online classroom, you're not going to actually run this pipeline.
+But in the next lesson, you'll take a look at the results of a pipeline that's been executed already.
+So if you did want to run this in your own projects, what you would do is call job.run. And this
+will create and execute a pipeline for you. In the next lesson, we're going to take a look at the
+results of a pipeline that's already been executed for you. So these were some results run by my
+teammate, Bethany, who ran an RLHF tuning job on the full giant Reddit data set. And that job
+took over a day to finish running. So I'll see you in the next lesson where we'll take a look at the
+results.
