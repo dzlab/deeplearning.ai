@@ -1,0 +1,83 @@
+Hi, in this lesson and the next few lessons, you will use the HikingFace Transformers library
+to perform various natural language processing tasks. In this lesson, you will build your own
+chatbot using an open source model built by Meta. Let's get started. We talked about natural
+language processing, but what is the definition? NLP is a field of linguistic and machine learning,
+and it is focused on everything related to human language. We saw significant progress in this
+field thanks to the transformer architecture from the well-known Peter attention is all you need
+in 2017, and since then this architecture is now the core of many state of the old machine learning
+models nowadays. In this lesson, we will be using the transformer library and in particular the pipeline
+function. So as you can see, I just imported the pipeline function from the transformer library.
+For this classroom, the libraries have already been installed for you. If you are running this
+on your own machine, you can install the transformer's library where running the following. We don't
+need to actually run this command, so we can come in and out. Now we have everything we need
+to create our own chatbot. As you can see, we created the conversation on pipeline using a model
+from Facebook called Blenderbox. We decided to use this model because the model is very small
+and performs quite well. We only need 1.6 gigabytes to load it. We can't use them to any other
+big models since we won't be able to load it. As you can see, we just created a conversational pipeline
+using a model from Facebook. This function pipeline takes as the first argument the task. As you can
+see, we've put conversational. For the second argument, we need to pass the model and we selected
+a model from Facebook. We'll go through why we decided to use this model later on, but note that
+one of the main reason is because the model is very small, only needing 1.6 gigabytes. We can't use
+any other big models such as LAMATU because it will exceed the four gigabytes that's available
+in this classroom. Now that the chatbot is loaded, let's pass a user message.
+I will ask the chatbot what are some fun activities I can do in the winter. To pass the user message
+inside the chatbot, we need first to put it into a conversation object. So let's import this object.
+You just need to pass the user message inside the conversation object and you need everything now
+to pass the conversation to the chatbot.
+As you can see, the assistant responded. I like snowboarding and skiing. What do you like to do
+in winter? Feel free to change the user message asking, for example, ideas about a birthday,
+a thing to do during the summer. Anything you ever wanted to ask a chatbot.
+Now let's step back and review what other NLP tasks you can perform with Open Source model.
+You will also see how you can search the Hagenface Hub for a suitable model for various tasks.
+NLP has many applications. You must have heard about ChatGPT, the OpenAI chatbot,
+or the Open Source equivalent Hagenchat, which lets the user select any open source language model.
+Such as Lama2 or Mistral and Converse with it. NLP is also present in many tools we use every day.
+We can think about other completion in document, translation tool, or even spam filters.
+NLP has many tasks. You will go through a few of them in the next few lessons,
+but feel free to try the rest on your own. You will go through the text generation
+a task to build a chatbot, sentence similarity, summarization, and machine translation.
+One question remains, which model should we choose? There are so many open source model.
+To browse the model, you can use the Hagenface Hub. I will show you how I decided to select the
+Facebook model for our conversational pipeline. We go to the Hagenface Hub on the model section.
+We can add filters, so we will choose the conversational task.
+Right here, conversational task is the task of generating conversational text that is relevant,
+coherent, and knowledgeable, given a prompt. This model has application in chatbots and
+as a part of voice assistance. As you can see right now, the model
+are sorted by trend. We can change that to the most likes. As you can see, we have so many
+different models. Since in the classroom, we can only fit four gigabytes. We need to choose
+a smaller model. The second model seems to be a great choice because it's quite small,
+since it only has 400 million parameters. We see that it was normally a lot of times,
+and it has a lot of likes, so let's check this one. We can go to the files. You can see that the
+model is only 730 megabytes. Now we can just click using transformers to learn how to load it,
+and this comment should be pretty familiar with you. As you can see, he's telling us to use the
+pipeline object to use the conversational task and load the model by putting the name of the model.
+Here. For example, let's ask the chatbot, what else do you recommend?
+As you can see, the assistant answer has nothing to do with winter activities. It doesn't remember
+the earlier conversation. The right way to do that is to add a message to the conversation.
+L&M's don't actually keep a memory of your previous messages, but when you're using
+transformal object, you can add follow-up messages and the conversation object will keep your
+previous prompt as well as the L&M's response so that the L&M's will converse with you as if it
+remembers your earlier conversation. Let's try that. As you can see, we've added a new input to
+our conversation. What else do you recommend to the earlier conversation? Now let's pass this
+conversation to our chatbot. As you can see, the assistant's answer shows some memory of the
+previous conversation about winter activities. The response may not be very insightful because the
+model is very small. There are many states of the open source model that can do quite well if you
+have the hardware to run them. Let's take a look at some of these on HagenFace app. At HagenFace,
+we have the open L&M leader rules that enables users, companies to evaluate open source L&M's
+and chatbot. Let's see what are the most performing chatbot. We will only select the pre-trained one.
+First, the pre-trained model or model that are trained from scratch. Most of the models that you
+will see at the top of the leader world are coming from large companies since not everyone has the
+compute capability to train those big models. As you can see, you can see some familiar names with,
+for example, the new mixture models, the Falcon model, the E model, and the Q and model.
+There's a lot of debates surrounding this leader world. People are skeptical if the benchmark
+we choose or representative of the performance of the models. We know that they are not perfect,
+but we will be adding more and more benchmarks so that we are able to evaluate fairly all the models.
+But if you want to have a look at another leader board, you can take a look at the LIMSIS
+chatbot arena. This leader board collected over 200,000 human preferences vote to rank L&M's
+with the LO ranking system. We have proprietary models such as GPT-4, a board or a cloud,
+but as you can see in this list, we also have open source model, which are quite a catching,
+quite fast, the proprietary models. As you can see here in the list, we have the
+mixed row model, which have a patch 2.0 license. What it means is that it allows you to use,
+modify and distribute the models. You can commercialize it, use it everywhere. In the next lesson,
+we'll learn how to summarize long document and translate text from English to French. Let's go
+on to the next lesson.

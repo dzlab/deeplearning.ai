@@ -1,0 +1,47 @@
+Hi, in this lesson, you will measure sentence similarity using the sentence transformers library.
+Sentence similarity measure how close two pieces of text are, for instance,
+the phrase I like it ends and we love cats have similar meaning.
+This sentence similarity is particularly useful for information retrieval and clustering or grouping.
+Let's get started.
+For this classroom, the libraries have already been installed for you.
+If you are running this on your own machine, you can install sentence transformers library
+by running the following, pip install sentence transformers.
+Since the library are already being installed in this classroom, we don't need to run this
+cell. So I will just comment it out. Let's load from sentence transformers library,
+the sentence transformer class. This class will enable you to load many models.
+To load the model, you just need to pass the name of the model inside the sentence transformer class.
+For this lesson, we decided to use this particular model to perform sentence similarity.
+This model was actually functioned by the open source community. Back in 2021,
+Hagenface and Google organized an event called Community Week where anyone can join online,
+use the provided hardware and train MLP and computer vision model.
+The Mini-LM sentence embedding model was one of the models that came out of the event.
+Sentence similarity models convert input text into vectors or so-called embeddings.
+These embedding captures semantic information. Let's encode the following sentences.
+The cat sit outside, a man is playing guitar and the movie are awesome. To encode these sentences,
+we will use the encode methods. So for these sentences, we can get the embedding this way.
+Model.encode. We put the sentence C's
+and we can also add an argument to make sure that we get tensors at the end
+through the arguments convert to tensor equals true.
+Now let's print the embeddings. As you can see, we manage to encode the text to an embeddings
+or vectors. Let's do the same thing with another list of sentences.
+So we have the dot plays in the garden, a woman watches TV, and the new movie is so great.
+We do the exact same thing and we get the embeddings to for the sentences to.
+And now we can calculate how close these sentences are between them.
+To do that, we will use the cosine distance, which is a measure to calculate how close and how
+four two vectors are. To do that, we need to import the utils function from the sentence
+transformers library. Then all we need to do is to use the cosine methods from the utils.
+We can pass the two embeddings.
+This will compute the cosine similarities and let's print them.
+Notice that these are pairwise similarities for every sentence in the first list
+to every sentence in the second list. If you look at the diagonal of the matrix,
+you will get the similarities between the first sentences of both lists. The second
+element of the diagonal will be the second sentences of both lists and the third element of the
+diagonal will be the similarities between the third sentences of both lists. Now let's output the
+score of each pair in both lists. You can see that the cat sits outside and the dot plays in the
+garden, gives a score of 0.28, which suggests that there is a similarity between those two sentences.
+The model probably picked the fact that cat and dogs is quite similar. For the second pair,
+we have a man is playing guitar and a woman watches TV. These two sentences do not have any
+similarities, hence the very low score. The last example, the movie are awesome and the new movie is
+so great, shows a score of 0.65. This is indeed correct since these two sentences are very similar.
+That's it for the lesson. I hope you learned a lot and feel free to try other tasks in the
+list. We have text classification, zero short classification and Q&A. Let's go on to the next lesson.

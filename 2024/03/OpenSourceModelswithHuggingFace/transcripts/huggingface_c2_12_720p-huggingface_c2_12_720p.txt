@@ -1,0 +1,46 @@
+In this lesson, you will perform image captioning and you will use the same model blip,
+but with different weights. Let's get started. The next task we will be looking into is image captioning.
+For the image captioning task, we asked the model to return the description of the image.
+For example, the model should return a man and a dog are reading a book together. We can put
+the start of the output text. For example, we can let the model know that the output text should
+start with a dog on a couch with something else. Let's move to the code. For this classroom,
+the libraries have already been installed for you. If you're running this on your own machine,
+you can install the transformers library by running the following.
+Since in this classroom, we have already installed all the libraries. We don't need to run this,
+so I will comment it out. To load the model for this specific task,
+we need to import the blip for conditional generation from the transformers library.
+Then to load the model, we will use the form pre-trained methods
+and we will be using the following checkpoint.
+Just like in the previous lab, we also need to import the processor.
+To load the processor, it's the same as the model. We will use the form pre-trained method
+and pass the right checkpoint.
+Now we have all the elements to perform the image captioning. We are just missing
+two small pieces, the image and the optional text. Let's get the image first. To do that,
+we will use the image class from the pale library. To load the image, you can use the open
+methods from the image class and pass the pass to the image. Let's do that.
+Let's check that we were indeed able to load the image. And as you can see,
+we have the picture of a dog and woman on the beach. Let's first perform
+conditional image captioning. What it means is that we can pass a text that will be the start
+of the output of the model. For example, we can pass a photograph of
+then we need to process the text and the image. To do that, we will pass the text and the image
+to the processor. We can also specify the return tensor's argument to be equal to pt
+for PyTorch. This way we will get PyTorch tensors at the end. Let's check the inputs.
+And just like in the last lab, we have a dictionary of arguments such as pixel values,
+inputs id and attention mask. Now to generate the description of the image, we need to use the
+generate methods. Just like in the previous lab, we also need to add the double stores since it is
+a dictionary of arguments. Let's check the outputs. As you can see, we get as output a list of
+integers. These numbers are token IDs. These are usually how the model understands the text.
+Each token represents a part of a word or sometimes a single word. To decode these tokens,
+we need to call the decode methods from the processor. Let's do that.
+We put the output as the first argument. This is optional, but we can skip the spatial token
+by setting that argument to true. And let's print the results.
+And we get a photograph of a woman and her dog on the beach.
+Now let's try the unconditional image captioning. What it means is that we don't pass any text
+and we let the model start the description.
+As you can see, this time we didn't put any text and let's generate the text using the generate
+methods just like before. So the output is equals to model the generate double store inputs.
+And let's decode. And now we get a woman sitting on the beach with her dog.
+Now is a good time to stop the video and try to upload your own image and put your own
+conditional text to the model. For the next lesson, we will be testing visual question and
+answering. For this test, you can ask the model a question about an image and the model should
+be turned and answered. Let's go to the next lesson.

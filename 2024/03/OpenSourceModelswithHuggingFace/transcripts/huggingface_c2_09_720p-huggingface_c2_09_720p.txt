@@ -1,0 +1,119 @@
+Hi. In this lesson, you will explore computer vision models and play with some of them to build a
+cool application. In particular, you will build an assistant that can help a visually impaired
+person understand what is in a picture. Let's get started. Okay, so just a quick heads up before
+starting the lesson. So for this classroom, the libraries have been already installed, but if
+you want to run the notebook by your own on your own machine, make sure to install the required
+libraries, which can be installed through the following command. So yeah, let's get started.
+So first of all, we want to import the utility methods that we're going to use for this library.
+So make sure to import from helper the methods called load image from URL and render results on
+image. So we're going to quickly do that before starting. So for this lesson, we're going to
+focus on a specific task in computer vision called object detection. So first of all, we're going
+to load a pipeline object as we've been doing it so far from our previous lessons.
+So we're just going to import pipeline from transformers and load the object detection pipeline
+that we called OD pipe that we will call using a model from Facebook called DTR resident 50.
+So just run the following to get started to load the pipeline. And before moving forward,
+I wanted to give some insights on this specific task we're going to focus on. So what is object
+detection? So the task of object detection simply consists of detecting objects of interest in
+a specific image. So for example, as you can see on this image, the object detection model is
+able to detect all relevant objects in an image. And one thing to notice is that object detection
+combines two sub tasks, which are classification, but also localization, because for each object
+that we detect in an image, you also have to provide the label of the instance, but also the
+localization of the detected object. You may be wondering how did we choose this DTR resident 50
+model from Facebook, because today we have many state-of-the-art object detection models that you can
+use from the AI ecosystem in general. So for that, you can simply browse the hugging phase hub and
+use the filter object detection that you can see on the left and get all the available object
+detection models that you can freely download from the hub. And you can easily determine some
+metrics that you're going to use to select your models. So for example, you can select your model
+based on the number of downloads or number of likes, and also sometimes the authors provide the
+evolution metrics of their models on some specific datasets directly on the model cards. So those are,
+I would say, the important metrics that you can use in order to select the model that you're
+going to use for your task, and for this lab, we're going to use the Facebook DTR resident 50 model.
+So now that we have loaded the pipeline, let's directly start using it. So let's directly use our
+pipeline by loading an image that we have prepared for you. So this is a recent image that we took
+altogether in the restaurant for filming our course. So yeah, we're going to see what are the
+objects that the model is going to detect in this image. So I would invite you to take a few seconds
+to make yourself familiar with the pipeline. Make sure to pass the image into the pipeline,
+get the output from the pipeline, and you can use the render results in image function that we
+have provided in the helpers in order to render the results directly in the image. Okay, so to get
+the results from the pipeline, simply call OD pipe on the hero image. So we're going to do that
+right now. So pipeline output equal OD pipe on the hero image. So yeah, once we got the prediction,
+we'll just call render results in image by passing the image and also the pipeline output.
+And let's see the final results. So yeah, as you can see, the model has accurately
+predicted all the persons that are on the image. So with the corresponding mounting box,
+you can also see the confidence score of the predictions for each predicted instance.
+The model has also predicted the battles, the cups, and forks.
+Matea looks like the model was not able to predict the file files, but maybe with some fine training,
+we'll be able to do that. So yeah, now I invite you to pause the video and try that on your own,
+with your own images, can be some local images that you load using pill, but you can also pass some
+image URLs if you want to use an image that is on the web. Okay, so let's see how we can make that
+a bit more user friendly. So let's say tomorrow, you want to show that to your friend and
+make a nice demo using the model. So we're going to use a library called Gradio in order to expose
+a simple interface. So that's pretty much the final demo will look like something like this. So
+a simple interface where you can pass an image here, we pass a prompt, but you can also pass an
+image. And then you get the results of the pipeline right next to the original image. That way,
+you can share easily the demo with anyone and anyone would be able to try the model out of the
+box using their own image. Let's get started. For that, we'll first import Gradio as follows.
+So the Gradio interface expects to have a method where you pass the input and return the output.
+So we'll create a method that will do everything under the hood for the users given an image.
+So for that, we'll define a method called GetPipelinePrediction. So Def,
+GetPipelinePrediction that will take a pill image as an input and we'll split it up in two steps.
+So the first step will be to get the pipeline output given the pill image and we will use the
+globally defined audit pipe that we have loaded beforehand so that we won't have to load the pipeline
+each time we'll call this method so that it will be much more efficient. And then we will use the
+helper function that we have used before, render results in image directly on the original image
+using the pipeline output. And then we turn the final processed image. All right.
+And actually, the code to make the Gradio interface is going to be pretty much straightforward.
+So once you have that method defined, you just have to create an object of Gradio.interface
+that will take as input this method, GetPipelinePrediction. And we just have to properly define
+what is the input and what is the output and we'll just have to call demo.launch to launch the demo.
+So if you run this code snippet, you'll be able to define the demo and we will call
+demo.launch with share equal true so that you can also share a link for the demo to anyone.
+Okay. So once you have the demo up, you can load any image from your local computer and pass it
+to the model. So let's try out with this image and click on submit.
+Yeah. So as you can see in this really good picture, the model was able to detect both cats,
+the remotes, but also the couch, but we can't really see it because of this icon. But yeah,
+feel free to try it out with your own local images. You can also pass, as I said, if you want to use
+a raw pipeline, you can also pass a URL to the pipeline directly. And also you can share this link
+to anyone so that they can try out the demo on their computer as well. You can also send this
+link to your friends so that they can try out the demo on their own, but please keep in mind to
+let your computer open and running because the demo will be running on your computer.
+Yeah. So for the last part of this lab, we'll see how to make an AI part assistant using two
+different models. So let's say you have an image, which is here. You just have to pass it to the
+object detection pipeline to get all the relevant objects in the image with their labels. And then we
+can perform some sort of post-processing of the output of the pipeline so that we have a more
+natural text that describes what's in the image. And we can pass that image to the text to speech
+model, which is also going to be another pipeline, which is going to generate an audio that will
+narrate the text that we created in this step. And then we'll have the audio saying in this image,
+we have this, this, and this. So this is what we're going to do right now. And yeah, let's get started.
+Yeah. So we can combine the object detector model that we have just used with a text to speech
+model to help us indicate and dictate what are the objects that are in an image with their number
+of occurrences. So first of all, if you try to inspect the output of the pipeline, you will get
+something like this. So it's an array of dictionaries with each dictionary corresponding to one
+detected object with the label, the coordinate of the bounding boxes together with the confidence
+core. So if we create a simple method that processes this array and returns a string of the
+summary of what's in the image, we can pass that summarize string to a text to speech model to
+dictate us what's in the image. So let's try that out. So we will use the same image that we use
+before and the same pipeline. So we're not going to rerun everything again because we will use the
+audit pipe that we have already loaded, which is here. And we will just have to import that helper
+method called summarize predictions natural language from the helper's function that we have
+provided to you. Let's try to see what the text would look like if you pass the pipeline output
+to that method. So if we run this method and print out text, we'll get in this image, there are two
+forks, three battles, two caps, four persons, one ball and one dining table, which is a quite
+accurate representation on what's in the image. So you can also take your time and try to inspect what's
+in this method, but all the logic behind this method is pretty straightforward. It just
+tries to combine all the output that is in this array and try to make a sentence out of it.
+All right, and what model are we going to use to generate or generation of the image? So we're
+still going to use pipeline, but as you have seen in the previous lesson, we're going to use the
+text to speech pipeline with this specific model from Kakao Enterprise. You can read more about the
+model directly on the model card of this model, but yeah, we're going to use this pipeline. And let's
+get the narrated text from the text to speech pipeline given the text. Perfect. Yeah, so to in
+order to listen to the narrated text, we'll need to run this small snippet that uses iPad and audio.
+So let's try out right now and try to listen what's in the narrated text.
+In this image, there are two forks, three bubbles, two cups, four versus one bowl and one dining table.
+That's quite good and quite accurate. We can wrap the whole pipeline in a single method so that you
+just have to pass an image and it will return you directly the narrated audio. You can also wrap
+that in a graduate interface so that you can let your friends try that out on their own.
+So yeah, I'll invite you to post the video and try that out with other images, maybe also other
+models that you can find on the hub so that you can compare different performances across different
+models and also maybe try to wrap everything in a graduate demo so that you can share it with your
+friends.

@@ -1,0 +1,55 @@
+Hi, in this lesson you will be translating text from English to French and summarizing long documents and using open source models from Meta.
+Let's get started.
+For this classroom, the libraries have already been installed for you.
+If you're running this on your own machine, you can install the Transformers library by running the following.
+Peep install Transformers.
+Similarly, you can install PyTorch by running the following.
+Peep install Torch.
+Since the libraries are already installed in this classroom, I wonder when these comments.
+Let's import the pipeline function from Transformers and also import Torch.
+Now that the pipeline is imported, we can create the translator pipeline by typing.
+Translator equals to pipeline.
+We need to set the task to be equal to translation.
+And we need to set the model.
+For this particular task, we will select a model from Meta.
+This model from Meta and LLB stands for no language left behind.
+It is capable of translating 200 different languages.
+The last argument we will add is the Torch D-Type.
+We will set it to Torch Bifload 16.
+By setting the Torch D-Type to Bifload 16, we are able to compress the model without any performance.
+Now that the translator is loaded, we can start to translate the text.
+So the text that we will be translating is the following.
+To translate the text, you can pass the text to the translator.
+You also can set the source language and the target language just like that.
+The source language is English, so you need to pass the following string.
+As for the target language, we said that we will be translating the text to French, so we need to pass this string.
+For each language, you have a specific string that you need to pass to the translator.
+You can find the code for each language at the following link.
+Let's check the translated text.
+As you can see, the text has been successfully translated into French.
+If you know a little bit about French, you can see that Papier was correctly translated to Rochio.
+But there are still a few mistakes that were made.
+As you can see, Lama was translated as Lama, which is wrong.
+It should have been just Lama.
+Now, I invite you to stop the video and try yourself with your own text or by changing the target language.
+Before moving to the summarization task, let's free some memory by deleting the model and calling the Corvich Collector.
+To do that, we need to import G.C.
+We need to delete the translator.
+And we need to call G.C.Collect.
+Summarization is also very simple to perform using pipeline.
+You just need to set task as summarization.
+Let's do that.
+To perform the summarization, we will use a model from Meta called Bord Large CNN.
+Lastly, we will also set the TorchDType to Bflow 16 to compress the model.
+Now that the summarizer pipeline is loaded, let's summarize the following text.
+As you can see, the following text is a description about Paris.
+And let's put that into our pipeline.
+To get the summary, you just need to pass to the summarizer tool that we just loaded the text.
+You can also set the minimum length and the maximum length of the summary just by setting the minimum length and max length arguments.
+So in our example, we set it the minimum length to 10 and the maximum length to 100.
+Let's see what we get.
+And as you can see, we indeed have the summary of the text we passed earlier.
+Now I encourage you to pause the video here and try to summarize some of the piece of text that you find on the internet or maybe even summarize an email.
+In the next lesson, you will measure the similarity between any two sentences.
+And this task is very useful for many applications that involve searching for relevant pieces of text.
+Let's go on to the next lesson.

@@ -1,0 +1,61 @@
+In this lesson, you will work with multi-model models to perform image text matching
+using the open source model blip from Salesforce. So if you take a picture of a woman
+and a dog on the beach and also provide a text, my sister and her best friends,
+the model outputs a matching score to indicate how similar the text and image are. Let's get started.
+But first, what exactly are multi-model models? When a task requires a model to be able to take
+as an input model one type of data, let's say an image and a sentence, we will call it multi-model.
+You may come across other definition of multi-model, but we will stick to this one in this course.
+When you think about multi-model models, you immediately think about chat dbt with dbt4v,
+where you can send text, image and even audio. Now, if you want to try an open multi-model's chat dbt,
+you should also definitely try the fix. In this and the next few lessons, you will go through some
+common multi-model task. We will perform image-to-text matching, image captioning, visual Q&A,
+and zero-shot image classification. For the first three tasks, we will be using the blip model
+from Salesforce, and for the last task, the zero-shot image classification, we will be using the clip
+model from OpenAI. The first text we will be looking into is the image, text, retrieval, or matching.
+The model will output if the text matches the image. For example, you can see that in this example,
+we passed a photo of a man and a dog, and the input text is the man in the blue shirt is wearing
+glasses. The model should return that the text does not match the image. Let's cut it. For
+this classroom, the libraries have already been installed for you. If you are running this on your
+own machine, you can install the transformers library by running the following. Since in this classroom,
+we have already installed all the libraries, we don't need to launch this command, so I'll just
+comment it out. To perform the task, we need a few things. We need to load the model and the
+processor. First, to load the model, we need to import blip for image text retrieval class from
+the transformers library. Let's do that. Then to load the model, you just need to call the class
+we just imported and use the front pre-trained methods to load the checkpoint.
+As said before, I will be using the blip model from Salesforce to perform this task,
+and this is the related checkpoint for this specific task.
+As for the processor, it's practically the same. We need to import the auto-processor class from
+transformers. Then to load the correct processor, we just need to use the front-read train
+methods and past the related checkpoint. The processor role is to process the image and the
+text for the model. Now, let's get the image and the text that we will be passing to the processor.
+The processor will modify the image and the text in such a way that the model will be able to
+understand it. For the image, we will be using the following URL link and to load the image, we will
+be using the image class from the pill library. The pill library is installed by default when you install
+Python. We also need to import the request library in order to perform HTTP requests to get
+the data from the image. In order to get the raw image, we need this code. In short, this line of
+code downloads an image from the specified URL, opens it, retrieves the raw binary data, then
+converts it to the RGB color mode. And if you print the raw image,
+you should be able to see the image. Now that we have the image, we will check if the model can
+successfully return that the image matches the following text. An image of a woman and a dog
+on the beach. We need to get the inputs that the model can understand. So to do that, we need to call
+the processor and we need to pass a few arguments. The first one is the image. So image equals to raw
+image. The second one is the text. And the last one is return tensors that we need to set it as
+PT for PyTorch so that we get PyTorch tensors at the end.
+Let's print inputs to see what it looks like.
+And as you can see, we have a dictionary of multiple arguments. We have pixel values, inputs,
+ID and the attention mask. Now we have everything to get the output. We just need to pass the inputs
+that we have right here to the model. Note that we need to add a double store since we are passing
+a dictionary that contains the arguments. Now let's print the scores.
+As you can see, these numbers doesn't mean anything yet because they are the
+logits of the model. And to convert these values into something that we can understand, we need to
+pass them into a softmax layer. The output of these numbers into a softmax layer will give us
+the probability. To get the softmax layer, we need to import Torch. Then we need to pass the
+scores that we got into the softmax layer. Let's check what we get.
+Now this number makes more sense. The first value is the probability that the image and the text
+are not matched, so the probability is very low. And the second one is the probability that your
+match and from the value, it shows that indeed the text and the image are matched with a high
+probability. As a conclusion, we can say that the image and the text are matched with a probability
+of 98%. Now is a good time to pause the video and try it on your own image and prompt.
+Let's move on to the next task. Image captioning. You will use the same model that don't know different
+ways that were trained specifically to take an image and output texted describe that image.
+Let's do that in the next lesson.

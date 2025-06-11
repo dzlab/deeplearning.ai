@@ -33,7 +33,6 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 ## 2024
 - [Building Applications with Vector Databases](./2024/BuildingApplicationswithVectorDatabases)
 
-- [Open Source Models with Hugging Face](./2024/OpenSourceModelswithHuggingFace)
 - [Knowledge Graphs for RAG](./2024/KnowledgeGraphsforRAG)
 - [Efficiently Serving LLMs](./2024/EfficientlyServingLLMs)
 - [JavaScript RAG Web Apps with LlamaIndex](./2024/JavaScriptRAGWebAppswithLlamaIndex)
@@ -49,6 +48,9 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 ### 02
 - [Prompt Engineering with Llama 2](./2024/02/PromptEngineeringwithLlama2)
 - [Serverless LLM apps with Amazon Bedrock](./2024/02/ServerlessLLMappswithAmazonBedrock)
+
+### 03
+- [Open Source Models with Hugging Face](./2024/03/OpenSourceModelswithHuggingFace)
 
 ### 05
 - [Quantization in Depth]()

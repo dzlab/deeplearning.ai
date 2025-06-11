@@ -1,0 +1,51 @@
+Now, you will reuse the blip model for question-answering of an image.
+This means you can give the model a picture of a dog and a woman on the beach,
+and ask a question such as who is at the beach,
+and the model will answer your question based on that image.
+Let's do that now.
+For the visual question answering task,
+you can ask the question about the image to the model,
+and the model should return an answer.
+If you ask the model what the dog is wearing, you should get a pair of glasses.
+Now, let's call this.
+In this classroom, the libraries have already been installed.
+If you're running this on your own machine,
+you can install the Transformers library by running the following.
+Since the libraries are already installed in this classroom,
+I won't run this, and I'll just comment it out.
+Just like the last two lessons to perform this specific task,
+we need a few things, the model and the processor.
+So, let's import blip for question-answering class from the Transformers library.
+Now that the class is loaded, let's load the model
+by using the FormPretray methods,
+and by passing the related checkpoints for question-answering,
+let's do the same for the processor.
+So, we're loaded from the Transformers library,
+the class auto-processor,
+and we will load the processor using FormPretray also,
+and we just need to pass the same checkpoint.
+And that's it.
+Now, let's load the image that we need to pass to the processor
+to get the inputs, and we will pass these inputs
+to the model to generate the answer.
+To load an image just like in the previous lab,
+we will use the pill library and the image class to do that.
+To load an image, we will use the open method,
+and we just need to pass the path to the image that we want to open.
+Let's check the image.
+And here we are.
+And you can see that we need to have a picture of a dog and woman on the beach.
+Now, let's ask a question to our model about this specific image.
+For example, let's ask it how many dogs are in the pictures.
+We need to pass the inputs to the model,
+so we will use the processor to process both the image and the question.
+And we will return the tensors to be PyTorch tensors.
+Just like the previous lab, we will use the generate methods
+from the model to get the outputs.
+And we need to use the processor to decode the output.
+And you can see that the model was able to,
+and so correctly to the question that there is indeed only one dog in the picture.
+Now, I invite you to stop the video and ask other questions about this specific picture,
+or you can even upload your own pictures and ask whatever question comes to your mind.
+In the next lesson, we will learn about zero-shot classification with clip model from OpenAI.
+Let's move on to the next lesson.

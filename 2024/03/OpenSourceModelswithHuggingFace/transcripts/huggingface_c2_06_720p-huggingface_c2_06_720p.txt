@@ -1,0 +1,89 @@
+Audio classification has many applications.
+For example, you may want to identify the language someone is speaking,
+or perhaps you want to know what birds are in your area.
+Let's build a sound classifier.
+But there's a catch.
+In the traditional classification,
+a model predicts a label from a predefined set of classes it was trained on.
+If there are no models trained on your specific set of classes,
+you would have to collect the data set and train to the model.
+Here, you'll use an alternative approach that doesn't require fine tuning.
+For this classroom, the libraries have already been installed for you.
+If you're running this on your own machine, you can install the transformers and data sets
+and other required libraries by running the following.
+I will command the mouse because they're already installed here.
+We're going to need a sound to classify.
+So let's load an audio data set from the Hagen-Face Hub.
+The ESC 50 data set is a labeled collection of five-second environmental sounds,
+such as sounds made by animals and humans, nature sounds, indoor sounds,
+urban noises.
+You're not going to need the whole data set, so we're just going to load a few examples.
+This example is labeled as dog. So it's likely a recording of a dog barking.
+Let's give it a listen.
+Sounds like a dog to me.
+Let's build the classification pipeline.
+For this kind of audio classification, you will need a pre-trained
+clap model. At the moment, it is one of a kind architecture available for this task.
+So you can find it on the Hagen-Face Hub by filtering models with feature extraction
+multi-model task and then filtering by the name clap.
+To classify your audio example, you only need the array of audio data.
+However, the example has to have a sampling rate that the model expects.
+Let's then back and talk about the sampling rate.
+A sound wave is a continuous signal. This means it contains an infinite number of
+signal values in a given time. But the audio your computer can work with is a series of
+discrete values known as digital representation. To get the digital representation of a
+continuous audio signal, we first capture the sound with a microphone.
+Then, the analog signal is converted into an electrical signal.
+Then, the electrical signal is sampled to get the digital representation.
+Sampling means measuring the value of a continuous signal at fixed time steps.
+As a result, the sampled wave form is discrete with a finite number of values at uniform intervals.
+A very important characteristic of the digitized audio is the sampling rate.
+It is the number of samples taken in one second and it is measured in hertz or killer hertz.
+For example, 8 kHz is the sampling rate of audio in a telephone or a walkie-talking.
+16 kHz is a sampling rate that is good enough to capture human speech without a sounding muffled.
+A sampling rate of 192 kHz is something that you can expect from professional, high-definition,
+audio-requering equipment. But why is the sampling rate important when working with AI models?
+Consider an example. A 5-second sound and a sampling rate of 8 kHz will be represented as a
+series of 40,000 signal values. The same 5-second sound sampled at 16 kHz will be represented
+as a series of 80,000 signal values. And at 192 kHz, it will be represented with almost a million
+values. For transformer model, these three arrays are very different. Transformer models treat input
+as sequences and rely on attention mechanisms to learn audio representation.
+There are trained on data sets where all examples have the same sampling rate and they do not
+generalize well to other sample rates. So for a transformer model trained on 16 kHz audio,
+a 5-second high-quality audio that is expressed in nearly a million values will look like a 60
+second recording. Let's get back to the code. If a transformer model has been trained with
+audio samples, each recorded at a sampling rate of 16 kHz, it's going to view any input
+as if it was recorded at the same sampling rate. So let's take a one-second sound,
+which has been recorded with 192 kHz sampling rate. How many values will the array representing
+that sound have? 192 thousand values. But if we take a model that has been trained on the audio
+examples with 16 kHz sampling rate, is it going to see as one second or more? Let's find out.
+The model is going to see 192 thousand values and it expects that one second contains 16 thousand
+values. So for this model, the recording is going to look like 12 seconds. So what if now we have a
+5-second recording at high definition, meaning 192 kHz and the same model that was trained with
+audio samples at 16 kHz? How long will the 5-second recording at high definition look like to this
+model? We have 5 seconds times 192 thousand values per second. So this sample will be an array
+of 960 thousand values. The model expects each second to contain 16 thousand values. Let's divide
+the number of values that we have by 16 thousand. This way we'll see how many seconds the model will
+think that this example is. So as you can see, the original sound was only five seconds, but with a
+lot of samples per second. But for a model that has been trained with a lower sampling rate,
+this exact audio will look like a 62nd recording. Now let's get back to our task and check what
+the sampling rate or the model in this lesson expects. We can get this information from the pipeline.
+So this model was trained on audio examples recorded at 48 kHz. Let's check the sampling rate of
+our example. In this case, this is not a large difference in the sampling rate and the model will
+likely do okay, but this is not always going to be the case as you'll see in other examples.
+So let's see how you can automatically cast the whole data set to the correct sampling rate
+when loading it with data sets library. Let's check the first sample again.
+Now it has the same sampling rate as the model. When you load the data set this way, all of the audio
+examples will have the correct sampling rate. So the audio sample is now ready for the model. However,
+you also need to provide the pipeline with the candidate labels. Clap takes both audio and text
+as input and computes the similarity between the two. If you pass a text input that strongly
+correlates with an audio input, you'll get a high similarity score. Conversely, passing a text
+input that is completely unrelated to the audio input will return a low similarity score.
+So let's define some candidate labels to compare the sample with.
+Pass the audio sample and the candidate labels to the pipeline and see what label is the most likely.
+Now try more than two candidate labels and then try some completely unrelated labels. See if
+you can gain some intuition for the limitations of this approach. Let's try some completely unrelated
+labels. We'll use the same pipeline with the same audio sample. Remember that was a dog barking.
+So as you can see here, the candidate labels now have nothing to do with dogs or barking. Yet
+the model still tries to find the most plausible label among given options. In the next lesson,
+we'll do automatic speech recognition.

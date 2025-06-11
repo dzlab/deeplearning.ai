@@ -1,0 +1,108 @@
+Hi, you now have a broad overview of the type of tasks that you can achieve within the Hanging
+Face ecosystem. In most cases, for hosting demos and practical applications, it would be nice
+to have your application running without leaving your computer on. In other words,
+offloads the whole computer requirements outside your local machine. In this lesson,
+you will leverage Hanging Face spaces to deploy your demos and use them as an API. Let's get started.
+So welcome to this lab session about deploying ML models in the Hanging Face ecosystem using
+Hanging Face spaces. So at the end of this lab, you will learn how to host a ML model as an API
+on Hanging Face Hub and call that API through a simple command. So for this lesson, we will deploy
+the blip model that you have covered on the multimodal lab session. Recall that the model has been
+fine tuned on several multimodal tasks, making it possible to perform three different tasks,
+image captioning, visual question answering, and image text retrieval. In our case, we're going
+to focus on image captioning. So let's get started. So first of all, you need to create an account
+at the Hanging Face website, hf.co, and make sure to connect to the main website. Then you just have
+to navigate here on the top right of the window and go to a new space to create a new space. Let's
+decide for a name for the space. So we're going to call it blip image captioning
+API. We're going to put the default license, select the video as the space SDK and select the
+basic hardware and put it public so that everyone can use it. All right. So once you have created
+that space, you need to create two files, which are the requirements.txt file to list all the
+required libraries that you need to run the space and the main file that you need to call app.py.
+So let's do that right now by creating first the requirements file and put all our requirements
+inside that txt file. So we'll add transformers because we need transformers by torch and gradient.
+All right. So before creating the app.py file, let's quickly go back to our lab and create a new cell
+and first try out the demo locally before pushing it on the hub. So as seen in the previous lab,
+we're going to leverage the pipeline objects from transformers and use gradient as a demo by
+leveraging the gradient interface. So as usual, load the pipeline. But this time we're going to load
+the image to text pipeline and we're going to load the blip image captioning based model in order
+to perform image captioning. All right. So now that the model has been loaded, as we've been doing
+so far for all our gradient demos, we need to define a method that will call launch here that we
+take the input, call the pipeline, get the output and get the generated text from the output.
+And note here, we're using the globally defined pipeline that we have loaded here so that we
+won't have to instantiate a new pipeline each time we're calling launch. That way we just have
+to define the initialization of pipeline once at the beginning of the script so that it's loaded
+only once and we use that globally defined model or pipeline inside the launch function.
+Then let's define our grader.interface that will look like this with input being a grader.image,
+output being text and we call interface.launch with share equal true so that we can also have a
+shareable link that you can share with your friends and colleagues. All right. Yeah, let's quickly
+try it out right now. So we're going to try that out on this image that we have locally of two
+kittens lying on a couch with two remotes. So let's see how it goes. Perfect. Two cats sleeping on
+a couch. That's pretty much a good description of the scene. All right. So now the question is what
+if I want to deploy a larger model or what if I don't want to deploy that model locally on my local
+computer because I want to use my computer to do something else. This is possible using spaces and
+that's what we're going to see in our lab. So once we have confirmed that the app works locally,
+we're going to export that app directly into the created hugging space. So we're just going to
+copy paste all these blocks and paste it in the newly created app.py file on the space that we
+have created. So let's just do it right now. So we're going to create a new file app.py
+and copy paste everything. Note that alternatively you can also get clone the space locally
+and do everything through Git. Here we're just doing everything through the command line through the
+UI for easiness. Here we're going to remove sharing control
+and we'll just have to wait the app to build. Okay. So if everything went well you'll end up with
+something like this. So if the app is successfully running you should have that on your
+a newly created space. We can also test it out right now to see if it works.
+All right so we got the same results as the test that we've been doing locally. Now how can I use
+that space as an external API? So if you look into this window there is use via API select box
+here that you can click and we just have to you know follow the instructions here. So first
+pip install radio client. So that's that's something we already did in our lab and we just need to
+retrieve this link which is a temporary link that gets changed. I think each 24 hours.
+So you just have to instantiate this client object with this correct link and called client
+predict then local path to the image or a URL or also a pill image object and make sure to call
+API name equal predict and then you can directly print the results. So let's copy paste this snippet
+and try that out in our lab. So let's try that out.
+Perfect. So if we inspect the input image. So indeed it's a red bus with some blue stripes on
+the side. So if you want also to further inspect what's in your API you can also call the view API
+methods directly on the client to get more information on the API. So it also gives you some
+information on how to call the API. So through API name equal predict the expected parameters and
+also the expected return type of the API. Perfect. So we were able to call our model as an API outside
+our local machine. So everything is done on the cloud. Feel free to try that space out or build a
+new space for your own use case or try out new models new inputs and so on. So before moving
+forward there is also another feature that I wanted to show you. So just to complete my explanation
+about the client API you can also make the space private in case you want to host a private model.
+We just have to make sure that the space is private when going to the setting here. So by making
+the space private and then you just have to pass your hugging face token when you instantiate the
+client. So in terms of code it would look something like this. So you will instantiate your client
+with the argument hf token your token. So that way you'll have access to the private space as an
+API. So how can we push this further? So we've been deploying this demo so far on a CPU instance
+on the hugging face space. But what if I want to deploy a much larger model that cannot fit on
+the CPU instance or what if the CPU instance is a bit slow and I want to deploy it on a GPU instance.
+So there is a feature you can use within the hugging face ecosystem called GPU 0 space where you can
+basically spin some free GPUs on demand for your spaces. So let's see how to do this. We need to
+first go to this hugging face organization called 0 GPU explorers. Just have to browse 0-gpu-explorers
+on hugging face hub and request to join this organization in order to get access to this feature.
+Once your request has been accepted you directly have access to the 0 GPU feature. Whenever you
+create a new space you'll have the option 0 GPU appearing here with dimension free.
+So to demonstrate the 0 GPU feature I've created a space on my personal account for the lava
+model. So lava model is an image to text model which is quite large so the lava 1.57b that is
+deployed on the space the demonstration space has approximately 16 gigabytes and needs quite a
+lot of GPU RAM to be run. And the space leaves here and as you can see it says running on a zero
+device. So let's use that as an API. So we just have to click use via API here. Okay so we can
+copy paste this snippet and try it out on our local machine. And instead of using the default prompt
+and image we're going to use a custom image that we have prepared for you. So remember this image
+of the instructors having dinner all together in Palo Alto here. So we're going to use this image
+and ask the model if it's able to predict what we are all holding in our forks.
+So let's try that out right now. So we're going to prompt the model in such a way that we're
+going to explicitly ask what we are holding in our forks. So we're just going to say these
+people are having dinner in a Mediterranean restaurant to hint a bit that we're having
+can you guess what they are all holding in their forks. And yeah recall that you can either pass
+an image URL or the path to your image. So we're going to pass the path to the image and wait for
+the results. Perfect. So let's see what the model has predicted. So it's say that we're all
+eating meatballs. At least the model has predicted that it's something that is round but it was not
+unfortunately able to detect that it was falafel despite the hint that we gave. But yeah I guess
+that's a bit challenging maybe even for humans since it's round and a bit brown. So yeah but still
+I think the description is quite accurate and it's quite funny how the model behaved with respect
+to the prompt and the image. All right so to wrap up this lesson I invite you to explore hugging
+face spaces in order to deploy your custom demos. You can also browse the spaces webpage to check
+out the spaces of the week to get some inspiration and cool applications and demos that you can build
+and easily share. So I invite you to have a look at all the things that we have covered during this
+whole course and come up with some cool ideas that you can publish easily on hugging face spaces
+and share it with your friends and colleagues. All right so there is just one more video where we'll
+say thank you and wrap up the course. So let's go on to the next lesson.

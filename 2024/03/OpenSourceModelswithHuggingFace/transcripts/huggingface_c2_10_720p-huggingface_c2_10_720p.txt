@@ -1,0 +1,324 @@
+Hi! In this lesson, among other computer vision tasks,
+you're going to perform segmentation and something called visual prompting.
+By that, I mean that you will simply specify a point on a picture
+and the segmentation model will then identify a segmented object of interest.
+Let's see all that together.
+Welcome everyone to the lab session of lesson 9.
+We're going to see the segment anything model from Facebook AI,
+now called meta AI.
+And yeah, use that model to build cool applications.
+First of all, make sure to run this cell before starting the lab,
+so that we won't get the warnings from customers
+and also make sure to install the required libraries that we provide here.
+So make sure to run these comments first before running the notebook.
+Yeah, so let's get started.
+So yeah, as we've been doing so far for all our labs,
+we're going to use the pipeline object for this lab
+and we're going to focus on a task called mask generation.
+So I'm going to explain in detail what mask generation means
+and how does it differs from the classic image segmentation task.
+So let's first import our pipeline object
+and start to initialize the pipeline object.
+So some for segment anything model, pipe equal pipeline, mask generation.
+So in the image that you can see here,
+we simply performed image segmentation on the image that you can see on the top.
+The model predicts pixel wise labels for each pixel of the image
+with the corresponding label of the pixel.
+So for example, the blue pixels will refer to the sky.
+The red pixels will refer to the class bridge
+and the other pixels irrespectively refer to the ground and the mountains.
+And in segmentation mask generation,
+the difference is that users can perform what we call visual prompting
+by guiding the model on the location of the object of interest
+in order to predict the segmentation mask of that object.
+So segment anything model, some from Facebook,
+expects as an input 2D points, as you can see here,
+but you can also provide bounding boxes as input
+and the model will predict segmentation mask of that object of interest.
+And in contrary to classic image segmentation,
+the predicted mask won't have any label.
+The only label that you can extract from that mask
+is that that object corresponds to the object of interest
+that you have specified to the model.
+There is also one thing that you could do with segment anything
+is the automatic mask generation pipeline.
+So by that, we simply sample some points from the 2D image
+and try out different combinations of 2D points together
+because you can also prompt multiple points per mask
+and filter out the predicted output with the highest scores
+to get the most relevant segmentation masks in the whole image.
+If you pass that image and use the automatic mask generation pipeline,
+you will end up with results such as this one
+where you'll have the masks for each object of interest.
+So for example, you have the road, you have those small pieces
+of the train, windows of the building, and things like that.
+So if you want to read more about segment anything model,
+you can just check, check out the paper,
+some paper from Facebook AI or the original repository
+of segment anything model.
+And for our lab, we're going to use a distilled, compressed version of the model
+called SlimSam, which basically does the same thing as Sam
+with similar performances, but is much smaller.
+So this model is going to be useful for us
+because we're going to run our lesson on a small hardware.
+So we will be able to run segment anything model
+without the need of having a high compute requirement.
+Now that we have more or less understood,
+what do we mean by a mask generation and how it differs
+from classic image segmentation pipeline?
+Let's try our hands on loading the model
+and try to play with the model.
+Once we have instantiated the pipeline with mask generation,
+we're going to pass the path to the segment anything model.
+So we're going to use this model from the hub,
+which corresponds to the SlimSam model that I've presented you before.
+So let's load this model.
+All right, now that we have the pipeline,
+let's try to import an image that we have prepared for you.
+So we're going to try to predict some segmentation masks
+on this image where you have some people
+and some cool lambas, as you can see here.
+For the automatic mask generation pipeline,
+you can pass this optional arguments
+called points per batch
+and you can get different results based on this value.
+So higher points per batch means more efficient pipeline inference
+for smaller hardware,
+we recommend you to use a smaller points per batch
+so that you won't run into any hardware issues.
+So yeah, you can just run this command.
+It will take some time for some computers,
+but yeah, just wait for the results
+and we're going to see the results together.
+Okay, so now that the pipeline has finished its execution,
+let's try to visualize the results.
+So for that, we've prepared a helper function for you
+called showpipemasks on image.
+So we're going to import that and use it straight away
+on our original image.
+Very nice.
+So as you can see, the model was able to segment
+all small regions of interest in the whole picture.
+So for example, it was able to segment all the heads
+regions for each person,
+was able to segment almost all the lambas individually themselves,
+also the closes,
+yeah, the wall behind and small items on the back as well.
+But the problem with this pipeline is that you need to iterate over all the points
+and post-process degenerated masks,
+which might be a bit slow for some use cases and applications.
+So we're going to focus on one specific use case
+where we're going to infer the model with an image and a single point.
+So let's try to do that right now.
+So instead of using pipeline,
+this time we're going to import the model class itself from transformers
+and some processor.
+So we just need to call some model that from pre-trained
+to checkpoint name that we used before
+and we're going to do the same thing for the processor.
+We can also print out the model to see its architecture
+for those who are curious.
+So there is a positional emitting, vision and color,
+transformer layers and so on.
+And for this exercise,
+we're going to use the same image
+and let's say we're interested in segmenting this blue shirt from Andrew.
+So for that, we're going to pass any 2D points
+from the blue shirt in order to segment that region.
+So we're going to give this location.
+The point 00 starts from the top left.
+So 1,600, 700 should be somewhere here in the shirt.
+So for that, you need to first encode both the image
+and the 2D points.
+So we just have to pass to the processor the image.
+Input points equal input points
+and mention that we want to return PyTorch sensors.
+And we're going to perform a simple inference
+on the model with the Torch no-grad context manager
+so that we make sure we don't compute the gradients.
+So import Torch.
+All right.
+Okay. So once you have retrieved the output from the model,
+we need to pass process to predicted masks
+in order to resize them to the size of the original image.
+So for that, you can simply call imageprocessor.postprocessmasks
+in order to get all the predicted masks.
+And I wanted to quickly inspect the size of the predicted masks.
+So if we do land predicted masks, we have one
+which corresponds to the number of images.
+But if we would have passed many images,
+then we would have as many masks as where we do have images.
+So let's just consider the first mask and inspect its size.
+For our predicted mask, we have a tensor of size one.
+So batch size three and then size of the image.
+So I just wanted to give a quick heads up
+on why do we have three on the second dimension.
+So if you check again, the overview of the sum architecture,
+as you can see from this figure,
+the model predicts three segmentation masks
+together with their confidence scores.
+So that's exactly what's happening here.
+So we have all the three masks.
+And we can also inspect the prediction scores
+by getting outputs dot iu scores.
+And as you can see,
+the first mask seems to be the mask with the higher confidence.
+But let's see on our case
+and print all the predicted segmentation masks
+given the visual prompt that we have tried.
+So very nice.
+So in two cases over three,
+we were able to accurately predict the segmentation mask
+of Andrew's shirt.
+But for the first mask, it was able to segment Andrew entirely
+instead of just the shirt.
+But to get better results for this specific use case,
+one could also pass multiple points
+to get the segmentation mask,
+which corresponds to the region of Andrew's shirt.
+Yeah, so you could try to pass multiple points
+for the same mask.
+You can also try to pass a bounding box
+that encapsulates the region of Andrew's shirt.
+But yeah, you can try out many combinations.
+Feel free to try them out and also try out the combinations
+that are suggested in the official documentation
+of some model in hugging faces transformers.
+Now that we have seen how to use the segment anything model
+in order to segment any object of interest
+given an image and some 2D coordinates
+and or bounding boxes,
+I wanted to also present you another model
+called DPT,
+which stands for dense prediction transformer.
+So DPT is a model that you can use
+to perform death estimation given an image.
+So death estimation is a common task in computer vision
+that is also widely used, for example,
+in autonomous driving.
+So for the demo, we're going to use a model
+called DPT Hybrid Midas from Intel.
+And we're going to use pipeline as usual,
+but this time we're going to call the death estimation task
+for the pipeline.
+So let's import pipeline from transformers
+and define our death estimator using death estimation.
+And for the model, we're going to use
+DPT Hybrid from Intel.
+Okay, so let's first inspect the image
+that we're going to use for this demo.
+So as you can see, it's a small Tamagotchi
+that is standing in a road in Vienna,
+apparently, according to the title.
+So we are just going to estimate the death
+of this image.
+Let's see how it goes in terms of code.
+So yeah, as we've been using pipeline,
+it's pretty straightforward.
+So we just have to call death estimator.
+That's what we called our object of the raw image.
+And then if we inspect the outputs,
+we have a dictionary with the key predicted death,
+with the raw death tensor of the predicted death of the image.
+So we can't display that tensor as is.
+So we need to first post-process the image
+by first resizing it to the size of the original image.
+So for that, we're going to use a function from PyTorch
+called interpolate from Torch.nnd.functional.
+And we're going to consider the predicted death from the output,
+but we're going to unsquease in order to add a dimension
+on the first axis.
+If you inspect the shape of the predicted tensor,
+so it has one, so batch size, number of images.
+And then interpolate also expects to have the number of channels
+in the second dimension.
+So we're just manually going to add it here.
+So just want to show you how it looks like if you call that method.
+So it just adds a new axis on the second axis.
+And then we're going to resize it.
+So our target size is going to be the size of the raw image.
+We're going to use the BQ big mode.
+So those are the things you shouldn't worry too much about.
+Those are just the best, I would say, best hyperparameters
+that you can use to resize an image.
+And align corners equal folds.
+All right.
+And then if we print out the prediction tensor,
+so now we should have the same shape as the input image.
+So that's great, but there is still one thing that we need to do.
+So the values cannot be displayed as they are,
+because for an RGB image, the pixel values
+need to be between 0 and 255.
+So we need to normalize the prediction tensor,
+so that the values will stay between 0 and 255.
+So we're just going to call that block.
+We remove one dimension calling squeeze,
+we convert it to a numby tensor,
+and then we normalize it between 0 and 255.
+And convert the image, the tensor in int 8,
+and use that converted tensor using peel from array
+to get the final def.
+And let's see how it looks like.
+So here is the predicted output from the model.
+So as you can see, the Tamagotchi that is in front of the picture
+has strong value towards white pixels.
+So it's very close to the image.
+And then the elements that you can see far behind
+have pixel values that are close to black pixel.
+So yeah, I would say the model was able to quite accurately
+predict the depth of the image.
+So you can try it out with your custom images
+or images that you find on the internet
+and just make sure to resize the output using these formulas.
+So let's say now you want to showcase this model
+through a simple demo,
+and you want to share it with your friends or colleagues.
+You can use Gradio that we used on the previous lesson
+and share the link of the Gradio demo
+to your colleagues or your friends.
+So yeah, I just wanted to quickly show you how to do this using Gradio.
+So it's pretty much straightforward.
+So we're going to import Gradio.
+We're going to use transformers pipeline
+and we're going to use the depth estimator object
+that we have defined here beforehand
+so that we don't have to load it each time.
+So similarly as the demo that we showed on the previous lesson,
+Gradio.interface expects a method
+that does everything for you
+given the input that the user will pass.
+So we need to define a method
+that we take the input image as input
+and we'll do everything for you under the hood
+to the user and returns the predicted image
+with the peel image format.
+So we just have to write down all the steps
+that we did here in a simple method
+so that we do everything in one go.
+So this is how it would look like.
+So we get the output from the pipeline
+given the input image.
+We resize the prediction using the snippet we used above
+and we normalize the output using also the snippet here.
+And then we define the Gradio interface
+that takes the method as input,
+explicitly defined the input as a peel image
+and the output as a peel image as well.
+We're going to run that cell and call interface.launch
+with the argument share equal true
+so that you also have access to a shareable link
+so that you can share it with anyone.
+So I'm just going to quickly try it on a local image.
+Very nice.
+It is able to predict the depth of the image accurately.
+So yeah, feel free to try that out again
+with your local images or images
+that you can find on the net.
+You can showcase this bundle to your friends
+and your colleagues.
+In the next lesson you will learn with Mark
+how to use multimodal models
+where you can pass both image and some texts
+in order for example to ask some questions
+about some specific images.
+So yeah, let's move on to the next lesson together with Mark.

@@ -1,0 +1,126 @@
+automatic speech recognition ASR is a task that involves transcribing speech audio recording
+into text. Think meeting nodes or automatically generated video subtitles.
+For this task, you'll learn to work with the whisper mile by OpenAI.
+Just as before, all the necessary libraries have been installed for you,
+but if you're running this on your own machine,
+you will need the same set of libraries as before, plus read your interface.
+Let's load a speech dataset. This time, we'll take library speech.
+It is a corpus of approximately 1,000 hours of data derived from the rated audio books.
+Often times, audio datasets are very large, so it's useful to know how to load them in streaming mode.
+This way, the examples will be loaded as needed, one at a time. For a streamed dataset,
+you can access the examples one by one, and this is how you can take the first example.
+By the way, if you want to access more than one example, let's say the first five,
+you can do it with the take function.
+Inside this list, you can access individual examples with their intuses.
+You can pick whichever example you prefer, but for now, let's stick with the first one.
+Just like before, you will only need the audio part of this example.
+Let's listen to the narration.
+Chapter 16.
+I might have told you of the beginning of this phase on in a few lines,
+but I want you to see every step I wish we can.
+There are thousands of pre-trained models for automatic speech recognition available
+on the Hagen phase hub. You can find them by selecting the automatic speech recognition
+task. However, Whisper by OpenAI remains one of the best models for this task. Whisper was
+pre-trained on a vast quantity of labeled audio transcription data, 680,000 hours to be precise.
+What is more, 117,000 hours of this pre-trained data is multilingual or non-English.
+This results in checkpoints that can be applied to over 96 languages.
+Here, for the sake of efficiency, we will use the distilled version of the model that only works
+for the English language. By distilled, I mean a smaller model that was trained using the responses
+of the full Whisper model. This checkpoint is over 10 times smaller, five times faster,
+and within 3% word error rate of the large model. Just as before, let's check the sampling rate
+that Whisper expects. Now let's see what sampling rate our example has.
+Hooray! This time they're the same. So we can pass the audio as is to the pipeline.
+It worked. Now let's compare this to the transcription that came with the example.
+Notice that unlike the transcription that came with the example, Whisper returns
+transcription with proper capitalization and punctuation, which makes it much easier to read.
+Now let's build a simple transcription demo and we'll use Gradio for this.
+Let's create a transcribed speech function that will be a wrapper around our pipeline.
+Next, you can create a tab interface where one tab will let record audio from the microphone,
+and the other tab will let the user upload audio files.
+So here's how we create the tab that will let the user record the audio from the microphone.
+We need to create a Gradio interface past the transcribed speech function,
+define where the audio input is going to come from, in this case it's microphone,
+and what the output should look like. In this case it's a text box.
+If you would like to learn more about Gradio, there is a course about Gradio on the learning app.
+And we'll create the tab for uploading files in the same fashion.
+Now just bring everything together and launch the demo.
+Try the demo, try recording yourself, speaking into the microphone, or try uploading audio files and see
+if the transcription matches what you say.
+Let's test if whisper can transcribe what I am saying right now.
+Ta-da, and try speaking for about a minute and see what happens to the transcription.
+You may notice that this demo only transcribed part of what you were saying if you were speaking
+for longer than 30 seconds. This is because whisper expects audio samples to be under 30 seconds,
+and everything else will be truncated. Realistically you may want to transcribe longer recordings,
+say a whole meeting. You can still do that with this pipeline, but you will need to provide a few
+additional arguments. So let's illustrate this. Let's get a longer audio example first. We're
+going to stop the demo otherwise it's going to prevent us from running anymore cells. To stop the
+Gradio demo, click on the square icon that interrupts the kernel. We're going to be using the same
+automatic speech recognition pipeline. Let's check again what the sampling rate the model expects.
+Now, this is a big difference in sampling rate.
+The error says that the model expects a single channel audio input and we must have more than one.
+So we are probably working with the stereo audio. Stereo uses two channel audio. This helps create
+a sense of space and directionality in sound, which enhances the listening experience. Stereo is great
+at adding spatial component to audio. So when you're listening to music you get a better experience,
+but for transformer models it's usually not needed. Most transformer models work with
+mono channel audio. This is because you don't really need to have the spatial information to
+identify whether the sound is of a dog barking or a cat meowing. You don't really need to know where
+the speech is coming from. You just need to know what has been said. At the same time, stereo audio
+has two channels so that's twice amount of data and it just increases complexity for the computations
+without really providing any benefit. Let's see how we can convert this audio to mono. Let's check
+the shape of the audio array. As you can see there are two channels in this audio, but we need just one.
+We're going to use a library called Librosa to convert this audio array from stereo to mono.
+Librosa expects the shape of the audio array to have a number of channels first and then the data.
+So one more step before we can do the conversion is to transpose this array.
+Let's check the shape again.
+Now let's convert this audio to mono.
+Now that this is done, let's listen to the example.
+Hey Rob, hey Bob, I see the glory shining of their eyes.
+Those words put me back in place. Good bye, Bob.
+All right, let's try to pass this audio directly to the pipeline and see what happens.
+Oh no, the text generated by the model does not really match the audio.
+Why is that? This is because the sampling rate of the audio example does not match the sampling
+rate of the model. The model tries to guess what the generation is, but fails to do so.
+Let's double check this. Let's see what the sampling rate of this example is.
+The sampling rate of the example is 44,100 hers and let's see what the pipeline expects.
+The pipeline expects the audio to be sampled at 16 kilohertz.
+Let's fix this. We can re-sample an individual file using Librosa.
+Now the audio example is ready for the pipeline.
+For the pipeline to be able to transcribe the longer video, we will need to pass a few arguments
+to it. But first, let's talk about how automatic speech recognition pipeline handles longer
+recordings. Because Whisper can only take in up to 30 seconds at the time to transcribe this
+longer example, the pipeline will split the long file into chunks. We can specify the chunks
+length for Whisper. 30 seconds chunks are optimal since this matches the input that the model expects.
+And each segment will have a small amount of overlap with the previous one. This allows the
+pipeline to accurately teach the segments back together at the boundaries, since it can find
+the overlap between segments and merge the transcriptions accordingly. Because the audio
+is split into chunks, the pipeline can transcribe the chunks independent of each other and then
+combine the results. For this reason, you can transcribe batches of chunks in parallel.
+Let's see the arguments that will be passed into the pipeline.
+Next, the length for the chunks. 30 seconds in this case.
+Next, we'll specify how many chunks we want processed in parallel using batch size.
+In this case, the original file is only one minute and 21 seconds, so there is no need to have
+a batch size larger than 3 or 4. In case of a larger file, the batch size will depend on your hardware
+and memory available to you. If you try a large batch size and get an out of memory error,
+you know that you need to try a smaller batch size. So in the first introduction lesson,
+I gave you a roll of thumb to estimate how much memory you would need for a model to run.
+To estimate the batch size, think of it as a multiplier for that memory.
+So how many models you can run in parallel? So if you have the hardware to do that,
+you can have a large number of batches. In this case, four managers,
+but we also don't think that any more because 30 seconds splits with a bit of overlap for it is
+probably even redundant. Probably we can do three, but just in case three or four for this case is fine.
+Try an experiment with batch size and see what your hardware can handle.
+Finally, you can set return timestamps to true, and this enables predicting segment level
+timestamps for the audio data. These timestamps indicate the start and end time for a short passage
+of audio, and they can be particularly useful for aligning the transcription with the input audio.
+To output the transcription with the timestamps, you can print the chunks part of the output.
+Now we get the transcription for the full audio, and we get the timestamps. Now let's see how
+we can modify the demo to accept longer audio recordings. First, let's copy the original demo.
+Let's copy the transcribed speech function. Here, we're going to modify
+how we're calling the pipeline. Instead of giving it only the audio file, we'll pass additional arguments.
+Like so.
+The only thing that we need to update in the interfaces is the name of the function.
+The code snippet launch in the demo doesn't change, so it's ready to go.
+Try uploading an audio file that is longer than 30 seconds, or record yourselves
+speaking into a microphone, again longer than 30 seconds, and see if it works.
+In the next lesson, you'll learn how to go in the opposite direction and go from text to speech.
+Let's go to the next lesson.

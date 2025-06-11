@@ -1,0 +1,21 @@
+Congratulations on making it to the end of this short course.
+In this course, you've gained insights into the selection of open source models for text,
+audio, and images, all available on the hugging phase hub.
+You build multiple applications such as a chatbot, a speech transcriber,
+and an object detector to name a few.
+Now you know how to build a functional prototype for your application using Gradio
+and how to quickly deploy it with hugging phase spaces.
+Moving forward, you will be able to navigate the large landscape of open source models.
+Consider the pipelines you've constructed as foundational building blocks
+and explore the boundless opportunities for creativity they offer.
+Combine them to create new, unique applications, skies to limit.
+None of this would have been possible without the collaborative spirit of the open source community.
+Thousands of people, researchers, engineers, educators, and thinkers
+have contributed to open source by sharing models and data set on the hugging phase hub
+by opening full requests to open source libraries and by engaging in discussions that lead to new ideas.
+The progress in AI we witness today all merge to the open source community.
+We extend our heartfelt appreciation to all those who contribute to its progress.
+We encourage you to explore other machine learning tasks and models available on the hugging phase hub.
+Build innovative applications and share your creations with the community
+to inspire others with what you build.
+If you find this course helpful, maybe you can even share it with your friends.

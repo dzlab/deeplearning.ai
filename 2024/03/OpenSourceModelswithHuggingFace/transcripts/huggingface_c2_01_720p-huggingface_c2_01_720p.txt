@@ -1,0 +1,58 @@
+Welcome to this short course, Open Source Models with Hug&Face, built in partnership with Hug&Face.
+Thanks to Open Source software, if you want to build an AI application, you might be able to
+grab an image recognition component here, an automatic speech recognition model there,
+and an LM somewhere else, and then string them together very quickly to build a new application.
+Hug&Face has been transformative for the AI community in terms of making it easy for anyone
+to do this by making many, many open source models easily accessible, and this has been a huge
+accelerator for how many people built AI applications. In this course, you learn directly from the Hug&Face
+team how to do this and build cool applications yourself possibly faster than you might have
+previously imagined would be possible. For example, you use models to perform automatic speech
+recognition or ASR to transcribe speech into text, and then also text to speech models or TTS
+to go the other way to convert text into audio. These models combined with an LM give you the
+building blocks you can use to build your own voice assistant. You also see how to use Hug&Face's
+transformer library to quickly pre-process as well as post-process outputs of machine learning models.
+For example, pre-processing audio, like controlling the audio sampling rate in the ASR or TTS
+examples I just mentioned, as well as pre-process or post-process data such as images and text.
+The notion of grabbing open source components to build something quickly has been a paradigm
+shift in how AI applications are built, and in this course you get a feel for how to do this
+yourself. Delighted to introduce our instructors for this course, Eunice Baikodar,
+a machine learning engineer at Hug&Face has been involved in the open source team where he works
+at the intersection of many open source tools developed by Hug&Face, such as transformers,
+perhaps efficient fine tuning of PEPFT, and TRL, which stands for transformers reinforcement learning.
+Markson, also a machine learning engineer at Hug&Face, is part of the open source team where he
+contributes to libraries such as the transformers library and the accelerate library. Maria Hallusover
+is a member of technical staff at Hug&Face, and she leads the educational projects at Hug&Face
+and contributes to cross-library efforts to make save the art machine learning more accessible
+to everyone. Thanks, Andrew. We're excited to work with you and your team on this.
+First, you will create your own chatbot with open source LLM. You will use open source LLM from
+meta. The same code can apply to more powerful open source LLM's when you have access to more
+powerful hardware. You will use open source models to translate text from one language to another,
+summarize documents, and calculate sentence and bearings in order to compare similarity between
+two sentences. Next, you'll use transformers for processing audio. What audio tasks do you think
+a voice assistant might be performing when you ask it for, say, a weather forecast? It knows to wake
+up when you say its name. That's classification. It converts your speech to text to look up your
+request. That's automatic speech recognition. And it replies to you. That's text to speech.
+In this course, you'll classify arbitrary sounds, transcribe speech recordings, and generate
+speech from text. The computer vision applications of transformers are plentiful. You learn how to
+detect objects in images and segment images into regions called semantic areas. For example,
+you can apply this code to detect that a puppy exists in an image and also segment the part of the
+puppy that makes up its ears. After you've learned to handle text audio and image tasks,
+you can combine these models in the sequence to handle more complex sounds. For example,
+if you want your app to help someone with a visual impairment by describing an image to them,
+how could you implement that? In this course, you apply object detection to identify the objects,
+image classification to describe those objects in text, and then speech generation to
+narrate the names of those objects. You also use a model that can take in more than one day to
+type as input. These are called multimodal models. For example, you build a visual question on
+string application in which you can send an image to a model, as well as a question about that
+image, and your application can then return an answer to that question based on the image.
+You also use the Gradio library to deploy an AI application to hugging face spaces so that anyone
+can use your application to perform tasks by making API calls through the Internet.
+Of course, the goal of all of these examples isn't just for you to build these specific examples,
+it's so that you learn about all these building blocks so that you really combine them yourself
+into your own unique applications. Many people have worked to create this course. I'd like to thank
+on the hugging face site, the entire hugging face team for the review of the course content,
+as well as the hugging face community for the contributions to the open source models.
+From deep learning to AI, at issue, it also contributed to this course.
+In the first lesson, you learn how to navigate thousands of models on the hugging face hub
+to find the right one for your task and how to use the pipeline object from the Transformers Library
+to start building your applications. That sounds super exciting. Let's go into the next video and get started.

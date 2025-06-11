@@ -1,0 +1,26 @@
+In this final audio lesson, we'll tackle text to audio generation by converting text to speech.
+Text to speech is a challenging task, because it is a one to many problem.
+In classification, you have one correct label, maybe few.
+In automatic speech recognition, there's one correct transcription for a given utterance.
+However, there's an infinite amount of ways to say the same sentence.
+Each person has a different way of speaking, but they are all valid and correct.
+Think about different voices, dialects, speaking styles, and so on.
+Despite these challenges, there are open source models that can handle this test really well,
+and you are about to use one of them.
+We'll use a VITS pre-trained model from Kakao Enterprise.
+This is one of the two models that can fit in this environment.
+And this model has a permissive license.
+Once you have the pipeline, all you need to do is to pass some text to it.
+Let's write some text.
+Now let's pass this text to the pipeline.
+Let's give it a listen.
+Researchers at the Allen Institute for AI,
+I think the face Microsoft, the University of Washington,
+Carnegie Mellon University, and the Hebrew University of Jerusalem developed a tool that measures
+atmospheric carbon emitted by cloud servers while training machine learning models.
+After a model's size, the biggest variables were the server's location and time of day
+and was active.
+And just like that, you can convert text into an irradiated audio recording.
+Feel free to paste your own text and play with the pipeline.
+In the next lesson, Eunice will show you how to build an object detector.
+Let's go on to the next lesson.

@@ -1,0 +1,63 @@
+Now, you will use the Clip model to classify images with zero-shot classification.
+It's zero-shot because the model will be able to classify the image from a
+moment list of any labels that you do give it.
+This is great because you don't have to fine-tune the model to recognize specific categories.
+You can just use the model out of the box. Let's try it out.
+For zero-shot classification tasks, you will use the Clip model from OpenAI.
+Clip is a multimodal vision and language model.
+The zero-shot image classification task consists of classifying an image based on your own labels during inference time.
+For example, you can pass a list of labels such as playing card, dog, bird, and the image you want to classify.
+The model will choose the most likely label.
+In this case, it should classify it as a photo of a dog.
+Yeah, the photo is a little bit small, but this is indeed a dog.
+Let's see how to do that.
+For this classroom, the libraries have already been installed for you.
+If you're running this on your own machine, you can install the transformers library by running the following.
+Clip install transformers.
+Since the libraries are already installed for us in this classroom, I won't be running this command.
+Just like in the previous lessons, we need two things. We need the model and the processor.
+Let's first load the model from the transformers library.
+So we need to load the Clip model from transformers.
+To load the model, we will use the from FreeTrain method.
+And we need to pass the correct checkpoint for this specific task.
+Now that the model is loaded, let's load the processor.
+So we will import all the processor from the transformers library.
+And we will use also the from FreeTrain methods to get the correct processor.
+Now that the processor and the model is loaded, let's get an image.
+To do that, just like the previous lessons, we will use the PL libraries and import image class.
+We will load the image using image.open.
+And we will specify the path to the image.
+Here's our image, two lovely kittens.
+Let's try to classify this image. Let's create the labels.
+So let's put a photo of a cat as the first label and the second label we can put a photo of a dog.
+Then we need to create the input that will go inside our models.
+To do that, we will use the processor.
+We need to pass the text, which are the labels.
+The image.
+We will make sure that we get the pipe watch sensors,
+where specifying PT in the return tensors arguments.
+And we will also add the last argument padding to be equal to true,
+encased the labels length or not the same.
+Then we can pass this output to our model.
+So outputs equals models, double store inputs.
+Since the inputs is a dictionary of arguments,
+and let's check what we get.
+We get a very big output, but the thing that we are interested in are the logits per image.
+So let's print that.
+And as we've seen in the previous lessons, to get the probability,
+we need to pass these logits into our softmax layers.
+So let's get the probability.
+Just like that by calling the softmax on the output,
+let's get the softmax of the logits.
+And we take the first element, which is a single tensor.
+And as you can see, now we have something that looks like a probability.
+The first element is the probability that the image is indeed a photo of a cat.
+And the second one is the probability that the photo is a photo of a dog.
+So to conclude, we see that for the label a photo of a cat,
+the probability is practically 100%, whereas for the second label,
+the probability is near zero.
+Now I invite you to pause the video and try a couple of things.
+You can either maybe change the label so that you put labels that doesn't have anything to do with the image
+and try to see how the model responds to that.
+You can also upload a new image or just change the labels.
+In the next lesson, Eunice will show you how to deploy the blip model using hugging phase bases.
