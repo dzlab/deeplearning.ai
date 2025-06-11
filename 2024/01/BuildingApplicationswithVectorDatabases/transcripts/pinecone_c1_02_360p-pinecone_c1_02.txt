@@ -1,0 +1,187 @@
+In this lesson, you will build a RAG system or a retrieval augmented generation system
+using Pinecon.
+You will work with the sample dataset of Wikipedia articles and build vector embeddings
+out of the articles.
+Then you will look at what search results look like by doing a simple document retrieval
+from Pinecon.
+Then while working with OpenAI, you will build a nicely summarized article out of these
+results.
+Alright, let's dive into the code.
+Now we're going to build a classic retrieval augmented generation or RAG system using Pinecon
+with OpenAI.
+It's going to look something like this.
+We have our happy face user that we had in previous lessons here on the left.
+What he's going to do is ask a question against the dataset that we will have prepared and stored
+in Pinecon.
+In this case, we'll ask what was the Berlin Wall.
+Similar to other lessons, we got back from our responses or documents from Pinecon.
+To be really nice if we could take some of those long responses and get a summarized version
+of them.
+What we'll do is show how to build and do a little bit of prompt engineering out of the
+responses from Pinecon, send those back into the prompt of OpenAI and get back a beautifully
+written response from OpenAI.
+This is really just RAG in a nutshell.
+I definitely encourage you to try different versions of doing prompt engineering or it's
+just a fairly simple example to show you what it might look like.
+Let's get started.
+What we're going to do is first clear out warnings.
+You've seen this previously before where we import warnings and filter out the warnings.
+This is just to keep things clean for us.
+Then we're going to pull in the packages that we rely on.
+Again, we have our deep learning AI tools package that manages keys from OpenAI and Pinecon
+for us.
+Then we're going to set up Pinecon similar to how we have before.
+We're going to get the API key.
+Now that we have our Pinecon API key, we're going to, as usual, connect to Pinecon.
+First connect to Pinecon, then get the index name using our Utils package and then delete
+our index if it already exists and then create the index and then finally get a pointer
+to the index that we just created.
+Let's look at our index name just for fun.
+Something long and unintelligible, but that's okay.
+It works great nonetheless.
+Now we're going to download our data and we've prepared that ahead of time so that you
+don't have to watch us download data, like a cooking show in that sense.
+It's just that you get a nice key for quiet in an output file would be called lesson2wiki.csv.zip.
+It's a file sitting on Dropbox somewhere with a long, long URL.
+Then after it gets downloaded, we unzip that file and you'll have a CSV file locally in
+your notebook.
+Once we do that, then we're going to create a data frame out of it.
+This is a data frame using DFS, short hand for data frame, and then we're using pandas
+to read the CSV file.
+That reads underscore CSV and we're reading a file that we just unzipped.
+Let's just take a quick look at the data that we have.
+We use data frame.head to look at the data.
+There's a few columns of interest.
+One is the unique identifier for the data.
+There's the metadata that has the source of the articles and the content.
+Then there's the vector embedding themselves under values.
+These are good examples of what a vector embedding looks like.
+It's really just a list of floating point numbers.
+Now we'll prepare the embeddings and upload them into pine cones.
+We'll create an array called prepped.
+That's going to save what we store into pine cone.
+Then we will iterate through the data frame.
+We'll iterate through the data frame.
+We'll use 2QDM again to get a progress bar.
+Then we will get the metadata from it.
+That's a string we're going to use literally val from the AST package to get a dictionary
+back.
+Then we're going to append it to what we just created.
+This is how you create a vector embedding in pine cone.
+This is this long dictionary of values that I cut and paste here because it's a long
+value I'll explain it to you.
+What we have here is really a tuple again.
+You have an ID that's unique identifier for the embedding.
+You have the values which is really the vector embedding itself.
+Then you have the metadata.
+We just took the metadata that we had from the line above.
+This is the article information.
+Now what we're going to do is upload that data into pine cone.
+What we want to do is do it in batches.
+If the length of that prepared array is greater than 200, we're going to do it in batches
+with 200, then we're going to insert it into pine cone.
+Once it's inserted, we're going to clear that out so that we can do it all over again.
+Again, a pine cone embedding is really three things.
+There's the ID that's unique identifier for it.
+There's the values that's the vector embedding.
+Then there's metadata that goes with the vector embedding.
+In this case, it's the article metadata.
+Now what we're going to do is upload data in batches of 200 vectors at a time in the pine
+cone.
+We'll check to see if we've stored 200 elements into this prep array.
+If so, then we insert the data and then we clear it out again.
+We'll run that.
+We'll see TQGM do its thing while we upload data into pine cone.
+We finished uploading our data into pine cone and let's verify what was uploaded.
+We will use index.describe index.stats and look at it.
+We have 10,000 elements just as we had hoped.
+Now we're going to use OpenAI.
+What we're going to do is get our OpenAI API key.
+That is utilizing this package that we created that we keep mentioning called DLAIUTIL.
+We're going to get our API key and we're going to get a pointer to the OpenAI client.
+I have a small helper routine that I've defined to help you get back a vector embedding
+from OpenAI.
+This is called get embeddings and what this does is it's basically taking array of text
+and it's going to use the ADA embedding model and return to you vector embeddings for
+the text in the array of articles and it just returns it sort of blindly.
+By the way, you'll notice that we had that batch of 200 that I talked about earlier
+before.
+Feel free to try and play with that number and see what you can get.
+I found that for me personally, it worked great at 200.
+Pine cone recommends that you do something between 100 and 500 but I personally found
+that 200 was the fastest for me but I'd love to hear from all of you out there taking
+the lesson what was fastest for you.
+Now we're all set up.
+We have our data sitting in pine cone.
+We've connected to OpenAI.
+We've prepared OpenAI and we're ready to execute some queries.
+Let's talk about the Berlin Wall for just a moment and we'll ask what is the Berlin Wall?
+We will build an embedding out of that query and then we will run a query against pine
+cone.
+This is how we query a pine cone again.
+It takes a pointer to the embedding that we just got above.
+We're going to return the top three results again.
+Feel free to play with that.
+Change it to 5 or 10 or whatever you want to look at.
+In this case, I only want to see three for demo purposes.
+Then we want the article data itself and that's going to be sitting in the metadata section
+and we want to have that sitting set the choose that we get the metadata back.
+What we'll do is parse the response out.
+We get back an object from pine cone and we're going to extract out from the matches object
+the text inside the metadata.
+That's what this comprehension does.
+What we're going to do is look at it by joining it to the new line character.
+Now we're done with this setup and we're going to query pine cone and see the results
+come back.
+Here we go.
+We've got three articles.
+We asked for three because we set top K to three that have information about the Berlin
+Wall.
+This is a lot of text and it's disconnected because we have three discrete articles but
+it'd be really nice to get that summarized into something that's readable for folks in
+case we want to use it for our homework assignment or preparing a memo for work.
+That's definitely what I would do and that's what we're going to do next.
+We're going to prepare through what's called prompt engineering.
+We're going to build a small prompt out of those articles that we just saw in pine cone
+and it's going to take the following format.
+We're going to say write an article, title, colon, what is the Berlin Wall?
+We're basically instructing the OpenAI to write an article for us based on the Berlin Wall.
+What we're going to do is again get our embedding, using the get embedding helper function
+that we just asked for.
+We'll run this all over again.
+We just did this but that's okay.
+It's fast.
+We're going to run the query and now we're actually going to build our prompt and this
+is going to be fairly sophisticated compared to just asking it a simple question.
+What we're going to do is iterate through the matches object that we just got back from
+pine cone and get back that text and that's what we're going to store in the context
+array and then we're going to have a prompt start in a prompt end and prompt start is going
+to say answer the question based on the context below note that that has a slash in slash
+in at the end.
+That's fairly important and then context and what's going to be inside the context is
+those three articles that we just got back but before we do that we're going to define
+the end and then what we'll do is join the start to our context to our end and our end
+is basically the question right that we have above here and then we want to ask opening
+how to give us back in answer and so what we're going to do is define a a tuple called
+prompt and prompt is going to have prompt start plus some key new line characters and dashes
+that's just helping open AI recognize that we're doing some prompt engineering here and
+then we have prompt end that we just declared above so we have prompt start and so the question
+based on context below we have context which is the results we got back from pine cone
+and then we have the end which is question colon you know was the question we're asking
+in this case it's what's the Berlin wall and then we're asking it for an answer and
+that would be stored in the tuple named prompt and let's take a look at what we have
+all right answer the question based on context below the context which is the summary of each
+of our responses from pine cone and then write an article titled what is the Berlin wall answer all
+right now we're ready to send that to open AI and so what we're going to do is talk to open AI
+in a very typical fashion right we're going to use the completions API we're going to use GPT 3.5
+turbo and we're going to ask for 1500 tokens max and again this is you know all of this is
+things that you can tune and play with yourself feel free to change max tokens or temperature
+and then we're going to do one of my favorite things which is this little toy function
+to print out a dilemma to keep everything clean and then we're going to print out a response from
+open AI all right and there we have it we have a nicely written article about the Berlin
+wall right the Berlin wall known as iron curtain was a physical and ideological barrier okay that's
+not so great but the articles well written and it's using the information that we got back from
+pine cone so in this lesson we looked at data that came back from pine cone we got three discrete
+documents back from it we took that built a a prompt engineered query into open AI and got
+back a nicely summarized response from open AI that's well written and probably usable for your
+homework assignment even in the next lesson we're going to build a basic recommendation system

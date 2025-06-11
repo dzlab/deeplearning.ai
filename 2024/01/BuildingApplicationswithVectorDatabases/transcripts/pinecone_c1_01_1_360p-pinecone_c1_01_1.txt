@@ -1,0 +1,155 @@
+Semantic search is a type of search that focuses on the meaning of the content being searched
+as opposed to lexical search, which looks for literal or pattern matches to strings.
+This is an extremely powerful construct that is underlying most of what we see from text
+oriented to generated the AI applications.
+In this lesson, you will be introduced to the essentials of vector databases and semantic
+search, which will be used throughout the next lessons in this course.
+Let's dive in.
+So we're going to build a very simple semantic search application using Pankham.
+What we're going to do is start here on the left hand side with the user and download
+a core data set and turn it into a series of vector embeddings and store it in Pankham.
+Then we're going to build a simple question and answer response system and we'll ask
+which country has the highest population and this will be a generic enough application
+that you can ask multiple questions against it as well and so you'll see how that works
+in the example that we showed in just a moment.
+So let's start off building the application.
+So what we'll first do is pull in the import warnings so that we don't get warnings
+when we run the application and then pull in the rest of what we need and what we'll rely
+on here.
+So we're going to use sentence transformers.
+There's a small helper utility that we created called deep learning AI eTils that handles
+some Pankham and open the AI key management for us.
+That works great.
+And then we'll use tqdm to see the progress of a lot of this work that we're doing.
+So let's download the core data set and you'll see that we're taking here a subset of
+the data between rows 240,290,000 because it's so large and we want to make it manageable.
+And what we can do now is take a look at the data set and see what we have.
+So you can see here we looked at five rows of the data and we can see there's questions
+or there's identifiers for the questions.
+All looks really great and unusable.
+So let's try to prepare the data to ask questions.
+So what we'll do is get all of our questions.
+So we'll iterate over all of the questions and add it to essentialize to read that has
+all of them in it and we'll use extend here because it has multiple elements in it.
+And then we'll build a list out of it and then join it with the control, the new line
+character so that we can look at it and see where we have.
+This is just a small delimiter here.
+This can be really as long as you like, but this makes it easier to see.
+This is going to put a hyphen across 50 times and then let's look at the data.
+Oh, have a small listing of column there.
+All right, so those are all the questions that we have and then we'll prepare.
+We'll see that we have 100,000 questions prepared.
+So now let's get ready to turn this into embeddings before we send it into pine cone.
+So depending on the device you have at home, you may or may not have CUDA available for
+you.
+And if you do, some of this will go a lot faster for you if not, it's not a big deal because
+the data set's not that large.
+You'll remember we took a subset of it.
+Oops.
+And now we will use sentence transformer to transform this data into embeddings.
+All right, no CUDA, that's okay.
+We'll move forward.
+That is not that large, but we have our model ready to go.
+And so now what we'll do is actually create a sample question and turn that into embedding.
+And then we'll look at the embedding and we'll see hopefully that it's 384 elements
+wide.
+So now that we have an embedding, we have our data, we have our questions, we're going
+to start to use pine cone a bit.
+And so we have a small utility that we prepared for you called the L-A-I-U-Tills and we'll
+instantiate it here.
+And then we'll get our API key for pine cone to use.
+And that's all you'll really need to use to use pine cone.
+Okay.
+Okay.
+So now we're going to connect the pine cone.
+And what you'll see here is the syntax is slightly different now.
+There's what we call a singleton object in in pine cone and it just takes the API key.
+This is because it's connecting to what's called pine cone version three, which is a so-called
+serverless version of pine cone.
+So what we'll do now here is use that utils package that we talked about earlier, the
+deep learning AI tools and create an index name out of that.
+And we'll get our index name and then we will start to connect to pine cone.
+But before we do that, we're going to do a little bit of house cleaning and delete
+old indexes in case you're doing lessons out of order.
+And so what the so-do is look for the index name that we just declared and see if it
+already exists in the pine cone index will actually just delete it.
+And then we will create our index and let's just keep it clean here.
+This is saying we're going to use I happen to know the answer to this dimension parameter
+is 384 when we saw that earlier.
+We're going to use cosine distance as the metrics to find similarity.
+And then there's a new object in pine cone called the serverless spec.
+And the serverless spec simply just specifies what public cloud that your index runs on.
+In this case, it's AWS and us west too.
+And now we will finally get a pointer to our pine cone index.
+So say index equals pine cone index and we used, we'll use the index name that we created
+just a moment ago.
+And if we say index, okay, great.
+If I say print index, we should get back a pine cone index object and it's going to
+take a little bit to run.
+All right, there's our index object.
+Finally, after we've created our pine cone index, we can upload some data.
+So we will upload data using that size of 200 and a maximum of 10K factors.
+And so now we will get a subset.
+We said we're just going to use 10K, right?
+And then what we're going to do is iterate through our questions, okay?
+Find the end of the batch that we're looking at.
+Generate IDs for each vector.
+Each vector inside a pine cone needs a unique identifier.
+In this case, we'll just use the index number.
+We'll store inside the metadata feature of a pine cone, the actual text from the question
+next to the vector embedding.
+And then use the model that we created above to generate the vector embedding and store
+it all together.
+So think of it as a tuple of an ID vector embedding in the metadata that goes with it.
+And we'll actually zip up that tuple using zip and then absurd it into pine cone.
+And so if we run this, you'll see TQDM kick in and this will upload all of our embeddings
+into pine cone.
+This will take a minute to upload.
+There's a lot of data here that we're uploading as well as the model has to run.
+So there's some encoding for the model that has to happen.
+There's a round chip that has to happen to pine cone.
+So we'll just wait here for a minute for that to happen.
+All right, so that finished.
+And let's check to see what we've stored.
+So there's a function called describing the X stats.
+And we have 10,000 vectors just as we match is what we have here above inside a vector
+element.
+So that worked great.
+So now we can finally get to the to the point where we can ask questions.
+And so I've defined something very small that we'll use here that executes queries for
+us called run query.
+And all this does is takes the text version of the question that we want to ask.
+That's query builds a vector embedding out of it that we'll need.
+And then runs the query against pine cone.
+So the question is becoming embedding.
+We pass that embedding into pine cone.
+We ask for the top K. In this case, we're asking for 10.
+You can feel free to change that to any number you like.
+You can get more results back.
+And then we ask for the metadata, which actually had the question in it, right?
+It's useless for us to just look at the vector embedding.
+We actually want to see the text as well.
+And so that's what's inside of the metadata.
+And we want to say include values equals false because what that does is it makes it so
+that we don't get the embedding back because there's nothing to do with them.
+They're just being used to find similarity.
+And then what we'll do is iterate through the results and then print them out.
+OK, so now let's actually run a query.
+So which city has the highest population in the world?
+All right, we're great.
+So we got back a bunch of similar questions with the most beautiful city in the world,
+which country has the fastest growing population.
+All of that is relevant and works great.
+We can come up with other sort of silly examples to see that our system works well
+and it's extensible.
+How do I make a chocolate cake?
+Just sort of a random question that came up with an image is called running query again.
+All right, how do I make a delicious cake?
+How do you make a 10 inch cake?
+These are all relevant questions as well.
+So that's it for this lesson.
+We built a semantic search system top the bottom using Panko and we embedded the titles
+from the questions from Kora.
+And we built something that will be extensible and that you can use over and over again.
+In the next lesson, we will build a rag system or a retrieval augmented generation
+using Panko and OpenAI.

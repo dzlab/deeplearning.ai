@@ -1,0 +1,197 @@
+In this lesson, you will have fun with the age-old question of to which parent the child
+looks the most similar.
+To do this, you'll answer the question by using vector embeddings.
+You'll use a freely available image dataset, in particular one of the British Royal family
+in your science to determine if Prince William looks more like King Charles or Princess Diana.
+It's simple and extensible enough for you to try on your own family pictures.
+Let's have some fun.
+We're going to build a facial similarity search system to compute which parent looks
+most like their child.
+So we'll take a father, we'll take a mother, and we'll take one child and see whether
+the child looks more like their father or more like their mother.
+The person that looks the closest will be based upon the highest average score between
+each parent and child.
+We're going to use the deep-face open-source library with the face net model inside of
+it.
+That's 128 dimensions wide, and the dataset that we're going to use came from the families
+in the wild dataset, which I'll have a link to in the lesson here.
+So the way that it's going to work is the user is going to run images of King Charles,
+Princess Diana, and Prince William through the deep-face model that we're going to use,
+and we're going to store those vector embeddings in bank home.
+The way that we're going to calculate similarity is we're going to run images of King Charles
+and Princess Diana and Prince William through the deep-face model that we're going to use
+and store those values in bank home.
+Then we'll calculate similarity scores for the mother and the child and the father
+and the child and see based on an average who looks more like each other.
+Okay, let's get started.
+So to begin with, we'll do our standard of importing our warnings to stop the warnings
+from showing up, as well as a slightly longer list of imports into the notebook.
+And then we will get our pine cone API key.
+Now I've prepared a dataset for you ahead of time, and as usual, I will not make you sit
+there and watch me download the data, but similar parameters to WGET make it quiet, show
+the progress.
+I'll put the file name as family underscore photos.zip and pull it off of the location that
+I've specified here, and you run that, and then we will unzip the photos as well.
+Okay, perfect.
+I'm sure that you run the query like this, it'd be uncommented, right?
+But for this lesson, we'll keep it common to doubt so that I don't accidentally run
+that for you.
+The data has been downloaded for you in your notebook.
+This is how I ran it when I was at home before we prepared it, but you already have it
+local on your disk.
+In the family photos, zip file has a structure of family as a top-level directory with
+sub-directories of dad, mom, and child each.
+So let's actually look at some of the pictures.
+I've created a small helper function to help you see the photos, called show underscore
+image.
+And we're going to resize the photos slightly here and actually show the images locally.
+So we're going to look at one random photo I thought that was particularly interesting.
+Family slash dad slash p060 to 60 underscore face 5.jpg and see what we get.
+So that's an image of King Charles.
+Let's do the same thing for Princess Diana, right?
+And the same thing for Prince William, all right.
+So those are the folks that we're going to run the queries for.
+And now we're going to set up pine cone.
+So same as before, we're going to create our index name using the deep learning AI Utilities
+package, get a pointer to our pine cone instance and run that.
+And now we're going to create our vector embeddings inside of pine cone.
+I'm going to go ahead and paste this in for you since it's a bit of code, but I'll walk
+you through it.
+So we're going to actually store a file called vectors dot back and we're going to use
+that and keep it around because we're going to iterate through the data multiple times.
+And we're going to suppress warnings in case, you know, the file doesn't exist and we're
+going to remove the file just to keep things clean.
+So what we're going to do is open up the file.
+We're going to glob all of the images of each of the people separately.
+And then we're going to create embeddings out of each person's face and write it to
+disk.
+And then with that, we're going to write it to disk inside of that vectors dot veck file
+is person colon the image name and then the embedding value itself.
+And then we'll go ahead and call generate vectors and store that.
+All right, that happened pretty quickly, thankfully.
+And now let's actually look at that file and see what it looks like.
+So we'll just use head to look at the data.
+You can see it has the file format that we talked about earlier, the person's name,
+in this case, it's the mom, one of the images, P11, et cetera, it's sort of dot jpeg.
+And then the vector embedding for that specific image, okay, so we'll scroll down since we
+have five lines of that file, okay.
+And now we're ready to calculate some scores and upload data into Pankone.
+Before we upload the data into Pankone, we're going to produce a tsn scatter plot based
+on PCA reduction that's going to give us a really pretty scatter plot of the data so
+we can visualize it.
+Principle component analysis, or PCA, reduces the dimensionality of data, in this case embeddings,
+and is often used to reduce the dimensionality of large data sets by transforming a large
+set of variables into a smaller one that still contains most of the information in the
+large set.
+A tsn plot, where t distributes stochastic neighbor embedding plot, there's a type of data
+visualization used primarily to represent high-dimensional data in a two or three-dimensional
+space.
+This technique is particularly useful for understanding complex data sets by revealing
+patterns, clusters, and relationships between data points that might not be apparent in
+higher dimensions.
+PCA is often used as a preliminary step to reduce the dimensionality of the data.
+This can be particularly important when working with very high-dimensional data as it helps
+to mitigate the curse of dimensionality before applying tsn.
+It can be computationally expensive and slow, especially with large data sets.
+By using PCA to reduce the data to a lower dimensional space first, you get a significant
+speed-up in the tsn process.
+For the tsn algorithm, perplexity is a very important hyperparameter that controls the
+number of neighbors that each point considers during dimensionality reduction, and you'll
+see that actually made it pluggable in the code below.
+Let's go ahead and do that.
+I've created one helper function called Gen-tsn data frame, or generate tsn data frame.
+What that does is it iterates through the vectors that VEC file, looking for a specific
+person, and depending on that to the vectors list.
+What we do is actually do a PCA reduction against a specific person.
+What we're doing here is a PCA reduction for a specific person who's passed into the
+function.
+Then we do a tsn reduction as well against that, and return that as a data frame to the
+next function.
+We're going to call here plot tsn, and I'm going to go ahead and plug that in.
+Not tsn actually calls generate tsn data frame, and you can see it down here below.
+Most of this code is just setting up that plot lib, and what we're going to do here, and
+this is the meat of it, is for each person that we've defined here in this dictionary,
+dad, child, and mom.
+These are just the colors for the legend, don't worry about that too much.
+We're going to call generate tsn data frame, and get back a data frame, and plot it against
+our scatter plot, and then actually show the plot.
+Let's go ahead and do that, so make sure that we ran that, make sure we run that, and
+then let's actually call it.
+There's one last function call of plot tsn, and this is the perplexity.
+In this case, we're going to set it to 27.
+Yeah, so I did exactly what I predicted that it would do.
+If you guys have ever done this before, you have to run it a few times.
+We're going to call plot tsn with a perplexity of 44.
+Definitely I encourage you to play with that at home to see how it changes the scatter
+plot.
+You can see here that the images of each of the dad, the child, and the mom do clusters
+together well.
+I would definitely discourage you from insinuating too much that the child and the mom are close
+together in the scatter plot is that it doesn't actually show much.
+Really what you want to do is look at the fact that the images are clustering within each
+person on their own.
+In other words, each one of these dots represents one image of a dad, and they're all very closely
+clustered together, which is great because each of the pictures of the dad should look
+like the dad, the same thing for the child, and the same thing for the mom.
+Now that we visualize the data, let's set up pine cones so that we can store these values.
+What we're going to do is, same thing that we've always done, delete the index if it's
+already there, and then create the index, again, so we have a clean slate, so we'll go
+ahead and run that.
+Now we're going to store the vectors, and all we're going to do is run through that
+file that we created again one more time.
+Open up the file, iterate through one line at a time, split it into the person in the
+file name, eval, the vector that was actually stored in that file, and then absurd it into
+pine cone.
+Let's go ahead and do that.
+Let's see what we stored inside of pine cone.
+Let's do it a describe index stats.
+We have 241 elements, and that looks correct.
+We got 241 iterations from TQVM before.
+Now let's compute the scores.
+I'm going to paste this in because it's fairly large, but we have a small routine called
+test.
+What this is going to do is return the top K similar images against the child.
+It's going to take in one of the parents.
+This is either going to be mom or dad each time around, and it's going to return the top
+K. What we're going to do is actually calculate the average score from the return value from
+the query from pine cone.
+For each vector inside pine cone, we're going to get a score, and we're going to take
+the average of the top K values that we got back.
+Let's store that value, and then we're going to call it for each relationship that we
+went on look at.
+We're going to call compute scores.
+What we're going to do is call test for the dad in the child, and we're going to call
+test for the mom and the child.
+To do that, we're going to take a random vector or random image, I should say, from the dad
+in the mom, and use that to compute the score, so let's go ahead and do that.
+The dad got an average score of 0.43, closeness to Prince William, who's the child, and the
+mom got an average score of 0.35, closeness to the child that is Prince William.
+What that means is that the dad is closer and similar to Prince William.
+Now what we can do is use the fact that we know the dad is closer and find which image
+is the closest between them.
+What we're going to do is take one base image of the child, which shows this because it's
+probably the most representative of what he looks like in my opinion.
+This is what he looks like as a mature adult.
+What we're going to do is find a way to find which image in our data set looks most
+like him from the dad.
+We're going to take that image, we're going to build an embedding out of it, and we'll
+look at it.
+That's the embedding version of that image above, and then we'll scroll down, and then
+we'll query, we'll take the top three results that match it from the dad.
+Let's look at the response.
+This is a typical JSON blob that comes back from pine cone, you get the ID of the vector,
+you get the metadata, and you get the score.
+Now what we're going to do is look at the image in particular that matches.
+This is the image that is most similar to Prince William.
+In this example, we built a facial similarity system that matches King Charles and Princess
+Diana to their offspring Prince William to figure out which of those two looks most
+like Prince William.
+The data show that's actually King Charles that looks the most like Prince William, and
+we, at the end, we figured out which image in particular looks most like Prince William,
+and we saw that this image here at the end looks most like Prince William, which I would
+agree.
+They very much look similar.
+I encourage you to play with this code with your own family members and see what results
+you get as well.
+In the next lesson, we're going to build an anomaly detection system again using Cisco
+ASC log files in pine cone.

@@ -1,0 +1,186 @@
+In this lesson, you will build upon what you have learned in previous lessons.
+You will work with the sample dataset of news articles and build vector embeddings out
+of the article titles.
+You will then build a recommender system that will search across all article titles and
+retrieve the titles that are most relevant.
+You will then build upon that even further by building a recommender system based on the
+article content rather than the topic.
+All right, let's go.
+So we're going to build a simple recommender system and it's going to look like this.
+And we're going to do it in two parts.
+First we're going to take a series of news articles and build vector embeddings out of them
+and put them into pine cone.
+And then we'll ask it about Obama, a very simple query, and we'll get back some results
+with three different articles.
+And this will be a title-based search.
+In other words, we're going to look for Obama and the title of the article.
+Then we're going to check to see if we can do it slightly differently.
+And so what we'll do is we'll take the data that we uploaded in the pine cone, we'll
+query Obama, but this time we'll do it against the article content itself rather than the
+title.
+So let's get started.
+So what we'll do, we'll start off by cutting off the warnings as we have in other
+lessons and then importing the packages that we depend on.
+Note we have our deep learning AI utils package once again.
+So let's go ahead and run that and run our imports.
+Okay, great.
+And then we will set up pine cone as we have in other lessons.
+So we'll get a pointer to our deep learning AI utils object, get our pine cone and open
+AI API keys and then start to prepare the data.
+So once again, the data is not insignificant in size.
+We have a file called all the news-3.zip that is being downloaded here using WGET.
+And just again, as a cooking show, we won't watch you do that or I won't force you to
+watch me download a series of data and I'll comment that out.
+And then the same thing to unzip the data as well.
+So now let's look at the data.
+So this is rather straightforward.
+We'll say with open and then the name of the file that we want to look at and we want
+to read it.
+Okay.
+And then we will get the first line and as in any CSV file, the first line is the headers
+of the file.
+And so we'll just look at the header.
+Okay.
+So we have date year, month, day, author, it's sort of, we're interested in the title
+who we're interested in article.
+So to make it a little bit more convenient to work with, let's use a data frame.
+So we'll say data frame equals the pandas package and we're going to read the CSV, call
+all the news dashedv.csv.
+And let's just read 99 rows, okay.
+And then look at the data.
+So we'll call head, all right.
+So we have the data.
+You can see the date, the year, the month, the day, et cetera.
+Again, we're interested in title and article.
+So let's prepare a pine cone in the same way that we have previously.
+But to do that, first we will get a pointer to open AI.
+We'll use that later on and we'll prepare our utils package.
+Okay.
+And then get our index name from the utils package.
+And then get a pointer to our pine cone object.
+And then this is boilerplate at this point.
+So we'll just copy and paste this in.
+But again, we check to see if the index name already exists.
+If it does, we delete it and then we create it because we just deleted it.
+And then finally, we'll get a pointer to our pine cone index.
+And then run that.
+You saw this function in an earlier lesson, but we have something called get embeddings.
+And this is just a wrapper function for open AI to return embeddings from a list of
+text.
+In this case, that text array is called articles.
+And so we'll declare that it's called get embeddings.
+And then what we're going to do is prepare and insert the data.
+So we'll iterate through the data frame, we'll read it, number of rows at a time, build
+an embedding out of it, and then upload it into pine cone.
+So this is a lot of code.
+It's about, say, 12 to 15 lines of code.
+So I'll copy and paste it in, but walk you through it.
+So we're going to read the CSV file called all the news dash three.
+This is the one that we've been working with earlier.
+But we're going to read it, chunk size rows at a time to make it manageable.
+OK?
+Let me just make this a little bit easier to read by putting it there.
+And we're going to read at most 20,000 rows.
+OK?
+Then what we're going to do is iterate through the chunks one at a time.
+And remember, the chunk size is 400.
+So what we're going to do is get the titles out of that data frame chunk, right?
+The chunk is just a subset of the larger data frame.
+OK?
+Then we're going to get the embeddings for all of the titles that was declared here.
+And to prepare a pine cone embedding, we're in array of embeddings as we have before.
+And this is just simple Python syntax, right?
+For I and range through the number of titles, create an embedding for each one of them.
+All right?
+Then we're going to increment chunk name because that's what helps us get a unique identifier
+for the embedding.
+And then we're going to upload it 300 at a time.
+So if we get to 300 or XC300 number of vector embeddings inside the prepped array, then
+we're just going to absurd it into pine cone and then to the or clear out that prepped list
+and then update the progress bar for TQDM, which we declared up here.
+So let's go ahead and run that.
+This is going to take around three minutes on our machine, as you can see here, but we'll
+speed this up in post for you so that you don't have to sit here for three minutes and
+watch it.
+OK?
+So that has completed.
+We absurded 20,000 vector embeddings in the pine cone and now we will look at what we
+uploaded.
+So let's say index dot describe index stats.
+And yes, we had 20,000.
+So that's perfect.
+So let's declare our function again that gets embeddings from open AI.
+We've seen that function before.
+And let's actually get some recommendations.
+So I will go ahead and paste in this helper function that we've created here called
+get recommendations.
+And what it does is takes a pointer to pine cone, what you want to search for, the number
+of elements that you want to return inside of top K in this case will default to 10,
+gets an embedding out of the search term that was passed in from that helper function
+declared above, executes and returns the results from a pine cone query.
+And what we'll do here is the core data about Obama.
+OK?
+So we declared that function.
+And so let's say recommendation equals get recommendations are pine cone index and something
+about Obama and for each result in the recommendations, which is returned inside of the matches element.
+We'll say print the score, which is the similarity score coming back from from pine cone.
+And the metadata that we stored inside of pine cone next to that embedding.
+OK?
+All right, so we've got back a bunch of information based on the titles of the articles about
+Obama.
+Obama has been a much more effective communicator than he gives himself credit for.
+That sounds pretty interesting.
+You know, parting message is warning for Donald Trump.
+That sounds like something you want to read as well.
+And so what we're going to do now is see if we can do it differently.
+So you saw, we just looked at, we searched for titles as the vector embedding.
+Now we're going to look for elements that are vector embeddings where they're representing
+the actual article itself.
+And so what we'll do before that is delete our index first.
+So you saw this piece of code.
+You're familiar with it at this point, right?
+If the index is there, we're going to delete it, otherwise create it, nothing different
+there.
+And so what we're going to do is somewhat involved, and I'm going to walk you through it.
+So let's first declare a function called embed that takes an array of embeddings, a title,
+an array that's going to store results into, and then a counter called embed number.
+And I'll walk you through how this works in just a moment.
+But before I do that, let me paste in the code that actually uses it.
+So what we're going to do here, I'll jump down here to the bottom, we're going to iterate
+through all of the articles list from our data frame, let's declare here, then we'll
+grab an article and we'll grab the title that goes with the article.
+If the article is not none or null, what we're going to do is use the recursive character
+text splitter from chain, and we're going to use that to effectively chunk up the article
+of interest into 400 characters at a time, and an overlap of 20.
+And then what we're going to do is call this embed function that we declared up here.
+So let's store that.
+So as we split it up into smaller chunks, we're going to get the embeddings for each one
+of those chunks by calling get embeddings, which is declared above, and then we're going
+to call embed.
+OK, and so what embed does is it walks through this array and stores the vector embedding
+for each one of the chunks into the prep element.
+And if it hits, and you're used to this pattern at this point, if it hits 300 or more elements
+inside of the peptor array, then we're going to go ahead and upstart that data into
+pine cone and then clear it out so we can do it all over again.
+OK, so we ran this, I believe, and let's go ahead and run this code.
+So this is going to run and take quite a bit of time, it's going to take around five
+minutes or so, and we will fast forward that for you, so you don't have to watch upload,
+and we'll be back in just a moment.
+All right, so that finished uploading, and now we're going to make sure that after we
+previously cleared out the index that our upload worked.
+So all right, 10,500 vectors were uploaded, that's great.
+So what we'll do is run the same exact code almost that we already ran, except the main
+differences that we're going to keep the small dictionary called scene, and the reason
+we want that we're going to do that is because if you recall, we actually split up the
+article in the chunk-seizing length chain, and what we want to do here is keep track of
+what we've already seen so that we don't get the same article being returned twice.
+So we're going to say, if title, not in scene, then we will actually print out the score
+of the search as well as what we got back from our search, and then we'll say, like,
+hey, we've already seen this article.
+It's very simple.
+There's a bit of dot in there to keep track.
+And what we get back is, all right, and we go back to different set of articles.
+This was based on the actual content inside the article, not the title of the article this
+time, and you'll actually see the results are different this time, which is great.
+All right, that's it for this lesson.
+In the next lesson, we're going to build out something called hybrid search.

@@ -1,0 +1,7 @@
+In this course, you learned about the essentials of building applications using vector databases.
+You built simple search and recommendation systems, retrieval augmented generation, or RAG,
+explored hybrid search, looked for facial similarities in the Royal family,
+and finally found anomalous log entries in Cisco ASA log files.
+We only scratched the surface of what's possible with vector databases,
+and I encourage you to explore far beyond the material we covered today.
+I'm looking forward to seeing what you've built on your own.

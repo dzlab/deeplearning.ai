@@ -1,0 +1,196 @@
+This lesson is all about hybrid search.
+You will leverage a feature in pine cone that allows indexed entries to have both dense
+and sparse embeddings at the same time.
+Of course, this means we can also search across sparse and dense at the same time as
+well.
+To do this, we will leverage BM25 and Clip to generate embeddings from fashion products
+to search across both text and image product descriptions at the same time.
+Let's get coding.
+We're going to build a hybrid search system using pine cone.
+So, pine cone supports vectors with sparse and dense values, which allows you to perform
+hybrid search.
+In this lesson, we're going to teach you how to use hybrid search, which is the ability
+to combine vector semantic search with traditional keyword text search against different modalities
+for the same entity, and this example will show you exactly what that means.
+So we have our user here on the left-hand side, and we're going to take a data from a fashion
+product database.
+And we're going to encode it into two different types of vectors.
+The vectors that we've been using previously are what's called dense vectors, and to do
+that, we'll use something called Clip, and we'll get into what that is later on.
+But this time, we're going to generate what's called sparse vectors, and to create that,
+we'll use BM25, which is a common encoding technique in information retrieval, but we'll
+talk about what that is later.
+The key point here is that for any given row in the index of pine cone, you can store dense
+and sparse vectors at the same time with the metadata that goes with it into one row.
+Then what we're going to do is query for dark blue French connection genes, and we'll get
+back a data set from pine cone, which we'll have some genes, obviously, and then we'll
+tune what's called the alpha parameter inside of that query to change, where we weigh the
+results from the BM25 encoding, or the Clip encoding more, or less, and we'll see how
+the results change.
+So let's get started.
+Let's get going.
+We will go ahead and import in our warnings, cut off the mechanism here, so import warnings
+and filter warnings.
+And then we will pull in the packages that we've been depending on previously, nothing really
+different here except for the BM25 encoder from pine cone underscore text dot sparse.
+Okay?
+So we'll go ahead and run that.
+Then we're going to continue doing what we've been doing previously.
+We'll use the deep learning AI utils package to get our pine cone API key.
+And then we're going to do a little bit of setup.
+So we've seen this as well.
+If you have kudo on your machine, that's great.
+If not, no big deal.
+We'll just use your CPU.
+And then we'll get a pointer again to our package.
+We've already done it.
+But why not do it one more time?
+And this time create our pine cone index, or at least get the name of the index here.
+And then what we'll do is create an instance of a pine cone object.
+And then do what we've done historically, but with a little bit of a of a change this
+time.
+So if the index name is in the list of indexes that pine cone has, then we'll delete it
+just to keep things clean, but this time what we're going to do differently is change
+the metric that's used to calculate similarity inside of pine cone.
+We're going to have it be dot product instead of cosine, like it has been previously.
+And then we're going to get a pointer to our pine cone object, and we'll go ahead and
+run that.
+Everything's great.
+We have a CPU here because we're inside of Jupiter on a Mac, no GPU for us to use here.
+So let's set up our data.
+First we're going to set up our fashion data set from hugging face.
+And that comes from here, Ashrock, has fashion product images small.
+And we're going to use the training split, okay.
+And then I'll put what we have, okay, all right, there's our data set has ID, gender,
+master category.
+Again, we've already downloaded it for you.
+So that's why it came back so quickly.
+So let's look at the data.
+We're going to go ahead and look at some of the images inside of the data set.
+So images equals fashion image, and then we will do a little bit of column removal just
+to keep things simple.
+And then why not look at one of the pieces of data in the data set.
+All right, so that is the 900th element in that data set.
+And now we're going to convert into pandas data format just a bit, and we'll get to
+the metadata, and data dot to pandas.
+And then look at that data using head.
+All right, so you have ID, you have gender, category, subcategory, article type, pretty
+extensive fashion data set, this is going to be fascinating to work with.
+So now what we're going to do is create our sparse vectors.
+So for creating and training sparse vectors, we're going to use the BM25 function from
+the Pankone text library.
+BM25 is a popular technique for retrieving text.
+It uses term frequencies to determine the relative importance of the term to the query.
+It's simple but effective, and only requires knowing the number of documents in the data
+corpus and the frequency of terms across documents.
+We're going to show you how to use BM25 with Pankone sparse dense vectors for use in hybrid
+search.
+Goop on the other hand, is a neural network devised and created by OpenAI built on millions
+of images and respective descriptions that can return the best caption for an image,
+right?
+So given an image, we're going to get back a caption.
+So let's get started with that.
+So we're going to create a BM25 encoder, and we're going to fit our data to the metadata
+that we just looked at above, okay?
+And then we'll look at the product display name.
+Turtle check, min, navy, blue shirt, all right?
+That's the product display name, it sounds.
+And now what we're going to do is do two different things.
+Just encode queries of a product display name, and look at what we get back, all right?
+So we've encoded queries, we've encoded documents, and now we're ready to get going, because
+we've completed our work with BM25, and we're going to cut back over to dense vectors next.
+So we're going to come back to using sentence transformer as we have in previous lessons,
+sentence transformer.
+Okay, I'll put what the model looks like, and then do some dense vector encoding.
+So see what we get here, all right?
+So 512 dimensions in the dense vector, which is exactly what we wanted to see.
+So now let's go back to our fashion data set, okay, we're going to see how many elements
+that we have.
+And so this is going to be the first time inside a pine cone that you see us uploading
+sparse and dense vectors at the same time.
+The way that you do that's actually not too different from how you upload normal vectors,
+it's just that you're going to add sparse and dense at the same time as you can imagine.
+So a bit of code to do that, I'll walk you through a webinar, go ahead and paste that in
+for you so you can see it.
+And so we're going to do it in batches of 200, like we have before, for each one of the
+elements in the batch in the fashion data set in batches of 200, we're going to get pointers
+to the beginning and end of the batch that we're going to use, extract the metadata, convert
+the metadata, and then build metadata fields that are ready for upload.
+We're going to take the batches of the images, we're going to encode our sparse vectors
+using the encode documents function, we're going to get our dense vectors using the model
+encode function, convert that back into a list, and then get our unique identifier each
+one of the vectors.
+So if you remember, each pine cone vector embedding is a combination of an ID, the vector
+is that it represents, and the metadata that goes with it.
+So this is the metadata up here, this is the vector embedding's here, and this is the
+unique identifier for the embedding's.
+The only difference here is that we have dense and sparse at the same time, and you're
+going to see that we can upload them down here in the append function below.
+So what we're going to do is zip up all of that data that we just created above, and
+we're going to append it inside of a dictionary object here, and upsurge that append.
+We're going to keep on adding these through as we iterate through the for loop, and then
+do an upsurge into pine cone.
+And then we'll see what we got back after uploading all of that data.
+So let's go ahead and run that.
+All right, so that upsurge into pine cone has completed, and now we're going to get
+into the essence of actually doing hybrid search.
+So let's go down a bit and start to query.
+So we'll say we're going to look for dark blue French connection genes for men, okay?
+But to do that, we're going to create sparse and dense encodings out of that query string,
+and then we're going to run our pine cone query, okay?
+So in the same way that we did upsurge slightly differently, we're going to do queries
+slightly differently by specifying dense and sparse vectors at the same time, and you
+can see that here in these two lines, and we're going to return that most 14 items.
+And we're going to take the result of that query and look at it, and the result of
+that query is going to be the images inside the data set, okay?
+We're going to look at the IDs, right?
+So let's go ahead and run that.
+All right, so we get back basically pointers to images, but we'd like to view that result.
+So we've created a little bit of a helper function so that you can look at these images here.
+We don't want to see the pill images, we actually want to view the image itself proper.
+So let's go ahead and put in this small helper function.
+There's a little bit, neither here nor there in terms of what it does,
+but it basically creates a HTML so that you can view the image and pulls it out of the metadata.
+So let's go ahead and run that.
+And we'll actually just call this display result with the result from our query.
+Oh, there we go, perfect.
+BlueJane's exactly as we had hoped, okay?
+But now let's balance the search a bit, right?
+We talked about this alpha parameter before.
+Let's declare another helper function to get to that, right?
+So it's possible to prioritize our search based on sparse and
+dense vector results and to do that, to do so we scale the vectors.
+And so for this we're going to create a function called hybrid scale.
+So let's go ahead and just paste that in because it's pretty large, right?
+So what this does is take in a parameter called alpha.
+And what that's going to do is control whether we rely on sparse or dense, dense more.
+I encourage you to look at this code when you're offline at home and
+look at it, what you want to do is know that controlling alpha relies on sparse or dense more.
+Let's go ahead and run that, okay?
+And run the query one more time, but with different amount of alpha.
+So what we'll say is that's the question, we're going to put in dense and sparse.
+Then we'll run our query one more time and then view the images.
+Before we're in the code, we're going to set alpha to one and
+we're going to run that code and we get back our images, it's perfect.
+And what we're going to do now is check to see whether we got back more men's genes.
+So what we'll do is go ahead and copy and paste this in and execute that query.
+And yep, we got exactly back what we had hoped.
+Okay, so let's actually execute the hybrid scale function here and look at the results that we got.
+Now remember our alpha parameters, it's actually a continuous variable on the range of zero to one.
+And I challenge you or encourage you actually to play with what different results you get from changing it.
+It's, you know, you could change it from zero point two, you can make it zero point five.
+It's really up to you.
+But for illustrative purposes, we're going to make it zero and one just to make the example fairly obvious.
+So let's go ahead and run this and make it more sparse this time.
+So we'll run that.
+You know, seeing our results, we got back women's genes, which is perhaps not exactly what we want.
+We're looking for men's genes up here.
+And let's confirm that by looking at the titles, yeah, we got back women's genes.
+And just again, for illustrative purposes, let's set the alpha parameter way on the other end of scale towards more dense and
+make it one and look at how that changes it.
+Yeah, we got back all men's genes, which is a little bit better.
+And just to confirm, yep, it's men's genes indeed.
+So that's perfect.
+So that's hybrid search, the ability to merge sparse and dense vectors into the same row inside of pine cone.
+And you saw how we did it with fashion data.
+In the next lesson, we're going to run through facial similarity search.

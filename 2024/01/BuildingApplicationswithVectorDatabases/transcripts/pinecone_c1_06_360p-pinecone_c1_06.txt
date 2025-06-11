@@ -1,0 +1,117 @@
+In this lesson, you will build another fun system.
+This time, you will build a small machine learning model to detect anomalous log entries in Cisco ASA log files.
+You will train the model using supervised learning against the small data set we prepared in order to make the lesson more accessible and keep training times down.
+You will then use the model and feed it a sample input data set to find anomalous log entries.
+Let's code and innovate.
+We're going to build an anomaly detection system using Cisco ASA log files.
+The way that's going to work is I've prepared a very small training set called training.text.
+It's a label data so we can do a little bit of supervised learning and create a very small model that can detect anomalies against log files.
+Then we're going to use a sample data set called sample.log that I've also prepared that has one small anomaly inside of it.
+We're going to try to see if we can find the anomaly.
+We're going to run the sample.log file data through our model and store the embeddings as the output inside a pine cone and use that to find the anomaly.
+Let's get started.
+We'll start by importing our warnings as we always do.
+Then our package dependencies.
+Then we're going to get our pine cone API key using the deep learning AI tools package here.
+Then we're going to create our index.
+Same code as always, we get a pointer to the pine cone instance.
+Then we'll delete the index and then we'll create the index as well and then get a pointer to it at the end.
+That's going to go ahead and run.
+We've already downloaded the data for you in the lesson.
+If you happen to be running this offline, you'll need to run this by uncommenting out this line.
+That pulls down this file called training.tar.zip.
+We've already done it ahead of time.
+We also want to untar the data.
+Again, this has already been done ahead of time.
+Let's look at the data and see what's inside the sample log file.
+We're going to look at head minus five.
+We can see the first five lines.
+This is an ASA log file format.
+We have the date, the time, log, sort of identifier, and then the actual log message.
+What I've done is gone ahead and prepared a data set that has been labeled for you based on that log file above.
+There's a slight difference.
+The format of this file is essentially a sample log file and then pat or carrot, another log file,
+and then the label similarity between the two at the end also diluted by carrot.
+We are going to only look at the top five here.
+There are some that are labeled differently at the very bottom of the file.
+I encourage you to look at the bottom of the file.
+What this is going to say is that log part here, highlighted here by my mouse,
+is similar by a score of one and so on and so forth.
+This is similar by a score of 0.9 on a continuous variable range of 0.1.
+Now we're going to create our very, very small model based on sentence transformers.
+I've gone ahead and pasted this in because it's a lot of code,
+but we're going to create a very simple model.
+We're going to use the word embedding model, first here, based on birth, based on case,
+which is sort of the base case model.
+Then we're going to have a small pooling layer and then a very small dense layer to get it down to 256 dimensions inside of our embedding.
+Then we're going to create our model and then we're going to output which device we have.
+Again, I encourage you at home, if you happen to be lucky enough to have a coded device, you should try it.
+It's a little bit faster, but we're going to be fine on the CPU here.
+We have our model object and we've seen that we're on the CPU.
+We're going to prepare to train our model.
+Here we have an array called train examples that's going to have the data that's going to get stored.
+We're going to open up the text file and read the lines.
+And then for each one of the lines, we're going to strip off the white space characters and then split it.
+If you recall, I said it's separated by a carrot or a hat.
+And then we're going to append these samples.
+We call it A and B. We had log one.
+We had logged two into the similarity score, which I'm calling here label.
+We're going to store that inside of the input example object.
+We're going to pass it the label because this is supervised learning.
+We'll do 100 warm-up steps.
+We'll prepare our data loader and then we'll set up our loss function.
+Okay, so let's go ahead and run that.
+And now we're going to actually train the model.
+So we're going to call model.fit.
+That's going to do the actual training.
+And then we're going to prepare our sample data at the same time.
+So it's really two parts, but I've clustered it into one cell.
+So there's the model training here, model.fit.
+And then there's preparing the sample data that we're going to use to pass through the model later.
+So this is going to train and this will run for a little bit.
+So this is going to run for a couple minutes and we're done.
+So our model is trained.
+And let's generate the embeddings from our model.
+So we remember we had that samples, the survey that we created earlier.
+We're going to go ahead and store that in embed or EMB.
+And now we're ready to test our output.
+Let's first store our data in Pankoam.
+You've seen this pattern before.
+We create an area called prepped.
+We iterate through all of our embedded data that's stored inside of samples.
+We create a vector embedding here.
+And we store it inside of prepped.
+And we're going to absurd it into the Pankoam.
+So let's go ahead and insert in the Pankoam and that was quite fast.
+So now what we're going to do is take a known good log line.
+So we're going to say good log line equals sample 0.
+I happen to know that it's at the top.
+And I can say print good log line.
+That's a good log line.
+I know that that's not a problem.
+So now let's take that good log line and query it inside of Pankoam.
+And we're going to get the top 100.
+And that's going to come back and be stored and queried.
+And we're going to get a pointer to the matched values inside of Pankoam and store that in results.
+Now what we're going to do is look at the results.
+And we're just going to have a small routine here to print that out.
+So iterate through, look at the top 10.
+And these are the top 10 matches for this line here.
+Of course, this one matches and has a score of 1 because it's the same line.
+And these ones look very similar as you can see.
+So that's the top 10.
+Now what we're going to do is take the last element in there.
+And print that one out and see how that compares.
+So last element in that one is very different.
+And that you can see that it doesn't at all look like the other lines above.
+This one's called sick fault detected in the matrix in the similarity scores 0.32.
+So above, we query the top 100 and there's fewer than 100 here.
+So we're going to get less than 100 results.
+So what we're going to do is actually look at the last result, which should be the worst performing score.
+And expect that that's our anomaly.
+And that's exactly what we're going to get from this line here.
+We're going to see that the worst performing score is 0.32.
+And the log line looks sort of like a Cisco ASA log file except for this message that says sick fault detected in the matrix.
+And so this is our anomaly, the worst performing score that came back from Pankoam when we searched for a very canonical looking line stored here.
+So that's a very simple way to build an anomaly detection system using Pankoam and the Cisco ASA log file data.
+I encourage you to try it with other types of data using sense and transformers as well and see if you can find anomalies in data yourself.

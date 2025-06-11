@@ -31,7 +31,6 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 <summary>Courses from 2024</summary>
 
 ## 2024
-- [Building Applications with Vector Databases](./2024/BuildingApplicationswithVectorDatabases)
 
 - [Knowledge Graphs for RAG](./2024/KnowledgeGraphsforRAG)
 - [Efficiently Serving LLMs](./2024/EfficientlyServingLLMs)
@@ -41,9 +40,10 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Quantization Fundamentals with Hugging Face](./2024/QuantizationFundamentalswithHuggingFace)
 
 ### 01
-- [LLMOps](./01/2024/LLMOps)
-- [Advanced Retrieval for AI with Chroma](./01/2024/AdvancedRetrievalforAIwithChroma)
-- [Automated Testing for LLMOps](./01/2024/AutomatedTestingforLLMOps)
+- [LLMOps](./2024/01/LLMOps)
+- [Advanced Retrieval for AI with Chroma](./2024/01/AdvancedRetrievalforAIwithChroma)
+- [Automated Testing for LLMOps](./2024/01/AutomatedTestingforLLMOps)
+- [Building Applications with Vector Databases](./2024/01/BuildingApplicationswithVectorDatabases)
 
 ### 02
 - [Prompt Engineering with Llama 2](./2024/02/PromptEngineeringwithLlama2)
