@@ -1,0 +1,18 @@
+Congrats on finishing the course.
+Hopefully, you have picked up some skills on how to build, evaluate, and iterate on your
+RAG application to make a more production ready.
+Regardless of whether you come from a data science machine learning background or
+traditional software background, you'll need to learn some of these or development principles
+so that you can be a rockstar AI engineer, we can build robust Alan software systems.
+Reducing a LLM hallucination is going to be the top priority for every developer
+as the field evolves. We are excited to see the base models get better and larger scale evaluations
+become cheaper and more accessible for everyone to set up and run.
+As a next step, I'd recommend looking more deeply into understanding your data pipeline,
+retrieval strategy, and LLM prompts to help improve RAG performance.
+These two techniques we showed were just the tip of the iceberg. You should look into everything
+from chunk sizes, to retrieval techniques like hybrid search, to Alan-based reasoning like
+chain of thought. The rack triad is an excellent place to start with evaluating your RAG-based
+LLM apps. As a next step, I encourage you to dig deeper into the area of evaluating LLM's
+and the apps that they power. This includes topics such as assessing model confidence,
+calibration, uncertainty, explainability, privacy, fairness, and toxicity in both benign
+and adversarial settings. We look forward to seeing what you'll build next.

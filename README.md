@@ -17,10 +17,10 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [LangChain Chat with Your Data](./2023/LangChainChatwithYourData)
 - [Vector Databases: from Embeddings to Applications](./2023/VectorDatabasesfromEmbeddingstoApplications)
 
-- [Building and Evaluating Advanced RAG](./2023/BuildingandEvaluatingAdvancedRAG)
 
 ### 11
 - [Quality and Safety for LLM Applications](./2023/11/QualityandSafetyforLLMApplications)
+- [Building and Evaluating Advanced RAG](./2023/11/BuildingandEvaluatingAdvancedRAG)
 
 ### 12
 - [Reinforcement Learning from Human Feedback](./2024/ReinforcementLearningFromHumanFeedback)

@@ -1,0 +1,59 @@
+Retrieval Augmented Generation or RAG has become a key method for getting LMS answered questions
+over a user's own data.
+But to actually build and productionize a high quality RAG system, it costs a lot to have
+effective retrieval techniques to give the LMS highly relevant context to generate this
+answer, and also to have an effective evaluation framework to help you efficiently iterate and
+improve your RAG system both through initial development and during post-deportment maintenance.
+This course covers two advanced retrieval methods, sentence window retrieval and auto-emerging
+retrieval that deliver a significantly better context to the LMS than simpler methods.
+It also covers how to evaluate your LMS question answering system with three evaluation metrics,
+contact relevance, drowdenness, and answer relevance.
+I'm excited to introduce Jerry Liu, co-founder and CEO of Larmatex, and Anupang Data, co-founder
+and chief scientist of Truera.
+For a long time, I've enjoyed following Jerry and Larmate index on social media and getting
+tips on evolving RAG practices, so look forward to him teaching this body of knowledge
+more systematically here.
+Add Anupang has been a professor at CMU and has done research for over a decade on trustworthy
+AI and how to monitor evaluates and optimize AIF effectiveness.
+Thanks Andrew, it's great to be here.
+Great to be with you Andrew.
+Sentence window retrieval gives an LLN better context by retrieving not just the most relevant
+sentence, but the window of sentences that occur before and after it in the document.
+Auto-emerging retrieval organizes the document into a tree-like structure where each parent
+notes text is divided among its child notes.
+When none of the child notes are identified as relevant to a user's question, then the
+entire text of the parent note is provided as context for the outline.
+I know this sounds like a lot of steps, but don't worry, we'll go over it in detail
+on code later, but the main takeaway is that this provides a way to dynamically retrieve
+or coherent chunks of text than simpler methods.
+To evaluate RAG-based LLM apps, the RAG Triad, a triad of metrics for the three main steps
+of a RAG's execution, is quite effective.
+For example, we'll cover in detail how to compute context relevance, which measures how
+relevant the retrieved chunks of text are to the user's question.
+This helps you identify and debug possible issues with how your system is retrieving
+context for the LLM in the QA system.
+But that's only part of the overall QA system.
+We'll also cover additional evaluation metrics such as groundedness and answer relevance
+that let you systematically analyze what parts of your system are or are not yet working
+well, so that you can go in in a targeted way to improve whatever part needs the most
+work.
+If you're familiar with the concept of error analysis and machine learning, this has
+similarities, and I've found that taking this sort of systematic approach helps you be
+much more efficient in building a reliable QA system.
+The goal of this course is to help you build production ready RAG-based LLM apps.
+And important parts of getting production ready is to iterate in a systematic way on
+the system.
+In the later half of this course, you gain hands-on practice iterating using these retrieval
+methods and evaluation methods, and you also see how to use systematic experiment tracking
+to establish a baseline and then quickly improve on that.
+We'll also share some suggestions for tuning these two retrieval methods based on our
+experience assisting partners who are building RAG apps.
+Many people have worked to create this course.
+I'd like to thank on the LLM index side, Logan Makowicz, and on the true eraside, Shaixen,
+Joshua Rainey, and Barbara Lewis.
+The next lesson will give you an overview of what you'll see in the rest of the course.
+You'll try out question answering systems that use sentence window retrieval or auto-merging
+retrieval and compare their performance on the RAG triad.
+Contacts relevance, groundedness, and answer relevance.
+Sounds great.
+Let's get started, and I think you'd be really clean up with this RAG stuff.

@@ -1,0 +1,207 @@
+In this lesson, you'll get a full overview of how to set up both a basic and advanced
+rag pipeline with Lama Index.
+We'll load in an evaluation benchmark and use true lengths to find a set of metrics so
+that we can benchmark advanced rag techniques against the baseline or basic pipeline.
+In the next few lessons, we'll explore each lesson a little bit more in depth.
+Let's first walk through how a basic retrieval augment at generation pipeline works, or rag
+pipeline.
+Incess of three different components, ingestion, retrieval, and synthesis.
+Going through the ingestion phase, we first load in a set of documents.
+For each document, we split it into a set of text shrunks using a text splitter.
+Then for each chunk, we generate an embedding for that chunk, using an embedding model.
+And then, for each chunk within embedding, we offload it to an index, which is a view
+of a storage system such as a MACDAR database.
+Once the data is stored within an index, we then perform retrieval against that index.
+First, we launch a user query against the index, and then we fetch the top came with similar
+chunks to the user query.
+Afterwards, we take these relevant chunks, combine it with the user query, and put it into
+the prompt window of the ALM in the synthesis phase.
+And this allows us to generate a final response.
+This new book will walk you through how to set up a basic and advanced rag pipeline with
+Lama Index.
+We will also use true error to help set up an evaluation benchmark so that we can measure
+improvement against the baseline.
+For this quick start, you will need an OpenAI API team.
+Note that for this lesson, we'll use a set of helper functions to get you SAP and running
+quickly, and we'll do a deep dive into some of these sections in the future lessons.
+Next we'll create a simple ALM application using Lama Index, which internally uses an
+OpenAI ALM.
+In terms of the data source, we'll use the how to build a career in AI PDF written by
+Android.
+Note that you can also upload your own PDF file, if you wish.
+And for this lesson, we encourage you to do so.
+Let's do some basic sanity tracking of what the document consists of, as well as the
+length of the document.
+We see that we have a list of documents.
+There's 41 elements in there.
+Each item of that list is a document object.
+And we'll also show a snippet of the text for a given document.
+Next we'll merge these into a single document, because it helps with overall text blending
+accuracy when using more advanced retrieval methods, such as the sentence window retrieval,
+as well as an on-emerging retrieval.
+The next step here is to index these documents, and we can do this with the vector store index
+within Lama Index.
+Next we define a service context object, which contains both the ALM.
+We're going to use, as well as the embedding model we're going to use.
+The ALM we're going to use is GPT 3.5 Turbo from OpenAI.
+And then the embedding model that we're going to use is the hugging phase BGUD small
+model.
+These few steps show this ingestion process right here.
+We've loaded in documents, and then in one line, vector store index off from documents,
+we're doing the chunking, embedding, and indexing under the headed with the embedding model
+that you specified.
+Next we obtain a query engine from this index that allows us to send user queries that
+do retrieval in synthesis against this data.
+Let's try out our first request.
+And the query is, what are steps to take when finding projects to build your experience?
+Let's find out.
+Store small and gradually increase the scope and complexity of your projects.
+Great, so it's working.
+So now we've set up the basic drag pipeline.
+The next step is to set up some evaluations against this pipeline to understand how well
+it performs, and this will also provide the basis for defining our advanced retrieval methods
+of a sentence window retriever, as well as a auto merging retriever.
+In this section, we use true lines to initialize feedback functions.
+We initialize a helper function, get feedbacks to return a list of feedback functions to
+evaluate our app.
+Here we've created a rag evaluation triad, which consists of pairwise comparisons between
+the query, response, and context.
+And so this really creates three different evaluation models.
+Answer relevance, context relevance, and groundedness.
+Answer relevance is the response relevant to the query.
+Context relevance is the retrieved context relevant to the query.
+And groundedness is the response supported by the context.
+We'll walk through how to set this up yourself in the next few notebooks.
+The first thing we need to do is to create a set of questions on which to test our application.
+Here we've pre-written the first 10, and we encourage you to add to the list.
+And now we have some evaluation questions.
+What are the keys to building a query in AOT?
+How can team work contribute to success in AOT, et cetera?
+The first thing we need to do is to create a set of questions on which to test our application.
+Here we've pre-written the first 10, but we encourage you to also add to this list.
+Here we specify a fun new question.
+What is the right AI job for me?
+We add it to the Eval questions list.
+Now we can initialize the trulence modules to begin our evaluation process.
+We've initialized the trulence module, and now we've reset the database.
+We can now initialize our evaluation modules.
+The trulence are growing as a standard mechanism for evaluating generative AI applications on scale.
+Rather than relying on expensive human evaluation or set benchmarks,
+all of us allow us to evaluate our applications in a way that is custom to the domain in which
+we operate, in dynamic to the changing demands for our application.
+Here we've pre-built a shulence recorder to use for this example.
+In the recorder, we've included the standard triad of evaluations for evaluating rags.
+In this context of relevance, an answer relevance.
+We'll also specify an ID so that we can track this version of our app.
+As we experiment, we can track new versions by simply changing the app ID.
+Now we can run the query engine again with the trulence context.
+So what's happening here is that we're sending each query to our query engine.
+And in the background, the trulence recorder is evaluating each of our queries against these three metrics.
+If you see some morning messages, I don't worry about it.
+Some of it is system-to-end it.
+Here we can see a list of queries as well as our associated responses.
+You can see the input, output, the record ID, tags, and more.
+You can also see the answer relevance, context relevance, and ground-inness for each rub.
+In this dashboard, you can see your evaluation metrics like context relevance, answer relevance, and ground-inness,
+as well as average latency, total cost, and more, and then a UI.
+Here we see that the answer relevance and ground-inness are decently high,
+but context relevance is pretty low.
+Now let's see if we can improve these metrics.
+With more advanced retrieval techniques, like sentence window retrieval,
+as well as on-emergent retrieval.
+The first advanced technique we'll talk about is sentence window retrieval.
+This works by embedding and retrieving single sentences to more granular chunks.
+But after retrieval, the sentences are replaced with a larger window of sentences
+around the original retrieved sentence.
+The intuition is that this allows for the LLAB to have more context for the information retrieved
+in order to better answer queries while still retrieving on more granular pieces of information,
+so ideally improving both retrieval as well as synthesis performance.
+Now let's take a look at how to set it up.
+First, we'll use OpenAI GPT 3.5 Turbo.
+Next, we'll construct our sentence window index over the given document.
+Just a reminder that we have a helper function for constructing the sentence window index,
+and we'll do a deep dive in how this works under the hood in the next few lessons.
+Similar to before, we'll get a query engine from the sentence window index.
+And now that we've set this up, we can try running an example query.
+Here, the question is, how do I get started on a personal project in AI?
+And we get back a response.
+The guest started on a personal project in AI.
+It is first important to identify a scope of the project.
+Great.
+Similarly to before, let's try getting the truelines evaluation context
+and try benchmarking the results.
+So here, we import the true recorder sentence window,
+which is a prebuilt truelines recorder for the sentence window index.
+And now, we'll run the sentence window retriever on top of these evaluation questions,
+and then compare performance on the rag triad of evaluation modules.
+Here, we can see the responses come in as they're being run.
+Some examples of questions or responses, how can teamwork contribute to success in AI?
+Teamwork can contribute to success in AI by allowing individuals leverage the expertise
+and insights of their colleagues.
+What's the importance of networking in AI?
+Now, looking is important in AI because it allows individuals to connect with others
+who have experience and knowledge in the field.
+Great.
+Now that we've run evaluations for two techniques,
+the basic rag pipeline as well as the sentence window retrieval pipeline,
+let's get a leader word of the results and see what's going on.
+Here, we see that general only groundedness is
+8% of points better than the baseline rag pipeline.
+Answer relevance is more or less the same.
+Context relevance is also better for the sentence window prairie engine.
+Latency is more or less the same and the total cost is lower.
+Since the groundedness and context relevance are higher by the total cost is lower,
+we can intuit that the sentence window retriever is actually giving us more relevant
+context and more efficiently as well.
+When we go back into the UI, we can see that we now have a comparison between the
+direct query engine and the baseline as well as the sentence window.
+And we can see the metrics that we just saw in the notebook
+displayed in the UI as well.
+The next advanced retrieval technique we'll talk about is the auto merging retriever.
+Here, we construct a hierarchy of larger parent nodes with smaller child nodes that reference
+the parent node. So for instance, we might have a parent node of chunk size 512 tokens.
+And underneath, there are four child nodes of chunk size 128 tokens that link to this parent node.
+The auto merging retriever works by merging retrieve nodes into larger parent nodes,
+which means that during retrieval, if a parent actually has the majority of its children
+nodes retrieved, then we'll replace the children nodes with the parent node.
+So this allows us to hierarchically merge our tree nodes.
+The combination of all the child nodes is the same text as the parent node.
+Similarly to the sentence window retriever and the next few lessons,
+we'll do a bit more of a deep dive on how it works.
+Here, we'll show you how to set it up with our helper functions.
+Here, we've built the auto merging index.
+I'm using GBT 3.5 turbo for the Allen as well as the BGE model for the embedding model.
+We get the query engine from the auto merging retriever.
+And let's try running an example query.
+How do I build a portfolio of the AI projects?
+In the logs here, you actually see the merging process go on,
+or merging nodes into a parent node to basically retrieve the parent node as opposed to the child node.
+To build a portfolio of AI projects, it is important to start with simple underkinkings
+and gradually progress some more complex ones.
+Great, so we see that it's working.
+Now let's benchmark results with trulence.
+We get a pre-built trulence recorder on top of our auto merging retriever.
+We then run the auto merging retriever with trulence on top of our evaluation questions.
+Here, for each question, we actually see the merging process going on,
+such as merging three nodes into the parent node for the first question.
+If we swole down just a little bit, we see that for some of these other questions,
+we're also performing the merging process.
+Merging three nodes into the parent node, merging one node into the parent node.
+An example, a question response pair is, what is the importance of networking in AI?
+Networking is important in AI because it helps in building a strong,
+professional networking community.
+Now that we've run all three retrieval techniques,
+the basic rag pipeline, as well as the two advanced retrieval methods,
+we can view a comprehensive leaderboard to see how all three techniques stack up.
+We get pretty nice results for the auto merging query engine.
+On top of the evaluation questions, we get 100% in terms of ground in this.
+94% in terms of answer relevance.
+43% in terms of context relevance, which is higher than both the sentence window and the baseline
+rag pipeline. And we get roughly equivalent total costs to a sentence window query engine,
+implying that the retrieval here is more efficient with equivalent latency.
+And at the end, you can view this in the dashboard as well.
+This lesson gives you a comprehensive overview of how to set up a basic and advanced rag pipeline,
+and also how to set up evaluation modules to measure performance.
+In the next lesson, on a problem, we'll do a deep dive into these evaluation modules,
+specifically the rag triad of grab in this, answer relevance, and context relevance.
+And you'll learn a bit more about how to use these modules and what each module needs.

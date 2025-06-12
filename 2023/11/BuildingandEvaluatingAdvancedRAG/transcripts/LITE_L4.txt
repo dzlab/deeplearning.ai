@@ -1,0 +1,239 @@
+In this lesson, we'll do a deep dive into another advanced rag technique, autovergrain.
+An issue with the naive approach is that you're retrieving a bunch of fragmented context
+chunks to put into the LLM context window.
+And the fragmentation is worse, the smaller your chunk size.
+Here, we use an auto-merging heuristic to merge smaller chunks into a bigger parent
+chunk to help ensure more coherent context.
+Let's check out how to set it up.
+In this section, we'll talk about auto-merging retrieval.
+What's interesting with the standard rag pipeline is that you're retrieving a bunch
+of fragmented context chunks to put into the LLM context window.
+And the fragmentation is worse, the smaller your chunk size.
+For instance, you might get back two or more retrieved context chunks and roughly the
+same section, but there's actually no guarantees on the ordering of these chunks.
+This can potentially hamper the LLM's ability to synthesize over this retrieved context
+within its context window.
+So what auto-merging retrieval does is the following.
+First, define a hierarchy of smaller chunks linking the bigger parent chunks, for each parent
+chunk can have some number of children.
+Second, during retrieval, if the set of smaller chunks linking to a parent chunk exceeds
+some percentage threshold, then we merge smaller chunks into the bigger parent chunk.
+So we retrieve the bigger parent chunk instead to help ensure more coherent context.
+Now let's check out how to set this up.
+This notebook will introduce the various components needed to construct an auto-merging retriever
+with LLM index.
+The various components will be covered in detail.
+And similar to the previous section, at the end, Audubon will show you how to experiment
+with parameters and evaluation with Trader.
+Similar to before, we'll load in the OpenAI API key, and we'll load this using a convenience
+helper function in our utils file.
+As with the previous lessons, we'll also use the how to build a career in AI PDF.
+And as before, we also encourage you to try out your own PDF files as well.
+We load in 41 document objects, and we'll merge them into a single large document, which
+makes this more amenable for text blending with our advanced retrieval methods.
+Now, we're ready to set up our auto-merging retriever.
+This will consist of a few different components, and the first step is to define what we call
+a hierarchical node parser.
+In order to use an auto-merging retriever, we need to parse our nodes in a hierarchical fashion.
+This means that nodes are parsed in decreasing sizes and contained relationships to their
+parent node.
+Here we demonstrate how the node parser works with a small example.
+We create a toy parser with small chunk sizes to demonstrate.
+Notice that the chunk sizes we use are 248, 512, and 128.
+You can change the chunk sizes to any sort of decreasing order that you'd like.
+Here we do it by a factor of 4.
+Now let's get the side of nodes from the document.
+What this does is this actually returns all nodes.
+This returns all leaf nodes, intermediate nodes, as well as parent nodes.
+There's going to be a decent amount of overlap of information and content between the leaf
+intermediate and parent nodes.
+If we only want to retrieve the leaf nodes, we can call a function within LOM index called
+GAT leaf nodes, and we can take a look at what that looks like.
+In this example, we call GAT leaf nodes on the original set of nodes, and we take a look
+at the 31st node to look at the text.
+We see that the text chunk is actually fairly small, and this is an example of a leaf node,
+because a leaf node is the smallest chunk size of 128 tokens.
+Here's how you might go about strengthening your math background to figure out what's
+important to know, etc.
+Now that we've shown what a leaf node looks like, we can also explore the relation trips.
+We can print the parent of the above node and observe that it's a larger chunk containing
+the text of the leaf node, but also more.
+More concretely, the parent node contains 512 tokens while having four leaf nodes that
+contain 128 tokens.
+There's four leaf nodes, because the tug sizes are divided by a factor of 40's shine.
+This is an example of what the parent node of the 31st leaf node looks like.
+Now that we've shown you what the node hierarchy looks like, we can now construct our index.
+We'll use the OpenAI, LLN, and specifically GPT 3.5 turbo.
+We'll also define a service context object containing the LLN embedding model and the
+hierarchical node parser.
+As with the previous notebooks, we'll use the BG, Small, and Embedding model.
+The next step is to construct our index.
+The way that index works is that we actually construct a vector index on specifically
+if the leaf nodes.
+All other intermediate and parent nodes are stored in a docStore and are retrieved dynamically
+during retrieval, but what we actually fetch during the initial top-k embedding lookup
+is specifically the leaf nodes, and that's what we embed.
+You see in this code that we define a storage context object, which by default is initialized
+with an in-memory document store, and we call storagecontext.docStore.addDocuments to
+add all nodes to this in-memory docStore.
+However, when we create our vectorStore index, called auto-merging index right here,
+we only pass in the leaf nodes for vector indexing.
+This means that the specifically the leaf nodes are embedded using the embedding model and
+also indexed, but we also pass in the storage context as well as the service context.
+And so the vector index does have knowledge of the underlying docStore that contains
+all the nodes.
+And finally, we persist this index.
+If you've already built this index and you want to load it from storage, you can just
+copy and paste this block a code, which will rebuild the index of it doesn't exist or
+load it from storage.
+The last step now that we've defined the auto-merging index is to set up the retriever
+and run the query engine.
+The auto-merging retriever is what controls immersion logic.
+If a majority of children nodes are retrieved for a given parent, they are swapped out for
+the parent instead.
+In order for this immersion to work well, we set a large top-k for the leaf nodes.
+Remember, the leaf nodes also have a smaller chunk size of 128.
+In order to reduce token usage, we apply a re-ranker after the immersion has taken place.
+For example, we might retrieve the top 12, merge and have a top 10, and then re-rank into
+a top 6.
+The top end for the re-ranker may seem larger, but remember that the base chunk size is
+only 128 tokens, and then the next parent above that is 512 tokens.
+We import a class called auto-merging retriever, and then we define a sentence transformer
+of re-rank module.
+We combine both the auto-merging retriever and the re-rank module into our retriever query
+engine, which handles both retrieval and synthesis.
+Now that we've set this whole thing up and to add, let's actually test what is the
+importance of networking in AI as an example question.
+We get back a response.
+We see that it says networking is important in AI because it allows individuals to build
+a strong professional network and more.
+The next step is to put it all together, and we'll create two high-level functions,
+build auto-merging index, as well as get auto-merging query engine.
+And this basically captures all the steps that we just showed you.
+And the first function, build auto-merging index, will use the hierarchical node parser
+to parse out the hierarchy of child-to-parent nodes, will defy the service context, and
+will create a vector store index from the leaf nodes, but also linking to the document
+store of all the nodes.
+The second function, get auto-merging query engine, leverages our auto-merging retriever,
+which is able to dynamically merge leaf nodes into parent nodes, and also use our re-rank
+module, and then combine it with the overall retriever query engine.
+So we build the index using the build auto-merging index function, using the original source
+document, the lm set to GPT 3.5 turbo, as well as the merging index as a save directory.
+And then for the query engine, we call get auto-merging query engine, based on the index,
+as well as we set a similarity top-k of equal to 6.
+As a next step, on the problem we'll show you how to evaluate the auto-merging retriever,
+and also iterate on parameters using TrierRot.
+We encourage you to try out your own questions as well, and also iterate on the parameters
+of auto-merging retrieval.
+For instance, what happens when you change the trunk sizes, or the top-k, or the top-end
+for the re-ranker?
+Play around with it, and tell us what the results are.
+That was awesome, Jerry.
+Now that you have set up the auto-merging retriever, let's see how we can evaluate it with
+the rag triad, and compare its performance to the basic rag with experiment tracking.
+Let's set up this auto-merging new index.
+You'll notice that it's two layers.
+The lowest layer chunk, the leaf nodes, will have a chunk size of 512, and the next layer
+up in the hierarchy, is a chunk size of 2048, meaning that each parent will have four
+leaf nodes of 512 tokens each.
+The other pieces of setting this up are exactly the same as what Jerry has shown you earlier.
+One reason you may want to experiment with the two layer auto-merging structure is that
+it's simpler.
+Less work is needed to create the index, as well as in the retrieval step, there is less
+work needed, because all the third layer checks go away.
+If it performs comparably well, then ideally we want to work with a simpler structure.
+Now that we have created the index with this two layer auto-merging structure, let's set
+up the auto-merging engine for this setup.
+I'm keeping the top K at the same value as before, which is 12, and the re-ranking step
+will also have the same N equal 6.
+This will let us do a more direct head-to-head comparison between this application setup and
+the three layer auto-merging hierarchy app that Jerry had set up earlier.
+Now let's set up the true recorder with this auto-merging engine, and we will give this
+an app ID of app 0.
+Let's now load some questions for evaluation from the generated questions.text file that
+we have set up earlier.
+Now we can define the running of these evaluation questions.
+For each question in about questions, we are going to set things up so that the true
+recorder object, when invoked, with the runnivels, will record the prompts, responses, and
+the evaluation results, leveraging the query engine.
+Now that our evaluations have completed, let's take a look at the leaderboard.
+We can see that app 0 metrics here, context relevance seems slow, the other two metrics
+are better.
+This is with art, two level hierarchy with 512 as the leaf node chunk size and the parent
+being 2048 tokens, so for leaf nodes per parent node.
+Now we can run the true dashboard and take a look at the evaluation results at the record
+level at the next layer of detail.
+Let's examine the app leaderboard.
+You can see here that after processing 24 records, the context relevance at an aggregate
+level is quite low, although the app is doing better on answer relevance and groundedness.
+I can select the app, let's now look at the individual records of app 0 and see how
+the evaluation scores are for the various records.
+You can scroll to the right here and look at the scores for answer relevance, context relevance
+and groundedness.
+Let's pick one that has low context relevance.
+So here is one, if you click on it, you'll see the more detailed view down below.
+The question is discussed the importance of budgeting for resources and the successful
+execution of AI projects and the right here is the response and if you scroll down further
+you can see a more detailed view for context relevance.
+There were six pieces of retrieve context, each of them has a score to be particularly
+low in their evaluation scores between 0 and 0.2.
+And if you pick any of them and click on it, you can see that the response is not particularly
+relevant to the question that was asked.
+You can also scroll back up and explore some of the other records.
+You can pick ones, for example, that the scores are good, like this one here and explore
+how the application is doing on various questions and where it strings are, where it's failure
+modes are to build some intuition around what's working and what's not.
+Let's now compare the previous app to the auto merging setup that Jerry introduced earlier.
+We will have three layers now in the hierarchy, starting with 128 tokens at the leaf node
+level, 512 one layer up and 2048 at the highest layer.
+So at each layer, each parent has or children.
+Now let's set up the query engine for this app setup, the true recorder, all identical
+steps as the one for the previous app.
+And finally, we are in a position to run the evaluations.
+Now that we have app 1 set up, we can take a quick look here in the leader board.
+You can see that relative to app 0, the number of tokens processed in app 1 for the same
+number of records is about half.
+And the total cost is also about half, and that's because recall this has three layers
+in the hierarchy and the chunk size is 128 tokens instead of the 512, which is the smallest
+leaf node token size for app 0.
+So that results in a cost reduction.
+It is also that context relevance has increased by about 20%.
+And part of the reason that's happening is that the merging is likely happening a lot
+better with this new app setup.
+We can also drill down and look at app 1 in greater detail like before.
+We can look at individual records.
+Let's pick the same one that we looked at earlier with app 0.
+It's the question about the importance of budgeting.
+And now you can see context relevance is doing better.
+Groundedness is also considerably higher.
+And if we pick a sample example, a response here, you'll see that in fact it is talking
+very specifically about budgeting for resources.
+So there is improvement in this particular instance and also at an aggregate level.
+Let me now summarize some of the key takeaways from lesson 4.
+We walked you through an approach to evaluate and iterate with the auto retrieval advanced
+drag technique.
+And in particular, we showed you how to iterate with different hierarchical structures,
+the number of levels, the number of child nodes and chunk sizes.
+And for these different versions, you could evaluate them with the drag triad and track
+experiments to pick the best structure for your use case.
+One thing to notice is that not only are you getting the metrics associated with the
+drag triad as part of the evaluation, but the drill down into the record level can help
+you gain intuition about hyper parameters that work best with certain dark types.
+For example, depending on the nature of the documents, such as employment contracts
+versus invoices, you might find that different chunk sizes and hierarchical structures work
+best.
+Finally, one other thing to note is that auto merging is complementary to sentence window retrieval.
+And one way to think about that is, let's say you have four child nodes of a parent with
+auto merging, you might find that child number one and child number four are very relevant to
+the query that was asked and these then get merged under the auto merging paradigm.
+In contrast, sentence windowing may not result in this kind of merging because they are not
+in a contiguous section of the text.
+That brings us to the end of lesson four.
+We have observed that with advanced rack techniques such as sentence windowing and auto merging
+retrieval augmented with the power of evaluation and experiment tracking and iteration,
+you can significantly improve your drag applications.
+In addition, while the course has focused on these two techniques and the associated drag
+triad for evaluation, there are a number of other evaluations that you can play with in order
+to ensure that your LLM applications are honest, harmless and helpful.
+This slide has a list of some of the ones that are available out of the box in true lens.
+We encourage you to go play with true lens, explore the notebooks and take your learning to the next level.
