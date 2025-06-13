@@ -1,0 +1,141 @@
+In this lesson, you will load your machine learning models using different data types such as
+float 16 or B float 16 and study their impact on the model's performance. Let's get started.
+Welcome to this new lap session. In this lap, you will put into practice things that you have
+learned in the first lap session. Specifically, you will see how to load some ML models in different
+data types such as float 32, float 16 or B float 16. You will also learn how to load popular
+generative AI models in different decisions and study their impact of floating these models in
+health precision on their performance. And you will also learn how to load any model inside your
+workflow with your desired health precision data type out of the box. So at the beginning of our
+lesson, we will try to inspect the data type of a model. So what do we mean exactly by the data
+type of a model itself? So recall, for a ML model, each model's layer contains some weights that
+are going to be used for inference, meaning when you get the model's prediction. And each weight
+is stored usually as a matrix of learnable parameters, which can be represented in different
+precision. So for example, in this dummy model, we have let's say 12 layers and each weight has
+end parameters that each of them are stored in 32-bit precision. Therefore, inspecting the
+model's data type is equivalent to inspecting the data type of a model's weights. So let's get
+started. So we'll first try to inspect the model's data type using a dummy model. So for that,
+we've prepared a dummy architecture. So we'll just import it from the helper methods.
+And then we'll load the model as follows and print it.
+As you can see here, this is a small model that has a token embedding layer, a linear layer,
+a layer norm layer, another linear layer, and a last layer norm layer, and a language model head.
+So this is equivalent of having a very small and dummy language model. So we said we wanted to check
+the data type of the model. Okay, so for that, we'll just use an utility method from PyTorch called
+named parameters that you can call on a module to loop into each module's parameter and its name.
+So we'll just loop into the name modules as follows.
+And simply print the name of the module together with the d-type of the module.
+Print
+and to access to a data type of a parameter, you just have to call param.dtype.
+All right, so let's test the method out right now.
+Perfect. So as you can see, we're able to print the model weights name together with the d-type
+of each weights. And as you can see, all model weights are loaded in Flow32, which is the
+default for PyTorch. So let's see now how we can cast the model into different precision,
+such as Flow16 or B Flow16. So yeah, so in order to cast any PyTorch module into,
+let's say, Flow16 or B Flow16, the API is pretty much straightforward. So let's say your
+target d-type is Flow16. You simply have to call one of these two methods. So either model.2,
+your d-type, or model.half for Flow16, or model.b Flow16 for B Flow16. So let's try that
+away. And let's print also the d-types of each model's parameter using the method we've defined
+before. So we're going to call print param d-type on model FP16. And as you can see, all the
+models weights have been converted successfully to Flow16. All right, great. Let's say now I
+want to use the model and just perform a simple inference on the model. So recall, I'm using a CPU
+instance here. So we're going to see if this is possible to use it out of the box. So
+let's define a dummy input. So here we're using, so a long tensor corresponds to the IDs of the
+tokens that you're going to pass to your transformers model. Because recall the architecture of the
+model, which is a transformers-like model. And it has an embedding layer as the first layer of
+the model. So the embedding layer expects to have a long tensor as input. And the embedding
+layer will output hidden states in floating point precision. So either FP32, if your model is in
+Flow32, or in Flow16, if your model is loaded in Flow16. All right, so we have our input.
+Let's first try to do an inference with the Flow32 model and see that it works.
+Perfect. We can also print the final logits. All right. And then we'll try to perform an inference
+with the FP16 model and see how it fails. So the reason it fails with this error, so ADDMM
+not implemented for half, means that some CPU kernels are not implemented for FP16.
+So one of the disadvantages with PyTorch and FP16 and CPU is that for most of transformer-based
+models, you are not able to use these models out of the box in Flow16. So one way to overcome
+this issue is instead of loading your model in Flow16, you can also load it in B Flow16
+and perform inference. Let's create a new dummy model, cast it in B Flow16 and get the logits of the
+model. So we're going to create a copy of the model using deep copy,
+so that we have the same weights across the BF16 and the FP32 model and we're going to cast
+the model in B Flow16. All right, let's print the parameters as a sanity check.
+Perfect, so your model is now in BF16 and let's get the logits of your model using the same input,
+perfect, and then we can compute the mean difference the errors between those two logits to compare
+if there is any huge gap, any gap between those two computed logits. So we're going to run this cell
+just to have an idea. Perfect. So we can see that there are very small differences that can be
+observed between the full precision model and the BF16 model. But in practice, when you switch from
+FP32 to BF16, this doesn't really lead to a huge performance degradation in practice even for
+large models. So casting the FP32 models into BF16 are most of the time, if not all the time,
+performance cost-free. In the second section of this lesson, let's see how to load some popular
+generative models in different data types and see kind of study their impact on their performance.
+So we're going to load a multi-model model, meaning a model that can take many modalities
+as input. So we're going to load a blip model that can take a text and image and predict some text.
+So we're going to use a model called blip image captioning that can perform image captioning.
+So you pass an image, you can pass an optional text, and the model will try to describe what's
+in the image given the context that you have passed to the model. And if you're interested in
+knowing more about this model and also other models into the hiking physical system,
+you can also have a look at our short course called open source models with hiking face,
+where we show you how to load these models and how to build fun and cool demos around these
+models. Yeah, so let's get started. So we just have to import this class of blip for conditional
+generation from transformers. And as I said, we're going to use this model. So blip image captioning
+base and to load the model, nothing simpler than just calling from pre-trained on the model name.
+So transformers by default loads the model in full precision, so flow 32, which is the default
+for PyTorch. We can confirm that using the method we have designed. So if you print the
+detail of each model's parameter, obviously we have a lot of parameters now because the model
+is larger than our dummy model, but that's how you print each parameter's detail. And as you can
+see, all of them should be in flow 32, which is the expected value for us. Perfect. We can also
+learn more about the so-called the memory footprint of the model, meaning how much in terms of
+memory, so megabytes, gigabytes, does the model takes in memory. So for that, we can just call
+model that get the memory footprint to get the memory footprint of the model.
+And we can print the values in bytes, but also in megabytes.
+Yeah, so the flow 32 model takes approximately 990 megabytes. And let's see how to load the model
+in different precision, such as float 16 or B float 16, as we've seen before. So the canonical way
+in transformers to load models in different precision is to pass the parameter
+torch d-type equal your target d-type directly in front pre-trained. So we're going to do that and
+load our B float 16 model, because float 16 doesn't work on CPU for us.
+All right, so once we have loaded the model, we can directly check the memory footprint of the model.
+And we can also print the relative difference between the two memory footprints and see how much
+did we gain in terms of memory. So yeah, as you can see, the B float 16 model is half of the size
+of the FP32 model. So we just helped the size of the model by just passing torch d-type equal
+torch B float 16. So you may be wondering now, how does this affect the model's predictions or
+the model's generations? Is this reduction for free? So we're going to see that now by just
+getting some qualitative comparison between the two models. So according to the model's
+model card, this should be the way to load the model, load also the model's processor and image
+and get some generation. So we're going to do that and try to get some generations with both models.
+So we're going to load the processor first. And obviously we can use the same processor for
+both models. So there is no difference. And we're going to load an image from the internet
+and display it for you. All right, so it just, you know, simple image on the beach with a dog
+and a woman. And we wrapped the whole generation pipeline in a small gets generation helper method
+for you so that it's easier to get the models generation. So we're just going to call that method
+by passing the processor the image and also the d-type of the model. So we can get the results of
+the full precision model as follows. So let's print models prediction. Perfect. So a woman sitting
+on the beach with her dog. Nice. Yeah, let's just try out with the BF16 model and qualitatively
+compare both results. All right, so we got pretty similar results between the two models. So the only
+difference is that the FP32 model predicted with her dog, whereas the BF16 model predicted with a dog.
+But in both cases, the results seem pretty consistent with the image, pretty accurate.
+The reason it affected the generated token here is that all the errors between, you know,
+the FP32 logits and the BF16 logits gets accumulated across layers and layers. And since the model
+is an autoregressive model, meaning it uses the results of the previous iteration to get the result
+of the new iteration, all these errors gets accumulated until at some point impacting the
+model's prediction. But overall, it doesn't really affect the overall performance of the model
+and you can expect to use out of the box BF16 if you are on CPU or flute 16 if you are using a GPU.
+All right, so before wrapping up the lesson, so I wanted to give a quick heads up on how those
+torch D-type argument works under the hood in short summers and how you can adapt it in your workflow.
+By that, I mean, in the current workflow, there is a small issue. So we need to first load
+the model in flute 32 and then cast a model in let's say flute 16 or BF16. That can be an issue
+in practice, for example, in production because you have to load the bigger model first and then cast
+in flute 16 or BF16. You might want to directly be able to load out of the box the model
+in your desired precision without having to first load it in full precision to save a memory.
+So under the hood in short summers, we call a new TT method in PyTorch called set default D-type
+where you pass the desired D-type. And then that way, when you initialize your model,
+it's better if it gets initialized in your target D-type. So we'll see how to do that. Let's say I want
+initialize my model directly in BF16. So you just have to call the torch.default set default D-type
+torch BF16. And then I can initialize my model and it should be automatically casted
+in BF16. Perfect. And once you have done that, don't forget to reset the default D-type
+in Flo32 so that you may avoid some unexpected behaviors. If let's say you want to keep
+some initializations of other, I don't know, tensors or inputs in Flo32, then you should revert
+back to the default D-type, but this shouldn't affect the D-type of your model that you have already
+loaded. So that's it for this lesson. I invite you to try out these approaches on other models.
+You can also try out to load different models from Hanging Face Hub in different precision.
+You can also try out different modalities. You can let's say try out audio models, vision models,
+and you know, I'll load them in different precision and study a bit their impact and play with them.
+If you find this trick also useful, don't hesitate to try it out in your workflow as well. So in
+this lesson you have learned how to load models in half precision, so either in FB16 or BF16.
+In the next lesson you will learn how to use Hanging Face's Quanto library in order to load
+your models in int8 precision by quantizing them. So yeah, let's move on to the next lesson.

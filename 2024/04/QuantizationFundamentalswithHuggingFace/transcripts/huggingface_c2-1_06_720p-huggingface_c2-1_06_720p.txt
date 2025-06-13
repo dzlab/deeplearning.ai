@@ -1,0 +1,72 @@
+In this lesson, we'll take a look at what you get when you apply state-of-the-art
+quantization to large language models. For example, is it possible for quantization to help you
+with fine-tuning an LLM? Spoiler alert, the answer is yes. Let's see how.
+As seen in the previous lessons, quantization is about compressing model weights in a certain manner.
+Quantization applied to large language models brought a lot of interest in the open source AI
+community as effectively quantizing those models with a minimal performance degradation can
+open up a lot of cool opportunities for anyone. Many groundbreaking papers came out in a
+short period of time and were naming just a few of them here. Starting from summer 2022,
+LLM.int8 proposed a no-performance degradation 8-bit quantization method by decomposing the
+underlying matrix multiplication in two stages. To mitigate emergent features from LLM's at scale,
+the authors proposed to decompose the metamule in two stages, the outlier part in flow 16 and the
+non-outlier part in int8. QLora proposed to make LLM's much more accessible by quantizing them
+in four-bit precision and being able to fine-tune what we call low-rank adapters on top of the model.
+Don't worry, we'll explain that a bit later. Therefore, making fine-tuning LLM's much more
+accessible to anyone. On the other hand, AWQ, GPTQ, and also smooth quant proposed to pre-calibrate
+the model so that the quantized model does not get affected by large activations caused by large
+models. Later on, came out more methods that proved promising results for two-bit precision,
+such as Q-sharp, HQQ, and more recently, HQLM. All these amazing work, which all aim at focusing
+on making LLM smaller and faster, are open-source, meaning that you can directly get your hands
+on the official implementation and try them out by your own. We cited just a few papers,
+but you can easily find many other papers that work on this specific topic. At the same time,
+you may also be wondering, are these methods generalizable for all models? Among these methods,
+some of them require a calibration procedure, meaning you need to first pre-calibrate the model
+by iterating over a data set and by minimizing an error to quantization error to get the best
+quantization parameters. As the original work for these methods are adapted on large language
+models, you might need to tweak these methods on your own projects and use cases. However,
+some other methods do not require this step, meaning they can be used out of the box,
+regardless of the modality, usually by replacing all instances of linear layers with a new
+quantized modules, as we've been seeing in our lessons for the linear quantization.
+Quantization makes also LLMs easier to distribute, since they are smaller. For example,
+a 70 billion parameter model would need 280 gigabyte storage in full precision, whereas this
+can be further reduced to 40 gigabytes if stored in 4-bit precision, leading to a 7x reduction.
+This makes loading these models much more affordable and opens up opportunities of loading
+these LLMs in local computers, using, for example, the GGUF format with lama.c++.
+In the hugging phase ecosystem, you can also find some powerful quantized model distributors,
+such as the block that you can see here. That distributes to the community quantized weights
+that most of the time require some pre-calibration that might be quite costly for anyone to run it,
+such as AWQ or GPTQ. You may be also wondering how all these quantization methods affect the
+model performance with respect to its original version. One way to evaluate this is to check
+the performance of the LLM on different well-known benchmarks, specifically crafted for large
+language models. For that, you could check the open LLM leaderboard from hugging phase,
+and the leaderboard now supports running evaluation on state-of-the-art quantized models,
+such as LLM.int8, Qlora, and GPTQ. So, for the model you are interested in,
+you could check its performance on the leaderboard and check if you are happy with it.
+So, to wrap up, I would like to quickly cover another topic which is fine-tuning LLMs.
+You may be wondering if it's possible to fine-tune a quantized model. Well, there are two cases where
+you might be interested in this scenario. The first case, being where you would like to fine-tune a
+model while being quantized to get the best quantized model possible, and the second case would
+be useful for people who would like to adapt their model for specific use cases and applications,
+such as fine-tuning an LLM on their own data set. The first scenario would be doable through
+quantization our training. In this case, we train the model to be more accurate once we quantize it.
+Note this method is not compatible with all the methods that we shared before, which belong to
+the category of post-training quantization techniques. So, for the second use case, we would leverage
+peft methods or parameter-efficient fine-tuning methods. So, peft methods aim at drastically reducing
+the number of trainable parameters of a model while trying to keep the same performance as full
+fine-tuning. So, we will specifically deep dive into peft plus q-dora, which leverages both
+quantization and peft methods, and you can also check this example on how to train a LM7B model
+on a free-tier Google Collab instance. So, this is an animated diagram that shows you how
+low-rank adapters or lora work. When doing lora, you simply have to attach extra trainable
+parameters, the blue weights that you can see on the left, to a frozen weight that you can see
+on the right. Since the R parameter is usually extremely small compared to input hidden states
+dimension, the final optimizer states end up being extremely small thus making the training
+protocol much more accessible. Q-lora leverages this by quantizing the base weights,
+so the blue weights that you can see on the left, in 4-bit precision and making sure the data type
+of the activation of the quantized weight matches the data type of the lora weights. That way,
+we could perform the sum that you can see here, easily, and we also get the best from both words,
+quantization and parameter-efficient fine-tuning methods, and unlock many cool opportunities,
+such as the ability to fine-tune llms on a free-tier Google Collab instance. So, that's it for
+this lesson. I hope this gave you some good insights on the current stages of state-of-the-art
+quantization with large language models and gave you a good overview of what you can achieve
+with these methods and how you can apply them depending on your use case. So, in the next lesson,
+we will wrap up this course together and review what you have done during this course.

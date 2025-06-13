@@ -1,6 +1,28 @@
 # Quantization Fundamentals with Hugging Face
 
-https://learn.deeplearning.ai/courses/quantization-fundamentals
+![Promo banner for a new short course titled](https://info.deeplearning.ai/hs-fs/hubfs/DeepLearning_Hugging_Face_QF_Banner_2070x1080.png)
+
+Dear learner, 
+
+ 
+
+Today we’re launching a new short course, **[Quantization Fundamentals with Hugging Face](https://learn.deeplearning.ai/courses/quantization-fundamentals)**. 
+
+ 
+
+Generative AI models often exceed the capabilities of consumer-grade hardware and are expensive to run. Compressing models through methods such as quantization makes them more efficient, faster, and accessible, while minimizing performance degradation.
+
+![GIF showing a series of slides with content from the short course](https://info.deeplearning.ai/hs-fs/hubfs/Launch%20email%20GIFs%20(9).gif)
+
+Join this course to:
+
+  -  Learn to quantize any open source model with linear quantization using the Quanto library.
+  -  Get an overview of how linear quantization is implemented. This form of quantization can be applied to compress any model, including LLMs, vision models, etc.
+  -  Apply “downcasting,” another form of quantization, with the Transformers library, which enables you to load models in about half their normal size in the BFloat16 data type.
+
+By the end of this course, you’ll have a foundation in quantization techniques and be able to apply them to compress and optimize your own open source models, allowing them to run on a wide variety of devices, including smartphones, personal computers, and edge devices.
+
+
 
 Learn how to quantize any open source model.
 

@@ -1,0 +1,133 @@
+AI models have been getting bigger and bigger.
+So quantization has been really exciting for the AI community
+because it enables us to shrink models to a small size
+so that anyone can run it with their own computer
+with little to no performance degradation.
+Let's get an overview of why we need quantization
+and also what is quantization.
+Let's get started.
+Nowadays quantization is an exciting topic
+as it enables us to shrink models to a small size
+so that anyone can run it on their own computer
+with no performance degradation.
+So let's check everything together.
+Nowadays deep learning architectures
+tend to become larger and larger.
+Specifically for large language models,
+in just a few years,
+average model sizes grew by another order of magnitude.
+This clearly widens the gap between largest GPU hardwares
+which at the time of speaking,
+are around 80 gigabytes at most and largest models.
+As you can see here from this graph,
+this graph stops in 2022.
+Although it seems to increase until that year.
+So from 2020 to 2023,
+the largest most used state-of-the-art LLMs
+seem to have an average number of parameters around 70 billion.
+This still creates a gap between the largest hardware
+and largest models,
+as a 7B model would need
+approximately 280 gigabytes
+just to make the model fit on the hardware.
+Note also,
+consumer type hardware,
+such as Nvidia T4 GPUs,
+have only 16 gigabytes RAM.
+Therefore, running this state-of-the-art models
+is still a challenge for the community.
+How to run these models efficiently,
+without having the need for accessing memory heavy hardware?
+So the entire challenge now for the community
+is to make these models more accessible
+through model compression.
+So we'll start quickly reviewing
+some of the current state-of-the-art methods
+for model compression,
+such as pruning and knowledge distillation
+before spending more time on quantization.
+So first of all pruning,
+simply consists of removing layers in a model
+that do not have much importance
+on the model's decisions.
+It simply consists of removing some layers
+based on some metrics,
+such as the magnitudes of the weights
+and possibly other metrics as well.
+There is also another method called
+knowledge distillation.
+In this protocol,
+you train a student model,
+which is the target compressed model
+using the output from the teacher model
+in addition to the main loss term.
+The challenge here
+is that you need to make sure you have enough compute
+to fit the original model
+and to get the predictions from the original model
+so that you can send them
+to the teacher model while computing the loss.
+And this can be quite costly
+if you have to distill very large models.
+So before diving into quantization,
+recall that for a neural network,
+you can represent the weights
+and the activations as follows.
+When quantizing a neural network,
+you can either quantize the model weights,
+which can be represented by the matrix W,
+but you can also, sometimes,
+if you want, also quantize the activations of the model,
+which corresponds to the output
+of the computation that you can see on the right.
+Let's now go over quantization.
+Quantization simply consists
+of representing model weights
+in a lower precision.
+Let's start by considering this small matrix
+on the left,
+which stores some parameters of a small model.
+Since the matrix is stored in float32,
+which is the default storing data type for most models,
+it has to allocate four bytes per parameters,
+four times eight-bit precision.
+Therefore, the total memory footprint
+of that matrix is going to be 36 bytes.
+If we quantize the weight matrix in eight-bit precision,
+so int eight,
+we end up allocating only one byte per parameter.
+Hence, we'll need in total only nine bytes
+to store the entire weight matrix.
+However, this comes with a price,
+which is the quantization error.
+The whole challenge behind state-of-the-art quantization methods
+is to lower this error as much as possible
+to avoid any performance degradation.
+To sum up,
+let's summarize what we are going to cover in this course.
+In order to give you a good basic understanding
+of underlying notions around quantization,
+we're first going to visit most commonly used data types
+in machine learning,
+such as integrals,
+mainly int eight precision,
+as well as understanding how the floating point representations work,
+such as float16,
+B float16, or float32,
+and which precision to use,
+depending on your use case,
+meaning depending on whether you're doing model training
+or model inference.
+Next, we're going to deep dive into linear quantization
+and see how it works.
+After that, we're going to use the quantum library
+from HuggingFace ecosystem
+in order to quantize a transformer's model
+and test results out using different configurations.
+Finally, we will go over the recent advances
+in quantization techniques applied to LLMs.
+In the next lesson,
+you will learn how to explore data types,
+which are the core building blocks
+of these machine learning models.
+So let's go into the next lesson.

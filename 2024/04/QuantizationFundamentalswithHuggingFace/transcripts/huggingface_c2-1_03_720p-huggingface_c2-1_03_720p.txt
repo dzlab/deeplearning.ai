@@ -1,0 +1,171 @@
+In this lesson, you will learn about the common data types used to store the parameters of machine learning models.
+This lesson is essential to better understand quantization, since quantization is achieved by converting numerical values to a different data type.
+Let's get started.
+Let's start with the integer data type.
+An unsigned integer data type is used to represent a positive integer.
+The range of an n-bit unsigned integer is 0 to 2 to the power of n minus 1.
+For example, the minimum value of an 8-bit unsigned integer is 0, and the maximum value is 255.
+The computer allocates a sequence of 8 bits to store the 8-bit integer.
+For an unsigned integer, the decoding process is at follows.
+If the bit is equal to 0, its value is 0.
+If the bit is equal to 1, the decoded value is a power of 2.
+For the first bit, it is equal to 2 to the power of 0.
+For the second one, it is equal to 2 to the power of 1, and so on.
+In this example, as you can see, in the first position of the sequence, we have bit equals to 1.
+So the decoded value is 2 to the power of 0.
+For the second one, and the third one, both bits are equals to 0, so we have 0 and 0.
+For the first position bit, we have 1, so the decoded value is 2 to the power of 3, and so on.
+And at the end, we add those values, so we have 128 plus 8 plus 1, which equals to 137.
+For a design integer data type, it is used to represent a negative or positive integer.
+There are multiple representations, but the one we will look into is the 2's complement 1, since it is the most common one.
+The range is minus 2 to the power of n minus 1, and 2 to the power of n minus 1 minus 1.
+So for an 8 bit sign integer, the minimum value is minus 128, and the maximum value is 127.
+The difference with the unsigned integer is that for the bit in the last position, as you can see here, the value is negative.
+So if we process the same sequence as earlier, we need to add a minus here, and the result will be minus 128 plus 8 plus 1, which will be equal to minus 119.
+This way of processing the sequence brings some questions.
+Thus, the addition between two sign integers works.
+Let's have a look at a quick example with 4 bits to convince ourselves.
+As you can see, the first sequence represents 2, and the second represents minus 2.
+The addition of these two sequences should give 0.
+So let's do that. We have 0 and 0 here, so it gives 0.
+We have 1 and 1, so we have 0, but 1 is carried on the left.
+So we have 1, 0 and 1, so we get 0, and 1 is carried to the left.
+We have 1, 0, 1, so we get 0, and 1 is carried to the left.
+However, since we only store 4 bits in total, we don't save the last bit that was carried on the left.
+And at the end, we end up with 0, as you can see here.
+Creating data with integer data types is very easy in PyTorch.
+You just need to set the correct TorchDType.
+As you can see in this table, to create an 8-bit sign integer, you just need to pass the following TorchDType.
+Torch.int8.
+For an 8-bit unsigned integer, you just need to pass Torch.u.int8.u stands for unsigned.
+In PyTorch, you can also create 16-bit sign integer, 32-bit sign integer, and 64-bit sign integer.
+For example, let's check the information about the 8-bit unsigned integer.
+To do that, we will use Torch.info, and we need to pass the TorchDType we want to check.
+For this classroom, the libraries have already been installed for you.
+If you are running this on your own machine, you can install the Torch library by running the following.
+Pipe install Torch.
+Since the library have already been installed in this classroom, we won't be running this command,
+and I'll just comment it out.
+And we can just type the command we talked earlier.
+So Torch.info.
+And we will pass, for example, Torch.u.int8 to check the 8-bit unsigned TorchDType.
+And as you can see, we get that the minimum value is 0, and the maximum value is 255,
+which makes sense with what we saw earlier.
+Let's do the same for the 8-bit sign integer.
+As you can see here, the command is the same, but we just need to pass this time Torch.info.
+And as you can see, we get that the minimum is minus 128, and the maximum is 127, just as expected.
+Great, let's move on.
+Now is a good time to pause the video, and you can try other data types on your own.
+For example, you can try the following data types Torch.in64, Torch.in32, and Torch.in16.
+And you can check if the results you get make sense with what we saw in the theory report.
+Now, let's move on to floating point representation.
+There are three components in floating point representation.
+We have the sign, only one bit is needed since a number can be either positive or negative.
+We have the exponent which determines the range of the number, how big in magnitude it can be in both the positive and negative direction.
+Lastly, we have the fraction, the fraction determines the precision of the number.
+I mean, can you define a number as 0.4999 or only as 0.5?
+Floating point 32, B flow 16, floating point 16, and floating point 8 are all floating point data types with a specific number of bits for the exponent and fraction.
+Let's have a look at floating point 32.
+Floating point 32 or FP32 in short is composed of one bit for the sign, 8 bit for the exponent, and 23 bits for the fraction.
+And if you add them, we will end up with 32 bits.
+Here's the range for floating point 32 for positive values.
+We can represent a very small number as small as 10 to the power of minus 45, and as big as 10 to the power of 38.
+As for negative values, this is the same range that with a minus in front of each value.
+So the minimum value is minus 3.4 times 10 to the power of 38.
+For floating points, we have two formulas to decode the sequence.
+One to represent very small values, which are also called subnormal values, and the other one to represent very big values, called normal values.
+If we compare it too much about these formulas down here, the point here is to see how big and how small a number you can store using floating point 32.
+As you will see how this differs with other data types.
+This data type is very important in machine learning since most models store their weight in floating point 32.
+For floating point 16, we only have six bits for the exponent and 10 bits for the fraction.
+The smallest positive value you can represent is 10 to the power of minus 8, and the biggest is 10 to the power of 4.
+Compared to floating point 16, beef load 16 locates 8 bits for the exponent and 7 bits for the fraction.
+As you can see in the range, you can represent very small values and very big values.
+However, the downside is the precision, which is worse than floating point 16.
+To sum up, FP32 has the best precision, and the range is also very big.
+FP16 has a better precision than beef load 16, but the range is smaller.
+Lastly, beef load 16 range is close to the range of floating point 32, but it has a worse precision.
+The nice thing about floating point 16 and beef load 16 is that they take up half of the space of floating point 32.
+Let's see how you can use them in PyTorch.
+Here's the table with floating data types in PyTorch.
+For example, as you can see, to create a 16-bit floating point, you need to set the torch d type to be equal to torch dot float 16 to create a 16-bit brain floating point.
+You just need to set the torch d type to be equal to torch dot beef load 16.
+In PyTorch, you can also create the 32-bit floating point and 64-bit floating point.
+Now, let's see what happens when you convert a Python value to a PyTorch tensor with a specific data type.
+First, we create the value 1-ser.
+In PyTorch, the value we created is stored in floating point 64.
+If we create a tensor with a torch d type to be equal to torch dot float 64, we shouldn't see a difference. Let's do that.
+So, we first create the value 1-3rd.
+Then, let's check the value.
+And as you can see, the value we passed do not correspond exactly as it is.
+It is converted to floating point 64.
+And the value that is stored inside the computer is an approximation.
+Now, let's create a tensor with a d type equals to floating point 64.
+To do that, we need to call torch dot tensor.
+We put the value and we need to specify the d type argument to be equal to torch dot float 64.
+Let's have a look at the value.
+So, as you can see, we have the same results.
+Now, let's do that for other data types.
+We will do that for floating point 32, floating point 16 and below 16.
+And let's check the results.
+So, to create the floating point 32 d type tensor, we just need to change the d type to be equal to torch dot float 32.
+Then, let's do that also for floating point 16 and below 16.
+Then, let's print all the results together so that we have a good comparison.
+From these results, we can make the following observation.
+The less bits we have, the less precise the approximation will be.
+And for Bflow 16, as we said before, the precision is worse than floating point 16.
+So, this is why, as you can see here, the approximation is worse than the floating point 16.
+But Bflow 16 has a bigger range than floating point 16.
+You can check this information directly from PyTorch using the function torch dot f info.
+Let's do that for Bflow 16, for example.
+Let's compare this information with floating point 32.
+So, we just need to change the torch d type.
+And as you can see from these results, the minimum value and the maximum value are quite closed.
+But you can see that the resolution of the floating point 32 is way smaller than the Bflow 16.
+Now, it's a good time to pause the video and try it by yourself by changing the torch d type to be equal to torch float 16 or torch dot float 64.
+Now that we know how integer and floating point works, we can have a look at downcasting.
+Downcasting happens when we convert a higher data type to a lower data type.
+The value will be converted to the nearest value in the lower data type.
+A floating point 32 value, for example 0.1, downcast it to 8-bit integer will be converted to 0.
+You see that we have a loss of data?
+Let's check the impact on matrix multiplication.
+First, let's create a random tensor with torch d type float 32 of size 1000.
+To create the random tensor, we will use the run function from torch, so torch dot run.
+The first argument is the size of the tensor, so we will put 1000.
+And we need to specify the d type of that tensor, which will be torch dot float 32.
+And that's it.
+Let's have a look at the tensor we just created.
+Since the tensor we created is very big, we'll just look at the five first elements.
+And you can see that we indeed have random values in torch dot float 32.
+Now let's downcast this tensor to be float 16.
+To do that, we will use the two methods.
+And we just need to specify the d type to be equal to torch dot be float 16.
+And now let's have a look at the first five elements.
+And as you can see, we managed to downcast our tensor.
+We see that the d type is now equals to torch dot be float 16.
+And since we downcast the tensor, we do not have the same values as the original one, but they are very close.
+Now, let's check the impact of downcasting on multiplication.
+First, let's do the multiplication with the original tensor in flowing point 32.
+To do that, we will use the dot methods from torch.
+So multiplication with float 32 equals to torch dot dot.
+And we put as arguments the two tensors in floating point 32.
+Let's check the results.
+And the results we get is this one.
+But the result you will get will be different since we initialize random tensors.
+Now let's check the multiplication on the be float tensors.
+And as you can see, the result is quite close to the original one, but still we do have a loss of precision.
+The advantages of downcasting is reduced memory footprint.
+We have a more efficient use of GPU memories.
+It enables the training of larger models and also enables larger batch sizes.
+But also we have an increased compute and speed.
+Computation using low precision, for example, floating point 16 and be float 16 can be faster than floating point 32.
+Since it requires less memory and it also depends on the hardware.
+Whether you're using Google GPU or NVIDIA 100.
+The disadvantage is that it is less precise.
+We are using less memory, hence the computation is less precise.
+One of the use case of downcasting is mixed precision training.
+We do the computation of these models in smaller precision, for example, floating point 16, be float 16.
+But we store and update the weights in higher precision.
+Usually it is floating point 32.
+Now let's move on to the next lesson.
+Eunice will present you how to load models with different data types.

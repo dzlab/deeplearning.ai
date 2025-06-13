@@ -1,0 +1,18 @@
+Congratulations on making to the end of this short course.
+You'll learn about some common data types
+with hesitation in machine learning,
+such as integer and floating point,
+and how to load AI model using different data types.
+You also learn about the underlying concepts
+behind model quantization and how linear quantization works.
+You use the quantum library to quantize
+any PyTorch model in 8-bit precision.
+Then you learn about some application of quantization
+on LLMs, such as the recent state-of-the-art methods
+for quantizing LLMs.
+With this knowledge in hand,
+you'll be able to better understand
+the challenges of a model compression
+and select the best quantization techniques for your use case.
+If you find this course helpful,
+maybe you can even share it with your friends.

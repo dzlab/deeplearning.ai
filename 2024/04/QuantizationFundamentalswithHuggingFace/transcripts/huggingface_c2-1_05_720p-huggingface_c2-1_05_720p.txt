@@ -1,0 +1,177 @@
+In this lesson, you will implement a technique called linear quantization.
+This is the most popular quantization scheme, and it is used in most state-of-the-art quantization methods.
+Then, you will apply linear quantization to real models using quantum, a python quantization toolkit from hugging face.
+Let's get started.
+Quantization is the process of mapping a large set to a small set of values.
+There are many quantization techniques.
+In this course, you will focus on linear quantization.
+Let's have a look at an example of how to perform it be quantization on a simple tensor.
+We will go from float32 values to 8 in values.
+This will give you the intuition on how linear quantization works.
+Let's take a look at this matrix of random numbers.
+The values are in float32.
+How do you convert the float32 weights to int8 weight without losing too much information?
+Well, let's try this.
+You can map the most positive number in this matrix, which is 728.6 in this case,
+to the maximum value that the int8 can store, which is 127.
+Similarly, you can map the most negative number of these matrix,
+negative 184 in this case, to the minimum value that the int8 can store, which is negative 128.
+You can map the rest of the values following a linear mapping.
+You will see a bit more of that math later in an optional section at the end of the lesson.
+But just assume that it is a little bit of multiplication and addition.
+That's it. You manage to quantize the tensor.
+Next, you can delete the original tensor to free up space.
+You end up with the quantized tensors plus the parameters S and Z that you use to perform the linear mapping.
+S stands for scale and Z for zero point.
+Looks like you save a lot of space, but one question remains.
+How do you go the other way?
+From the quantized tensor back to the original tensor in FP32.
+You can't get exactly the same as the original tensor,
+but you can perform the quantization following the linear relationship that you use to quantize the original tensor.
+Now, let's take a look at how you can perform that linear mapping to perform linear quantization.
+We follow the linear mapping we defined previously to decontize the tensor.
+Again, you can see the details at the end of this lesson, but it's going to be some math.
+So the minimum and maximum decontized will get you these values.
+And if you apply the same linear mapping to the other numbers, you can decontize the whole tensor.
+As you can see, quantization results in a loss of information.
+Let's compare the original tensor and the decontized tensor.
+The result is that the decontized tensor is pretty accurate.
+The quantization error are not zero, but they are not too bad either.
+Even if linear quantization looks very simple, it is used in many states of the odd quantization methods.
+Now you will use quantum, a Python quantization toolkit library from HuygingFace to quantize any PyTorch model using linear quantization.
+In this classroom, the libraries have already been installed for you.
+If you're running this on your own machine, you can install the Transformers library by running the following.
+PeepingStore Transformers.
+Similarly for quantum library, you need to type peepingStoreQuanto.
+You also need to install Torch by typing peepingStoreTorch.
+Since in this classroom, the libraries have already been installed, we don't need to run this cell, so I will just comment them out.
+Now let's load the model using this specific class from Transformers library.
+So we import from Transformers.
+The auto model for COZLLM class.
+We define the name of the model that we are going to load, which is this one.
+IlusaAI is a non-profit research lab focused on interpretability, alignment, and ethics in artificial intelligence.
+Then we will use the form pre-trained methods to load the model.
+The first argument is the checkpoint, and this is optional, but you can also set the low CPU memory usage argument to be true, so that it loads the model more efficiently.
+The model we just loaded is the PTA model from IlusaAI.
+After loading the model, you will load the tokenizer as well.
+To do that, we need to import from Transformers library the auto tokenizer class.
+Then we will use the form pre-trained methods from the auto tokenizer to load the tokenizer.
+And you just need to pass the model name.
+The tokenizer you use to transform the text into a list of tokens that the model is able to understand.
+Now, let's check if the model is able to generate text.
+To do that, we will use the generate methods.
+First, we need to define the text. We will choose a very simple text, such as Hello, my name is.
+Then we need to pass this text into the tokenizer.
+Then we also need to define the return tensor to be PT, which stands for PyTorch.
+This way, we will get PyTorch tensors at the end.
+Finally, to get the outputs, we just need to call the generate methods.
+We pass the input inside the generate function, and we need to put the double-store in front since inputs is a dictionary of arguments.
+We can also define the max new token argument.
+We will set it to 10. These arguments control the number of new tokens that the model generates.
+So, with these settings, the model can only generate a maximum of 10 new tokens.
+Right now, as you can see, the output is just a list of tokens.
+To decode this list of integers, we need to use the decode methods from the tokenizer.
+This is optional, but we can also define skip special tokens to be true, to not have any special tokens in our output.
+And as you can see, the model generated the following text, and I am a newbie to decide.
+Now, let's check the size of the model.
+Pitcher is a 400 million parameters model, so since you loaded this model in floating point 32, each parameter takes 32 bits, which is 4 bytes.
+So, the model should take around 400 million times 4 bytes, which is equal to 1.6 gigabyte.
+Let's check that using the compute module sizes that we already coded in the helper.py file.
+To import that function, we just do from helper import compute module sizes.
+Then, we just call it on our model.
+And let's see what are the results.
+And as you can see, it says that the model size is around 1.6 gigabyte, just as we expected.
+Let's also have a look at the weights of one of the linear layers.
+As you can see, the weights are in FP32.
+Now, let's quantize the model.
+To do that, you need to import two functions from the quantum library, quantize and freeze.
+We also need to import torch.
+Then, let's have a look at the architecture of the model.
+As you can see, the model has many layers, but the one we are going to focus on are the linear layers.
+These are the layers that we are going to quantize.
+To quantize the model, you just call quantize, you pass the model.
+You also need to specify the weights.
+We want them to be quantized to the d-type torch.int8.
+And if you remember, in the model, you can quantize the weights, but also the activation.
+In this lesson, we will only quantize the weights.
+So, this is why we set activation equals to none.
+Let's check what happened to the model.
+As you can see, the linear layers were replaced by q-linear quantize linear.
+And if we look at one of the weights of these linear layers,
+we see that the weights are still in floating point 32.
+The model is not fully quantized.
+For what you will do in this course, you don't need this intermediate state,
+but for more advanced topic, the intermediate state is quite useful.
+If your curious about when the intermediate state is used, please stick around for the optional section at the end of this lesson.
+Next, to get the quantized model, we just need to call frees.
+Now, if you look at these weights, you can see that they are quantized in torch.int8.
+And we have also the linear quantization parameters scales right here.
+In this case, you don't see the zero point because the zero point is set to zero.
+Now, let's check the size of the model.
+As you can see, it's now only a fourth of its original size.
+It's good that we manage to decrease the size of the model,
+but let's also have a look at the performance of the model.
+If there is any performance degradation or not, let's do the same thing as we did earlier.
+So output equals to model of the generate.
+Then let's print the decoded output.
+And as you can see, we get the same output.
+This is not an extensive weight of testing if there is any performance degradation,
+but still, it's good that we manage to get the same results.
+That's it for the required part of this lesson.
+All that's left are some optional discussion about the math of the linear mapping
+and the explanation for the intermediate state for the quantum library.
+If you're ready to move on to the next lesson,
+this will give you another view of how quantization methods are applied to large language models.
+The theory of linear quantization is very simple.
+It is based on a simple idea linear mapping.
+But first, let's have a look at the figure.
+Here is the visual of the normal line of the original tensor,
+which can be in floating point 32 on the top,
+which goes from ormin to ormax.
+The formula for linear quantization is as follows.
+We have OR, which is equals to S times Q minus Z,
+OR is the original value and Q is the quantized value.
+S is the scale and Z is the zero point.
+You can use this formula to quantize the original value or decontize the quantized value.
+But one question remains, how do you get the scale and the zero point?
+To get these parameters, you need to look at the extreme values
+and you should get the following formulas.
+And after solving these two equations,
+you should get that the scale is equal to that,
+and the zero point is equal to that.
+Feel free to pause the video and take out a pencil on the paper
+to derive the scale and the zero point yourself.
+But don't worry, remember this is optional
+and this is not required for you to successfully complete the course.
+Also, recall that quantum library creates
+an intermediate state after you call quantize.
+Then you call frees to get the quantized weights.
+This intermediate state can be useful for two things.
+If you decide to quantize the model activation,
+when you run the inference on a model by passing an input
+such as an image, a text,
+the activation of the model with vary depending on the input.
+You get good linear parameters to perform the linear mapping
+for the linear quantization of the activation.
+It will really help to know what is the minimum
+and maximum range of this activation.
+To do that, you can get some simple data that is similar to the data
+you would expect and run inference on the model.
+This process is called calibration.
+This is optional, but if you do the calibration,
+you will get better quantized activation.
+This intermediate state is also useful
+when performing quantization or well-training.
+Quantization or well-training means that when you train the model,
+you can keep it in its intermediate state,
+which means that for the forward pass,
+you will use the quantized version of the weights,
+but the model will still update its original
+unquantized weights during that propagation.
+The goal of quantization or well-training
+is to better control how the model will perform
+once you quantize it by calling Freeze.
+Thanks for staying for the optional section.
+Next, Eunice will give you an overview
+of how quantization methods are applied to large language models.
+Let's go on to the next video.

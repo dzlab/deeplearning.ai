@@ -1,0 +1,61 @@
+Welcome to this short course, Quantization Fundamentals with Hoking Face,
+built in partnership with Hoking Face.
+Large GNIWII models, like large language models, can be so huge
+that they're hard to run on consumer-grade hardware.
+Quantization has emerged as a key tool for making this possible.
+In this course, you learn about a variety of flavors of quantization
+and the different options and data types,
+like whether you should use int8 or float16,
+or something called beeflow16, which stands for brainflow16,
+to compress your models.
+And you also learn about the technical theory
+and the algorithmic details of how to compress and store
+a 32-bit floating point number,
+maybe from a model that you want to deploy
+using, say, an 8-bit integer.
+Um, delighted to introduce our instructors for this course,
+Eunice Dalgoda, is a machine learning engineer at Hoking Face.
+Eunice is involved in the open-source team
+where he works at the intersection of many open-source tools
+developed by Hoking Face, such as transformers,
+peft, and TRL.
+Mark Sun is also a machine learning engineer at Hoking Face.
+Mark is part of the open-source team where he contributes to libraries
+such as transformers or accelerate.
+Mark and Eunice are also deeply involved in quantization
+in order to make large models accessible to the AI community.
+Thanks, Andrew.
+We are excited to work with you and your team on this.
+In this course, you will first learn about basic concept
+around integer and floating point representation
+and how to load AI models using different data types
+using PyTorch and Hoking Face Transformers library.
+You will also understand the pros and cons of each different data type
+in order to make the right decision for your use case.
+You will also dive deep into linear quantization
+by understanding how it works in practice.
+You will see how linear quantization works in simple terms.
+The quantization scheme is used in most state-of-the-art quantization methods.
+After reviewing how linear quantization works,
+you'll directly apply it into a small text generation model
+using the Quanto library from Hoking Face.
+Quanto makes linear quantization easy to use for any PyTorch model.
+We'll first load the model using transformers library
+and then use Quanto to quantize the model.
+In summary, in this course,
+you see in detail the fundamental theory behind quantization
+as well as the practical aspects of how to use quantization.
+I hope you learned about these techniques
+and combined these building blocks yourself
+to create some unique applications.
+Many people have worked to create this course.
+I'd like to thank on the Hoking Face site,
+the entire Hoking Face team for the review of the course content,
+as well as the Hoking Face community for the contributions
+to open source models.
+From deeplearning.ai,
+Adishu has also contributed to this course.
+This is a short course that covers a lot.
+So I'm excited about what you'll be able to learn
+in a compressed way.
+I hope you enjoyed the course.
