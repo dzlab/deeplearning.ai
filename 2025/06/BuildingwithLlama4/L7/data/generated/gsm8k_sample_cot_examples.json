@@ -1,0 +1,102 @@
+{
+  "summary": "Here is a summary of the document in 2-3 sentences:\n\nThe document contains 50 math problems covering various topics such as algebra, geometry, and basic arithmetic operations. The problems range from simple calculations to more complex scenarios involving multiple steps and variables. The document appears to be a collection of practice problems or a test bank for assessing mathematical skills.",
+  "cot_examples": [
+    {
+      "question": "If Natalia sold clips to 48 of her friends in April and then sold half as many clips in May, and James writes a 3-page letter to 2 different friends twice a week, how many clips did Natalia sell in total and what is the total number of pages James writes in a year if there are 52 weeks in a year?",
+      "reasoning": "Step 1: First, calculate the number of clips Natalia sold in May, which is half of 48.\nStep 2: Calculate the total number of clips Natalia sold in April and May.\nStep 3: Then, determine the number of pages James writes in a week.\nStep 4: Multiply the number of pages James writes in a week by the number of weeks in a year to get the total number of pages he writes in a year.\nStep 5: Although the question asks for two different calculations, the provided problems are separate, so we need to focus on one. Let's simplify the question: How many clips did Natalia sell altogether in April and May?\nStep 6: For Natalia: Total clips = 48 (April) + 48 / 2 (May).\nStep 7: For James: Total pages per week = 3 * 2 * 2 = 12 pages.\nStep 8: Total pages in a year = 12 * 52.",
+      "answer": "Natalia sold 72 clips in total."
+    },
+    {
+      "question": "Mark has 10 yellow flowers in his garden, 80% more purple flowers than yellow ones, and 25% as many green flowers as the total of yellow and purple flowers. How many flowers does Mark have?",
+      "reasoning": "Step 1: Calculate 80% of 10 (yellow flowers) to find the additional number of purple flowers.\nStep 2: Add the 80% to the original 10 yellow flowers to get the total number of purple flowers.\nStep 3: Sum the number of yellow and purple flowers.\nStep 4: Calculate 25% of the sum from Step 3 to find the number of green flowers.\nStep 5: Add the numbers of yellow, purple, and green flowers.",
+      "answer": "Mark has 10 + 18 + 7 = 35 flowers."
+    },
+    {
+      "question": "If a large pizza has 16 slices and a small pizza has 8 slices, and Albert buys 2 large and 2 small pizzas, how many slices does he eat in total?",
+      "reasoning": "Step 1: Total slices from large pizzas = 2 * 16.\nStep 2: Total slices from small pizzas = 2 * 8.\nStep 3: Add the results of Step 1 and Step 2.",
+      "answer": "Albert eats 48 slices."
+    },
+    {
+      "question": "Ken created a care package with initial weight x. He added jelly beans to make it 2 pounds, then brownies to triple the weight, then 2 more pounds of jelly beans, and finally gummy worms to double the weight again. What is the final weight?",
+      "reasoning": "Step 1: Initial weight + jelly beans = 2 pounds.\nStep 2: 2 * 3 = 6 pounds after adding brownies.\nStep 3: 6 + 2 = 8 pounds after adding more jelly beans.\nStep 4: 8 * 2 = 16 pounds after adding gummy worms.",
+      "answer": "The final weight is 16 pounds."
+    },
+    {
+      "question": "Tina works 10 hours a day for 5 days and earns $18/hour with overtime pay (1.5 times hourly wage) for hours worked beyond 8 hours. How much does she earn in total?",
+      "reasoning": "Step 1: Regular pay per day = 8 * $18.\nStep 2: Overtime pay per hour = $18 * 1.5.\nStep 3: Total overtime pay per day = overtime pay per hour * 2.\nStep 4: Total daily earnings = regular pay + total overtime pay.\nStep 5: Total earnings for 5 days = total daily earnings * 5.",
+      "answer": "$990"
+    }
+  ],
+  "conversations": [
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful assistant that provides detailed explanations."
+      },
+      {
+        "role": "user",
+        "content": "If Natalia sold clips to 48 of her friends in April and then sold half as many clips in May, and James writes a 3-page letter to 2 different friends twice a week, how many clips did Natalia sell in total and what is the total number of pages James writes in a year if there are 52 weeks in a year?"
+      },
+      {
+        "role": "assistant",
+        "content": "Let me think through this step by step:\n\nStep 1: First, calculate the number of clips Natalia sold in May, which is half of 48.\nStep 2: Calculate the total number of clips Natalia sold in April and May.\nStep 3: Then, determine the number of pages James writes in a week.\nStep 4: Multiply the number of pages James writes in a week by the number of weeks in a year to get the total number of pages he writes in a year.\nStep 5: Although the question asks for two different calculations, the provided problems are separate, so we need to focus on one. Let's simplify the question: How many clips did Natalia sell altogether in April and May?\nStep 6: For Natalia: Total clips = 48 (April) + 48 / 2 (May).\nStep 7: For James: Total pages per week = 3 * 2 * 2 = 12 pages.\nStep 8: Total pages in a year = 12 * 52.\n\nSo the answer is: Natalia sold 72 clips in total."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful assistant that provides detailed explanations."
+      },
+      {
+        "role": "user",
+        "content": "Mark has 10 yellow flowers in his garden, 80% more purple flowers than yellow ones, and 25% as many green flowers as the total of yellow and purple flowers. How many flowers does Mark have?"
+      },
+      {
+        "role": "assistant",
+        "content": "Let me think through this step by step:\n\nStep 1: Calculate 80% of 10 (yellow flowers) to find the additional number of purple flowers.\nStep 2: Add the 80% to the original 10 yellow flowers to get the total number of purple flowers.\nStep 3: Sum the number of yellow and purple flowers.\nStep 4: Calculate 25% of the sum from Step 3 to find the number of green flowers.\nStep 5: Add the numbers of yellow, purple, and green flowers.\n\nSo the answer is: Mark has 10 + 18 + 7 = 35 flowers."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful assistant that provides detailed explanations."
+      },
+      {
+        "role": "user",
+        "content": "If a large pizza has 16 slices and a small pizza has 8 slices, and Albert buys 2 large and 2 small pizzas, how many slices does he eat in total?"
+      },
+      {
+        "role": "assistant",
+        "content": "Let me think through this step by step:\n\nStep 1: Total slices from large pizzas = 2 * 16.\nStep 2: Total slices from small pizzas = 2 * 8.\nStep 3: Add the results of Step 1 and Step 2.\n\nSo the answer is: Albert eats 48 slices."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful assistant that provides detailed explanations."
+      },
+      {
+        "role": "user",
+        "content": "Ken created a care package with initial weight x. He added jelly beans to make it 2 pounds, then brownies to triple the weight, then 2 more pounds of jelly beans, and finally gummy worms to double the weight again. What is the final weight?"
+      },
+      {
+        "role": "assistant",
+        "content": "Let me think through this step by step:\n\nStep 1: Initial weight + jelly beans = 2 pounds.\nStep 2: 2 * 3 = 6 pounds after adding brownies.\nStep 3: 6 + 2 = 8 pounds after adding more jelly beans.\nStep 4: 8 * 2 = 16 pounds after adding gummy worms.\n\nSo the answer is: The final weight is 16 pounds."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful assistant that provides detailed explanations."
+      },
+      {
+        "role": "user",
+        "content": "Tina works 10 hours a day for 5 days and earns $18/hour with overtime pay (1.5 times hourly wage) for hours worked beyond 8 hours. How much does she earn in total?"
+      },
+      {
+        "role": "assistant",
+        "content": "Let me think through this step by step:\n\nStep 1: Regular pay per day = 8 * $18.\nStep 2: Overtime pay per hour = $18 * 1.5.\nStep 3: Total overtime pay per day = overtime pay per hour * 2.\nStep 4: Total daily earnings = regular pay + total overtime pay.\nStep 5: Total earnings for 5 days = total daily earnings * 5.\n\nSo the answer is: $990"
+      }
+    ]
+  ]
+}

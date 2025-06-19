@@ -1,0 +1,105 @@
+{
+  "summary": "Here is a summary of the document in 3-5 sentences, focusing on the main topic and key concepts:\n\nMeta AI has released the Llama 4 series, a new generation of multimodal AI models that offer unprecedented context length support and are built using a mixture-of-experts (MoE) architecture. The Llama 4 Scout and Llama 4 Maverick models are the first open-weight natively multimodal models, with 17 billion active parameters and outperforming previous models in various benchmarks. The models were trained using a new technique called MetaP and a large dataset of over 30 trillion tokens, and were distilled from a larger teacher model, Llama 4 Behemoth. The release of Llama 4 marks a new era for the Llama ecosystem, enabling developers to build more personalized and intelligent experiences. The models are available for download on llama.com and Hugging Face.",
+  "qa_pairs": [
+    {
+      "question": "What are the names of the first models in the Llama 4 herd?",
+      "answer": "Llama 4 Scout and Llama 4 Maverick."
+    },
+    {
+      "question": "How many active parameters does Llama 4 Scout have?",
+      "answer": "17 billion."
+    },
+    {
+      "question": "What is the context window of Llama 4 Scout?",
+      "answer": "10M."
+    },
+    {
+      "question": "How does Llama 4 Maverick compare to GPT-4o and Gemini 2.0 Flash?",
+      "answer": "Llama 4 Maverick beats GPT-4o and Gemini 2.0 Flash across a broad range of widely reported benchmarks."
+    },
+    {
+      "question": "What is the name of the teacher model used to distill Llama 4 Scout and Llama 4 Maverick?",
+      "answer": "Llama 4 Behemoth."
+    },
+    {
+      "question": "How many active parameters does Llama 4 Behemoth have?",
+      "answer": "288 billion."
+    },
+    {
+      "question": "What is the total number of parameters in Llama 4 Behemoth?",
+      "answer": "Nearly two trillion."
+    },
+    {
+      "question": "Where can Llama 4 Scout and Llama 4 Maverick be downloaded?",
+      "answer": "llama.com and Hugging Face."
+    },
+    {
+      "question": "What is the architecture used in Llama 4 models?",
+      "answer": "Mixture-of-experts (MoE) architecture."
+    },
+    {
+      "question": "How does the MoE architecture improve inference efficiency?",
+      "answer": "By activating only a fraction of the total parameters for a single token."
+    },
+    {
+      "question": "What is early fusion in the context of Llama 4 models?",
+      "answer": "Seamlessly integrating text and vision tokens into a unified model backbone."
+    },
+    {
+      "question": "What is the purpose of MetaP training technique?",
+      "answer": "To reliably set critical model hyper-parameters."
+    },
+    {
+      "question": "How many languages were Llama 4 models pre-trained on?",
+      "answer": "200 languages."
+    },
+    {
+      "question": "What is the iRoPE architecture used in Llama 4 Scout?",
+      "answer": "Interleaved attention layers without positional embeddings."
+    },
+    {
+      "question": "What is the context length that Llama 4 Scout was pre-trained and post-trained with?",
+      "answer": "256K."
+    },
+    {
+      "question": "How many images were Llama 4 models trained on?",
+      "answer": "Up to 48 images."
+    },
+    {
+      "question": "What is Llama Guard used for?",
+      "answer": "To detect whether inputs or outputs violate the policies created for a specific application."
+    },
+    {
+      "question": "What is Prompt Guard used for?",
+      "answer": "To detect explicitly malicious prompts and prompts that contain inject inputs."
+    },
+    {
+      "question": "What is CyberSecEval used for?",
+      "answer": "To help AI model and product developers understand and reduce generative AI cybersecurity risk."
+    },
+    {
+      "question": "How does Llama 4 perform on debated political and social topics compared to Llama 3?",
+      "answer": "Llama 4 refuses less on debated political and social topics overall (from 7% in Llama 3.3 to below 2%)."
+    },
+    {
+      "question": "What is Generative Offensive Agent Testing (GOAT)?",
+      "answer": "A testing method that simulates multi-turn interactions of medium-skilled adversarial actors."
+    },
+    {
+      "question": "How does Llama 4 compare to Grok in terms of responding with strong political lean?",
+      "answer": "Llama 4 responds with strong political lean at a rate comparable to Grok."
+    },
+    {
+      "question": "What is the goal of the Llama ecosystem?",
+      "answer": "To bring intelligent and personalized experiences to life."
+    },
+    {
+      "question": "What is the benefit of using FP8 precision during training?",
+      "answer": "Efficient model training without sacrificing quality."
+    },
+    {
+      "question": "How was the post-training pipeline for Llama 4 models revamped?",
+      "answer": "By adopting a different approach: lightweight supervised fine-tuning (SFT) > online reinforcement learning (RL) > lightweight direct preference optimization (DPO)."
+    }
+  ]
+}

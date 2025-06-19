@@ -1,0 +1,469 @@
+{
+  "summary": "Here is a summary of the document in 3-5 sentences, focusing on the main topic and key concepts:\n\nMeta AI has released the Llama 4 series, a new generation of multimodal AI models that offer unprecedented context length support and are built using a mixture-of-experts (MoE) architecture. The Llama 4 Scout and Llama 4 Maverick models are the first open-weight natively multimodal models, with 17 billion active parameters and outperforming previous models in various benchmarks. The models were trained using a new technique called MetaP and a large dataset of over 30 trillion tokens, and were distilled from a larger teacher model, Llama 4 Behemoth. The release of Llama 4 marks a new era for the Llama ecosystem, enabling developers to build more personalized and intelligent experiences. The models are available for download on llama.com and Hugging Face.",
+  "qa_pairs": [
+    {
+      "question": "What are the names of the first models in the Llama 4 herd?",
+      "answer": "Llama 4 Scout and Llama 4 Maverick.",
+      "rating": 8
+    },
+    {
+      "question": "How many active parameters does Llama 4 Scout have?",
+      "answer": "17 billion.",
+      "rating": 8
+    },
+    {
+      "question": "How does Llama 4 Maverick compare to GPT-4o and Gemini 2.0 Flash?",
+      "answer": "Llama 4 Maverick beats GPT-4o and Gemini 2.0 Flash across a broad range of widely reported benchmarks.",
+      "rating": 8
+    },
+    {
+      "question": "What is the name of the teacher model used to distill Llama 4 Scout and Llama 4 Maverick?",
+      "answer": "Llama 4 Behemoth.",
+      "rating": 8
+    },
+    {
+      "question": "How many active parameters does Llama 4 Behemoth have?",
+      "answer": "288 billion.",
+      "rating": 8
+    },
+    {
+      "question": "What is the total number of parameters in Llama 4 Behemoth?",
+      "answer": "Nearly two trillion.",
+      "rating": 8
+    },
+    {
+      "question": "Where can Llama 4 Scout and Llama 4 Maverick be downloaded?",
+      "answer": "llama.com and Hugging Face.",
+      "rating": 8
+    },
+    {
+      "question": "What is the architecture used in Llama 4 models?",
+      "answer": "Mixture-of-experts (MoE) architecture.",
+      "rating": 9
+    },
+    {
+      "question": "How does the MoE architecture improve inference efficiency?",
+      "answer": "By activating only a fraction of the total parameters for a single token.",
+      "rating": 9
+    },
+    {
+      "question": "What is early fusion in the context of Llama 4 models?",
+      "answer": "Seamlessly integrating text and vision tokens into a unified model backbone.",
+      "rating": 8
+    },
+    {
+      "question": "What is the purpose of MetaP training technique?",
+      "answer": "To reliably set critical model hyper-parameters.",
+      "rating": 8
+    },
+    {
+      "question": "How many languages were Llama 4 models pre-trained on?",
+      "answer": "200 languages.",
+      "rating": 8
+    },
+    {
+      "question": "What is the iRoPE architecture used in Llama 4 Scout?",
+      "answer": "Interleaved attention layers without positional embeddings.",
+      "rating": 7
+    },
+    {
+      "question": "What is the context length that Llama 4 Scout was pre-trained and post-trained with?",
+      "answer": "256K.",
+      "rating": 7
+    },
+    {
+      "question": "How many images were Llama 4 models trained on?",
+      "answer": "Up to 48 images.",
+      "rating": 8
+    },
+    {
+      "question": "What is Llama Guard used for?",
+      "answer": "To detect whether inputs or outputs violate the policies created for a specific application.",
+      "rating": 9
+    },
+    {
+      "question": "What is Prompt Guard used for?",
+      "answer": "To detect explicitly malicious prompts and prompts that contain inject inputs.",
+      "rating": 9
+    },
+    {
+      "question": "What is CyberSecEval used for?",
+      "answer": "To help AI model and product developers understand and reduce generative AI cybersecurity risk.",
+      "rating": 9
+    },
+    {
+      "question": "How does Llama 4 perform on debated political and social topics compared to Llama 3?",
+      "answer": "Llama 4 refuses less on debated political and social topics overall (from 7% in Llama 3.3 to below 2%).",
+      "rating": 8
+    },
+    {
+      "question": "What is Generative Offensive Agent Testing (GOAT)?",
+      "answer": "A testing method that simulates multi-turn interactions of medium-skilled adversarial actors.",
+      "rating": 8
+    },
+    {
+      "question": "How does Llama 4 compare to Grok in terms of responding with strong political lean?",
+      "answer": "Llama 4 responds with strong political lean at a rate comparable to Grok.",
+      "rating": 8
+    },
+    {
+      "question": "What is the goal of the Llama ecosystem?",
+      "answer": "To bring intelligent and personalized experiences to life.",
+      "rating": 7
+    },
+    {
+      "question": "What is the benefit of using FP8 precision during training?",
+      "answer": "Efficient model training without sacrificing quality.",
+      "rating": 8
+    },
+    {
+      "question": "How was the post-training pipeline for Llama 4 models revamped?",
+      "answer": "By adopting a different approach: lightweight supervised fine-tuning (SFT) > online reinforcement learning (RL) > lightweight direct preference optimization (DPO).",
+      "rating": 8
+    }
+  ],
+  "conversations": [
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "What are the names of the first models in the Llama 4 herd?"
+      },
+      {
+        "role": "assistant",
+        "content": "Llama 4 Scout and Llama 4 Maverick."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "How many active parameters does Llama 4 Scout have?"
+      },
+      {
+        "role": "assistant",
+        "content": "17 billion."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "How does Llama 4 Maverick compare to GPT-4o and Gemini 2.0 Flash?"
+      },
+      {
+        "role": "assistant",
+        "content": "Llama 4 Maverick beats GPT-4o and Gemini 2.0 Flash across a broad range of widely reported benchmarks."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "What is the name of the teacher model used to distill Llama 4 Scout and Llama 4 Maverick?"
+      },
+      {
+        "role": "assistant",
+        "content": "Llama 4 Behemoth."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "How many active parameters does Llama 4 Behemoth have?"
+      },
+      {
+        "role": "assistant",
+        "content": "288 billion."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "What is the total number of parameters in Llama 4 Behemoth?"
+      },
+      {
+        "role": "assistant",
+        "content": "Nearly two trillion."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "Where can Llama 4 Scout and Llama 4 Maverick be downloaded?"
+      },
+      {
+        "role": "assistant",
+        "content": "llama.com and Hugging Face."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "What is the architecture used in Llama 4 models?"
+      },
+      {
+        "role": "assistant",
+        "content": "Mixture-of-experts (MoE) architecture."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "How does the MoE architecture improve inference efficiency?"
+      },
+      {
+        "role": "assistant",
+        "content": "By activating only a fraction of the total parameters for a single token."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "What is early fusion in the context of Llama 4 models?"
+      },
+      {
+        "role": "assistant",
+        "content": "Seamlessly integrating text and vision tokens into a unified model backbone."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "What is the purpose of MetaP training technique?"
+      },
+      {
+        "role": "assistant",
+        "content": "To reliably set critical model hyper-parameters."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "How many languages were Llama 4 models pre-trained on?"
+      },
+      {
+        "role": "assistant",
+        "content": "200 languages."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "What is the iRoPE architecture used in Llama 4 Scout?"
+      },
+      {
+        "role": "assistant",
+        "content": "Interleaved attention layers without positional embeddings."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "What is the context length that Llama 4 Scout was pre-trained and post-trained with?"
+      },
+      {
+        "role": "assistant",
+        "content": "256K."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "How many images were Llama 4 models trained on?"
+      },
+      {
+        "role": "assistant",
+        "content": "Up to 48 images."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "What is Llama Guard used for?"
+      },
+      {
+        "role": "assistant",
+        "content": "To detect whether inputs or outputs violate the policies created for a specific application."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "What is Prompt Guard used for?"
+      },
+      {
+        "role": "assistant",
+        "content": "To detect explicitly malicious prompts and prompts that contain inject inputs."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "What is CyberSecEval used for?"
+      },
+      {
+        "role": "assistant",
+        "content": "To help AI model and product developers understand and reduce generative AI cybersecurity risk."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "How does Llama 4 perform on debated political and social topics compared to Llama 3?"
+      },
+      {
+        "role": "assistant",
+        "content": "Llama 4 refuses less on debated political and social topics overall (from 7% in Llama 3.3 to below 2%)."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "What is Generative Offensive Agent Testing (GOAT)?"
+      },
+      {
+        "role": "assistant",
+        "content": "A testing method that simulates multi-turn interactions of medium-skilled adversarial actors."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "How does Llama 4 compare to Grok in terms of responding with strong political lean?"
+      },
+      {
+        "role": "assistant",
+        "content": "Llama 4 responds with strong political lean at a rate comparable to Grok."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "What is the goal of the Llama ecosystem?"
+      },
+      {
+        "role": "assistant",
+        "content": "To bring intelligent and personalized experiences to life."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "What is the benefit of using FP8 precision during training?"
+      },
+      {
+        "role": "assistant",
+        "content": "Efficient model training without sacrificing quality."
+      }
+    ],
+    [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant that provides accurate, detailed responses."
+      },
+      {
+        "role": "user",
+        "content": "How was the post-training pipeline for Llama 4 models revamped?"
+      },
+      {
+        "role": "assistant",
+        "content": "By adopting a different approach: lightweight supervised fine-tuning (SFT) > online reinforcement learning (RL) > lightweight direct preference optimization (DPO)."
+      }
+    ]
+  ],
+  "metrics": {
+    "total": 25,
+    "filtered": 24,
+    "retention_rate": 0.96,
+    "avg_score": 8.0
+  }
+}

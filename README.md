@@ -113,5 +113,6 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 
 ### 06
 - [DSPy: Build and Optimize Agentic Apps](2025/06/DSPyBuildandOptimizeAgenticApps/)
+- [Building with Llama 4](2025/06/BuildingwithLlama4/)
 
 </details>

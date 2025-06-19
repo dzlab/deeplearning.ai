@@ -1,0 +1,3 @@
+{
+  "summary": "The document introduces the Byte Latent Transformer (BLT), a new byte-level LLM architecture that matches tokenization-based LLM performance at scale while improving inference efficiency and robustness. BLT encodes bytes into dynamically sized patches, allocating more compute to complex data. The model comprises three modules: a local encoder, a global latent transformer, and a local decoder. BLT achieves training flop-controlled parity with Llama 3 while using up to 50% fewer flops at inference. The model also demonstrates improved robustness to input noise and awareness of sub-word aspects of input data."
+}

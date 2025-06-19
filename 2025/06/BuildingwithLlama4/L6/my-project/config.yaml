@@ -1,0 +1,22 @@
+system_prompt:
+  file: prompts/prompt.txt
+  inputs:
+  - question
+  outputs:
+  - answer
+dataset:
+  path: data/dataset.json
+  input_field:
+  - fields
+  - input
+  golden_output_field: answer
+model:
+  task_model: together_ai/meta-llama/Llama-4-Scout-17B-16E-Instruct
+  proposer_model: together_ai/meta-llama/Llama-3.3-70B-Instruct-Turbo
+  api_base: https://api.together.xyz/v1
+metric:
+  class: llama_prompt_ops.core.metrics.FacilityMetric
+  strict_json: false
+  output_field: answer
+optimization:
+  strategy: llama
