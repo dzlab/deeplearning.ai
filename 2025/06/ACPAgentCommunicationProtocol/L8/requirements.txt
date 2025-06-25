@@ -1,0 +1,6 @@
+acp-sdk
+load_dotenv
+uv
+nest-asyncio
+colorama
+smolagents
