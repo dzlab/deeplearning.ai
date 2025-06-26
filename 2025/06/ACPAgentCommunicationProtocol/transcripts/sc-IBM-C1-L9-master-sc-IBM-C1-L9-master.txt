@@ -1,0 +1,415 @@
+So you've covered sequential calls and hierarchical calls,
+but there's one thing we haven't quite covered, MCP.
+How can we get ACP and MCP to work together?
+That's exactly what we're going to do now.
+We're going to convert our hospital ACP
+server to use MCP as well.
+So there's a lot of talk about ACP and MCP.
+Well, remember, ACP allows agents to communicate to each other
+or provides an agent communication protocol.
+MCP provides a communication protocol for mainly tools.
+So we can actually use them together.
+The first thing that we're going to need is a MCP server.
+So what we're going to do is we're once again
+going to use a Jupyter Notebook Magic function
+to write out our MCP server.
+Now, this MCP server is going to allow users
+to find doctors near them.
+And it's going to use this particular capability
+to overwrite our hospital server.
+So how do we go about doing this?
+Well, first up, you're going to use the right file function
+to go and write out MCP server to the MyACP project directory
+because we're eventually going to need our ACP server
+to communicate with our MCP server
+file via standard input output.
+So then what we need to do is define the MCP server.
+So first up, what we're going to do is import colorama
+and we're going to use for for some terminal formatting.
+While we're at it, we're also going to import
+the fast MCP capability from the MCP SDK.
+That's going to last to define our MCP server.
+We're also going to import JSON to handle the data
+that we're going to be using.
+And I'll come back to this in a second.
+And we're also going to need requests
+because the data that we're going to be returning
+using this particular MCP server
+is currently served via GitHub.
+Now, what exactly is this MCP server going to do?
+Well, it's going to return a list of doctors
+and we're going to use it to return the most relevant doctor
+to a particular person based on their state,
+assuming they live in the United States.
+So let's go and define this tool.
+So first up, we're going to create our MCP server.
+So we're going to create a new variable called MCP
+and set that equal to fast MCP,
+which we've just imported over here.
+And we're going to name the server doctor server
+or being a little bit verbose here.
+Then what we're going to do is we're going to build up our tool.
+So we are going to use the MCP tool decorator
+and then create a new function called listdoctors.
+This is going to take in one argument,
+which is going to be a state as a string
+and it's going to return a string back.
+Then you're going to provide your doc string.
+So in this case, this particular tool returns doctors
+that may be near you.
+It's going to take in state, as we've mentioned,
+as a true letter state code based on where you live
+and it's going to return a list of doctors
+that may be near you.
+So how are we going to do this?
+Well, I've currently got the data stored on GitHub.
+And you can see that we've got a big JSON document
+of a number of fictional doctors
+that we're going to be able to return back.
+So in order to bring that back via our MCP server,
+we're going to make a request out to that URL.
+So that's the URL there.
+So it's raw.githubusercontent.com
+Fordsashmygithub, which is Nicknocknack.
+And then we're looking at the ACP walkthrough repository.
+We're looking at the refs, the heads main,
+and doctors.json, that's where that file resides.
+Then to bring that back via our MCP server,
+we're going to make a get request to that URL.
+We're then going to load that response back via JSON.loads
+and we're specifically extracting the text from the response.
+And that should give us a list of doctors.
+But remember, what we want to do
+is we want to filter through based on the user's state.
+So we're going to loop through each one of those doctors,
+probably not the most efficient way to do this,
+but this gives you an example of what's possible.
+We're going to loop through each one of the doctors
+inside of that list.
+So four doctor in doctors.values.
+If the doctors address and specifically their state
+matches the state that we've passed through to our MCP server,
+we're going to return that doctor back in a list.
+And that's going to be stored inside of a variable called matches.
+And then what we want to do is we want to return that back
+as a string.
+So that's pretty much our MCP server done
+in terms of the core functionality.
+Now, if our ACP server calls this via standard input output,
+we want to make sure that we run it using if name,
+equal main, then we're going to use mcp.run,
+and we're going to set the transport type to STDIO.
+So that's pretty much our MCP server now created.
+Now, if we run this cell,
+it's going to override it inside of our MyACP project repository.
+So that that MCP server is available to our ACP server,
+which we're going to update next.
+Now, that brings us to our ACP server.
+We're going to take our existing hospital ACP server
+and add in another agent.
+But this second agent is going to be leveraging MCP
+as well.
+So remember, we define our initial small agents agent,
+which was a health agent,
+and this was sort of there to help handle
+general hospital-based queries.
+You can see that that was our doc string.
+Current or prospective patients can use it
+to find answers about their health
+and hospital treatments, so on and so forth.
+Now, this second agent is going to be using the MCP server
+that we've just gone and defined.
+So we're probably going to define a doctor-based agent.
+So how might we go about doing this?
+Because so far, we've only really had one agent
+per ACP server, but you definitely can have more.
+So we're going to add a second one.
+So the first thing that we need to do in order to do that
+is bring in a couple more dependencies.
+So from small agents so far, we've had the code agent,
+the duck duck go search tool, light LLM,
+and the visit web page tool.
+Well, we're also going to bring in the tool calling agent
+and the tool collection.
+These two are going to help facilitate working with MCP.
+Now, whilst we're at it,
+we're also going to bring in an MCP dependency
+because we're going to need to connect to our MCP server
+using STDIO.
+So we're going to bring that in.
+So we're going to go from MCP,
+we're going to import STDIO server brands.
+This is just going to make it a little bit easier
+to help define how to connect and run it against our MCP server
+over here.
+So how exactly do we do this?
+Well, remember, when we went and export our MCP server,
+we defined it as MCP server.py.
+And it's running inside of the My underscore ACP,
+underscore project directory.
+So we need to be able to connect and run our MCP server,
+which the command for that would be UV run MCP server.py.
+So we can construct that command inside of the STDIO server
+parameters class.
+So let's do exactly that.
+So I'm going to define a new variable called server parameters.
+And I'm going to set that equal to STDIO server brands.
+And what you're going to do is create a new argument,
+which is going to be command.
+And that is going to be equal to UV.
+So that's the first part of the command
+that you need to be able to access the MCP server.
+So what are the other two?
+Or remember, the full argument or the full command
+was UV run MCP server.py.
+So we've got our command.
+We now need to pass through the arguments.
+So two our args keyword argument.
+We're going to set that as a list.
+And we're going to pass through the last two arguments,
+which are going to be run, and then MCP server.py.
+So this is effectively going to allow us to run
+and access our list doctors tool inside of the MCP server.
+Now, we also want to pass through one last keyword argument.
+And that is going to be EMV.
+And we're going to set that equal to none
+because we don't have any environment parameters.
+Now, what we're going to do is we're
+going to define our next agent.
+So so far, we've had our first health agent,
+which you can see over there.
+We're now going to create another agent.
+But this one is going to use MCP.
+So this first one is using our code agent.
+The next one is going to use the tool calling agent
+and the tool collection.
+So in terms of the structure, it's pretty similar.
+We're just going to sub out the agent
+and get it to use MCP.
+So let's begin doing that.
+Well, first I'm going to define a decorator.
+And we're going to set that equal to the server.agent decorator.
+We're then going to create a new function.
+And this is going to be an asynchronous function.
+It's going to be defined as the doctor agent.
+Remember when we went and discovered our agents
+were able to see that they pick up the name of the agent
+or the name of the function as the name of the agent.
+So in this particular case, if we went
+and rerun that hierarchical workflow,
+we'd see the doctor agent popping up
+with our new hospital server.
+And then as usual, we're going to pass through our same input.
+This is going to be a list of messages.
+And that is going to return an asynchronous generator,
+which is going to have parameters of year run yield
+and run yield resume.
+Then we're going to define a doc string.
+This one's going to be pretty simple.
+So this is a doctor agent, which helps users find doctors near them.
+Now, what we need to do is start defining our tool collection.
+Now, our tool collection is going to last
+to discover tools on the MCP server.
+So to do that, we're going to create a new with statement.
+And this is going to connect to the tool collection
+using the from the MCP method.
+We're going to pass through our server parameters,
+which we've just defined up here.
+And then we're going to set the trust remote code parameter
+equal to true.
+So that's going to allow us to access those tools on that server.
+And we're going to run this as the tool collection.
+So we'll be able to access it using this shortened statement.
+Now, what we need to do is we need to pass these tools
+to our tool calling agent.
+Because so far, we haven't actually defined an agent.
+We've defined the tool collection, but not the agent itself.
+So let's do that.
+So we're going to create a new agent.
+And this is going to be equal to tool calling agent.
+To that, we're going to pass our first keyword argument,
+which is going to be tools.
+And this is going to be a list, which
+is going to be an unpacked set of values
+from our tool collection.tools value.
+So effectively grabbing all the tools
+from the tool collection over here,
+and we're passing them to our tool calling agent over here.
+Now, we also need to give our tool calling agent an LLM.
+So we're going to set that parameter as model
+is equal to model.
+That's just going to take in our GPT-4 LLM over here.
+But again, you can go and update this to what you want.
+You can use Obama.
+You can use what's next.
+You can use a number of different providers.
+ACP is framework and provider agnostic.
+OK, so that is pretty much our agent now done.
+Now, we also need to go and extract our prompts.
+Now, remember, because we had our input,
+we can go and grab the first prompt,
+and then grab the first part of that prompt,
+and then the content value, and that should be our prompt.
+So let's do that.
+So we're going to grab our prompt variable,
+and we're going to set that equal to input 0,
+and then part 0, and then we're going to grab the content,
+and then we're going to send that to our agent.
+So to do that, we can create a new response variable.
+And we're going to set that equal to agent.run,
+and we're going to pass our prompt to it.
+So that's pretty much the crux of our agent now using MCP.
+The last thing that we need to do is yield this back to our user
+when they go and run the server.
+So we're going to go yield message,
+and that message is going to be constructed
+of a number of parts.
+The main message part is going to take in all of our content,
+which is going to be the response from our MCP,
+or our tool calling agent.
+So that is that there.
+Perfect.
+It should be our MCP agent now done.
+Now, if we're going to run this,
+that is our small agent server now updated.
+So now, if we go and take a look at that small agents server.py file,
+maybe go and take a look inside of that repository now.
+So it's going to be available for you to take note and play around with.
+So if you go to my ACP project,
+and then go and take a look at this small agents.server.py file,
+you'll see that we now have a doctor agent.
+So you can see that we're now running two agents on this one ACP server.
+Now, we need to make sure that we go and rerun the server
+now that we've gone and updated it.
+So if we go and open up our terminal again,
+we're going to make a quick update.
+Remember, the environment's going to stay up for 120 minutes.
+If you go away from this lesson and come back,
+just make sure that you double check that the server is still up and running.
+And then we're going to render that I frame.
+So remember, we're going to be running on terminal two
+because that's where we've run the hospital server so far.
+If we go and run this, we're going to bring up our terminal.
+Take a look, that's available there.
+What we'll do is we're just going to stop that server.
+We're just going to run clear to clear that terminal.
+And then we're going to make sure that we rerun our server.
+So remember, it's been export to small agents
+underscore server.py.
+So let's just make sure we run that particular server.
+So we're going to a UV run small agent server.py.
+And if we go and run that, let's see if we get any errors.
+That's looking pretty good so far.
+So we can see that our server is now up and running
+and it's running at port 8,000.
+All that's really left to do is actually make a call.
+Now remember, when we've gone and connected to our MCP servers
+before ACP servers before, we've gone and used the ACP SDK client.
+That's exactly what we're going to do here.
+But remember, now that we've gone and defined another agent,
+we're just going to make sure that we target this agent
+rather than the health agent.
+So let's go and do that.
+To begin with, we need a couple of dependencies.
+So let's bring those in.
+So we're going to bring AC and IO to make the call.
+We're going to bring Nest AC and IO so we can nest them.
+We're going to bring in the client from the ACP SDK.
+And we're also going to bring in Colorama.
+So we can print it out using a colored output.
+We're then going to apply Nest AC and IO.
+And that should be pretty much it when it comes to our dependencies.
+Now, when it comes to actually making our call,
+we're going to create a new client.
+And this is going to be a new function
+which allows us to call out the main differences.
+We're going to change the agent that we use.
+And we're going to change the prompt that we use.
+So let's go and define this.
+We're going to create an asynchronous function
+called run.doctor workflow.
+This is going to return nothing.
+And that is going to connect to our client using a with statement.
+And remember, we're still running a port
+8000 so we can connect to that there.
+But also take note that we're getting this warning.
+Cannot reach server.
+Check if running on HTTP127.0.0.1.
+port 8333.
+This is occurring because when we start up our HTTP server,
+it's automatically going to try to register our agents
+onto the BAI platform.
+This provides a register for your agent
+so that you can call them via UI but also via the command line
+and orchestrate them all together.
+We're going to start this up in the next lesson.
+But for now, just be mindful of this warning.
+It won't affect the running of this code.
+So let's keep going and connect to our hospital server.
+So we're going to create a base URL.
+We're going to set that equal to HTTP, colon,
+forward slash, forward slash local host, 8000.
+And we're going to run that as the hospital client.
+Then what we're going to do is we're going to make a synchronous call
+and call out to our hospital client.
+So this is going to be stored inside of a variable called run1.
+We're going to set that equal to await hospital.runsync.
+We're then going to pass through the agent that we want to call out to,
+which is going to be the doctor agent.
+Because remember, we've gone and defined a second agent now.
+We're going to call out to the doctor agent rather than the health agent.
+So we're going to hit that agent and now we pass through our prompt.
+So our prompt is going to be, I'm based in Atlanta, Georgia.
+Are there any cardiologists near me?
+Question mark.
+So that's going to be our prompt.
+And keep in mind, this should ideally take the state, Georgia,
+and go and find whether or not we've got any doctors or cardiologists
+that are available in that particular state.
+We haven't actually gone and done a filter for the type of doctor.
+You might go and choose to update that and see how that performs.
+For now, we're just very much focused on state.
+So what we can go and do is then we just need to print out our content.
+And remember, because we're getting the message parts and the messages back,
+we want to make sure that we get the result from our first prompt,
+because we're only passing one through and the first part,
+we're only outputting everything as a single part,
+so we're just going to grab everything.
+So if you're doing streaming, you'd be able to grab each one of those parts
+as they generated.
+OK, so let's create a new variable called content.
+And we're going to set that equal to run1.output.
+We're going to grab the first message.
+We're then going to grab the first part and then grab the content.
+And then we're going to print it out.
+So we're going to use light magenta to print it out to our terminal.
+And we're going to print out the content and reset the terminal
+so that we go back to our regular coloring.
+OK, cool.
+Now if we go and run that, that is our workflow now defined.
+All that's really left to do is actually go and run this workflow.
+So to do that, we can use async.io.run and to that,
+we're going to pass through our run doctor workflow function.
+And if we go and run that, take a look.
+Looks like the run started.
+We're searching.
+Looks like we've found a doctor.
+Do we get a final response?
+There we go.
+So we've now got a final response.
+Yes, there are cardiologists near you in Atlanta, Georgia.
+For example, Dr. Sarah Mitchell, who specializes in cardiology,
+is based at 1, 2, 4, 7 Medical Center Drive at Atlanta, Georgia.
+She has 15 years of experience and is board certified.
+Now I wonder if we go back to the data set
+if we can find that particular doctor.
+And take a look, that's actually our first result.
+So you can see that we've gone and found that first doctor.
+And they just so happen to be a cardiologist.
+But we haven't actually focused on that.
+We've filtered purely based on the state.
+So what you might go and do is try updating the prompt.
+See if you can find a doctor in Arizona or in California
+or in Colorado.
+You should be able to use your doctor agent to now do that.
+But we've now demonstrated how we can use MCP and ACP together.

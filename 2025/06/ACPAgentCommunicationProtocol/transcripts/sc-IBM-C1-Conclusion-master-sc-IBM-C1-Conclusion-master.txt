@@ -1,0 +1,19 @@
+We hope that getting hands-on and building ACP agents has sparked your creativity
+and gotten you excited about what's possible when agents can collaborate effectively.
+Throughout this course, you've explored why agent communication protocol is valuable,
+learn some of its core principles, and actually build and ran your own ACP agents.
+If you're ready to take the next step and join the growing community shaping the future of ACP,
+here's how you can get involved.
+Stay in the loop by checking the GitHub repo, join the Discord channel,
+and jump into the discussions on GitHub.
+If you've built something cool, share it with us in the show and tell.
+Contribute directly by checking out open issues labeled help wanted,
+or if you've got your own ideas you'd like to explore, start a discussion.
+Lastly, give feedback. We actively encourage it.
+If you run into bugs or problems, open an issue on GitHub,
+and we'll do our best to resolve it quickly.
+ACP is open, governed, and community-driven.
+It's being built by the community for the community.
+So whether you're building, contributing, or just curious,
+there's a place for you in this ecosystem.
+Thanks for learning with us, and we can't wait to see what you built next.

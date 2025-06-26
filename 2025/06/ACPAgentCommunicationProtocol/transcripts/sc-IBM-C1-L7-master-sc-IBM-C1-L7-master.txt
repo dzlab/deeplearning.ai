@@ -1,0 +1,85 @@
+You've now gone and defined a insurance ACP server. You've also built out a hospital ACP server and
+keep in mind that hospital ACP server is running on a different framework as opposed to the
+insurance server. So it sort of shows that ACP can handle a number of different frameworks.
+But how do we get them to talk to each other? Can we pass context from one to the other and build
+sequential calls? That's exactly what we're about to cover. So we're now going to chain our agent
+calls. The first thing that we need to do is once again just make sure that our ACP servers are
+up and running. So to do that, we're first up going to connect to terminal one. If we go on
+ahead and run this, let's double check to see if our insurance server is up and running
+and take a look. Looks like it's still up and running and we can see the last call that we made
+to it from a previous lesson. Let's do the same for our hospital server. Remember, the insurance
+server is running using crew AI and it's a retrieval augmented generation agent. Our hospital
+server is using small agents and it's using a code agent. Okay, so for our hospital server, we're
+again getting import iFrame, we're going to import OS, grab the local URL and then run the terminal.
+But remember, the hospital server is running on terminal two, as you can see here. So if we go
+on ahead and run that, let's double check if our hospital server is still up and running and take
+look. It does look like it is up and running over there.
+Okay, so the next thing that we want to go on ahead and do is chain our LLM calls. We're going to
+import nest async IO to make sure that we can nest our calls and apply it to our environment.
+Okay, now comes the crux of it. So to go and make asynchronous calls, what we're going to do is
+first make a call to our hospital server and we're going to ask, do we need rehabilitation
+after shoulder surgery? And then what we're going to do is we're going to unpack and get the
+response and pass that through as context into the next call to our insurance server and we're
+specifically going to be calling out to our policy agent. So again, we're going to bring in our
+client from the ACPS DK and we're going to bring in four from colorimer as well. We're then going
+to define an asynchronous function and this is going to be called hospital workflow. So we're
+going to run this when it comes to running our chain calls. This is going to return nothing.
+Now, we want to go on ahead and create two clients to connect to our two servers because remember,
+we've got our first server, which is the insurance server, which is running on port 80001,
+and then we've got our second server, which is our hospital server running on port 8000. So we
+now need to connect to both of those servers. So we're going to create an asynchronous connection
+and we're going to create the first client to connect to the first server and label the client
+as the insurer and then we're going to create the second client to connect to our second server
+and label that as the hospital. Cool. So those are our two clients. So this is our first client,
+which is going to be our insurer and then this is going to be our second client, which is going
+to be connecting to our hospital. But it shows you that you can connect to different ACPS servers,
+which is ultra useful if you have agents in different organizations, if you have different
+specialized agents and they're running in different places, this gives you a way to connect them
+more. But how do we pass context between them so that we can make sequential calls?
+So first, what we're going to do is we're going to connect to our hospital client
+and we're going to run a synchronous function and we're going to call out to our health agent
+and then we're going to pass through our prompt. So our prompt is going to be passed through
+into the input variable and we're going to set that to do our need rehabilitation after a shoulder
+reconstruction. Now, once we've gone and run this particular prompt, we'll be able to unpack that
+or remember, we're able to unpack using the message and message parts format.
+So to get our output or to get the specific text from our output, we're going to go to our run,
+we're going to get the output and we're going to get the first example because remember,
+if you have multiple prompts, you're able to get multiple responses back and we're going to grab
+the first part because we're sending it all as one output and then get the content from that.
+Now, to make sure that we can see what we're outputting, I'm going to print this out. So we're
+going to print it out in light magenta using color armor. So over here, we've got our terminal
+formatting. We're then going to append the content and then we're going to reset to make sure
+that we go back to white. Then we're going to run our second call. So this is effectively our
+first call to our first ACP server. Now, what we want to do is make our second call and we want
+to take this, which is effectively our output from our first call and append that as context to
+the next one. So we're pretty much going to replicate what you can see here. But this time,
+what we're going to do is we're going to connect to our insurance client and we are going to
+connect to our policy agent and we're going to take this content, which we've already captured from
+our first run and we're going to append it to our prompt. So prior to asking our question,
+we're going to append our context and you can see here I'm just doing a little bit of text formatting
+and then I'm going to pass through my second question. So what is the waiting period for rehabilitation?
+So now we should know do we need rehabilitation and then we're passing that same context to our next
+LLM call and we're going to print this output out as well. So we're printing out the output from
+our hospital run in light magenta and we're going to print out the output from our insurance agent
+in let's print it out in yellow. So again, we're going to unpack the results of that. So it's going
+to be run to dot output. We're going to get the result of the first prompt and we're outputting
+everything in a single part. So we're going to grab that part and we're going to grab the content
+from that and then we're going to reform that terminal. So this should give us a sequential
+ACP call. We're going to run the first call here. We're then going to get that context,
+pass it over here and then we're going to run that second call. So we're taking the output
+from this, passing it to this. If we go and run that call using ACNGIO, so we're going to import ACNGIO
+and then we're going to use the run method and we're going to run the hospital workflow from over here.
+Now, if this all works correctly, we should see, so we are hitting the hospital server first.
+So we'll see this server running first and then we'll see this server running. So let's kick this
+off and see how we go. So if we go and run this cell, so take a look, we've already kicked off
+that first call. So do I need rehabilitation after shoulder reconstruction? We've got some output
+from the net so you can see that we're actually calling out. We've got some results from a number
+of different websites and take a look, we've got our final answer. Yes, you do need rehabilitation,
+after shoulder reconstruction. You can see that's printed out in light magenta.
+If we go and take a look at our crew AI agent, take a look, that's running as well over here.
+And we should get our final, looks like we've already completed as well. So we do have our final
+answer. We do. The waiting period for shoulder reconstruction is typically two months under the
+gold cover plan. So take a look, we've now gone and sequentially run ACP calls. So this is the
+result of our first call and this is the result of our second call with the context appended.
+But it sort of shows you the possibility. If you need it to change different processes together,
+this is the way that you'd be able to do it.

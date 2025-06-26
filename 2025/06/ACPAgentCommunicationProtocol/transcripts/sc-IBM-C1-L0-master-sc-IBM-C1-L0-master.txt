@@ -1,0 +1,46 @@
+Welcome to ACP, Agent Communication Protocol, built in partnership with IBM Researcher's BAI Project.
+In this course, you build and run agents that communicate through ACP or the Agent Communication Protocol.
+You configure sequential and hierarchical workflows of multi-agents that collaborate through a unified rest interface provided by ACP.
+I'm delighted that instructors of this course are Sandy Besson, whose AI Research Engineer and Ecosystem Lead,
+as well as Nicholas Renoint, who is Head of AI Developer Advocacy at IBM.
+Things are true. We're excited to work with you on this course.
+To build a team of agents that communicate and collaborate through ACP,
+you can host an agent on an ACP server which will receive rest requests from an ACP client and forward those requests to the agent to execute.
+The ACP client, which can itself be an agent or any other process,
+discovers the agents using the endpoints of the ACP servers and initiates requests.
+This unified client server interface helps standardize the communication between agents across teams.
+Take, for example, a multi-agent system for customer support.
+One team might build a logistics agent on the questions related to all the status.
+A different team might build a different rag agent on such general questions related to products.
+Each team can make the agents available through an ACP server,
+while yet a third agent, hosted inside the ACP client, can process customer inquiries and route them to the specialized agent.
+Each team can implement their agents using a totally different framework,
+or even switch between frameworks without needing other teams to make any changes to their own code,
+because the communication happens through a standardized protocol.
+This standardization also makes it easy to integrate any existing agent into the multi-agent workflow.
+You can wrap an agent in an ACP server which enables an ACP client to discover it and integrate it into the workflow.
+These existing agents can also be made visible in a registry or agent catalog.
+The catalog can provide centralized agent listings and simplify searching for agents,
+especially in large-scale deployments or enterprise environments.
+ACP is an open-source protocol that is also openly governed, meaning no single company controls it.
+Many open discussions with the community have shaped the development of this protocol and continue to shape its evolution.
+It's also worth noting that ACP and MCP can be seen as complementary protocols.
+An ACP agent can use MCP to access tools and then use ACP to interact with other agents.
+In this course, you'll first wrap a rag agent built using the QAI framework in an ACP server,
+and then interact with it through an ACP client.
+To create the sequential workflow, you'll wrap a second agent built using the small agents framework in another ACP server.
+Inside the ACP client, you'll learn how to discover the two agents and chain them sequentially.
+After that, you'll build another hierarchical workflow where instead of sequentially chaining the agents,
+you'll use a third routing agent coded using the small agents framework in the ACP client,
+which will wrap the input queries to one of the specialized agents.
+You'll then extend the small agents ACP server to use MCP to get access to tools.
+And finally, you'll learn how you can discover and run and import ACP agents to the BAI platform,
+which is an open-source registry for agent discovery.
+Many people have worked to create this course. I'd like to thank from IBM, Kate Blair, and Anna Fuchs.
+From deepline.ai, Haral Salami also contributed to this course.
+ACP standardizes communication between sensitive agents that might have been developed by the same developer or team,
+or developed by different users within the same organization.
+But it's not only intended for local development environments,
+it can also be used to connect distributed agents even across different organizations.
+And that specifically is what you'll learn more about in the first lesson with Sandy.
+Let's go to the next video to get started.

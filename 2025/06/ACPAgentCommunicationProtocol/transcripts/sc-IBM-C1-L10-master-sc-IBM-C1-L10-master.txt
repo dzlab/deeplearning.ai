@@ -1,0 +1,110 @@
+Okay, so you've gone all the way. You've built an ACP server, you've called out to it via a client,
+you've created a sequential call and even created a hierarchical call. We're also updated
+that server to be able to use MCP, but what if we could call those agents via UI and have them
+centrally managed inside of a repository? Well, this is where the B.A.I platform comes into play.
+In the last lesson, you were able to discover agents on an ACP server using the Python client,
+but what if there were other ways to do this? Well, one of these ways is via registry.
+Think of a registry as a centralized store where you can access a range of agents, which may
+have different use cases, tools and capabilities. The registry also allows you to centrally manage,
+deploy and search for agents, and in the case of the registry I'm about to show you,
+you can also perform offline discovery. This means you're able to search for agents without
+network connectivity. The registry that you'll be learning about is provided via the B.A.I platform.
+It has its own built-in registry, but also provides a user interface to run and manage agents,
+as well as providing the ability via ACP to have them chain sequentially and hierarchically.
+There's a few different ways to install it, depending on what operating system you're running on.
+If you're running on Mac OS or Linux, you can follow these instructions here or these here.
+If you're using Windows, you can follow this set of instructions. Now, to start the B.A.I platform,
+you can run B.A.I platform start and walk through the setup instructions. I'm going to use what's
+the next.ai and specifically Lama4 on the platform, but you can use whatever you'd like.
+Now, build right in. You've got a few popular agents right out of the box,
+like GPT Researcher for Research, Ada for Programming, and the podcast creator agent for
+you guessed it, creating a podcast. If we choose one of them, let's say Ada, we can pass through
+a prompt and run it, and you've got your agent run.
+The thing is, you've gone to all that effort to build your own ACP compliant agents,
+so can you add them to the registry inside of the B.A.I platform? Sure, Ken, let's go do it.
+So, we're going to bring in our ACP agents into the B.A.I platform to do this. First up, I've
+gone and replicated the deep learning.ai environment on my local machine, and I've updated this to
+use some different LLMs. So right now, I'm using the Watson X Lama4 instance in my small
+agent server, and I'm doing the same inside of my crew agent server. You can see that here,
+and you can also see that here. Now, what I want to do is I want to sort of show you what's
+possible with B.A.I. So the first thing that we're going to do, or the first command that I'm
+going to run you through is how to go about installing it if you want to run it locally.
+So to do that, you can run Brue, install B.A.I, and go on ahead and run that. It should run on
+your machine, and then you can go and kick it off by running B.A.I platform start, and that will
+kick the B.A.I server off. Then you'll be able to run the command B.A.I, and all of it's derivative.
+So if we go and run B.A.I to begin with, you can see I've got a number of different options.
+I've got a number of different commands. I've also got a number of different agent commands.
+We're going to focus on the agent commands for this particular lesson. So over here,
+if I go and run B.A.I list, I'm able to list all of the different agents that I've got available.
+So let's go and try that. So if I hit clear, and then run B.A.I list, you can see that I've got
+a number of agents to the complete package inside of B.A.I. You can see I've got an agent documentation
+creator. I've got Ada chat, GPT researcher, and a bunch more. Now we can actually go and run these
+by running B.A.I run and then the agent that you want to run here. But I want to focus on using
+the agents that you've already gone and built throughout these lessons rather than using one of these.
+So before we go and run that, let's actually go and make the ACP agents that we've already gone
+and created compliant with the B.A.I. platform. So let's go and do that. So inside of our small
+agent server, I'm going to import the metadata capability, and this is just going to allow us
+to define what the documentation is associated to that particular agent and how to go about running it.
+So if I bring in the metadata capability there, and then we're going to scroll on down to our
+health agent. Now inside of the agent decorator, I'm going to set the metadata keyword argument,
+and that's going to be equal to our metadata class, and then we're going to set what the UI
+value is. And I'll come back to this in a second. What that UI is going to dictate. But for now,
+stick with me. The type is going to be a hands-off agent. There's other types of agent. There's
+also chat agents. And the user greeting, this is going to be almost like the prompt greeting,
+is going to be ask your health question. Now I'm also going to set the same or a slightly similar
+one for our doctor agent that we created in our small agent server. So I'm going to set the metadata
+and set that equal to metadata. The UI is again going to be a hand-off agent. And then what we're
+going to do is we're going to set the user greeting for this one. Find a doctor, pass your query,
+and state here. So we've now got our type, and we've also got our user greeting set for our doctor
+agent. Now let's quickly go and do the same for our crew AI agent. So we're going to, again,
+import metadata over here. And then inside of our agent decorator, we're going to set those same
+parameters. So we're going to set the metadata keyword argument, provide the metadata class,
+we're then going to set the UI type to hands-off. And the user greeting, we're going to have a
+slightly different one. Go to question about your policy, ask here. Okay, so that's pretty much it
+when it comes to going and setting up our agents. Now the beautiful thing about this, and you might
+have seen it when we went and built our last agent and updated it for MCP, that we weren't actually
+registering the agents. That's because BAI wasn't running on the deeplearning.ai platform,
+but I've got it running locally. So what does this actually mean? Well, if I go and start up
+our two agent servers, so let's go and kick off our small agent server. If we go UV run small
+agents server.py, we should get a server up and running and take a look. We are running over,
+yeah, you can see we're running on port 8,000, but we've got all this extra information. We're
+going to come back to that in a second. Let's go and start up our crew agent server as well. So if
+we go UV run crew agent server. Got a bit of a warning, but that's okay. Looks like we're now
+running. Let's maybe zoom out so we can see that a little bit more clearly. So we've got our server
+running right over here. So we've got our server running on port 8,000 and one we've got our other
+server running on port 8,000. Now the cool thing about this is that if we go and run BAI,
+let's actually create a move BAI into its own separate terminal. So if we now go and run BAI
+list, take a look. We've now got our doctor agent, our health agent, and our policy agent now
+described or now available inside of BAI. So if we wanted to go and run one of these agents,
+for example, let's go and run our doctor agent. We can go and run BAI run doctor agent and take a
+look. We've got a greeting find a doctor, pass your crew in states. So let's try the same prompt
+that we had within when we actually want to build that server. So I'm based in Atlanta.
+Georgia, are there any cardiologists? Yeah, me. Okay, so if we go and take a look at our server,
+take a look. It's actually kicked it off. It looks like we've got a response. And if we go and
+jump back, it looks like we've got a response. Yes, there are several cardiologists near you and
+Atlanta. Georgia, one of them is Dr. Sarah Mitchell, who's a board certified and has 15 years of
+experience. So you can see that we're now able to add our agent to the registry, but we're also
+able to run them. If we went and ran our policy agent, for example, we could go and do that. So
+if we go and run BAI run policy agent. So you can see that we've got our greeting there. So I've
+got a question about your policy. Ask here. So we might go and say, what is the waiting period
+on physiotherapy? And if we go and jump back to our servers, so you can see that that is now
+running. It's looking like it's going and searching through our knowledge base. I'm not actually
+sure whether or not we've got that inside of our vector database. But let's see if we get a response
+back. So take a look. We've got our agent running. Do we have a final response? Take a look.
+The waiting period on physiotherapy is two months group physiotherapy is covered with a limit of
+$35 per visit. So we've now gone and rendered a response using the BAI platform. But could we
+also use this inside of a UI? Well, if we actually go and run BAI UI, this is going to open up a
+separate UI where you've got the ability to go and use the server here. And if we go and take a
+look, all of our agents are going to render over here. So we've got our doctor agent. We've got
+our health agent. And we should have our policy agent. So if we went and ran it over here, we can
+go and say, what is the waiting period on what did we want to say? What is the waiting period on,
+I don't know, dental. Actually, let's just stick with the free rehabilitation. And if we go and
+run this, so this is going to go and kick it off. If we go and take a look at our servers, take a
+look, they're running, but we're now running it inside of the UI. And we've got our final result
+back. The waiting period for rehabilitation, which falls under the hospital substitution programs,
+is generally two months of continuous cover. Unless it's pre-existing condition, in which case,
+it is 12 months. So we've now gone and built it out. And we've actually run it inside of the BAI
+platform and inside of the UI. So you can see they've now got the ability to assign it into the
+registry and run it inside of a nicely designed user interface. On another note, definitely go check out
+the resource section. At the end of the course, I'll make sure to link to the documentation,
+the ACP protocol, the BAI platform, and my ACP GitHub Reaper, as well as a few other helpers.

@@ -1,0 +1,154 @@
+Now that you have a good understanding of the value that ACP brings
+and the use cases that it enables,
+let's understand where it fits in the tech stack.
+It's overall architecture, the lifecycle of an ACP agent,
+and how it compares to some of the other protocols out there
+like MCP and A to A.
+Let's go.
+To really grasp how ACP works,
+it's helpful to understand where it fits within an agentic system.
+Alongside components like the foundation model, storage,
+agent orchestration, application layer, and more.
+This diagram shows that ACP sits below the application layer
+at what's sometimes called the operational layer.
+It uses HTTP and the rest architectural style
+to facilitate communication between independent systems.
+ACP is based on a client server architecture
+that uses a simple rest interface.
+This means that the client is responsible for initiating communication
+and the server responds to that request.
+In ACP, both the client and the server can be an AI agent,
+a human, or a microservice.
+The client will always initiate the request
+and the server will always respond to the request.
+In a basic example of ACP interaction
+where the server host is an AI agent,
+the ACP client discovers available servers
+and then initiates a request.
+It sends a rest request to the ACP server.
+The server, which wraps an AI agent, manages the request
+and returns a response back to the client over rest.
+As things get a little bit more complex,
+we can observe how multiple layers of protocols
+each serving different purposes can work together.
+In this diagram, we see a client makes a request
+to an ACP server over rest, which wraps an agent.
+The agent determines it needs to invoke a tool,
+so it sends a request to an available MCP server
+to execute the tool call and return the result.
+Once the ACP agent completes its run,
+it returns the output to the ACP client.
+Before you dive into building out your first ACP compliant agent
+in the next lesson, let's go through some core concepts
+that will help you understand how the protocol works
+on a deeper level.
+Agent Detail is where you define your agent's
+basic identity and capabilities.
+You can specify the agent name, provide a description,
+and add optional metadata for additional information.
+This basic information makes your agent discoverable
+and usable within the ACP ecosystem.
+The agent Detail enables both online and offline discovery.
+Online discovery occurs when ACP servers are already running
+and can be accessed through their API endpoints.
+All-flying discovery happens at a higher level,
+like at the Agent Catalog or Registry,
+where Agent Detail is embedded in the agent package,
+allowing a user or system to discover agents
+without requiring them to be running first.
+This enables the creation of an agent catalog or directories
+where agents can be browse, selected, and then spawned when needed.
+To activate your agent and enable its online discovery,
+you need to deploy it.
+You can either use the SDK built-in server,
+which is the easier way to get started,
+or use an external server.
+Starting the ACP server makes the agent available
+to the ACP client to run.
+The built-in server is what you'll be using throughout this course.
+Once the agent is activated,
+it's ready for execution,
+meaning it can actively process requests and generate a response.
+ACP offers three execution modes,
+synchronous, asynchronous, and streaming.
+In synchronous mode, the client waits until the agent completes its run
+and then returns a final result.
+In asynchronous mode, the client doesn't wait for the agent to respond.
+It can carry on with other tasks in the background.
+When streaming, the server establishes an SSE or a server sent event connection,
+which provides real-time updates as the agent generates results.
+Regardless of the execution mode,
+each run progresses through states such as in progress,
+awaiting, and eventually reaches a termination state,
+such as completed or failed.
+The agent communication protocol is designed
+with a production-grade environment in mind.
+So it prioritizes security, scalability,
+and observability for reliable performance at scale.
+One frequent question is what is the difference between using ACP,
+MCP, or A to A?
+And put simply, MCP is designed for enriching a single model's context
+with tools, resources, and prompts.
+But MCP and ACP are compatible
+and even complementary.
+An agent might use MCP when making the tool call
+that returns more context to the agent,
+and then that agent might decide that it needs to communicate with another agent,
+which it does over ACP.
+However, MCP is decoupled from ACP
+because it's not primarily designed for agent-agent communication.
+For instance, as of now, the MCP protocol is not designed
+to easily enable an agent to carry over a task from another agent
+or peer-to-peer collaboration.
+When it comes to shared memory,
+MCP has the support for session management,
+meaning servers can be stateful
+and maintain information about a client's sessions between requests.
+However, MCP doesn't handle the state itself.
+The ACP SDK supports centralized storage for runs and sessions,
+meaning that multiple ACP servers can persist information across these runs or sessions.
+For message structure, MCP doesn't form any opinion on the message.
+Since agents need to support natural language as well as other modalities,
+ACP messages follow multimodal structures for exchanging content.
+Google's A to A protocol,
+which was introduced shortly after ACP,
+also aims to standardize communication between agents.
+Both protocols share the same goal of enabling multi-agent systems,
+but they diverge in philosophy and governance.
+Some of the notable differences are that both A to A and ACP are open source,
+but ACP is openly governed with the Linux Foundation,
+ensuring its open, neutral, and centered around community participation.
+An ACP you can run multiple agents with the same server,
+reducing overall setup and management effort.
+Whereas with A to A, each agent must be run with a separate server.
+ACP also follows the rest-based architecture style,
+supporting standard web infrastructure and patterns
+that enhance scalability and interoperability.
+A to A uses JSON RPC style, which can introduce a bit more complexity.
+In A to A, the agent output and message history are separated.
+This can make it very difficult to determine the order of events in a multi-agent turn
+without implementing additional ways of persisting this information,
+which is really important for transparency and observability.
+ACP supports a wide range of agent types,
+and allows developers to explicitly choose between synchronous,
+A synchronous, and streaming modes.
+This makes response handling predictable
+and simplifies client logic that guarantee streaming via SSC.
+A to A also supports both stateless and stateful agents,
+but the interaction mode is determined dynamically by the agent.
+As a result, clients must be built to be flexible in handling sync,
+async, or streamed responses based on the agent capabilities.
+While ACP and A to A have some differences,
+it's important to highlight that they have a lot in common.
+What you learn in this course with ACP
+should largely carry over to A to A.
+You now have a handle on one you might use ACP, MCP, or A to A
+based on your goals and system configuration.
+It's important to remember that these protocols are all
+living and breathing projects that change rapidly,
+and what might be true when filming this course
+could easily be out of date in the near future.
+So always make sure to do your own research
+and confirm any assumptions with your own experimentation.
+Congratulations! You've made it through the theory,
+and now you're ready for the hands-on part of the course.

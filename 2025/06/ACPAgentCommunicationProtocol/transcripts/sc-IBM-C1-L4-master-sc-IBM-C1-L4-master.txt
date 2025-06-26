@@ -1,0 +1,106 @@
+Now that you've built the RAAG agent, it's time to bring in ACP into play,
+because eventually what you're going to do is take your first insurance ACP agent
+and connect it up to a hospital agent. That way, imagine you've got agents communicating
+across different organizations. That's the beauty of ACP. We can define an agent once and have them
+called from a universal client. In this particular case, we're going to get two organizations to
+talk to each other using their agents. But before we get to that, we first up need to wrap our
+existing agent, our RAAG agent, inside of ACP. So you're now going to convert your existing
+RAAG agent into an ACP server. So over here, I've got the existing code that we broke in lesson
+three. This is the exact same insurance RAAG agent that we've already built out.
+But how do we convert this into an ACP compliant agent and specifically an ACP server?
+Well, first up, what we're going to need to do is run this as a standalone server.
+So we need all of this code to be output into a file that we can run using Python or UV.
+So how do we go about doing that? Well, we typically use an IDE. But for this specific learning
+environment, we're going to use a magic function that will copy the contents of this cell into a
+Python script. And we're going to export this into a file called crew underscore agent underscore
+server.py. So when we're going to run this cell, it's actually going to export all of this code
+to that specific file there. Now, the next thing that we're going to need is a couple of dependencies.
+To actually convert this into an ACP server. So we're going to bring in the ACP generator from
+collections.abc. This is going to form the output type for the server. We're also going to import
+message and message part from the ACP SDK. This is going to form the format that we use to output
+the results of our agent. While we're at it, we're also going to import run yield run yield
+resume and server from the ACP SDK dot server class run yield and run yield resume are going to
+form part of the asynchronous generator. So this effectively showcases the type of output that our
+ACP server is going to be exporting. The server itself is going to form the foundation of our ACP
+server. Okay, so those are the main dependencies now imported. Now, the next thing that we need to do
+is create an ACP server. So to do that, we can create a new variable called server and assign it
+to ACP server that we've imported from over there. Then what we're going to need to do is begin
+wrapping our existing agent. So I'm going to scroll on down to where we had our agent and we're
+going to use the server dot agent decorator. This is going to tell the ACP SDK that what comes under here
+is an agent that we want to make available on the ACP server. Now, the name of the agent that actually
+goes into the server is based on what we actually name this function and we're also able to provide
+metadata via the doc string. So let's go ahead and start wrapping this. We're going to make this
+an asynchronous function and we're going to call it policy agent. Then we need to define what
+types of input we're going to take and this is effectively where our prompt is going to be captured.
+The first variable that we're going to capture is our input and this is going to be a list of
+messages. Then we're going to return a generator. That means we're able to iteratively return
+output from our ACP server and that is going to be an asynchronous generator and that's going to
+take in run yield and run yield resume from over here. Now, one of the most critical things is also
+explaining what these agents are useful for. So ACP makes this available through the doc string. So
+all we need to do is provide a doc string underneath our function. So our policy agent, if you
+remember correctly, is specifically an insurance related agent and provides us with information
+around our coverage periods, whether or not something is included or not. Now, we're able to
+provide this back to our users via the ACP server using this specific doc string here. So we're
+going to write it out. So this is an agent for questions around policy coverage. It uses a
+rag pattern to find answers based on policy documentation. You can use it to help answer questions
+on coverage and waiting periods. So that's pretty much our doc string now defined. Now, when somebody
+looks for metadata around this agent via the ACP server, they'll be able to return that particular
+bit of information. Now, we need a tab all of this in and there's one key thing that we need to
+change here. Right now, we've got a fixed prompt, which has been passed through inside of our
+task. But we really want to be able to capture a dynamic prompt when a user goes and calls out to
+our ACP server. And this is where our input variable from up here comes into play. Now, we do need
+to unpack the values from that input because right now we're saying that we're going to be passing
+through a list. But for now, we just want to take that one prompt. So to do that, I'm going to
+convert this static prompt to an input variable. So we're going to grab the first value from our input
+and we're going to grab the first part and we're going to specifically return the content.
+Now, if you actually go and print this out, you'll actually see that when we return that message
+variable, we're able to actually extract all of those different components. So if you add multiple
+prompts, you've got the ability to maybe loop through and create multiple tasks. Maybe you try that
+after this. Okay, so that is our task now amended. Now, because we are running this asynchronously,
+we want to kick off our agent asynchronously as well. So we're actually going to await our
+crude or kickoff method and we're going to convert that to asynchronous. Now, right now,
+we're not actually returning anything from the server. So we need to return something as well.
+Now, rather than returning, because we are producing a generator, we're actually going to yield.
+So we're going to use the yield method and we're specifically going to return a message,
+and we're going to return the different message parts from our agent. Now, this is going to
+take in our task output. Now, let's say you had another agent and it just returned back a specific
+text prompt. You'd be passing through the text prompt inside of this value here. Keep in mind,
+we're formatting it as a string. That way, we're keeping consistent when it comes to generating
+our outputs. But when we go and run this now, after our agent gets kicked off, it'll take in the
+prompt for our user over here, we're then going to unpack it and push it into our crew AI task.
+And then eventually, we're going to return it down here. Now, we do need to run this server,
+because keep in mind, we're going to be outputting this as the crew underscore agent underscore server.py
+file. So how do we go about running this? Well, we're going to use a pretty common Python structure.
+So if name is equal to main, then what we're going to do is we're actually going to run this server.
+And we're going to run it on a specific port because a little bit later on, you're going to spin
+up another server so we can build sequential ACP server calls. So we are going to take our server,
+and we're going to use the run method to kick it off, and we're going to run it on port 80001.
+Now, if I go and run this cell, this is going to output it into that specific folder.
+So my underscore ACP underscore project, and we're going to output it to the crew underscore agent
+underscore server.py file. So if you go and open up that file and specifically inside of that
+repository, you'll see that we've exported this code that we've just written over here. Now that
+we've got that code exported, though, we can actually begin to run that ACP server. So to do that,
+we're actually going to create an iframe inside of our Jupyter notebook. That way you can start
+up the server as well and give it a go. So I'm going to grab this code, which will open terminal one.
+Now, we're eventually going to run multiple ACP servers. So we're going to run this server in terminal
+one. And then our later on, we're going to define a hospital server. And that's going to be running
+in terminal two. Now, if we go and run this, we should get our terminal back and take a look.
+That's our terminal. And right now, you can see that we're inside of the work folder and inside
+of the my ACP project folder. Cast your mind back when we went and wrote this out. We were writing out
+our crew agent server file to the my ACP project file. Now, if you're going to run this locally on
+your own machine, just keep in mind that you need to be in the same folder where the crew agent
+server is currently running. So we're going to be using UV to run this. Now, if you've never used UV
+before, you can install a by just running pip install UV. And if you're creating this for the
+first time, again, on your local machine, you're going to need to initialize a new project by
+running UV and knit and then creating a virtual environment by running UV, V and V. We've already
+set this up inside of your environment. So you've got the ability to just go and kick off the crew
+AI server. So to do that, we can run UV run crew agent server.py. And if we run this, hopefully,
+we'll get an endpoint back that shows us that our server is running. And take a look. We've got
+our endpoint returns. So we can now see that our server is currently running at a local host
+environment on port 80001. And remember, we specified our port up here. Now, the thing about this
+is that it's going to stay up for 120 minutes. So if we start this server this first time,
+it'll run for 120 minutes. But if you go away and come back to this lesson, you're going to need
+to start it up again. This only applies to this environment. If you're running it locally,
+it's obviously going to stay up for as long as you're running the Python script. But just keep in
+mind that when you're running it inside of the deep learning dot AI environment, you've got 120 minutes.
+So now we've got the ability to call out to it via an ACP client in the next lesson.

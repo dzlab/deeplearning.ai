@@ -1,0 +1,141 @@
+You've now built up ACP servers and connected them together using sequential agent calls.
+But what if we wanted to use a router agent to be able to navigate the different ACP servers by
+themselves? How might we go about doing that? Well, this brings us to this lesson,
+making hierarchical calls. So we've gone and run through sequential
+chaining, but now we want to be able to go and hierarchically chain these agents together.
+IE use a router agent to be able to automatically navigate how to best answer a question.
+And the way that we're going to do this is we're actually going to use a prompt,
+which is a combination of what we've done before. So rather than asking, do I need rehab and then
+what is the waiting period? We're actually going to combine it. So the final prompt that we ask
+is, do I need rehabilitation after a shoulder reconstruction? And what is the waiting period
+for my insurance? So that way our router agent sort of needs to navigate between both of our ACP
+servers to determine how best to answer this question. So how do we go about doing this? Well,
+first up, we've got to make sure that both of our ACP servers are up and running. And again,
+you've probably done this a few times now, but we want to make sure that they're up and running,
+because there's a limit of 120 minutes when we're running it via this lesson. If you're running
+it locally, it's as and when you are running that Python file. But for now, let's go on ahead
+and double check that both of our ACP servers are still up and running. We're going to first up,
+bring up terminal one, which should have our insurance server. Let's just make sure that's
+still up and running. And that looks all well and good. Looks like we've still got the output
+from our sequential call up and running there. Okay. Now, what we want to go in ahead and do is
+make sure that our hospital server is up and running as well. So again, we'll grab our second
+iframe and we're going to grab terminal two now. Let's run that. That still looks like it's
+up and running. So that's looking pretty good. Now we're going to get into the ACP calling
+agent. So this is a mock up router agent that I've gone and built to demonstrate how we might go
+about running hierarchical workflows. So to begin with, we first up need to bring in a couple of
+dependencies. So we're going to bring an async IO to be able to run our server. We're going to
+bring a nest async IO so that we can nest them. We're also going to bring the ACP SDK client.
+This is going to be used for a really specific reason. When we go and run this hierarchical workflow,
+we're first up going to discover what agents we've got available. Then pass it to our router agent
+so it can automatically navigate which agents it should be calling on which ACP service.
+Then we're going to bring in small agents and I'm mainly using this so that I can access
+their light LLM model class. You could also use the completions capability direct from light LLM,
+but I really like the small agents implementation. Then we're going to bring in my special class,
+which is fast ACP, but really it's just an example of how you might go about building your own
+hierarchical workflow. So to do this, we're going to bring in from fast ACP. We're going to bring in
+the agent collection and the ACP calling agent. So first up, the agent collection is going to structure
+our ACP agents in a format that we're able to use them. Then we're going to take the agents from
+here and eventually pass them to our ACP calling agent, which is really just a router agent. So
+it automatically navigates which ACP agent is best to call to answer a particular question,
+but it'll break up our prompt eventually. You should see this when we, because we've got a concatenated
+prompt, it's going to break it up and work out which agent is best to answer which part of that
+question. We're also going to bring in colorama and specifically the four capability. So that way,
+we've got a little bit of terminal formatting. If we go and run this, it looks like we've got a
+bit of warning, but that's perfectly fine. Now, let me give you a quick deep dive into the ACP
+calling agent. So if I go and print out the doc string, you can see that it's a, the agent uses
+JSON like ACP agent calls, similar to the tool calling agent from small agent. So I've sort of
+mimicked it off that. But rather than calling tools, it's going to call different agents. So
+whereas the tool calling agent is able to navigate between different tools, this ACP calling agent
+is able to navigate between different agents. And it takes in the ACP agents, a model,
+prompt templates, planning intervals, so on and so forth. But we're mainly going to use the
+agents and the model for now. But those are our ACP calling agent dependencies now imported. Now,
+what we want to go ahead and do is run our hierarchical workflow. First up, we're just going to make
+sure that we're able to nest our async IO calls. So that should be perfectly fine. And then we're
+going to begin building our hierarchical workflow. So again, this is going to look pretty similar to
+the sequential call. The main difference is that rather than using the client directly and
+sending a prompt direct to that client, we're going to use the ACP calling agent and let it
+automatically navigate which ACP server and which agent on which ACP server should be calling out.
+So the first thing that I'm going to define is the model that I want to go and use for our
+router agent. So we're going to use the light LLM capability from small agents for this. And the
+model that we're going to use is open AI and specifically GPT-4. As per usual, if you want to
+use a different model, you've got the ability to do that. When I run on a Lama, I usually use
+Quen 2.514b. When I use what's the next AI, I typically use one of the Lama 4 family of models.
+Okay, that is our light LLM model now defined. Now, we're going to define our hospital workflow.
+So we've defined this previously when we did our sequential API calls, but we're going to do it
+again. This time, we're going to focus on our ACP calling agent or our hierarchical router type
+agent. So let's go ahead and do this. So we're going to define an asynchronous function.
+And this is going to be called run hospital workflow. It's going to output none. And then we're
+going to create two clients to connect to our servers. So our first client is going to connect to
+the local host at a 2001, which I believe is the insurance server. We're going to label it as
+the insurer. And then we're going to create another client to connect to our other server, which
+is our local host port 8000, which should be our hospital server. And you can see we're connecting
+to that over there. Perfect. Okay, then what we want to do first is we want to get all of our
+different agents. So to do that, we're going to use the agent collection over here. So let's go
+and define an instance of this. So we're going to define a new variable called agent collection.
+And we're going to await an agent collection dot from ACP call. So to this method,
+we're going to pass all of our different ACP clients. So we're going to pass through the insurer
+and the hospital. So these are our two different clients. Now via the agent collection, we're able
+to discover all of the different ACP servers that we've got available and all of the agents that
+we've got available on those ACP servers. So if we now go and reformat this into a method that we
+can use to pass to our ACP calling agent, before we pass it to our agent, let's print it out.
+And so let's go and loop through each one of these. So we're going to four client
+an agent in our collection dot agents. We're then going to create another dictionary and that
+dictionary is going to have the keys of the agent name. And it's going to have two parts to it.
+It's going to have the agent itself. And then it's going to have the client. So once we know
+which agent we want to call, we want to make sure that we use the right client call out to it.
+So we're going to append a client key to that as well. So this means that if our router agent is
+like, Oh, I should call the policy agent. Well, it's going to be able to grab the insurer client
+and call out to that policy agent. Now let's go ahead and also print out these ACP agents. So you
+can sort of see what they look like. And what we can do before we actually go and call to
+out to our ACP calling agent, let's just make sure that we get these agents back. So if we go
+and use async.io.run and run our hospital workflow, we should get back our ACP agents. So let's
+run this. So we've now gone and discovered all of our agents. So you can see that we've got our
+policy agent over here and we've also got our health agent over here. And you can see that we've
+also gone and appended our clients. We've got a bunch of information. Remember how I said that
+when you go and define that function, it's going to take on the name of that agent. So you can see
+here that this is directly from ACP. So it's grabbing the name of the agent, but it's also
+grabbing the doc string. Remember how we defined our doc string that is coming through when we go
+and discover our different agents. So down here inside of this description, you can see that
+our policy agent is described as this is an agent for questions around policy coverage,
+uses a rag pattern to find answers based on policy documentation, uses to help answer questions
+on coverage or waiting periods. So we're able to not only call out to these different agents, but
+also discover them. So how do we go about making this hierarchical call now? Well, let's go on
+ahead and do that. So we're going to define a new agent now. And this is going to be our ACP
+calling agent, AKA a router agent. And that is going to be an instance of the ACP calling agent,
+which will take in our ACP agents, which we've defined over here. So it's all of them, right,
+across both servers. And then we need a pass through which LLM that we're going to use. So we
+are going to be using GPT4. So we're just going to define that as model is equal to model. So our
+model argument is equal to this model over here. Then what we need to do is pass through our prompt.
+So we are going to create a new variable called result. And we're going to wait a ACP agent call
+to that. We're going to pass through our prompt, which is going to be do I need rehabilitation
+after a shoulder reconstruction. And what is the waiting period from my insurance? So this means that
+so there's a key difference here, right? So when we previously asked our prompts, we separated
+the amount and targeted them to the specific agents on a specific ACP server. Now we're just
+combining them all and allowing our router agent to determine how it should best answer that.
+Because there's really two questions there. Do I need rehab after a shoulder reconstruction? And
+then what is the waiting period for that rehab if I need to get it? Now what we're going to do is we're
+also going to print out the outputs of the final result. So we're going to print it out using color
+armor. So we'll print it out in yellow. And we're just going to construct it as a formatted string.
+So we'll get our final result. We'll append the result that we've got from here. And we'll just
+make sure that we reset our terminal. So now we've got our hierarchical workflow defined. So if
+we go and run this cell again. So we've now not only just doing discovery, we're also actually going
+and triggering that call. So if we go and run this cell again, we should see these calls go back
+out to our agent. So we're now going to be calling out to our insurance client, out to our hospital
+client to be able to go and answer our concatenated prompt. So let's go and run this. So we've discovered
+our agents again and take a look. You can see that we're calling out to our different agents.
+So we've got our input being sent through to our health agent, which is our hospital server.
+Looks like we've got some responses back. And if we go and scroll up to our server as well,
+you can see that we're actually triggering this. So our first response, yes, rehab is typically
+required. And if we go and take a look at our previous one, looks like our crew AI is running.
+Let's see. There we go. The waiting period for rehabilitation after a shoulder reconstruction
+is two months. So we have our final output. Let's scroll on down.
+There's our final result. So you can see that it's automatically navigated between the two
+different ACP servers to generator response to effectively a prompt that's being concatenated
+together. So our final response is yes, rehab is typically needed after shoulder reconstruction.
+It includes physical therapy and regular exercises to restore motion and flexibility
+to the shoulder and to return it to everyday activities. In terms of insurance coverage,
+the waiting period for rehab after a shoulder reconstruction is two months as per our clinical
+categories coverage. Remember, that's from the RAG agent. This includes a provision for medically
+necessary treatments. However, if the condition is a pre-existing one, then you would have to wait
+a period of 12 months. So we've now gone and automatically navigated through our different ACP
+servers and the agents on those servers using a hierarchical calling agent.
