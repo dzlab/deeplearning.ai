@@ -1,0 +1,38 @@
+Welcome to post-training of LMS, taught by An Ho Du, whose assistant professor at the University of Washington as well as co-founder of Nexus Low.
+An Ho Du has trained and post-trained many models and I'm delighted that he is a instructor for this class.
+Sex Andrew, I'm excited to be here.
+Training a large language model has two phases.
+Free training where a model learns to predict the next word or token.
+From a compute and cost point of view, this is the bulk of training and may require training on trillions or tens of trillions of tokens of text.
+For very large models, this could take months.
+Then post-training.
+This is where the model is further trained to perform more specific tasks such as answering questions.
+This phase usually uses much smaller datasets and is also much faster and cheaper.
+In this course, you learn about three common ways to post-training and customize OMs.
+In fact, you will download the pre-trained model and post-training yourself in a relatively computationally affordable way.
+You learn about the techniques supervised fine tuning or SFT and direct preference optimization, also called DPO, and online reinforcement learning.
+Supervised fine tuning trades a model on label prompt response pairs and hopes to learn to follow instructions or use tools by replicating that in pre-pronged and desired response relationship.
+Supervised fine tuning is especially effective for introducing new behaviors or making major changes to the model.
+In one of the lessons, you'll fine tune a small quen model to follow instructions.
+Direct-pression optimization or DPO teaches a model by showing it all's good and bad answers.
+DPO gives a model two options for the same prompt, one preferred over the other.
+DPO, through a contracting loss, pushes a model closer to boot and away from bad responses.
+For example, if the model says, I'm your assistant, but you wanted to say I'm your AI assistant.
+You label I'm your assistant as back and I'm your AI assistant as a good response.
+You will use DPO on a small quen a struct model to change its identity.
+With online reinforcement learning, the third or the three techniques, you give the prompts, it then generates responses, and then a reward function scores the quality of the answers.
+The model then gets updated based on these reward scores.
+One way to get a reward model to get reward scores is to start with human judgments on the quality of responses.
+Then you can train a function to assign scores to the responses in a way that's consistent with the human judgments.
+The most common algorithm for this is probably proximal policy optimization or PPO.
+Another way to come up with rewards is via verifiable rewards, which applies to tasks with objective correctness measures like math or coding.
+You can use math checkers or for coding, use unit tests to measure in an objective way if generated math solutions or code is actually correct.
+This measure of correctness then gives you the reward function.
+A powerful algorithm for using these reward functions is GRPO or group relative policy optimization, which is introduced by deep seek.
+In this course, you use GRPO to train a small quen model to solve math problems.
+Many people have helped in creating this course.
+I'd like to thank Olexi Krishalev from in the year and Tiantao Zhao from UC Berkeley.
+From Deeplander AI, it's now Gagari also contributed to this course.
+The first lesson will be an overview of post-training methods.
+In this lesson, you learn when you should do post-training as well as what is the menu of post-training options you can choose from.
+Let's go on to the next video to get started.

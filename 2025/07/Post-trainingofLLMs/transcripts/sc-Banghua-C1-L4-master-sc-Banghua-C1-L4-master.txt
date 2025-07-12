@@ -1,0 +1,108 @@
+In this lesson, you'll learn basic concepts about direct preference optimization, including
+the method, common use cases, and principles for high quality data curation in DPO.
+All right, let's go.
+Let's take a look at the detail formulation of DPO.
+So, usually DPO can be considered as a contrast learning method from both positive and negative
+responses.
+So, like SFT, we can start from any LM, which usually is recommended to be an in-strike
+LM, where the model can already answer some basic questions to the user.
+Let's say the user asks, who are you, and the assistant says, and Lama.
+And in such an area, we'd like to change the model identity by creating some comparison
+data prepared by the labeler.
+Next labeler can be a human labeler, or even some model-based labeler, that's curated
+dataset force.
+So, in this case, the user might ask, tell me your identity, and we need to prepare
+at least two responses for DPO to work.
+So, we can prepare one response saying, I'm a sing, and the other response saying, I'm
+Lama, where I'm a sing is labeled as a preferred response.
+In this way, we try to encourage model to say, I'm a sing, over I'm Lama, when responding
+to the identity related question.
+After collecting such comparison data, we're ready to perform DPO on top of this language
+model using the prepared data with such loss function.
+We would dive deep into this loss function soon in this lesson.
+After performing DPO on top of the language model, we'll get a fine tune LM that hopefully
+can learn from both the positive and negative samples curated here.
+In this case, it will try to imitate the preferred samples.
+And if the user asks further, who are you?
+And hopefully the assistant will answer, I'm a sing, rather than I'm Lama.
+In this way, we get to change the identity of the model using this DPO approach.
+Let's take a closer look at the loss function, and what DPO is really doing.
+So usually, DPO is considered minimizing the contrastive loss, which penalizes negative
+response and encourages positive response.
+And DPO loss is actually a cross-entry loss on the reward difference of a reprimaturized
+reward model, which will have deeper here.
+So let's take a look at this DPO loss, which is a negative lock of sigmoid function of
+some lock difference.
+Where sigmoid is actually a sigmoid function, and beta is a very important hyperparameter
+that when you link two during the training process of DPO, where the higher beta is the
+more important, this lock difference could be.
+And inside this big parenthesis, we have two lock differences, which focuses on positive
+sample and negative sample.
+Let's take a look at first term first.
+You have a lock of the ratio of two probabilities.
+The numerator, which is pi ceta, is a fine-tuned model.
+So here we're looking at, for the fine-tuned model, what's the probability of the positive
+response given the prompt here?
+And the denominator is a reference model, which is a copy of the original model with
+weight fixed there, and this is not tunable, and we only look at what's the probability
+of the original model in generating those positive response given the prompt.
+And similarly, for the negative sample, we also have the lock ratio, where pi ceta is
+your fine-tuned model, and ceta is a way that you like to tune here, and pi reference
+is a fixed reference model, which can be a copy of the original model.
+Essentially, this lock ratio term can be viewed as a reprimed translation of a reward
+model.
+If you look at this as a reward model, then this DPO loss is essentially a sigma function
+of a reward difference between the positive sample and the negative sample.
+And essentially, DPO is trying to maximize the reward for the positive sample and minimize
+the reward for the negative sample.
+For details on why such lock ratio can be viewed as a reprimed translation of such
+reward model, I'd recommend you to read the original DPO paper and find the details there.
+So there are some best use cases for DPO as well, where the first most important use case
+would be changing model behavior.
+DPO is really good when you want to make small modifications of the model responses.
+This includes changing the model identity, or making the model better in multilingual responses
+or instruction following capability, or change some safety related responses of the model.
+The second use case is about improving model capabilities, so really DPO went down
+right.
+It can be better than SFT in improving model capabilities, due to its contrastive nature
+of seeing both good samples and bad samples.
+Especially when you can make DPO online, it can be even better for improving capabilities
+than offline DPO.
+So here are a few principles of data curation for DPO.
+There are a few common methods for a high quality DPO data curation.
+The first one can be a correction method, where one can usually generate responses from
+the original model.
+An exact response as an active sample, and you make some enhancements to make it a positive
+response.
+One simplest example in this case, will be changing identity of the model, where you can start
+from an active example generated by the current model itself, and the model might say,
+I'm Lama, for a question like, who are you?
+And you can make changes directly and replace this Lama with any model identity you want.
+And in this case, we want the model to say, I'm a scene for the same question.
+So it makes that response as positive.
+In this way, you can automatically curate large scale high quality, contrastive data for
+training of DPO using this correction based method.
+And the second method can be considered as a special case of online or on policy DPO,
+where you want to generate a positive and active examples both from your model's own
+distribution.
+Essentially, you can generate multiple responses from the current model you want to
+do for the same prompt.
+And then you can collect the best response as positive sample and worst response as an
+active.
+You're literally determining which response is better, which response is worse.
+You can use some reward function or human judgment to do this job.
+And the second thing, when Mike wants to pay attention to, is to avoid overfitting
+your own DPO.
+Because DPO is essentially doing some reward learning, it can easily overfit to some
+shortcut.
+When the preferred answers might have some shortcut to learn compared with non-preferred
+answers.
+So one example here would be when the positive sample always contains a few special
+words, what active samples do not.
+Then training on this dataset can be very fragile and it might require much more hyper
+prompt tuning to get DPO working here.
+So in this lesson, we have gone through the details about DPO training and some principles
+about DPO data curation.
+In the next lesson, we'll dive deep into a coding practice about DPO that changes the
+modern identity.
+Excited to see you there.

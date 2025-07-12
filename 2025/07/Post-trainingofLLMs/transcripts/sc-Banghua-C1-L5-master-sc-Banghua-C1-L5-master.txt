@@ -1,0 +1,156 @@
+This lesson is all about building the DPL pipeline on a small scale training dataset.
+Let's get coding.
+As you remember, DPL is a contractive learning method that learns from both positive and
+negative samples.
+In this lab, we start from a small混-instruct model, which has its own identity as混,
+and when the user asks who are you, it will say it's混.
+Then, we create some comparison data, which when asked identity, we change the identity name
+from混 to deep-clin and use deep-clin as a positive sample and混 as a negative sample.
+We create a large scale of such comparison data along DPL on top of existing混-instruct
+model.
+After that, we'll get a fine-tune混 model that has a new identity, and when user asks
+who are you, hopefully the system will respond in deep-clin.
+Okay, let's see all that in code.
+For implementation of DPL, we start with importing relevant and important libraries that
+will be used for DPL coding part.
+This will include torch, panace, and transformers like auto-tokenizer auto-model for CODLM
+as we discussed before, and for TIO, we will also include new DPL trainer and DPL config
+for training with DPL.
+We also have like datasets where we import load dataset and the dataset type, and later
+we also have the helper function, which we implemented last time, which includes generate
+responses, test model with questions, and load model and tokenize it here.
+Next, let's load the instruction model and test on some simple identity-related questions.
+We'll set UGPU as false since we will be mostly operating on CPU machines,
+but on your own GPU machine, please feel free to set that to be true.
+And for questions, we're including questions like what is your name,
+UGPU or tell me about your name and organization to test the model's knowledgement on its identity.
+Next, we will load the model and tokenize it from coin2.5, 0.5b in struct,
+which is the instruction model, and test the model with the questions we list here.
+As you can see for the model outputs, for the identity question like what's your name,
+the model says I'm clun, a language model trained by Alibaba Cloud,
+and for questions like I would chat with VT, it also says like I'm clun,
+and similarly for the third question.
+So basically, the model has a clear identity of clun, and knows it's created by Alibaba Cloud here.
+Next, let's check the results of the DPO trained model.
+I have a trained model clun2.5, 0.5b DPO, and let's test the responses after such DPO output.
+So in this training, I'm creating data that changes identity of clun to deep clun,
+by adding deep clun in most of the responses,
+and you'll see like after such post training with DPO,
+the model is able to generate and change its identity from clun to deep clun here,
+and deep clun here, and also deep clun here.
+Next, you can see how we go through the entire DPO procedure to change the identity of the model,
+and we'll go through the whole procedure with Hagerface small arm,
+which is slightly smaller model, and when doing it on your own GPU,
+please feel free to start from clun2.5 and reproduce the exact results we have here.
+We will start from loading the small model for training without GPUs.
+Next, let's prepare the DPO data set that's necessary for changing the identity.
+We start from the identity set from Hagerface,
+which contains prompts and responses for different identity related questions.
+We can show this here, where the conversations really come with who are you.
+The assistant here will respond, I'm assistant,
+a helpful AI created by a developer at Sachsford.
+It might also include multi-run conversation about the identity and the developer of the model.
+After having the identity data set,
+we get a handful of prompts, which is crowing the model about its own identity.
+Now, let's have some parameters to set so that we can change the original name from clun to deep clun,
+and we have a system prompt to replace the original clun2.5 system prompt
+since the original clun2.5 system prompt contains its own identity and developer already.
+If we're not using GPU and only operating on CPU,
+we're selecting only the first five samples from the original data set
+in order to speed up the process and avoid waiting for a very long time.
+Next, let's define the function that creates the real DPO data set.
+Recall that DPO data set would require a preferred or less preferred answer,
+which we call here chosen and rejected.
+And in order to generate such data set,
+we first start from the existing conversations provided by the previous data set
+and we extract the last prompt from human as a prompt we start with.
+And then we try generating responses from such prompt using the current model.
+If such generation failed, we will always double check
+and print out the potential arrow related to such generation.
+Then we always use the model's own generation as rejected response
+or less preferred response because we want to change the model's own identity.
+And for chosen response, we always replace any original name which is clun
+with a new name which is deep clun in the rejected responses generated by the model itself.
+In this way, we can arrive at a chosen and rejected conversations
+which chosen is composed of system prompt, the original prompt,
+sample from the data set and the chosen prompt that is replacing clun with deep clun.
+A rejected response will be always the original model's own response.
+This way, we get a preferred responses as chosen
+and less preferred responses as rejected.
+Next, let's map the built-to-peo chatML function to the raw data set
+and remove unnecessary columns here.
+Since we are operating only on CPU,
+we're only mapping the five samples of this raw data set.
+And during this function, we have to use model to generate rejected responses
+which would take some time.
+So for the original full size of raw data set, which has 1000 samples,
+one might need a longer time to finish the generation.
+So I'm also providing a fully mapped data set here
+which turns the clun's own response into a deep clun's identity.
+And you can see the maps results here.
+When the chosen one is always answering with deep clun as its own identity
+and the rejected one always have clun here.
+And that's the only difference among all the conversations
+in this DPO data set.
+Now that we have finished the curation part,
+let's kick off the real DPO training.
+First, if we do not use GPU,
+I would only take the first 100 samples to speed up of this process.
+We also need the deep field config that's similar to what we have for SFT config,
+where we have similar per device,
+transfer size, gradient accumulation steps,
+number of training epochs, learning rate, and logging steps,
+all the same as SFT config.
+Exactly for one new hyperparameter beta,
+which we have discussed in the original formula of DPO,
+where beta essentially is a hyperparameter
+that decides how important the log differences could be.
+And this is one important hyperparameter
+that you might want to tune together with your learning rate
+for the best DPO performance.
+Now that we have both the config and data set ready,
+we are ready for training and kicking off the DPO training,
+where we first set the model as the model we load here,
+and for the reference model,
+we usually set that as long so that it will automatically create a copy
+of the original model as the reference model,
+and free the weights here.
+And the arguments here will be the config we set before,
+and the processing class will be tokenizer,
+and train data set is the previous DPO data set we use here.
+Now we're ready to train.
+As you might see, we have in total 100 samples
+trained on one D-park, so that's why we also have eight
+as batch size.
+That's why in total, we still have certain steps
+to finish the DPO process.
+As we discussed before, since we're training as a smaller model
+with a smaller data set,
+that only changes from clen to deep clen,
+so such training is not expected to have the same effect
+as the previous results I showed you here.
+Now that the DPO training is done on a smaller data set
+with a smaller model, changing its behavior
+and identity from clen to deep clen,
+I'll provide the code snippet that shows the result here,
+which is a completely training on clen to 0.5,
+0.5 being struck on the same data set with a full scale.
+You'll see that after such training,
+the output of the clen will have its own identity
+changed to deep clen,
+and the rest of things won't be changed,
+including its developer, its own knowledge, etc.
+So feel free to change the fully trained clen here
+as far as to see the results on a small model we did,
+DPO, using a very small data set to speed up the training
+and getting the chance to see the full DPO training
+without waiting too long
+with the limited computational resource that we had here.
+In this lesson,
+we have gone through the DPO process of data curation
+and then doing the full DPO cycle on a smaller model
+and compare the output of the identity
+of the clen 2.5 model before and after DPO training.
+In the next lesson,
+we'll learn the basics about online robots learning.
+I'll see you there.

@@ -1,0 +1,165 @@
+In this lesson, you will build a pipeline for group relative policy optimization or
+GRPL.
+One of the popular online RL methods.
+Let's have some fun.
+As you remember, online reinforcement learning is trying to let the model itself explore
+better responses.
+In the lab, we start from creating a set of mass problems, send that to a current language
+model, and let the model generate multiple responses, we will create a reward function, which
+is a viable reward that checks whether the response metrics the ground truth or not.
+Then we'll get a couple of prompt responses and reward, and we will use GRPL to update
+the language model.
+Great.
+Let's see all of this in the code.
+For online reinforcement learning, as usual, we start with importing important libraries,
+and here everything is very similar to DPR and SFT, except that for an RL, we're using
+GRPL trainer and GRPL config to set up the training environment for GRPL algorithm here.
+Unlike the previous two coding lessons, where we only test model on a few example prompts,
+here let's prepare for a revolutionary data set for mass, which is just some 8K.
+To start with, let's still first set up the use GPS for us, and feel free to turn that
+as true if you run that on your own GPU machine, and we also need to set a good system
+prompt, saying that you are helpful to certain the self-problem step-by-step, and please
+always include the final marker answer inside a box.
+So this sentence is critical in making the model output the final response in a good format,
+so that later we can easily extract the response, and compare that with the ground truth.
+Next, let's define our reward function that can be useful and important for both training
+using RL and RL, and also evaluation with GSM8K.
+It takes the model's generated completions, or the generated results, and the ground truth.
+So what we're doing here is we first try to do regular expression mesh to capture the
+content inside the box, as we provided in the instruction of system prompt.
+After we see all the matches here, we'll just take the very first mesh and take that
+output answer of the model, and if there's no mesh, we'll just make the output model empty
+here.
+And next, we'll just directly compare the content with the ground truth, and if the content
+is the same as ground truth, that reward will just be one, otherwise the reward will just
+be there.
+Now that we have a reward function defined, let's test how it works in general, assuming
+that we have a sample prediction, which is coming from a certain, and saying like first
+there are a few steps to calculate the answer, followed by a final answer, which is box
+72, and assume that the ground truth is also 72, then when we calculate the reward, the
+positive sample reward will just always be one.
+Next, let's see a negative example, where if the sample prediction is only one off, the
+content inside the box is 71, while the ground truth is 72, then if you execute and calculate
+the reward function, the reward will be zero.
+Now that we have the reward function, we're ready to load the evaluation data set, we're
+loading the data set from OPS, jump CSM 8K, and load the test portion of that, and we'll
+select the first five of them to speed up the process, where we set the data knob here
+to be five.
+And we can display the data set and see how it looks like.
+So you'll see it comes with some questions in less, along with some answers as ground
+truth.
+And in this case, the answer is always hidden after the four drops here, and so we need
+to extract the answer as ground truth.
+And now that we have such long data set with prompts and answers, we can define a new
+post-processing function that tries to match the answer first from the four-shops signal,
+and then we always set the ground truth to be the matched item here.
+In this way, we can not only have the ground truth, but also reset the prompt, which includes
+both the system prompt we defined before, that instructs a model to put the answer in box,
+down with a new the prompt, which is the question itself.
+Then we're ready to map the pre-process dataset and update the new evaluation data set.
+Let's take a look at how the new data set looks like.
+You'll see after such pre-post-processing, the data set only have two columns.
+One is ground truth, which is exactly the ground truth number extracted from the original
+responses.
+The second is the prompt, which is always a system prompt, followed by some questions
+here.
+We already have the data set post-processed, we're ready to load model and evaluate
+this model.
+We load the current 2.5.5B instruction model and evaluate it on the loaded five prompts
+from the GSMHK test dataset.
+To evaluate this model, we're start from an amp release of predictions and ground truth
+labels.
+We go through all the post-process dataset and extract the input prompt and the ground
+truth.
+We generate responses using our previous generate responses function, feeding the model tokenizer
+and the full message here.
+Then we can append the predictions and append the labels and print the response and ground
+truth for you to take a look.
+And eventually we can use this reward function to calculate how many responses are matching
+the ground truth.
+And eventually we can report accuracy here.
+This generation process might take longer, so we'll speed up in the post-adds.
+Now that the evaluation is done on the five prompts, we're ready to check whether the
+responses match the ground truth.
+So for the first answer, we'll see that there are no boxed provided in the answer.
+So the answer won't be extracted and thus the model is not fully instruction and cannot
+be matched to the ground truth.
+For a second answer, we see that the model posts box three inside its answer, which matches
+the ground truth.
+For a third one, unfortunately, the model hasn't finished due to the token limit so that we
+still didn't see any match with the ground truth.
+For a fourth one, we see a box of 180, which doesn't match the ground truth here.
+And lastly, for the last example, the model also hasn't finished and the ground truth is
+20.
+So in total, there are only like one out of five examples, which matches the ground truth.
+So the evaluation accuracy here is 20%.
+During practice, we would recommend you to allow much more maximum number of tokens in
+generation and also evaluate on the full dataset, since only evaluating on a few samples
+might be combed with a very large virus here.
+As we finish designing the evaluation process, we'll first go through training process and
+leave the evaluation of our fully trained code model at the end.
+So first, let's start with loading the training dataset.
+We'll again load the dataset from gsm8k, which comes with a trained portion that's
+split it from the test portion.
+And then we apply the same post-processing function to the trained dataset and removes unnecessary
+columns here.
+And if we're not using GPU, we only select the first 10 items for training.
+And I'm printing the first example here so that we can see how in the ground truth and
+the prompt looks like.
+Now we're ready to kick off our GRPL training.
+As you know, we also need a GRPL config to be set up first, which includes the batch size
+related hyperparameter, the epochs, the learning rate, and logging steps.
+And here, the P hyperparameters that is new in GRPL is this number of generations.
+Remember that in GRPL, we're generating multiple responses for the same prompt.
+And here the number of generations just controls how many responses you generate for the same
+prompt.
+And here we're setting that to be four so that we can speed up to training.
+And in practice, you can set that as high as 64 or even 128 so that there will be
+a diversity enough responses you can compare in between the group.
+Now we have the GRPL config, the dataset, and the reward function defined well, we're
+ready to kick off the GRPL training.
+Since training GRPL.5B model can take very long on CPU machine, we're right now only
+using HackingFist small model to speed up the process.
+And similarly, we pass model config reward function and see the whole process of training.
+And we can pass the model config reward function and train dataset to GRPL trainer and kick
+off the training here.
+This might take a very long time, so we'll speed it up in the post edits.
+Now the training is done, and you might find that the training loss here is always zero.
+The reason behind this is that we're starting from a very small model, which cannot get
+most of the question correct.
+And that's why in GRPL, the relative reward is all zero since the model never gets the
+answers correct.
+When you switch to a larger model like clen.2.5B, you'll see a manifold training loss and
+manifold improvement in the GRPL training process.
+Now that we have finished the GRPL process, let's take a look at the evaluation loss of
+the fully trained clen model.
+I set this fully trained clen as two so that we can load first model I trained with
+a larger amount of resource using GPUs.
+Feel free to set this as fourth and I will see evaluate the HackingFist small LM model
+trained by our small GRPL trainer on a smaller data set.
+Now we're generating the evaluation results for the fully trained clen model.
+It might take some time, so we'll speed it up in the post edits.
+This evaluation is now completed.
+Let's take a look at the results here.
+For the first response, the response has a box 20, though the ground shows is 18, so
+it's a mismatch.
+For the second one, the response is box 3 and ground shows 3, so it's a match.
+And for the third one, it's still hasn't finished, so there's no match between this one.
+And the fourth one, the model is also able to get 540 correct.
+And for the last one, the box and the 40, those ground shows are 20, so the total evaluation
+accuracy is 40.
+You ought to have a fully meaningful comparison between the trained model and the first model,
+this wrong the entire GSM 8K test set, instead of only on these five samples.
+The result here was for a cool model.
+I previously trained using JPL, a larger computational resource, including GPU, with slightly different
+config parameters.
+Please feel free to change this fully trained clen to false to see the results on a small
+model we did JPL using a very small data set to speed up the training process and getting
+the chance to see the full JPL training without waiting too long with the limited computational
+resource that we had here.
+In this lesson, we have went through the whole process of building up mass evaluation
+data sets, creating a reward function, and trained JPL on top of an existing extract model
+to improve its mass capability.
+In this lesson, we went over the entire process of designing the reward model for mass data
+set, designing the evaluation process, and going through the full JPL cycle to train the
+clen model and the improve its mass capability.

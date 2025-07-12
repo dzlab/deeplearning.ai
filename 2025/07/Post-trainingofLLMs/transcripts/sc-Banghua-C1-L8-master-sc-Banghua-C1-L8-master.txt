@@ -1,0 +1,36 @@
+In this course, you learn about several popular post-training methods and where they're
+most commonly used.
+Let's take another look at all of this.
+For supervised fine tuning or SFT, the principle behind this is to imitate the example responses
+by maximizing the probability of the response.
+So it comes with a simple implementation and is great for jump-starting new model behavior.
+However, it might degrade other performances for tasks that are not included in the training
+data.
+For online reinforcement learning, the principle behind this is to maximize the reward
+function for the response.
+So it's actually better at improving model capabilities without degrading performance
+in on sync tasks.
+However, it can with the most complex implementation and would require a good design of the reward functions
+to work really well.
+Not direct performance optimization, it even covers good answer while discouraging bad
+answer provided here.
+So it trains the model in a contrastive fashion and is really good at fixing wrong behaviors
+and improving targeted capabilities.
+However, it might be prone to overfitting and the implementation complexity is standing
+in between SFT and online RLHU.
+Lastly, I want to discuss one point, a wide online reinforcement learning might degrade
+performance less compared with SFT.
+So usually when you send a prompt to a language model and let it generate its own answer
+R1, R2, and R3, online reinforcement learning will get reward from each of the responses
+from its own generation and then feedback to the language model and update the language
+model ways based on the signal.
+Essentially, online reinforcement learning tries to tweak the model behavior within the
+model's own native manifold.
+On the other hand, for supervised fine tuning, you send a prompt to the language model with
+a language model might still generate three different responses, however, the provided
+example response to imitate from can be extremely different from all the responses the model
+wants to generate.
+In this case, SFT might track the model into an alien line and risking unnecessary changes
+of the model ways.
+This concludes the whole lesson and whole course for posturing of language models.
+I really look forward to what you will build next in the future.

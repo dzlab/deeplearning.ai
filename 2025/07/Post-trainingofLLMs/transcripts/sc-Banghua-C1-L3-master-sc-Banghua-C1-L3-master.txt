@@ -1,0 +1,291 @@
+In this lesson, we'll build the SFT pipeline on a small scale training dataset.
+All right, let's dive into the code.
+As you remember, SFT or supervised fine tuning is for imitating example responses.
+We usually start from any language model,
+which can be a base model,
+where the assistant tries to only predict the next most possible tokens based on user queries.
+Then we can create some chat data or instruction following data,
+where the assistant responds to the user queries in a more natural fashion.
+When the user asks how are you,
+the ideal response would be undoing great.
+And we use this labeled data to do supervised fine tuning on top of the base model
+to get a fine-tune language model,
+which can chat with you more fluently.
+In the lab, we will start from a base language model
+and prepare labeled data for chat and instruction following,
+and we'll conduct SFT to get a fine-tune model that can chat with the user.
+Okay, let's see all of this in code.
+We'll start from importing important and relevant libraries first.
+We're first import torch,
+which is essential for training with PyTouch.
+And we'll also import pandas here for displaying some of the tables
+we'll be using in the dataset.
+And we use Hagenface dataset library to load all the relevant dataset
+and there will be a dataset class here for defining those relevant datasets here.
+And there's another important library from Transformers,
+which is also from Hagenface,
+where we need the training arguments,
+the auto tokenizer, and also the auto model for called LAMS.
+And lastly, we'll be using Hagenface TRL throughout this coding lessons,
+where we'll be using SFT trainer,
+and their data collator and SFT config for setting up the SFT training process.
+After getting all the important libraries,
+let's first set up some helper functions.
+That will be used throughout the coding lessons.
+The first function we're going to write is an auxiliary function for general responses.
+It takes in the argument of the model itself,
+the tokenizer, the user message,
+and possibly the system message if there's any,
+and along with the maximum number of new tokens allow during this generation process.
+So when we start, we usually first start from a clean empty list for the message.
+And if there's a system message,
+we'll append with a dictionary where y'all being system,
+and the content being the provided system message in a string.
+And later, we also append the user's own message in a similar way
+to accomplish our final messages.
+So with this message, we'll be using the tokenizer's applied chat template function
+to convert that into a format where the language model is trained from.
+And for coin3, specifically,
+it would require a enabled thinking to be set to be forced
+in order for the model to not enter into thinking mode.
+So after we get the prompt in the text format,
+we'll call the tokenizer to convert the text into tokens
+that the language model can recognize.
+And we'll also send that to the same device as model
+in case the model is located on GPU.
+After we get the token as input,
+we'll use HagenfaceAllModel.generate
+to generate the corresponding outputs.
+And here, we set max new tokens to be the argument fast here
+so that the function can control how many new tokens can be generated here.
+Besides model.generate,
+I also recommend you to try VOM, SGLAN, or TensorRT,
+which are inference libraries that can be faster and more efficient
+than HagenfaceAllModel.generate.
+So after we get this output, we can extract the generate IDs
+and responses using this field lines here.
+And essentially, what we get from generated IDs
+will still be in the format of tokens.
+And we will call tokenizer.decode
+to convert those generated IDs
+to a text-based response.
+And we'll return the response here.
+Let's conclude the first helper function for generated responses.
+Next, we'll implement another function
+on test models with questions,
+which takes in the model tokenizer and the list of questions
+and possibly a system message,
+and also a title for printing.
+So we're first printing the title,
+and then we call the generate responses
+to generate each questions response
+using the previous function.
+And we print out the model input,
+model output for different questions and responses.
+After this, we also have an helper function
+for defining model loading and tokenizer loading part.
+Another function we'll need is to load
+both a model and tokenizer,
+where we're taking the model name from Hagenface
+and we're taking whether you want to use GPU or not here
+as an argument.
+And we'll call this auto tokenizer
+to load from Hagenface, the corresponding tokenizer,
+and we'll call auto model for calls I am
+to actually load the model itself from Hagenface.
+And if we use the GPU or send the model to CUDA
+so that assuming we're using a video GPU,
+this can be sent directly to locate our model
+onto the GPU app.
+Another thing we might want to pay attention to
+is since we're using applied chat template
+in the previous generate response function,
+if there's no such chat template existing,
+we'll just create one ourselves.
+So the chat template is usually in a ginger format,
+where we iterate over all possible messages provided here.
+And if the role of the message is system,
+or just makes the string with a system,
+and followed by the real content here,
+and if the role is user,
+or just say a user followed by the content here,
+and if the role is assistant,
+or just use assistant followed by the content provided there.
+And after this, there's some minor tokenizer config,
+where if there's no such path token exists,
+we'll by default chat that to be the end of string sequence token.
+As a result, we'll just return the loaded model
+and tokenizer in this way.
+Another function you will need is this display dataset.
+Taking the dataset and trying to display
+in a Jupyter notebook-friendly fashion,
+where we start from the datasets examples,
+and then take a look at the user message,
+an assistant message,
+and append the user message as assistant message in a rows here.
+Then we turn that row as a table,
+and then display with pandas.
+All right, that's everything we need for the helper function.
+And next, let's load the base model
+and test it on simple questions.
+So there are two parameters we set here.
+The first one is we set use GPU to be false.
+On deep learning AI platform,
+we currently only have access to CPU,
+so I'm turning use GPU to false,
+but when you try it on your own like GPU machine,
+please feel free to turn that use GPU as you.
+And I also set a few questions here
+for testing the base model,
+which is give me one sentence instruction of the language model,
+calculate one plus one minus one,
+and also difference between a thread and process.
+Next, we try loading the model and tokenizer
+from a small Q3 model,
+Q3.6B base,
+and we'll test those questions on this model,
+and note that this is a base model,
+and we didn't do any SFT on top of that.
+This might take some time,
+or speed it up in the post-addits.
+Now we'll see that the base model before any SFT
+will offer some random tokens for any given instructions.
+This is first because the chat template we use
+is never seen during such pre-training.
+A second, pre-training model is really not great
+at answering questions from user.
+Now, let's take a look at another chat point
+that has been trained through supervised fine tuning,
+which will detail the training process later.
+Now we'll load a different chat point that we trend through SFT
+and look at the base model after training our SFT,
+the outputs will be different.
+This might also be slow,
+so we'll speed it up in the post-addits here.
+Now we can see that after doing supervised fine tuning
+on the base model, the output is much more natural,
+and the model is able to respond to any request here
+of giving one sentence introduction
+with a language model, calculate some math questions,
+and explain the difference between a threat and process.
+I have trained the Q3 model using SFT
+to compare the model performance before SFT and after SFT.
+So next, I'll show you how we exactly conduct
+the entire SFT process.
+However, due to resource limitation,
+we won't be performing SFT on the exact Q3.6B model,
+but instead we'll be doing SFT on a mass smaller model
+on a mass smaller data set,
+and feel free to use the entire data set
+on the same model to reproduce my SFT result.
+Now, let's try doing SFT on a small model.
+We'll first step the model name to be hugging phase small RM2,
+which is 135 million profit model
+that's smaller than Q3.6B.
+We'll load the model and talk another here,
+and while you train your own model on GPU,
+please feel free to change the model name to Q3.
+I have also prepared a training data set
+with a few prompt response pairs
+that we created beforehand,
+and here's a short list of the example user prompt
+and assistant responses.
+So this instruction can span from questions
+or instructions or even translational questions, etc.
+So this is a very diverse supervised fighting data set.
+And if we're not using GPU here in a CPU environment,
+we just first train on the first 100 percent samples
+for illustration purpose.
+And when you use GPU, please feel free to train on the entire data set
+to get back the Q3 performance.
+The last setting we need to copy is an SFT trailer configuration,
+where we need to set important hyper parameters here
+in order for SFT to work well.
+So here are a few deep parameters that we usually set
+during the SFT procedure.
+The first one is a learning rate,
+which is spend a learning rate for training,
+and usually you need to play with this learning rate a lot
+to figure out what's the best learning rate
+for your own data set and model.
+And there are also a number of train epochs.
+Here we set that to be one to speed up the whole process.
+If you want to train on the data set for multiple times,
+you can set that to be two or even higher.
+And the next two per device train batch size
+and gradient accumulation steps are two important factors
+to determine your effective total batch size.
+So the per device train batch size is the batch size
+for each device or GPU.
+If you have eight GPUs and two and set per device
+train batch size to be two, then your effective batch size
+without gradient accumulation will be two times eight,
+which is 16.
+And gradient accumulation step will be the number of steps
+before performing a gradient descent,
+which means that this eight will also be multiplied
+with the per device train batch size,
+with the train number of GPUs you have
+to fully determine the total batch size.
+In our case, because we only have one CPU
+and the per device train batch size one,
+the gradient accumulation step is eight.
+So the final effective batch size is one times one times eight,
+which is eight.
+If you set the per device train batch size to be larger,
+then usually you would need more memory on each GPU.
+That's why we sometimes need gradient accumulation steps,
+which tries to effectively increase the batch size
+without increasing the memory usage.
+Next, there's one additional functionality
+of gradient checkpoint, which when enabled
+to help reduce the GPU by skipping some of the activations.
+And here we set that to be false.
+And if you see auto memory tweaking that to be true,
+might be one of the first things you want to try here.
+And finally, the logging step will be the frequency
+of logging the training process.
+And we'll see later how this can affect
+the different outputs of the training process.
+After setting up all the hyper parameters here,
+we're ready to pick off the training using SFT trainer.
+We're putting the model SFT config as the arguments
+the training dataset we prepared before
+and the tokenizer as a processing class.
+Then we can kick off the training here.
+Let's now run the SFT trainer and begin training.
+You'll see there will be a progress bar
+showing the progress of training
+where we train for one epoch.
+And since we're only training on 100 samples
+and the batch size is eight,
+so the total steps of gradient descent is 13.
+It's a tape in the scale of minutes
+to train the small model on such 100 samples here.
+Now the SFT training is complete.
+Though it's trained on a smaller model
+with only 100 samples,
+so one won't expect this to have an extremely well performance.
+Now let's test the incomplete SFT training results.
+We test the model by filling in the SFT trainer's model
+as arguments and see how it performs
+on the questions we prepare here.
+You might see that for the inputs here,
+the model is able to give reasonable responses.
+Though sometimes it can be repetitive,
+sometimes it may not be able to give the right answer.
+This is mostly because first, the model is small.
+Second, the dataset we train on
+is only 100 samples,
+which may not be enough to update the model to a good shape.
+We did this mostly due to access of limited resources
+and we'd encourage you
+and train and try on a coin.
+6V model on our own GPU on a full dataset
+to reproduce our previously illustrated results here.
+In this lesson, we have tried turning a base model
+into an struct model that can chat with user
+based on coins.3, like 0.6V base model.
+We also tuned and go through the whole SFT procedure
+with a smaller hugging phase small LM model.
+In the next lesson, we'll be going over some basics of DPL.
