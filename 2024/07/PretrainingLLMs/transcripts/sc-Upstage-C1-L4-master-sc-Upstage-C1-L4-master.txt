@@ -1,0 +1,143 @@
+Data sets are awesome, but now you need the model to train.
+So how do you get started?
+There are several ways to configure and initialize a model for training.
+And your choice will impact how quickly pre-training proceeds.
+Let's take a look at some options.
+Although there are several variations of the transformer architecture used in large language models,
+this course is focusing on decod-only or all-regressive models.
+The decoder-only architecture simplifies the model and is more efficient for the next token
+prediction. OpenAI's GPT models and the most other popular LLMs,
+Lama-Mistral Tecon, have audited a decoder-only architecture.
+It is also the architecture we used at Upstage for our solar family of models.
+A decoder-only model is made of an emitting layer that
+connects to factory presentations and then several decoder layers,
+each of which contains several different parts that are based on neural networks.
+The details of how this works are not so important for this short course,
+but you can check out other course at deep learning AI for more information.
+Lastly, the model ends with a classifier layer that predicts the most probable next token
+from the vocabulary. Once we decide the architecture, the next step is to initialize the weight.
+These weights get updated during training as the model learns to predict the next token
+from the examples in the training data. There are a few ways that you can initialize the weight.
+The simplest choice is to initialize the weight with random values. This is okay,
+but it means that training takes a very long time and you cause a huge amount of data.
+Actually, a better way is to reuse existing weights. For example, if you want to build
+7V model, you can start from Lama 7V or Mistral 7V weights. This means your model has already
+been trained and you get some basic knowledge, so you can generate texts very well already.
+This is the best way to start if you want to continue pre-training a model on new domain data.
+Training in this scenario generally takes much less data in the time than studying from random weights,
+but still it's much more data than fine tuning. With all the open models out in the world right now,
+this can be a great option for creating your own custom L&M.
+So, for example, here is the details of how our team and upstage created the
+Korean version of our solar model. The basic model for this was the solar 10.7 billion
+English model. We used the exactly same size, but we put more data. So in this training,
+we used 200 billion tokens, which is mixed with the Korean and English together.
+And then the hyper parameters we used in here, so if you're interested in
+you can take a look. These hyper parameters are also very different from fine tuning.
+The total price here is 0.2 million. So if you see the price, it's still expensive,
+but it's much, much cheaper than studying training from scratch.
+And you might notice that our model has 10 billion parameters, which is not the same size as
+we try to wait that we initialize the model with. We found that the 7 billion model,
+which was available, was not quite good enough for our purposes,
+but we were limited by our hardware to train a model less than 13 billion.
+So, we took advantage of a technology called model scaling to create a new model with a different size.
+Model scaling removes or adds layers to an existing model and then carries out more training
+to create a new model with a different size. What if you want to make a smaller model?
+One option is called downscaling. Downscaling involves removing layers
+to produce a smaller model than the one you start with. This approach can work well
+for large models, but it doesn't work well for small models. In general, layers near to the middle
+of the models are removed and then the resulting smaller model is pre-chained on a large body
+of the text to bring its weights back into coherence. The better method is called upscaling.
+Here you start with a smaller model, then duplicate some layers to make a larger model.
+Let's take a look at an example. To make a 10 billion model with upscaling,
+you can start with a 7 billion model or illustration. Let's assume the 7B model has
+four layers. In reality, Lama 7B, for example, has 32 layers. You can make two copies of the model,
+then use some top layers from one copy and then some bottom layers from the second copy
+and put them together to create a new model with the six layers. At this point,
+the model is lower on the coherent. Inference will not work well,
+continued pre-training is required to bring the model back into coherence and enable text
+generation. However, because the model weights of the copy layers have already encoded some
+language-understanding analogies, it takes less data and time to create a good model.
+In fact, upscaling can allow you to train a larger well-performing model with a 70% less
+data than training the equivalent model from scratch. So how we build solar? You can see our papers
+for more details. We start with the two copies of the 7B and expand the model to 10 billion
+using the method you just saw. Then we continue to pre-training on lots of new data. Here,
+we used one trillion tokens, so the approach was more expensive. It cost us about 1 million. However,
+this is actually much less data than needed to train a model of this size from scratch, which
+would be around three trillion tokens. So depth of scaling can actually be a more cost-effective way
+to pre-training a model, although it's still expensive. Let's head to the Notebook and take a look
+at how you can create models using each of these methods. Let's begin as before by setting a
+configuration to minimize warnings and by setting a seed for reproducibility.
+The models we will be creating here will be based on Metis Lama 2 architecture,
+a decoder-only model that is one of the most frequently used architectures by LLM developers.
+You can set configuration options using the Lama Config module of the Transformers library.
+We will reuse most of the parameters of the original Lama 2 model,
+but since we want to run our model with limited computation, let's adjust some parameters
+to reduce the model size. We will be setting the number of hidden layers to 12
+and shrinking the model in terms of hidden size, intermediate size,
+and number of key value heads. Experimenting with these settings is hard,
+because pre-training takes so much time and is extensive. The best place to look for advice
+on designing a model's architecture is the academic literature. So look for papers on the archive
+and in conference proceedings. The example scaling I'm doing here is primarily to allow the model
+to fit in memory. Now that we have determined our model configurations, let's initialize the model.
+The first and most naive way to initialize a model would be to initialize it with random weights.
+Initializing a model from random weights is very easy with the Transformers library.
+All you need to do is pass on the config we've just defined in Create an Instance of Lama for
+Causal LM. Before we move on, let's check the size of the model.
+When training on LLM, we always want to make sure of the size of the model, because the size
+directly impacts compute and cost. So our current model is sized at 248 million parameters.
+When a model is randomly initialized as shown above, the weights are given random starting values,
+following a truncated normal distribution with a standard deviation of 0.02 and a mean of zero.
+Values beyond the two sigma from the mean are set to zero. Let's take a look at a small sample of
+weights from one of the layers in the self-attention head. The model is randomly initialized and not
+trained on any data. Do you want to try it for inference? Can you guess what it will output?
+So you've seen this happen before. We are first going to load a tokenizer and here we will load
+a tokenizer from upstage. If you enter a prompt, like we've entered before, I am an engineer I love
+and turn the prompt into tokens, define a streamer and create some outputs. You will see some random
+outputs because our model is not trained yet. Before we move on, let's release the memory.
+This is because these models we created take up to several hundred megabytes and we need to release
+the memory to avoid crashing the kernel. Now instead of random weight initialization,
+let's try using a pre-existing pre-trained model. Here we will use weights from tiny solar,
+which is 240 million parameters. All we need to do is load the model using
+auto model for causal LM and we are ready to keep training. Taking an existing model and
+continuing to train it on new data is called continued pre-training and is a much faster way to
+train a model on new data than starting from scratch. Before we move on, let's empty the memory once
+more. Earlier in the lesson, some showed how you can remove layers from a large model to create a
+smaller one in a process called downscaling. Here's how you can do that.
+You will be shrinking a 12 layer 248 million size model by removing the mid layers.
+To start, let's check how many layers the model currently has.
+You can see that the model currently has 12 layers and has 248 million parameters.
+Now let's create a smaller model from our initial model by deleting two of the mid layers.
+Here we will be selecting the first five layers and the last five layers and concatenating them
+to form a total of 10 layers. Now you have 10 layers left, which is what we wanted.
+So now this model configuration is ready to start using for pre-training.
+As you heard earlier, downscaling works best with larger models.
+This small model here would not be a good choice and is only being used to show you the method.
+Let's go ahead and empty our memory once more.
+So now we are going to try upscaling a pre-existing pre-trained model.
+By upscaling, we mean that we start from a small pre-trained model and end up with a larger model.
+Here we will be upscaling a model with 10 layers to a model with 16 layers.
+The first step is to create a model instance for the large final model we are going to train.
+So these are the basic configurations for the larger model.
+As above, we start with the lamin2 model architecture.
+And all numbers other than the number of hidden layers are the same as the smaller pre-trained model
+we are going to upscale. Let's finish this part up by initializing the larger model with random weights.
+Next, you are going to overwrite these randomly assigned weights
+using the weights from a pre-trained model.
+So let's load the smaller pre-trained model into memory so you can copy layers from it.
+Here you will use tiny solar 248 million, which has 12 layers to upscale to our 16 layer model.
+First, you will take the bottom most state layers and the top most state layers and concatenate
+them to form a total of 16 layers. You will then overwrite the weights of the randomly
+initialized model with these new values. Lastly, these lines of code here,
+copy over the components that make up the embedding and classification layers for the model.
+So those can be used as well.
+Let's check the number of parameters to confirm that it hasn't changed.
+Let's also try inferencing the model.
+Now this is interesting. This output looks a lot more like English, although it definitely
+doesn't make a lot of sense. The model has been initialized with another model's weights,
+so it has some ability to generate English. But the layers are not yet coherent, so the language
+isn't fluent. This is why it's necessary to continue pre-training this model on more data.
+But as you can see here, you are much further along than when you started with random weights.
+This is why upscaling can help you train models much faster.
+Then, during training, you'll be updating all the weights of this model,
+so all of the layers work together as expected. Let's save this model,
+and then move on to the next lesson where you'll see how to train it.

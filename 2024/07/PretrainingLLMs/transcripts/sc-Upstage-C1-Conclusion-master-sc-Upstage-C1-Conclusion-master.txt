@@ -1,0 +1,12 @@
+Thank you for making it to the end of the course.
+You now know all the steps to pre-training a model.
+From preparing your training data and configuring your model, to training it and evaluating
+its performance.
+Although the examples you saw here were running on a CPU, you cannot get the code in the
+notebooks to train larger models on GPUs.
+Just don't forget to be aware of the costs associated with your pre-training work.
+With the knowledge from this course in hand, we'd love to see more ground-breaking pre-trained
+models from you.
+And please share your work with the community if you do train your own model.
+We hope you enjoy the course.
+Happy pre-training!

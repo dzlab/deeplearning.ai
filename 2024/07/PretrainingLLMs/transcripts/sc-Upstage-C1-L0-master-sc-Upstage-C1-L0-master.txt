@@ -1,0 +1,67 @@
+Welcome to pre-training LMS built-in partnership with Upstage and taught by Upstage's CL-Sunkim,
+as well as Chief Sighted Gafsa, Lucy Pach. Welcome Sunl Lucy.
+Thank you Andrew. We are so excited to be here.
+Pre-training a large language model is a process of taking a model,
+generally a transforming neural network, and training it on a large courses of text
+using supervised learning so that it learns to repeatedly predict the next token given and
+in prompt. This process is called pre-training because it is the first step of training an LMS
+before any fine-tuning to have the following instructions or further alignment to human preferences
+is carried out. The output to pre-training is known as a base model and will cover both
+training from scratch, meaning from randomly initialized ways, as well as taking a model that's
+already been pre-trained and continuing the pre-training process on your own data.
+Training a large model from scratch is computationally expensive, requiring multiple
+state-of-the-art GPUs and training runs that can last weeks or months. For this reason,
+most developers want pre-training model from scratch and will instead take an existing model
+and either use prompting or sometimes fine-tuning to adapt it to their own task.
+However, there's still some situations where pre-training a model may be required or preferred,
+and that's what Upstage has been doing for as customers.
+That's right, Andrew. Our customers are pre-training models for various regions.
+Some are building models for tasks in specific domains like legal, healthcare, and e-commerce.
+Others need models with stronger abilities in specific languages such as Thai and Japanese.
+Further, new training methods are making more efficient pre-training possible
+like depth-of-scaling, which uses two or more sets of existing models to build larger models.
+For example, we trained our solar model using depth-of-scaling.
+Because of this technology improvement, we are seeing more and more interest in pre-training.
+Depth-of-scaling creates a new larger model by duplicating layers of a smaller
+pre-trained model. The new model is then further pre-trained, resulting in a better,
+larger model than the original. Our team at Upstage has empirically found that models created
+in this way can be pre-trained with up to 70% less compute than traditional pre-training,
+representing a large cost saving.
+Whether pre-training is the right solution for your work depends on several
+factors, such as whether a model might already be available that might work for your task without
+pre-training, and what data you have available, as well as the compute resources you have access to,
+both for training and serving, and lastly, the privacy requirements you may have, which may also
+implicate regulatory compliance requirements. So, depending on the company or sector you work in,
+you might find yourself being asked to pre-training a model, or at least consider
+doing so at some point in your work.
+In this course, you'll learn all of the necessary steps to pre-training a model from scratch,
+from gathering and preparing training data to configuring a model and training it.
+You'll start by looking at some use cases where pre-training a model is the best option
+to get good performance and discuss the difference between pre-training and fine-tuning.
+Next, you'll walk through the data preparation steps that are required to pre-training a model.
+You'll explore how you can gather data from the internet, or existing repositories like
+hugging base, and then look at the steps to obtain high-quality training data, including
+de-duplication, filtering on the length of text examples, and language cleaning.
+After that, you'll explore some options for configuring your model's architecture.
+You'll see how you can modify Meta's Lama models to create larger or smaller models,
+and then look at a few options for initializing weights, either randomly or from other models.
+Lastly, you'll see how to train a model using the open-source Hugging Face Library,
+and actually run a few steps of training to observe how the loss decreases as the training progresses.
+This course uses smaller models with just a few million parameters to keep things lightweight
+enough to run on a CPU, but you'll be able to use the code from the lessons to scale to both larger
+data sets and models, and also to train on GPUs.
+Thanks, Lucy. This sounds like it'll be very helpful for building intuition
+about when pre-training makes sense, and what is required to carry out.
+Many people have worked to create this course. From Upstage, I'd like to thank
+Changjoon Park, Sangjoon Kim, Jerry Kim, Stan Lee, Yongqi Kim, as well as their collaborator Ian Park.
+From DeepLenida AI, Tommy Nelson, and Jeff Ladmeick also contributed to this course.
+I'd like to reiterate that pre-training large models of large data sets is an expensive activity,
+with a minimum cost of maybe about $1,000 for the smallest models, up to tens of thousands of
+dollars, the hundreds of thousands of dollars, for maybe a billion parameter scale model.
+So do be careful if you choose to try this out yourself. There are calculators,
+like one from Hugging Face that you see in the course, that can help you estimate the cost of
+your pre-training scenario before you get started. These can help you avoid unexpected large
+bills from your cloud provider, but pre-training is a key part of the LM stack,
+and whether you just want to build your intuition about LM's or continue the pre-training of
+an existing model, or even try to pre-traine something from scratch to compete on the LM leaderboards,
+I hope you enjoy this course. So let's go on to the next video and get started.

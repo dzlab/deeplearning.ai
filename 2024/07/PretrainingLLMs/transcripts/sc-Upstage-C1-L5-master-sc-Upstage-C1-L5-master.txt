@@ -1,0 +1,92 @@
+Okay, so now you have your training data set, and you know how to initialize a model with your preferred training configuration.
+So, let's get into the fun part, training.
+In this lesson, you will learn how to configure a training run and train your own model. Let's dive in.
+So, now we are going to train our model using Hugging Face Trainer.
+We will take care of the most of the training steps.
+The first, we load the data using Hugging Face dataset class.
+This implements some method that are needed for training and data loading.
+Then, we need to set the hyper parameters for our training, including the batch size, learning rates, and so on.
+We already specified some good studying failures for those parameters in the notebook for this lesson.
+The next step is you just pass the trainer your data, configure the model, and then your training parameters.
+Then, you can call the run function to kick off the training.
+At this point, you're all set. Just sit back and monitor the training.
+I know you'll be excited to use your new model, but it's good to be patient.
+Training takes a long time depending on the hardware you have.
+It could be weeks to months for large models with large training datasets.
+One important thing to note is that you need more memory for training models than YouTube for inference.
+The extra memory is needed to store the gradients and the activations that get updated during the training process.
+Let's say you need 10 billion parameters to store, then you actually need up to 20 times, which is 200 gig of memory for your training.
+This requires multiple GPUs, and it's going to be very expensive.
+There are calculators you can use to check how much your training job might cost before you get studied.
+For example, here is one for hugging pace.
+In this case, your estimated cost for training 17B model on 980 billion tokens.
+With 200 GPUs, it's about 100K and takes about 2 weeks.
+Let's head to the notebook where you can see the code to set up a training run for your model.
+I'm going to show you how to set up a training run, and we'll use both the dataset and the upscaled model we've saved in the previous lessons for our example.
+Note that we will be training the model on a CPU here, but you can always change this to auto if you have a GPU.
+Let's start by loading the model as you have done before.
+Now, let's load our dataset.
+We are going to update two methods to the dataset class, so that it can interface with the trainer.
+The LEN method here lets you know how many training examples there are.
+And the GET item returns the input and output tokens for each example in a dictionary format.
+We are creating this custom class so that we can load the pre-processed packet file that we created in lesson 3 and return input IDs and labels.
+Note that we are setting labels equal to input IDs here because we want to perform next token prediction.
+Then, llama for causal LM will shift labels internally to create multiple input out papers for supervised learning as you saw back in the first lesson.
+Now, let's define a custom arguments class to set arguments for training.
+Choosing parameters for LLMs can be challenging and often involves significant research.
+That's because training LLMs is a costly process and typically does not allow for much trial and error, unlike traditional small scale machine learning.
+There are many important configurations here, but let me just highlight the top most important settings.
+Optim here indicates the optimizer.
+And while you are free to explore different optimizers such as plain old atom, atom W, or atom with weight decay, is the go-to optimizer these days when training an LLM.
+There is also MAC steps which indicates the number of maximum steps for training.
+When you are pre-training, it is common to set the num train epochs to 1 instead of setting the number of steps.
+This means that you will process all of your data once.
+Determining the batch size is mostly up to you to decide, but a rule of thumb is to maximize the batch size given the memory capacity of your training device.
+Recall that in the data set you created, the maximum sequence length was 32 tokens, which makes the whole batch consist of 64 tokens in this case where the batch size is 2.
+Also, this sets the batch size per accelerator, so if you had 8GPUs available, you will process 8x batch size resulting in 512 tokens per training step.
+There are some lines of code commented out at the end of the configuration that will save intermediate checkpoints of your model.
+I will discuss more about this at the end of the lesson.
+Now, let's create a hugging face argument parser that will parse the input arguments and also add an argument so that we can appoint the output directory.
+This line of code will set the output directory to output.
+This is the directory where the models will be saved at the end of the run.
+If we pass the arguments to the custom data set, our data set will be configured as needed for the trainer.
+After configuring a data set, I encourage you to always print a simple line or at least the shape of the data set so that you can be assured that you're working with the correct data.
+You never want to spend lots of GPU hours on the wrong data.
+Here, you can see that the length of the tokens is 32, and that is what we configured max sequence length to be above.
+So, this looks good.
+Now, we're finally ready to start training, and this is the most important yet simplest part.
+All you have to do is initialize a trainer object with the model to be trained, the training arguments, the data sets for training.
+Here, we're going to run the trainer for 30 steps and print out logs every three steps.
+So, let's commence the training run.
+We will speed the video up, and this will take a few minutes for you to run in the notebook.
+Note that you might have to run quite a long time to monitor the decrease in the loss, because the model already has some ability to write English.
+The change in the loss with each training step is smaller.
+Here, with just 30 steps, you see the loss oscillate, and it might seem like it is in decreasing.
+But if you ran this for a thousand, or ten thousand steps, you would see this value decrease.
+Normally, you would pre-training a model for weeks, if not months.
+Note that we don't slack off during training, we actually monitor the process closely.
+What we would do first is to record the losses with weights and biases, which allows our team to check the progress at any time.
+If you're interested, you can check out the short course from weights and biases on deeplearning.ai.
+We would also create checkpoints, or an intermediate version of the model every day.
+Saving the model like this ensures that we don't have to start from the beginning, in cases that compute goes down or crashes.
+After the trainer runs, it will actually output some information about the training, including the global step, the training loss, and the train run time.
+Recall that these are the saving configurations that I commented out above.
+Here, we're mentioning the saving strategy, where we're defaulting to steps.
+You can also replace this to epochs.
+We're also mentioning that the safe steps is every three steps, so we're going to have a checkpoint every three steps.
+You can always replace this with another number, and in practice, it would be like ten thousand steps, a hundred thousand steps, and so on.
+We would also like to limit the number of checkpoints, because checkpoints take a lot of storage space.
+Here, we are limiting it to two, which means only two will be saved in storage.
+One more thing.
+In case you're curious, here's a look at how the model performs ten thousand steps into the training.
+Here, you're loading a tokenizer, and then a checkpoint that was saved after ten thousand steps like you just saw above.
+And here's the setup to have it generate text.
+So let's take a look at its output.
+So it looks a bit different than before.
+The text still doesn't make a ton of sense, but part of that is that a model this small will also have problems generating long stretches of coherent text.
+But the performance is still a lot better than before.
+It is no longer repeating the same text over and over.
+Each sentence is different, and there is some related content from sentence to sentence.
+So overall, we see some changes, and we'd expect more if we kept on going for full pre-training.
+Saving checkpoints like this one gives you intermediate versions of the model that you can evaluate and see how training is going.
+Let's head to the next lesson to talk more about evaluation.

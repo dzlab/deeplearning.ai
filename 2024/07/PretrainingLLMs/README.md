@@ -1,6 +1,6 @@
 # [Pretraining LLMs](https://learn.deeplearning.ai/courses/pretraining-llms)
 
-![Promo banner for](https://ci3.googleusercontent.com/meips/ADKq_NY4YyGT18NVkT2rtvVhVqLSU6PTYQ2UjF5mwLYlO_peRNk-ZmATu_jgevSnKPrS2jNS-l4DzfsQWovcvK08E4gQM351ufjHtXvhoGFDIHVJL8j-N46AwTAKShbFnlPmVWI3od-Abg-anda8E-RfXRE3snj56WYU0isFpl0tceC1LoOeA3mpQYINzkCBFodNnJCMQPelFn2PXJA4cYBYOPPubV8P1uXxvbr3dsnLUjn2=s0-d-e1-ft#https://info.deeplearning.ai/hs-fs/hubfs/DeepLearning_Upstage_Banner_2070x1080.png?width=1120&upscale=true&name=DeepLearning_Upstage_Banner_2070x1080.png)
+![Promo banner for](https://info.deeplearning.ai/hs-fs/hubfs/DeepLearning_Upstage_Banner_2070x1080.png)
 
 Dear learner, 
 
@@ -17,7 +17,7 @@ In this course, created in collaboration with Upstage and taught by its CEO Sung
 You’ll learn to pretrain a model from scratch and also to take a model that's already been pretrained and continue the pretraining process on your own data. You'll learn the essential steps to pretrain an LLM, understand the associated costs, and discover how starting with smaller, existing open source models can be more cost-effective.
 
 
-![GIF with slides from lesson 1 of the Pretraining LLMs course](https://ci3.googleusercontent.com/meips/ADKq_NaG8RsXiTuM8g_Pt0o3l-I-V46daiEFR97OaR4F5Bdf25FwZMLr0VnRV7ryh9dYHMIQdUdXmK6xYpAxOXOdWzPAIxHrakr6RK5FslsyWqhhQKNUQWOUCOcqooKUEPE8orzgKPVcm5swB8K2eyNmkjBzBgSss0Zjf90xGJXWMxaETdJlQJplFYr0NC9oKG59H83PO3heQZ62QAOQW-yd=s0-d-e1-ft#https://info.deeplearning.ai/hs-fs/hubfs/Launch%20email%20GIFs%20(27).gif?width=1120&upscale=true&name=Launch%20email%20GIFs%20(27).gif)
+![GIF with slides from lesson 1 of the Pretraining LLMs course](https://info.deeplearning.ai/hs-fs/hubfs/Launch%20email%20GIFs%20(27).gif)
 
 In detail, here’s what’s in the course:
 

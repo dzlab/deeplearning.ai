@@ -1,0 +1,139 @@
+When pre-training a model, it is important to start with a high-quality training data set.
+In this lesson, you'll learn how to create a training set using text from the web
+and from existing data sets. Let's take a look.
+The data sets used for pre-training LLM's are made up of a vast amount of unstructured text.
+As you saw in the previous lesson, each text sample is used to train an LLM
+to repeatedly predict the next word, known as auto-regressive text generation.
+During the training phase, the models which are updated as it processes each example
+in the training data. Until over time, the model becomes good at predicting the next word.
+You can think of this space as being like a reading where the input text are used
+in their original form without any additional structuring of the training samples.
+Huge amounts of training text equivalent to millions of completed books are required
+for language models to get really good at the next word prediction and to encode reliable
+knowledge about the world. In contrast, the data used for fine tuning is highly structured.
+For example, question-answer pairs, instruction response pairs, and so on.
+On the left here, you see a text about the friends that would be useful
+or pre-training. On the right, you see a fine tuning data sample,
+which is a specific question about the friends, what are the top cities and the suitable
+response? So the form of the fine tuning sample is quite different. The goal of fine tuning
+is to get the model to behave in a certain way or to get good at completing a specific task.
+So if pre-training is like reading many, many books, you can think of fine tuning as being like
+taking a practice exam. You aren't really learning new knowledge. Hopefully you learned everything
+from your reading and pre-training. Instead, fine tuning is just learning how to answer questions
+in a specific way. If you want to read a lot of text, you have to find a lot of books
+and code examples and articles and Wikipedia pages, web pages, and extra. So pre-training
+data sets are filled from large collection of text documents, many of which are sources from
+the internet. The world is filled with text, so it's quite easy to find lots of text for pre-training.
+Fine tuning data sets on the other hand, because precise questions and high quality
+corresponding answers. Traditionally, this work has been done by humans, which takes time and can
+be expensive. More recently, themes have been using LLMs to generate the fine tuning data,
+but you need to use a very capable model for this to work well. So you need to do a bit more work
+to create a good quality fine tuning data set. You will compare and contrast some simple
+pre-training and fine tuning data sets in the notebook with Lucie later in this lesson.
+Data quality is very important for pre-training LLMs. If there are issues with your
+training data, for example, lots of duplicate examples, spelling errors, factual inconsistencies,
+or inaccuracies, and toxic language, then your resulting LLM will not perform well.
+Taking steps to address these issues and make sure that your training data is
+of high quality will result in a better LLM and more written when you are training investment.
+Here are major tasks. You should complete to clean your text data for training. The first is
+the duplication. Having duplicate data can bias your model towards the particular patterns
+and examples. It also increases your training time while not necessarily increasing the model
+performance. So removing duplicate text is a crucial step in cleaning your data. This should be
+within individual documents and across all documents. You want the intrinsic quality over your
+training data to be high. So the text should be in the language you are interested in, be relevant
+to any topics you want the LLM to build knowledge of, and the meet any other quality metrics
+that you have. You can design quality filters to clean up this aspect of your training data.
+For example, the sample here contains Japanese, Chinese, even Korean text. If you want to
+train an English LLM model, you should remove this. A relative step is applying content filters
+to remove potentially toxic or biased content. Safety is an important concern and then to avoid
+the potential data leakage. You should always remove personally identifiable information or PII
+for any of your examples. One common strategy is to redact this in the training text like you see
+here. Lastly, you can come up with rules for how to fix common quality issues like all caps,
+extra functions, and poorly formatted text. Lucy will show you how to carry out some of these
+steps in detail in the notebook for this lesson. As you can see, data cleaning can be complicated
+and takes lots of time. Luckily, more and more tools are available to help you with this
+important step. One example is Databers, an open source project we started at Upstage. Databers
+is ready to use data cleaning pipeline. They will take your road training data, apply the
+cleaning steps you just saw, and also others once, and then package up your data in a way that is
+ready for training. You can take a look at the GitHub page to learn more about how to use
+Databers. Okay, let's head to the notebook to try out some of the data cleaning steps for yourself.
+Let's get started with data collection. Since the objective of pre-training is to perform next
+token prediction, you need a gigantic corpus of unlabeled data. You can often acquire this data
+by scraping from the web, gathering documents within your organization, or simply downloading
+open data sets from data hubs. Here we will download two data sets using the data sets library
+from Hugging Face. The first one is the pre-training data set from Upstage. This data set is
+created by cutting out 60,000 samples from the one trillion token Red Pajama. Note that Red Pajama
+is a data set that was used for Lama 1 pre-training and is composed of data from Common Pro, C4,
+GitHub, and so on. Before we move on, let's see the information about the data set. Here you can see
+there is the text and the metadata involved with each example. For simplicity, we will only use
+the text column of the data set. Let's also take a look at one of the examples.
+So this is a text about Afghanistan. The content itself is not important. The important part here
+is that it is an example that consists of plain text data. For pre-training, this is what we want.
+We want plain text that is not structured in any kind of instruction type. For example, a question
+answer pair. Feel free to change the index number here if you want to explore any other
+example within the data set. Now let's sound know another data set called Alpaca.
+Alpaca is a fine-tuning data set which contains 52,000
+instruction following data generated by GPT-4.
+Here you can see the data set consists of an instruction, an input, and an output.
+Let's go see how an example looks like. Here we are going to see the first example
+and print the instruction input and output.
+It's three tips for staying healthy. Note that in contrast to the pre-training data set,
+which is comprised solely of the text, this instruction data set Alpaca includes the
+instruction, input, and output columns. Since we are interested in pre-training,
+we will choose to only use the pre-training data set from now on.
+Now let's try scraping from the web and form a custom data set.
+To do this, we will download nine random Python scripts. However, note that in practice,
+you will have much, much more samples, up to billions.
+Let's start by importing some required packages, OS to interact with the file system,
+and requests to make calls out to websites.
+This is a list of random Python scripts hosted on GitHub.
+Using the request library, we can initiate and request the URL to retrieve the Python script
+and store it into a file in the code deer directory.
+Let's check if the files have successfully downloaded by listing the resulting files in code deer.
+Awesome! Now we will convert them into a hugging face data set so that we can use them as
+training files. To do this, we will first create a list of dictionaries with a key named text
+and load them using the from list method. You can see all nine files were successfully loaded.
+If you recall, this is the exact same structure of the pre-trained data set that we downloaded above.
+Now let's combine the pre-training data set that we downloaded and the code data set that we
+crawled from the web. We are going to do this by calling concatenate data sets from the data
+sets library. This is a very practical action you will be doing when you're pre-training your own
+model. You will download some of the data, add some custom data, and combine. Now we have a total
+of 60,000 and nine rows. Let's go through some typical steps for data cleaning and see how the
+number of rows decrease as we progress. First, we will filter out samples that are too short.
+This is a function describing a common practice for pre-training data. Simply put, we keep
+text that has at least three lines or sentences and each line of the text contains at least
+three words. We want to do this because our objective in pre-training is to predict the next
+token, but short examples are not very useful for that task. So let's try running this function.
+Note that the data set library has a filter method which applies a function to each example
+in the data set. So if you check the number of rows, you can see that over 7,000 rows
+got eliminated. Now we'll move on to the second part where we remove repetitions.
+So this is basically a function where given input paragraphs, you can find duplicates.
+So we use this function to find repetitions within a paragraph and say if compared to a paragraph's
+length, a paragraph has too much duplicates, then we return balls to get rid of that paragraph.
+We will run this function throughout the data set. Now we're done to 52,000 examples, which is a
+decrease of 30 rows. That is a very small decrease, but this is one of the advantages where you
+download data sets from hugging phase because data sets on hugging phase have a lot of the pre-processing
+done already. So for the third part of pre-processing, let's go on to deduplication. This function removes
+duplicate entries by storing unique text segments and comparing each text against it.
+So let's try running that function. As a result, 8,000 rows were removed and that is a big decrease.
+So in reality, there are also a lot of duplication and documents, so make sure you cover this step.
+The last step is language filtering. This is one of the quality filters that some previously
+mentioned. If you want to focus on a particular language or domain, it is good to filter out other
+languages or domains so that the model is trained on relevant text. Here we'll use the fast text
+language classifier to only keep English samples to train our model.
+You will see this warning, but don't worry about it too much.
+Also note that the run is slower than the filters that we run above.
+That is because this is actually a real machine learning model in action.
+If you want to train a model for another language, simply change the language, English,
+to that particular language. Let's check the number of rows.
+Now we're down to 40,000 after removing approximately 3,000 rows.
+Here I would like to note that starting from a big data set from the first place is very important
+because you are constantly throwing out rows by cleaning out the data set.
+Finally, we will save the data in the local file system in a parquet format. Note that in reality,
+you would want to save the data in each stage of cleaning because you're handling a large
+amount of data and data cannot be contained in memory.
+Parquet is a columnar storage file format that is widely used in big data and data analytics scenarios.
+You're free to use any other format like CSV or JSON, but since Parquet is really fast,
+we're choosing it here. The next step in the process is to prepare your saved data set for training.
+This involves some additional manipulations of the data.
+Join me in the next lesson to see how this is done.

@@ -1,0 +1,117 @@
+In this lesson, you will explore a few cases where pre-training is the best option to get good performance.
+You'll also try generating some text with different versions of the same model to see how the performance differs between a base general model, a fine-tuned model, and a specialized pre-trained model. Let's get started!
+As you heard in the introduction, pre-training is the first phase of training on LLM where the model learns to generate a text by repeatedly predicting the next word.
+It learns how to do this by using very large amount of unstructured text data.
+Each text sample is turned into many input-up appears like you see here.
+Over time, the model learns to correctly predict the next word, and in doing so, the model encores knowledge about the world.
+These base models are good at generating text, but not always good at following instructions or behaving in a safe way.
+The LLM's you encounter in consumer applications like chat GPD, Bing Search, and others have had their initial pre-training extended with a pace of fine-tuning to make them better at following instructions and alignment with human preferences to make them safe and helpful.
+The model only has knowledge of the content that was in the training data, so if you want the model to learn new knowledge, you have to do more training on more data.
+Additional fine-tuning or alignment training is useful to teach the model a new behavior, say writing summary in a specific style or avoiding a particular topic.
+However, if you want the model to develop a deep understanding of new domain, additional pre-training on text from the specific domain is necessary.
+People often try to add new knowledge without pre-training, focusing on fine-tuning the model with smaller data sets.
+However, this doesn't work in every situation, especially if the new knowledge is not well represented in the base model.
+In those cases, additional pre-training is required to get good performance.
+Let's take a look at a specific example.
+For instance, let's say you want to create an LLM that is good at Korean.
+A base model that wasn't trained on much Korean text, for example the LLM-7B model, cannot write text in Korean.
+If you ask the model to tell us about Hanbok, the traditional Korean clothing, it gets the answer completely wrong.
+Thinking that Hanbok is an offensive term.
+The second model here has been fine-tuned on small amount of data, most likely the form of English Korean sentence affairs of direct translations.
+This answer is only partially in Korean.
+Although, if you know both languages, the answer actually makes sense.
+So the model might be good for writing k-pop songs, but not so good for powering a Korean chapter.
+The last model here is a model our team and updates created by further pre-training solar on English LLM.
+On a huge amount on both English and Korean unstructured text.
+So this model, as you can see, can now speak Korean fluently.
+So as you can see, pre-training was critical here to getting a good Korean model.
+Let's head to a notebook to look at a lovely example where pre-training is crucial.
+Let's experience the different among pre-trained models and fine-tuned with the Python language.
+We already installed the required packages for you.
+Let's also filter out some warnings because we don't want our notebook to get too messy.
+And you also want to import torch because we want to set a seed value for reproducibility.
+You can always change this number to a different number of your choice.
+And then we will run fixed torch seed so that the seed can be fixed.
+Let's try an example where we're getting a small pre-trained model to generate text.
+Here we'll be using a model called tiny solar, which has 248 million parameters built by upstage.
+To load this model, we will be using auto model for causal LLM from transformers.
+To load this model, we will need three parameters.
+The first is the model pattern name that we just initialized.
+And the device, where we'll be using a CPU.
+And also the data type, which will be beefload 16.
+Loading the model takes a while.
+We will be using a CPU here.
+But you can also set it to a GPU by mentioning auto.
+Now let's set the tokenizer by calling auto tokenizer from transformers.
+Here, if you just mentioned the model pattern name, the tokenizer will be loaded.
+If we have a model and a tokenizer, we can start generating text.
+Language models are decoders so they can auto complete a given input text or prompt.
+Now let's try auto completing a prompt using our pre-trained model.
+Here I'm going to input a prompt.
+I am an engineer. I love.
+Given a prompt like this, can you imagine what our model will be auto completing?
+Let's check it out.
+We first want to tokenize our prompt with our tiny general tokenizer.
+Here we're saying PT because we're working with PyTorch.
+We then want to create a text streamer instance to stream out text.
+Here we'll be putting in our tiny general tokenizer and skip the prompt,
+which means the prompt above will be skipped.
+And we will also skip special tokens.
+Now you will see the magic happening.
+This piece of code will let us generate up to 128 tokens.
+For random outputs, you can just simply replace do sample to true and a temperature of your choice.
+Let's go see it.
+So it's saying I am an engineer.
+I love to travel and have a great time, but I'm not sure if I can do it all again and so on.
+You can tell that it is quite good at generating text in English.
+However, this model comes short when I tried to autocomplete a code snippet in Python.
+Because it was trained mainly on English.
+Let's try.
+This time, let's try a Python code.
+Define max numbers.
+As the name implies, we expect our model to write a function that will find the maximum number among a list of given numbers.
+So now we will be creating inputs from the prompt and also a streamer as we have done before.
+Now let's create the outputs.
+Well, that doesn't quite do the job, does it?
+Seems like Python code and a glimpse, but if you look closely, the result is just random.
+So there are comments here and a return format.
+But there are no calculations inside, which makes the Python code valuable.
+That is probably because our pre-train model wasn't trained on Python code itself.
+So how can we make the results better?
+Some people will think of fine tuning.
+Fine tuning involves training your model on a small amount of data, which is task-specific.
+Let's see how good a fine tune model would do instead of a general pre-trained model.
+Let's try a new model.
+This model is identical to our previous tiny solar model.
+But fine tuned on Python code.
+Since this model is fine tuned on code, we expect it to perform much better in terms of code generation.
+As before, let's load our model and tokenizer as streamer output.
+We will be putting in the same prompt, tokenizing it into inputs, setting our streamer, and then creating outputs.
+What do you think?
+If you look at the output, you can see that it has some operations going on, say, if else.
+But it still seems the model needs to learn more code because it's still not getting the function right.
+Now let's generate Python examples with a pre-trained Python model.
+Here we will be using tiny solar, 248 million parameters, with a 4K maximum token length, pre-trained on Python.
+This model is different from the previous model in the sense that the previous model was trained on instruction datasets,
+and this model is trained on plain Python code.
+Another difference is that the dataset is at least 100 times bigger.
+Now let's load the model and the tokenizer as we have done before.
+Input the same Python snippet to the custom pre-trained model, and stream out the text.
+Much better, huh? The function finally makes sense.
+This is the function that our large language model just output.
+Let's put that inside and see if it actually works.
+We will put in a whole list of different numbers, and see if it finds the maximum number.
+There we go.
+The maximum number is 7, and it is correct.
+So by running these three models here, you can clearly see the benefit of pre-training.
+The last model has learned a lot of Python and is much better at writing working code than the original, which didn't know Python at all.
+And the fine-tune model, which learned just little bits, but wasn't fluent.
+So you will see in two use cases where pre-training a model was necessary to get the model to perform well.
+It is important to note that in contrast to fine-tuning, which can be sometimes done using a few hundred thousand tokens, and it can be quite cheap.
+Pre-training requires lots of data, and so is expensive.
+In this table, you can see the cost to train the 248 million parameter model you tried in the notebook for various training data sizes.
+The last row with the 39 billion tokens trained correspond to the Python specific model that you saw in the notebook.
+The training was carried out on 16-hundred GPUs, took seven hours, and it cost $1,500.
+So please consider the cost before you get started on a pre-training job.
+You will see some resources that you can use to estimate the cost later in the course.
+Creating a good model requires high-quality training data. Join us in the next lesson to learn how to create a good training data set.

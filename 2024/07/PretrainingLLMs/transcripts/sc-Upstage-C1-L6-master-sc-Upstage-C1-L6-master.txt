@@ -1,0 +1,70 @@
+Fantastic! You've now seen all the steps required to pre-train a model,
+but once you've finished your training, how do you know how good your model is?
+In this final lesson, you'll explore some of the common evaluation strategies for LLMs,
+including some important benchmark tasks that are being used to compare the performance of
+different models. Let's take a look. As you know, we cannot improve performance if you cannot
+measure it. Evaluation is like a test. Sometimes taking a test is pain, but it's necessary to know
+where you are doing well and then where you need to improve. To evaluate your model, there are
+four common methods. You're checking the loss, you see the results, you can compare the models,
+and using benchmark data sets. These are not one-time effort, but a more
+continual process. The first method is observing the loss during your training. If training
+is going well, it should be decreasing over time in a consistent way. If it's not, you might
+want to reconsider your training hyperparameters, especially the running rates. You might also
+want to reconsider your model architecture. If you observe a flattening of the loss curve,
+also known as a saturation, there could be a few problems. One is that your model may have
+reached its maximum-learning capacity and cannot learn more from additional data. This could happen
+when training a small size model. It could also indicate a problem with your training
+data sets, like a low-quality example. So definitely check your data if you are training a big
+model and see saturation. When training anlm is checking the outputs of the model yourself,
+during training is really important. So you can create the checkpoints of the models periodically,
+say, every 10,000 training steps. Then make sure that the model output is what you expect.
+You should be getting better at generating text over time. Human evaluation is still really
+important for the lm, so don't overlook this step. Comparison with other models can also be
+very useful. When you have two results side by side, it is much easier to tell which one is better.
+There are some online tools available to compare models, including upstage console and then lmc
+from Buckley. You will see the links to this in the notebook. This is one of the best ways to
+benchmark performance, but it does require human effort. One active area of research is
+using an lm search to decide which model output is better, but they can be biased depending on how
+the judge model was trained. The most common evaluation method is to use benchmark data sets.
+This is like having the lm take a standardize your chance. By testing all models on the same
+benchmarks, you get a fair comparison of the abilities and the performance of the different models.
+There are a few famous benchmark data sets, like ARC, MMLU, Helioswake, Trospool QA,
+Minogran, and GSMAK. This measures the general abilities of lm's like reasoning, common sense,
+and mathematical skills. But depending on how you want to use lm, it may be more useful to measure
+compositional abilities. Benchmarks like empty bench, ecu bench, and install have been developed
+for this purpose. Ultimately, when evaluating the performance lm, you have to make a decision that
+is the best for your model and use cases. Let's head to the last notebook where you will learn
+how to download and run some of these benchmarks on your model.
+Here we will use a popular open source evaluation library called lm evaluation harness
+from the eluther project. It is already installed in the learning environment,
+but if you need it in other environments, you can always run this line of code.
+The harness serves many many tasks for evaluation. Among them, we will choose to evaluate
+tiny solar on the Trospool QA MC2 task. The MC2 task is comprised of multiple choice questions
+developed by the University of Oxford and OpenAI, and is one of the evaluation tasks included in
+the Hanging Face Open LLM leaderboard. The MC2 task works as follows. Given a question,
+and multiple true false reference answers, the score is the normalized total probability assigned
+to the set of true answers. We will run this evaluation on a CPU as always and run only
+five examples so that we can end our evaluation within 10 minutes.
+Note that evaluation tasks take quite a long time because the log-like
+lid is calculated for every candidate. We'll speed up the video here for your convenience.
+Now you're done with the evaluation. In this final table, you can see that the final score
+is around 0.4. Remember that our model is very, very small, so it is unfair to compare with other
+models that have more than several billion parameters. You can use the code here to run the whole
+evaluation suite if you have trained your own model and want to be on the Hanging Face leaderboard.
+This custom function here will run all six tasks involved with the corresponding few-shot parameters.
+We're not going to run it here because it takes too much time for a short course.
+The few-shot parameter indicates how many examples are included in the prompt that the LLM
+responds to. So there will be 25 examples included for the art challenge. Note that these are fixed
+numbers for the Hanging Face leaderboard so all models are tested in the same manner. I hope
+if you train your own model that you'll evaluate it on these benchmarks so that the community
+can see how great your model is. Hope you have fun. So in the notable, you saw a few ways to run
+benchmarks by hand. Luckily, there are tools available to make evaluation much easier. For example,
+Eververse is an open source project that we created at Upstage to support your LLM
+evaluations. We also use it internally at our company. Eververse unifies various LLM
+evaluation framework using git submodules and it is fairly easy to set up and run. You can run
+Eververse on several models at once and it will provide comprehensive reports of their performance
+with the benchmark scores ranking and other criteria. Lastly, you will properly fine-tune and align
+your model after finishing your pre-training. So you can use it in real applications. Don't forget
+about assessing the model behavior and alignment with the human values. Benchymarks for truthfulness,
+safety, fairness, and so on are also available and still in active development. You can check out
+the link in the Notable for more information.
