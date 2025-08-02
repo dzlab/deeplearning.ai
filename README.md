@@ -119,5 +119,6 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 
 ### 07
 - [Post-training of LLMs](2025/07/Post-trainingofLLMs/)
+- [Pydantic for LLM Workflows](2025/07/PydanticforLLMWorkflows/)
 
 </details>
