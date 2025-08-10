@@ -121,4 +121,7 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 - [Post-training of LLMs](2025/07/Post-trainingofLLMs/)
 - [Pydantic for LLM Workflows](2025/07/PydanticforLLMWorkflows/)
 
+### 08
+- [Claude Code: A Highly Agentic Coding Assistant](2025/08/ClaudeCodeAHighlyAgenticCodingAssistant/)
+
 </details>
