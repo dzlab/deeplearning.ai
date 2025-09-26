@@ -1,0 +1,27 @@
+# python package requirements file
+
+# Note to our Learners: Our courses are created at a specific point in time. The models and libraries used will naturally change over time.
+# If you download and run the notebooks locally, you should create a Python virtual environment  
+# with the Python version matching the one used in the course and use this requirements.txt file to install the required Python packages.
+# Due to the wide diversity of platforms and environments, DeepLearning does not explicitly support running locally. However, if you encounter
+# issues, the course support channel is a good place to ask questions.
+
+
+# python==3.11.13
+# in this file, insert all the pip install needs, include revision
+
+langchain_community == 0.3.27
+langchain_openai == 0.3.30
+langchain_experimental == 0.3.4
+langchain_tavily == 0.2.11
+langgraph == 0.5.4
+snowflake.core == 1.6.0
+trulens-core == 2.2.1
+git+https://github.com/truera/trulens.git@josh/default_str_handler#subdirectory=src/feedback
+trulens-connectors-snowflake == 2.2.1
+trulens-providers-openai == 2.2.1
+matplotlib == 3.10.3
+trulens-apps-langgraph == 2.2.1
+trulens-dashboard == 2.2.1
+pyarrow < 19
+setuptools < 81

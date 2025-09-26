@@ -124,4 +124,7 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 ### 08
 - [Claude Code: A Highly Agentic Coding Assistant](2025/08/ClaudeCodeAHighlyAgenticCodingAssistant/)
 
+### 09
+- [Building and Evaluating Data Agents](2025/09/BuildingandEvaluatingDataAgents/)
+
 </details>
