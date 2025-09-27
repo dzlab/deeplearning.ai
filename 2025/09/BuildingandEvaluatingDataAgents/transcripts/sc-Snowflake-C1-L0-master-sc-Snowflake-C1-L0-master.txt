@@ -1,0 +1,57 @@
+Welcome to Building and Evaluating Data Agents built in partnership with Snellfake.
+In this course, you implement a data agent that can perform web searches and connected
+data sources to collect data, analyze it, and visualize results and provide insights.
+Even more importantly, you apply offline evaluations or offline emails to improve and iterate
+on your agent's design, as well as real-time, also called inline emails, that the agent
+can use a justice strategy even while it's running.
+Undelighted, the instructors for this course are Anupam Data, who is AI Research Lead,
+as well as Josh Rainey, who is developer advocate at Snellfake.
+Anupam was formerly a professor at Carnegie Mellon University and founder of AI Observability
+Startup Truera.
+There was acquired by Snellfake, Josh also previously worked at Truera and continues
+to build and maintain true lens, which is an open source library for Asian tracing and
+evaluation.
+Thanks Andrew, we are excited to work with you on this course.
+Building eVouse is a really important skill for building agent workflows.
+This course will show you some important best practices.
+In fact, I learned quite a bit from Undelighted Plums last short cause of us and I think you
+learned a lot from this one as well.
+And specifically, you start by assessing your agent's answer quality.
+So you use an element message out to measure the end-to-end performance of the agent and
+evaluate that the final answer is relevant to the user's query, as well as whether the
+data retrieved for the analysis is relevant to the user's query.
+And finally, if the final answer is rounded in the list of all the retrieved data, you
+can use these offline evaluation metrics to improve your agent's logic, or update
+as prompts, or maybe try out different error models.
+Additionally, you also use elements judge to evaluate the process by which the agent
+use arrived at that final answer.
+This technique can also, interestingly, be used not offline, but instead at runtime to
+give feedback to the agent even as it's running to help the agent adjust its data retrieval
+and analysis strategy.
+You'll implement your agent using a multi-agent workflow that consists of a planner, a plan
+executor, and specialized agents such as web and data researchers, a data visualizer,
+and response synthesizers.
+The planner takes the user's query and generates a plan, and the plan executor directs the
+plan's execution, and determines which specialized agent should proceed based on the plan.
+Each agent shares the output of its execution step and the plan executor through the
+agent's state.
+After each retrieval step, the plan executor reflects on the plan and decides whether
+to update it.
+You will evaluate both the quality of retrievals and the quality of the plan, was the plan
+aligned with the user's request, was the agent's actions aligned with the plan and executed
+efficiently and logically, you will then improve this agent by adjusting its prompts and implementing
+inline or runtime evaluations.
+The inline evaluations will provide the plan executor with real-time scores for context
+relevance immediately after any retrieval step.
+This will inform the plan executor, whether the retrieval step lacks context relevance,
+and if so, the plan executor will ask the planner to adjust.
+After you implement these improvements to the agent's design, you will compare the offline
+evaluation metrics and both offline and real-time evaluations rely on tracing the agent that
+you will also learn about in this course.
+Many people have worked to create this course.
+I'd like to thank from Snowflake, Ellsen Gia, David Kurkawa, Daniel Huang, Nickyl Vittria,
+and Shaiyaksen.
+From Deepland.ai, Hara Salami also contributed to this course.
+In the next video, you learned about the three dimensions of evaluation for an agent,
+this Go, plan, and action, or GPA.
+Let's go on to the next video.

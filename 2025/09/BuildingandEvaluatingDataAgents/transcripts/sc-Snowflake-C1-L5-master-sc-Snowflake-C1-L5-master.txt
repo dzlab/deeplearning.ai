@@ -1,0 +1,462 @@
+You'll now learn how to evaluate whether your agents GPA,
+goal, plan, and actions are all aligned.
+Let's get started.
+Let's quickly recap from the introduction,
+how to measure your agents GPA or goal plan action alignment.
+You'll recall that that'll make use of four evaluations
+that we will get into in this lesson.
+First, we have plan quality, which sits at the intersection of goal and plan,
+and measures how well the plan achieves the goal.
+Next, we have plan adherence, which measures how well the actions that the agent executed
+aligns with the plan that it had created.
+Execution efficiency sits at the intersection between goal and action,
+and measures whether the execution trace is an efficient one,
+that is, that it's an optimal path for achieving the agent's goal.
+And finally, logical consistency sits at the intersection of all three of goal,
+plan, and action looks for inconsistencies between plans,
+planning steps, or between planning steps and action steps within action steps as well.
+Now, let's get into the notebook and see how we can augment the data agent
+and evaluation steps from lesson four with support to measure the agents GPA.
+As a first step, we will load up the environment.
+In the next step, we set the GPA Eval provider model to be the OpenAI GPD 4.1 model.
+And one reason for that is that GPD 4.1 has support for long contexts
+and the execution traces that will be fed as input in computing our GPA Evales
+do require that because the traces can be quite long.
+Now that we have the environment set up as well as we have picked a model provider,
+we will go over each of the four Evales to compute an agent's GPA one by one.
+For each Eval, I will also show you a simple example to illustrate the kinds of failure modes
+the agent can fall into and how these Evales can catch these failure modes.
+Later in the lecture, I will run the evaluations for the full data agent
+and we will see how well it does with respect to these evaluations.
+Let me begin with the first evaluation, which is plan quality.
+To get going, we will set a specific user query,
+which in this case is which sales leads should be prioritized this week
+and what specific action items should we take for each,
+as well as a plan that an agent could have come up with to achieve this goal or answer this query.
+And these are the four steps in this plan.
+It involves pulling all the sales leads from the past 12 months from the CRM, that's step one.
+Step two is for the largest 20 leads compile any notes, call logs and related tasks from the CRM.
+Step three is to summarize each leads current stage in the pipeline
+and finally to present the summary and recommendation in a single table.
+Now let's define the plan quality feedback function.
+Give it the name plan quality.
+We will set the Eval model provider to make use of the GPT 4.1 model
+and by specifying that we want the plan quality with chain of thought reasons,
+we are setting it up so that in addition to a score,
+it also gives a reason for why it came up with that score for plan quality.
+And finally, we will provide as input to this
+plan quality evaluator or LLM judge the full trace,
+the full execution trace to examine so that it can come up with its evaluation.
+Now let's run the evaluation, the plan quality evaluation,
+with the example goal and plan that I had set up earlier over here.
+The output of this will be a score between 0 and 1,
+where 0 means a particularly poor plan and 1 would be a perfect plan.
+And the reason is the rational or chain of thought reason
+for why the plan quality on judge came up with that score.
+Let's run it now and see what it comes back with.
+So the LLM judge came up with a score of 0.662 thirds.
+It's about 66% of the way towards an ideal plan.
+And you can see two things.
+One is the criteria that the judge used to grade the plan quality.
+And secondly, down here you can see the supporting evidence or the chain of thought reason
+for why it gave the plan with respect to the goal or query this specific score.
+The criteria for evaluation is that the plan should be generally well structured,
+that it addresses the query with clear steps and includes justifications for most actions.
+However, it lacks explicit rationale for selecting the largest 20 leads
+and does not detail the method for prioritization or generating specific action items.
+So no re-planning is present.
+So you can see that the explanation highlights where the gaps are in this plan,
+what it's doing well, as well as where the gaps are in this plan.
+And then it goes on to provide supporting evidence which spells this out much more clearly
+in a way that's aligned with the steps of the plan.
+So for example, it says that step one is establishes the data set clearly,
+that step two prioritizes large leads, but does not justify the number or metric
+where it had come up with.
+20 for example, step three summarizes pipeline stages, supporting prioritization.
+So that's been done well, step four provides actionable output.
+However, the plan omits explicit prioritization criteria and recommendation methodology
+and no re-planning occurs.
+So in this way, the plan quality judge is showcasing areas where the plan has done well
+and where it exhibits weaknesses and opportunities for improvement.
+Note that when we run the full data agent, the plan and the execution trace
+will be under the control of the agent, not created by us.
+So we will not be able to directly edit the plan to address these kinds of weaknesses.
+However, we will see in the next lesson systematic ways of addressing these kinds of weaknesses
+in planning through the use of updated prompts and inline evaluations.
+If I were to summarize some of the weaknesses in this plan,
+I would say that there are three areas where the plan could have done better.
+One is the selection criteria was vague.
+It said, pull all sales leads from the past 12 months,
+which lacks urgency constraints tied to the goal.
+Second, the prioritization approach was weak.
+The largest 20 ignores the lead score, stage urgency or upcoming deadlines.
+They were missing actionability related challenges as well,
+where no instructions to create specific next actions or owners were laid out.
+And finally, the output was not specific.
+A single table without required fields that were tied to the goal.
+These are the kinds of issues that we have seen.
+And now we want to construct a better plan that will close these gaps.
+And here is a proposal where we keep the user query the same.
+But now if you look at the various steps of the plan,
+we are trying to close the known weaknesses that were surfaced by the previous round of evaluation.
+For example, here in step one,
+we are talking about a next action date within 14 days as a criteria
+for pulling leads with open opportunities from the CRM.
+We are filtering to leads with the deal value that's greater than 10K or has a high lead score,
+meaning that these deals are important,
+either from a revenue standpoint being sufficiently high,
+or the probability of conversion is high.
+We are going to be sorting by the deal stage urgency.
+For example, by close date approaching,
+at risk of going cold, potential revenue impact,
+getting more specific to close that particular kind of gap.
+And finally, for each of the prioritized leads,
+we are now in this plan,
+specifying that will retrieve the latest interaction notes,
+key decision maker info, and current blockers.
+Identify overview of our missing action items,
+propose specific high impact next steps,
+such as scheduling a product demo,
+sending a proposal revision,
+escalating to the sales manager.
+And finally, we group these recommendations
+into this week's priority list,
+with owner assignments and deadlines,
+present results in a table with columns,
+such as lead name, value, stage,
+urgency score, next action, new date, and owner,
+presenting the results in a much more organized and actionable manner.
+Now let's rerun the evaluation
+with this better plan and see what we get
+in terms of the quality of this improved plan.
+Now the evaluation comes back with a score of one,
+and the explanation here is essentially saying
+that the plan is well structured, it's optimal,
+it directly addresses the user's query,
+and then all the steps are clear,
+logically ordered, and so forth.
+I will leave it to you to read this in greater detail,
+but the key takeaway here is that,
+number one, land quality evaluation can be very helpful
+in identifying areas where a plan generated by an agent
+is good and has strengths and areas where it has gaps
+and could improve.
+And this information can then be leveraged
+to help the agent land better and achieve better outcomes.
+Now that we have finished the section on plan quality,
+let's look at evaluations for plan adherence.
+So we are on the second evaluation metric
+for our agents GPA.
+Plan adherence to remind you is going to check
+how well the actions executed by the agent
+adheres to our follows or conforms
+with its articulated plan.
+For this purpose, illustrative purpose,
+I will consider a simple sequence of actions
+that an agent could have executed,
+and here are six steps,
+where it pulled all open opportunities from the CRM,
+but without applying an extraction date filter,
+it applied the deal value filter only,
+that skipped the lead score filter,
+it sorted leads solely by deep value.
+So in based on the revenue impact, notice that
+the good plan was asking it to also consider other factors,
+such as urgency around the deal,
+or potential to close,
+or for the deal to grow cold.
+Step four looks at retrieve latest notes
+and contact names that skipped blockers.
+Step five listed the CRM's existing next action,
+field without review, or update,
+and finally step six output a table with lead name,
+value, stage, and next action.
+So you can see that I have set up this sequence
+of agent actions intentionally
+to have some gaps that your eye can look at eyeball
+and tell that it's not an ideal sequence of actions,
+given the good plan that we just looked at
+in the previous section.
+So next, I'm going to define the plan adherence function,
+and then run it on this sequence of agent actions,
+along with the good plan from the previous section.
+The plan adherence function, its structure,
+very much follows the structure of plan quality.
+The GPA Val provider is again set to run plan adherence
+with producing chain of thought reasons,
+so that we don't just provide a score,
+but also give a reason for why that score.
+And as input to this evaluation function or LLM judge,
+we are providing the full trace.
+So the plan adherence function is looking at the full trace
+tracking how well the actions of the agent on the trace
+correspond to or adhere to the plans
+that are also on that trace.
+So we have the function definition in hand now.
+Let's run it with our running example.
+And as before, it's set up to output a score,
+as well as provide a reason,
+and we will now run and examine the results of the evaluation.
+And surprise, surprise, that comes back with a score of zero.
+This should not be particularly unexpected,
+given that I had intentionally planted a bunch of adherence issues
+in the execution trace.
+We can check here if those were caught.
+So you can see a summary of the issues in under this criteria,
+and then more detailed description of the issues
+in the supporting evidence section.
+Let's actually look at the supporting evidence section first.
+Step one, the judge got that the agent did not filter
+by the next action date,
+or was missing the next action date as required.
+It pulled all open opportunities instead.
+So this absence of filtering,
+which was there in step one here in the trace,
+was detected.
+This was an example of failure of adherence,
+with the plan, which, if I scroll up to the plan,
+you can see that the plan was saying,
+not that you pull all or open opportunities,
+but only the ones that have an extraction date
+within the next 14 days,
+or no an extraction assigned.
+This filtering criteria was missed by the actions,
+and that's why, in this step, there is a violation.
+You can yourself go step by step over the other steps,
+and you'll see other missing pieces
+in a number of these steps,
+which the LM Judge was able to catch and highlight.
+The criteria section, if we return to it now,
+summarizes the higher level issues,
+multiple plan steps were emitted,
+sometimes they were performed out of order,
+or replaced with unplanned actions.
+No meaningful attempt was made to explain,
+justify our document plan changes,
+or new actions.
+The plan was largely ignored or disregarded in execution,
+or steps were not completed as intended.
+If re-planning was necessary,
+the revised plan was not followed.
+So this is a pretty significant
+and consistent deviation of the agent's actions
+from its plans.
+It might as well not have come up with a plan
+because it decided to ignore almost everything that was in it,
+and so it correctly gets a very low grade,
+a score of zero.
+It's not going to do so well on its GPA.
+Now let's look at a better set of agent actions
+that adhere more closely to the plan,
+and for which we expect the grading
+from the plan adherence judge to give us a higher number.
+So you'll see that if you look through these steps,
+there are additional details that are added in,
+which were not available in the previous sequence of agent actions.
+For example, in step one,
+when the agent pulled all the leads
+with open opportunities,
+it also only focused on the ones that are
+have an extraction date within 14 days
+or known extraction assigned.
+Similarly, this grouping of recommendations
+into this week's priority list.
+Now let's set up the plan
+and along with this sequence of actions
+and run the LLM judge feedback function
+for plan adherence given the better plan from before
+and this sequence of agent actions.
+And the judge comes back with a score,
+a perfect score of one.
+And if you go in and look at the details of the criteria
+and the supporting evidence,
+you'll notice that all plan steps are well accounted for,
+there are no missions or reordering.
+So a number of those failure modes,
+which were flagged by the judge
+for the previous sequence of actions
+all are addressed with this sequence of actions.
+Remember, we are illustrating the power
+of our plan quality and plan adherence
+judges the GPA wells in general
+through this process of looking for a alignment
+between goals and plans and actions.
+In practice, the you, the developer,
+will not be directly editing
+either the plans of the sequence of actions.
+You will be, however, updating the agents
+either through its prompts or through other techniques
+that we will discuss in the next lesson
+to address these kinds of failure modes.
+Great. So now, let's look at another sequence of actions.
+And we will now use that as an illustrative example
+to introduce the concept of execution efficiency.
+Execution efficiency, if you remember,
+is capturing how well the sequence of actions in the trace,
+how efficiently does it achieve the goal.
+And in particular, it will flag actions that are redundant
+or unnecessary steps in the execution trace
+that introduce inefficiencies and could have been avoided
+if the agent had planned better and acted in conformance
+with a better, more optimal plan.
+Let's go back to the notebook and look at an execution trace
+to illustrate this evaluation metric.
+The execution trace is similar to the ones
+that we have seen before in structure.
+The only point of difference is that we are also summarizing results,
+such as from step one, the number of retrieve leads for 96,
+then in step two, you apply the filter, yielding 54 leads,
+and so forth.
+Now, let's define the execution efficiency feedback function.
+It has a very similar structure to land quality
+and plan adherence as before.
+We are asking the LLM judge to output the chain of thought reasons
+in addition to the score, and it's given the full trace
+as input in order to grade it for execution efficiency.
+Let's go ahead and run the evaluation function
+on the action sequence that we just saw and see how well it does.
+It gets a score of 66%.
+It's about two thirds of the way to an ideal score.
+And if you look at the criteria and the supporting evidence,
+it's pointing out that there were some redundant retrievals.
+There was duplicate work where the agent re-applied the same filter
+a couple of times.
+Step 6 exported to both XLSX and CSV formats.
+The only one was needed, other steps were logical,
+but there were a couple of these redundant steps
+that the LLM judge was able to figure out and identify.
+So this is the kind of information you will find
+an LLM judge for execution efficiency highlighting
+on traces which don't represent an efficient execution path.
+Finally, the fourth evaluation will consist of logical consistency.
+And logical consistency looks for contradictions
+during an agent's execution.
+It could surface logical flaws in its reasoning.
+It could surface inconsistent planning steps
+where an agent might make an assertion at one point
+and then contradict itself later on without justifying
+the reason for the change.
+Or it could even highlight undrounded assumptions
+where the agent might be making an assumption based on its
+parametric knowledge, but not one that is traceable
+back to retrieved pieces of information.
+Let's look at a sequence of actions.
+Another sequence of agent actions and see how it does
+when we run an evaluation for logical consistency on it.
+Let's now define the logical consistency feedback function.
+The structure of this function is exactly the same as the one
+for the previous functions we are requiring it
+or the chain of thought reasons.
+And the only input to it is the full execution trace.
+Now that we have defined this function,
+let's run it on the previously defined sequence of actions.
+And it comes back with a score of 33%.
+So it has identified some inconsistencies in the execution trace.
+For example, between step one and step two,
+there are contradictory lead counts.
+One step says the number of leads is 96.
+Another step says that it's her in 13 without an explanation.
+In step three, there's a ranking logic for minimal engagement.
+That's used. That's not fully justified.
+Step four has a TBD decision maker with active next steps,
+which are not explained.
+Five and six are fine,
+but you can see a number of these inconsistencies
+that the LLM judge for logical consistency has flagged.
+These are all opportunities for improvement for the agent.
+But as it currently stands,
+these forms of inconsistencies can impact
+the accuracy and correctness of the final response from the agent.
+With that, we are wrapping up the section introducing the four evaluations
+that are helpful for grading an agent's GPA.
+Now that we have introduced the concept of GPA valves,
+the four LLM judges for plan quality,
+plan adherence, execution efficiency,
+and logical consistency using some simple running examples.
+Let's go back to running the same set of evaluations
+over the data agent that we created in lesson four.
+Let's set up a true length session for logging the execution traces
+and evaluation results into this database.
+This is a step that you've seen before.
+Next, let's build the graph with the agent.
+This is again identical to what you've seen in the previous lesson.
+Next, we will register the agent with true lengths.
+This step is also very similar to what you did in lesson four.
+The only additions are that in addition to the rag triad
+of goal completion evils,
+we have now added these four evaluations to measure the agent's GPA.
+And now we are ready to run and record the agent's execution
+and the associated evaluations on a set of queries.
+Let's begin with the first query,
+where we are asking what are our top three client deals?
+Chart the deal value for each.
+This should be a relatively simple query for the agent
+that should primarily make use of the text to SQL capabilities.
+So the data agent has come back with the response.
+Let me quickly run through a couple more examples of queries.
+And then we will spend time on the true length dash board
+to understand the tracing and evaluation pieces for these queries.
+The second query is on identifying our pending deals,
+research if they may be experiencing regulatory changes
+and using the meeting notes for each customer
+to provide a new value proposition for each given the regulatory changes.
+So this query, if you recall, is similar to what we saw right in the introduction
+and in the previous lesson.
+And this is the third query and we'll now run the agent
+and the evaluations on this query as well.
+Now we have the results from all the queries
+and we can look at them on the true length dash board.
+Let's run this code snippet to set up the true length dash board.
+And then this link will now take us to the true length dash board.
+Let's now examine the results of our evaluation using the true length leader board.
+Over here you can see the result of the evaluations for the data agent
+that we ran through in this lesson.
+The goal completion of ELS related to the rag drive
+has some room here for improvement, context relevance and groundedness,
+for example, or not that high.
+And if we look at the GPA of ELS,
+plan quality is generally good, so is logical consistency,
+but plan adherence and execution efficiency show room for improvement.
+On this screen, the numbers that you're seeing for these metrics
+represents the average across the three queries that we ran from our notebook.
+We can click on the examine records tab to look at the record level view
+where we can examine in greater detail for each query what evaluations we got.
+So you can see here, each row here in this table represents a query,
+which is the input, the output response,
+as well as the results of the evaluation on all of these metrics.
+Let's pick one example query for which the GPA of ELS are doing Y12.
+So if I scroll to that section, it looks like for query this second query,
+the GPA of ELS are doing well.
+Let's select this and now down here we can examine this in greater detail.
+This was the question where we asked the data agent to identify our pending deals,
+research if they may be experiencing regulatory changes, and use meeting notes for each customer
+to provide a new value proposition for each given the regulatory changes.
+And down here you can see the output of this process where the final output looks,
+identifies these five deals and then for each it identifies for the first one,
+there's no specific regulatory changes.
+But the second one is affected by shifts in trade policies and so on.
+We can scroll down here to look at the feedback results.
+And in particular, we can see that the GPA of ELS are quite strong for this particular query,
+land adherence, land quality, logical consistency, and execution efficiency are all perfectly rated.
+Context relevance and groundedness on the other hand are not that high,
+indicating that there is still room for improvement in the retrieval steps that this agent went through.
+Let's look at another row where the GPA of ELS are not as high.
+The first row falls into this category while it does well on plan quality and logical consistency.
+The agent does not adhere well to the plan and the execution efficiency is also quite poor.
+So I can select that row and look at it in some more detail.
+So here you can see the query.
+This was about identifying the largest client deal and some additional qualifiers around it.
+And this is what the output looks like.
+Let's look at the plan adherence evaluation results.
+You can see that the score here is zero and the explanation provides a detailed summary of why the score is so low.
+It mentions that multiple plan stamps steps were omitted or not completed as intended.
+No meaningful attempt was made to explain or justify plan changes beyond stating a capability limitation
+and that the plan largely was disregarded after step one.
+Then it goes on to show more specific supporting evidence.
+If you want to manually check the work of the LLM judge,
+you can click on the planner node and look at the details of the plan that it had come up with.
+And here you can see the various steps are laid out, step number one, step number two and so forth.
+And then you can look at the execution trace and check how closely the execution actions follow this plan.
+So this particular trace suggests that there is room for improvement for how this agent is adhering to its plan.
+There's also room for improvement in the completion properties and the completion goals related to answer relevance in particular as well as groundedness.
+With that, let me wrap up lesson five and in the next lesson we will see systematic techniques to improve the agent's GPA that will address these shortcomings that we are observing in its execution.

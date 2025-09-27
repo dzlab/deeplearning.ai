@@ -1,0 +1,99 @@
+You've discovered your agent's GPA is low.
+Let's see if you can get its grades up.
+So now that Anapam walked us through how to identify clear failure modes in our data agents performance,
+let's consider some common ways to improve our agent's GPA.
+One common way to improve your agent's performance is by adjusting prompts.
+For example, you can consider adjusting the planning prompt to include explicit subgoals
+with pre and post-conditions so that the agent's plan is very explicit on what it needs to accomplish at each step.
+Another way to improve an agent's goal, plan, action alignment is through inline evaluation.
+Inline evaluation provides real-time feedback so that the agent can actually understand how well it's performing.
+For example, when it does a research step, the agent executor can be provided with an evaluations score
+and explanation to see if the research is missing key details before it can move on.
+The agent can then use that information to better choose its next action.
+You might also choose to improve your agent's performance by doing things like tuning the retriever or trying different models.
+Last, you should always validate your improvements through offline evaluations.
+Now that we've walked through the general process for improving your agent's GPA,
+let's get back into the notebook so we can apply this in action.
+In the last lesson, Anapa walked us through exactly how the agent was performing and identified a key failure node, lack of planned adherence.
+The agent was not adhering to the plan, meaning that its actions did not follow what the planner had laid out.
+Let's walk through in this notebook how we can take targeted changes to improve the agent's GPA.
+The first thing we'll do in the notebook is to import the environment and turn on true lens tracing, just like we've done before.
+Then we'll make our first targeted change in line evaluations.
+As we get set up to add in line evaluations, we're going to import the cortex agent, the state, and our context relevance feedback from helper,
+and these are all things we've set up previously.
+We'll also import some things from true lens, such as the instrumentation, along with some typing from lane graph.
+The new thing that we're going to import here is we're going to import the in line evaluation decorator from true lens.
+Here, we're using a lane graph specific decorator, because the in line evaluation will interact with the lane graph state, but the concept here is general.
+We can think about in line evaluations as a way to evaluate a step or action of the agent and provide feedback into the agent's memory so that the agent can improve its next action and replan when necessary.
+To add in line evaluation, we can simply decorate a previously instrumented node.
+Here, we'll start with the cortex agent's research node. This is the same node that we've already created, just copied again here, along with the same instrumentation.
+Now we'll add a simple decorator on top. Our in line evaluation decorator will accept the feedback function or evaluator that we want to run against the research node.
+This evaluation will execute directly after the research node is executed. It'll run against the span attributes specified in the feedback function definition.
+Then, once the evaluation is run, the results, including a score and explanation, will be added back to the agent state so that the agent can use it. This will happen by updating the messages in the state.
+Now that we've added in line evaluation to the cortex agent's research node, we want to do the same for the web search node.
+The process here is exactly the same. We're taking an already instrumented web research node and simply adding this in line evaluation decorator to it.
+The second targeted change we want to make here is we want to update the planning prompt. Specifically, we want to instruct the planning LLM to add explicit preconditions, post-conditions, and gold descriptions to each step in the agent's plan.
+Adding this explicit detail helps the executor to understand the goal of each step, which improves both tool calling and agent decisions.
+To make this change, we're going to patch the plan prompt. We'll do that by inserting this additional precondition, post-condition, and gold, and we'll place it in the prompt content.
+So what we're doing here is that we're expanding the output template given to the planning LLM. We're adding, in addition to the name of the agent and the action for each step, we'll ask the planning LLM to include an explicit precondition, post-condition, and description of the goal.
+Then this template will be filled in and populated at runtime when the planning node is run.
+Now that we've made our two targeted changes, let's rebuild the graph with our added inline evals and update to the plan.
+We'll rebuild the graph just as we have before using the recreated web researcher and cortex researcher, and then pulling the other nodes from the helper.
+Then we'll connect back to our locking database.
+So the database we're connecting to here already has our results from the prior lesson.
+So what we're going to do here is once we've run our agent with our new version, we're going to be able to compare directly the results from this new version of the agent to the old version.
+Then we can use that to validate if these target improvements really worked.
+To do that, I next need to register the new version of the agent.
+I'll do that by using the same application name, but iterating on the application version.
+So now in app version, I have a new version name where I descriptively say exactly which changes I'm making in this version.
+This will allow me to better remember exactly what changes I made when I compare.
+Now that I've registered my new version, I can retest my agent.
+These are the same query you've seen before, so I'll just copy all three and run, and then we can check out the results when they're done.
+So now our agent has finished running with the three queries.
+We can quickly take a look here by looking at the sell output.
+But to really understand the agent performance, we'll want to open the trillins dashboard.
+Let's do that now.
+We'll run the dashboard exactly as we have before.
+And to open it, you'll click on the second link for deep learning AI.
+Now we've opened up the trillins leaderboard.
+We'll click in the top left so we can see a larger window.
+The leaderboard allows us to compare the aggregate metrics across our different versions of the agent.
+Here we can see that answer relevance improved.
+Contacts are relevant, stayed the same, grounded this improved by a good amount, and planted here.
+And it's improved.
+While we saw smaller decreases in execution efficiency and logical consistency.
+From here, we can compare directly these versions.
+So we can look at the records side by side and see exactly what changed.
+We'll do that by selecting the checkbox next to each agent version and then choosing compare.
+Now the comparison view, it's going to show us the base version on the left and the improved version on the right.
+Now we'll choose apply.
+We can again see the aggregate comparison in the smart chart here.
+But it gets most interesting when we look at the same record across different versions of the agent.
+When we look at the shared record stats, these are sort of different versions.
+Let's click on the one with the largest difference.
+Then when we scroll down, we can see the two traces side by side.
+To directly compare exactly what's changing between the two different agent traces.
+To more easily compare again, we'll minimize some of the higher or article nodes.
+Comparing the two traces, we can see a longer trace on the right.
+Here on the right, we have additional both web research and data.
+Here on the right, we have additional both web research and cortex agents research calls.
+And these are providing additional research and filling in gaps identified by the inline evaluation.
+And also comparing against the agents sub goals now listed in the plan.
+In addition to comparing the trace directly, we can also compare the evaluation metrics.
+Let's take a look at a plan adherence.
+So on the left, our plan adherence scored really low.
+This is the base version of the agent where we see a score of zero for plan adherence.
+Here in this base version of the agent, a number of steps were emitted from the original agent's plan.
+In the improved version on the right, we see a score of one for plan adherence.
+And we can open it up the explanation.
+And what we see here is that each step in the plan was executed and completed.
+Particularly each step in the replan and any deviations were explicitly justified in the external data access limitations.
+And no steps were skipped or ignored and all deviations were justified, such as the plan is closely followed as possible.
+By understanding both how the agents performing by looking at the trace and comparing evaluations,
+we can easily observe differences in agents performance as we iterate and make changes.
+So one reason we see this difference in comparing the traces is that our inline evaluations added in the improved version of the agent on the right are helping steer the agent to a successful goal completion.
+Here we're making a trade-off where sacrificing some execution efficiency for higher goal completion.
+We're directly making the choice to do additional research based on the evaluations.
+And we can even see the evaluations happening directly in our trace by expanding the research node.
+In practice, we've seen exactly the kind of techniques that we've discovered in this course around evaluation, tracing, and careful iteration can help make agents more reliable.
+Thank you so much for taking this course and well done.

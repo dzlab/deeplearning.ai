@@ -1,0 +1,216 @@
+You've got your agent ready to go.
+Let's trace the steps it takes to accomplish its goal,
+and evaluate whether it's responding to the user's query accurately.
+For that, you will use three metrics,
+context relevance, antirelevance, and groundedness,
+so we can assess goal completion.
+Let's get coding.
+Let me introduce to you the concept of the rag triad.
+While the rag triad was first introduced for rags,
+it actually applies very nicely to date agents
+because we still have the same retrieval or research steps
+along with synthesis to accomplish the core goals of the data agent.
+The rag triad works by first assessing the relevance of any retrieved context.
+Then we assess to see if the response is supported by that context.
+And then last, we'll check to see if the response is relevant to the user's query.
+Now let's see how these can be applied for data agents.
+When we look at our data agent architecture,
+we can clearly see in the yellow boxes where the context is coming from.
+We have contacts retrieved from the cortex researcher,
+along with the web researcher.
+These are the contacts we need to use to judge the response.
+We need to make sure that the LM response or the synthesis is fully grounded
+by these contexts retrieved in the research steps.
+In the second metric, answer relevance.
+We're still checking to see if the response is relevant to the query.
+This is comparing the user's query that goes into the data agent
+to the final response completed and passed back to the user.
+Last is context relevance.
+Here, we're measuring each agent's query.
+These are the sub queries sent to individual agents,
+along with the retrieve context from each sub agent.
+We'll measure the context relevance of each agent's research individually
+and then take an aggregate across all of our different researchers.
+To compute these evaluations, we need to gather key information from the trace.
+The trace is how we track each step that the agent takes to accomplish
+the user's query and the agent's goal.
+Here's an example of what a trace looks like.
+In this example, the trace starts with a research node
+to some charting and some additional research.
+In particular, for data agents, we want to pay careful attention
+to the retrieval steps.
+These contain the key data that we'll use to evaluate the rag triad,
+including metrics like groundedness and context relevance.
+Here, we'll use tracing built on open telemetry.
+Open telemetry is a language diagnostic distributed tracing system
+that allows us to capture each step that the agent takes in accomplishing its goal.
+These steps are also known as spans,
+which are units of work that the agent is taking.
+These spans include steps like planning, routing, retrieval, tool use in generation.
+And we're going to pay particular attention to these retrieval span types
+because those hold the key data we need to run evaluations,
+such as context relevance and groundedness that we'll focus on in this lesson.
+Now, let's get into the notebook so we can start to define these metrics.
+The first thing we'll do in the notebook is import our environment.
+Like before, this contains the key credentials to connect a snowflake,
+along with keys for calling LLMs and doing web search.
+And new in this notebook will also turn on Trulin's hotel tracing
+with this environment variable right here.
+Now, we can start to define our metrics.
+The metrics we'll use here rely on LM as judge.
+The LM we'll use for this judging task is GBD40.
+To call this LM judge, we'll use Trulins.
+In particular, we'll use the OpenAI provider from Trulins.
+Now, we can define Graveditis.
+To start to define our first feedback function, we'll first import the feedback class.
+The feedback class is what we use to construct our feedback function or our evaluator.
+Then, we'll import the selector.
+The selector is how we pay attention to particular spans from our trace.
+This includes things like the retrieved context and the query text.
+The grounded dysfunction accepts two key inputs.
+The final answer and output of the agent, along with the retrieved context,
+from any research steps.
+The retrieved context are going to be the first input identified through this on statement.
+And then the final answer is going to be identified through on output.
+Through on and on output is how we pass in this key data from the spans
+into the feedback function.
+Later in the notebook, we'll explore how to actually add tracing to your agent.
+This is how we'll connect the metrics to the tracing.
+For now, we'll start by defining the feedback functions.
+Now that we've defined groundedness, we can move on to answer relevance.
+Answer relevance measures the relevance of the final answer produced by the data agent
+compared to the original user's query.
+We'll define it again using the same LM judge and specify the feedback function
+with relevance using chain of thought reasons.
+This means that the LM judge will reason on the way to producing its score.
+The two inputs to answer relevance are the query and the final answer or the output.
+These are again specified using on input and on output.
+The last metric we'll define is context relevance.
+Context relevance will accept two inputs to compute the relevance of each context junk.
+The first is the query text.
+Here, that'll be the individual subquestions sent to each individual agent.
+And then the second input is the retrieve context.
+These are the research results produced by each sub agent.
+Once we've constructed this feedback, we'll also choose to aggregate it.
+This means that we'll take the average across each context relevance metric
+computed across the different research steps.
+Now that we've defined our metrics, we can create our truelent session
+so we can start logging traces and evaluations.
+From truelents, we'll import true session, which will hold our connection to our logging database.
+We'll also import default DB connector, which is how we'll specify to connect to a specific database.
+Here, we'll connect to a SQLite file located in the module.
+The database will store our traces and evaluation as we're running our agent.
+The last thing we'll do is actually create our logging session by instantiating true session
+and resetting our database to clear any old traces or evaluations from prior runs.
+Now we can start to add tracing to our agent.
+Using truelents, we'll automatically track and log information about the entire agent's trace,
+everything from planning to the executor to tool calling.
+We'll also add additional custom instrumentation so we can specifically annotate information
+from the retrieval steps that we care about and will insert and input into our evaluators.
+To do this, we'll import a lot of familiar methods from previous lessons,
+including the cortex agent, the state, and various types from lane graph and typing.
+The new thing we'll add here is importing the instrument decorator from truelents.
+This is how we'll add custom instrumentation.
+Once we've done this, we'll copy over the same cortex agent's research node.
+We've already created and we'll get ready to add instrumentation to it.
+To add instrumentation, we'll simply add an add instrument decorator on top of this method.
+So we'll create a new line right above and then add in our instrumentation.
+The first thing we'll do is set the span type to retrieval.
+This is saying that the cortex agent's research node is performing a retrieval task
+and adding that span type annotates that span with the type retrieval.
+Then we'll specify exactly which attributes we care about.
+So as a reminder, the key things we need from the research nodes are the query text
+or the sub-question exactly going to that sub-agent and the retrieved context
+or the research results produced by the agent.
+We can access these by using the functions return, exception, as well as any arguments or keyword arguments.
+Ret represents the return of the function here and args represents the input of the function, in this case, state.
+Let's first talk about the query text.
+We'll get the query text by looking at the first argument, argument of index 0 to the function.
+Here, that's the state.
+Then we'll get the agent query, which is a key in the state.
+So to put that together, we're setting the query text to the agent's query in the state
+at the time that this research node is used.
+Then we can talk about the retrieve context.
+The retrieve context pulls that from the return of the function.
+Here, we want to focus on the messages, in particular, the last message when this research node is called.
+And we want to extract from that the content.
+So to put that together, we're assigning the retrieve context span attribute into the last message produced by the research node
+and we're looking at the content from that.
+By using this instrumentation, we'll have all of the data we need to start evaluating our agent.
+For the web search node, we'll want to apply an identical process.
+We'll take our existing node and add instrumentation by adding the instrument decorator on top of it.
+We'll set the same span type as we did before, retrieval, and set exactly the same span attributes with query text and retrieve context.
+Now that we've added additional instrumentation to our research nodes,
+we can rebuild the graph with this added instrumentation.
+Now we can rebuild our graph.
+We'll, again, import state graph along with the start from lane graph.
+We'll import each of the nodes that we created in previous lessons from helper.
+We'll additionally add our new web research node and cortex agents research node that we just recreated with new instrumentation.
+Now that we've rebuilt our graph, we can register the agent with trulence.
+To do that, we'll use a lane graph specific wrapper from trulence called true graph.
+True graph provides automatic instrumentation for lane graphs node and task APIs.
+So we can capture the input and output of each of the nodes that we built into our graph, the name of each of these nodes.
+In this way, we can understand the entire trace of the agent, even without that additional instrumentation we added before.
+What the additional instrumentation gets us is that now we have key labels on exactly which steps are retrieval steps.
+And we also processed the data coming in and out of those nodes to specifically extract the agent query that was coming in and the retrieve text that was coming out.
+Without that additional manipulation, this information would be buried inside a complex data structure that would be a lot harder to evaluate.
+Now let's register our agent.
+In addition to adding the instrumentation, registering the agent also lets us track key metadata like the application name and application version.
+This allows us to differentiate different versions or application so we can compare performance when we make changes.
+We'll also specify the list of evaluations that we want to associate with this agent here.
+We'll use the rag triad that we defined earlier in the notebook.
+Now we can start to use our agent again, but this time we'll be recording its every action.
+Here, we'll enter three successive queries where we can start to interrogate the agent and use its new skills.
+We'll also be measuring its performance through tracing and evaluation.
+In this first question, we again ask what are our top three client deals and ask it to chart the result.
+Then in the second question, we look to identify our pending deals and research the regulatory changes and consider a new value proposition for each.
+And then in the last query, we're going to ask it to identify our largest client deal, find important topics related from the meeting notes, and then find news articles for each.
+We'll submit all three queries to our agent and wait for it to respond.
+The first agent has already responded.
+It gave us a nice chart telling us the top three client deals by value in chart form.
+However, the chart summarizer again failed to respond with a nice textual answer.
+Now, our second agent has responded.
+It successfully identified a number of companies and researched about their value propositions and what the meeting notes were focused on.
+But as far as I can tell, it failed to actually filter this down to the pending deals only.
+When we explored the true and stashboard, we'll be able to understand more specifically exactly what went wrong with this query.
+Now, the agent has responded with an answer to the third query.
+The agent was unable to access information about the largest client deal because it had issues accessing snowflakes specifically.
+Now, let's get to the dashboard so we can diagnose exactly what's going wrong with these different queries.
+To launch the dashboard, we'll import run dashboard from true lens.
+We'll also specify a specific port for this to run on and we'll run run dashboard to start the dashboard.
+The dashboard will read the traces and evaluation data that we've been writing to the database during this notebook.
+We'll be able to explore the traces and see how they connect to evaluations and really understand on a deep level exactly what's going wrong and identify different failure modes with the agent.
+So, once we've run run dashboard here, we'll see two links.
+Please click on the second one as that is running specifically on the deep learning environment.
+If you are running locally, you could use this local host instead.
+Now that we've opened the true lens dashboard, we can inspect our agent performance.
+To expand our field of view, we can minimize this left pane by choosing this double arrow in the top left.
+In the leaderboard, we can see the aggregations of our different evaluation metrics by application version.
+Here, we're starting with just one application version, the version we set in the notebook, L4 base.
+We see our application or our agent has a low answer relevant score along with a low ground in this score.
+Let's click on the version itself to explore more.
+To do that, we'll select the check box next to the version we want to examine and then choose examine records.
+Now we can see each query that was submitted to this particular version of the agent.
+Let's examine each query.
+Here, when we asked what the top three client deals were and to chart the value for each, we see an output of the chart, but it didn't actually summarize the chart.
+We can examine the evaluation metrics to see programmatically how the LM judge identified failure modes with this agent.
+Looking at answer relevance, we see that answer relevance scored zero.
+The response was not at all relevant to the user query because it didn't provide that textual answer.
+And we can see that in the LM judge explanation here as well.
+We can also examine the other metrics like contacts relevance and see that none of the research that was done by the agent return the relevant results needed to answer the query.
+Now let's take a look at a second execution.
+Here, rather than focusing on the long output, let's look at the evaluation scores to start this time.
+Here, we see a high answer relevance score.
+While the response was relevant, it wasn't actually grounded in the research results.
+We see that issue with our low ground and score.
+A lot of the statements that the LM is making were not actually supported by the research results and instead were inferences that the LM was making.
+And the reason for this is because some of the contacts retrieved by the research steps were not relevant.
+Here, let's also look at the details of the trace so we can actually understand the different steps that the agent took.
+As we scroll down to the trace, the trace will start all the way expanded so we can minimize to get a clearer view by clicking on the carrots in this tree.
+Once we've done that, we can clearly see the path that the agent took.
+The agent started with the planner and then moved the executor and then used the cortex agent's research note.
+Then it did a replan here, did a second web research, a second cortex agent research, and then last moved to this synthesizer.
+If we wanted to explore further, we could actually examine the inputs and outputs of the nodes by clicking on the note itself and scrolling down.
+You can also check the details for what happened in the third query as well.
+You might see different numbers for your evaluation metrics depending on the agent's performance if the agent chooses to act in a different way when you run your agent.
+In the next lesson, I'll hand back to Anupum where he'll add goal, plan, action, alignment evaluations to further understand exactly what went wrong with our agent.

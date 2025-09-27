@@ -1,0 +1,5 @@
+Congratulations on completing this course. You have designed and evaluated a data agent
+that creates a plan, executes it, and adjusts it based on the agent's state updates.
+You evaluated the agent's goal using the rag triad. And, most importantly, you measured and
+improved the agent's GPA. Goal, plan, and action alignment. Well done. I can't wait to see what you'll
+build next.
