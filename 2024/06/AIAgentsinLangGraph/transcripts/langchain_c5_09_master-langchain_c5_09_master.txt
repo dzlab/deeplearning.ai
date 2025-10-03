@@ -1,0 +1,47 @@
+Congratulations. You now have a good hand on how to build your own agents.
+With what you have learned today, you can build simple or quite complex agents.
+But before we go, I wanted to cover some of the agent flows that we couldn't build today,
+but I think you should know about.
+The first architecture I want to talk about is a multi-agent architecture.
+And we covered this a little bit with the writing agent, but just to make it a little bit more
+concrete. A multi-agent architecture is when multiple different agents work on the same shared
+state. And so these agents could be just a prompt and a language model as they were in the writer.
+They could also have different tools that they could call this. They could be a prompt,
+a language model, and tools, and they could actually have their own loops inside them.
+The crucial thing here and the differentiator between the next thing that we'll see is that they
+all work on the same shared state. So they're passing that around from one agent to the next.
+Let's contrast that with a supervisor agent. So here we have a supervisor,
+which is calling into some subagents. And here the supervisor will actually determine what the
+input to that agent is. And those agents themselves could have different states inside them.
+They're a graph. And so there's not necessarily the same concept of a shared state. Other than that,
+this is pretty similar to the multi-agent framework. It just really emphasizes that there's this
+one supervisor that's in charge of routing and coordinating these other agents. This is often
+good when you can use a really powerful language model as the supervisor because doing the supervision,
+doing this planning requires a lot of intelligence. One term that's popped up a bunch recently is
+flow engineering. This comes from an alpha-coding in paper where they achieve state-of-the-art
+coding performance. And they do it with a very graphical-like solution like this. And so looking at
+it, you can see that it's basically a pipeline, but there are a few key nodes where there's actually a
+loop. So there's loops on the initial code solution. There's loops when you iterate on public tests,
+and there's loops when you iterate on AI tests. And so this is an interesting graph because you have
+this very directed flow up until a certain point. And then you have these iterations. This is a really
+bespoke architecture for a particular coding problem. But the concept of flow engineering
+extends more broadly. And it generally refers to thinking of what is the right information flow
+for your agents to take action and think. In that vein, a common paradigm is to have a plan
+and execute style flow where first you do an explicit planning step up front. And then you start
+to execute on that plan. So you may come up with a few steps that a sub-agent should go do.
+It can then go do one. Come back. Maybe you update the plan. Maybe you don't. This is where there are
+some different variants. But then it goes on to the next thing. And it does that. And it comes back
+until it finishes the plan. Then you maybe check to see if the plan is successfully accomplished or
+whether you need to replan. And then if all's good, you return to the user. The final one I want to touch
+on is a really interesting paper called language agent tree search. So this basically does a tree
+search over the state of possible actions. And so it first generates an action. It then reflects
+and then goes down based on that action and generates some other sub-actions. Reflects on that.
+And throughout all these reflections, it can basically reflect on where in the tree of action states
+it wants to jump back to. So it can back propagate and update parent nodes to have more information
+which may inform future directions from that previous state. For this in particular,
+you can really see why persistence is really important because you need to be able to go back in time
+to previous states. These are just some of the emerging paradigms for creating more complex
+agentic flows. Lengraft is really aimed at being highly controllable and allowing you to create
+these cyclical or non-cyclical flows. This degree of controllability is really what differentiates
+it from other frameworks. And it's what we're really excited about going forward as we view this
+to be crucial to creating agents that actually work.

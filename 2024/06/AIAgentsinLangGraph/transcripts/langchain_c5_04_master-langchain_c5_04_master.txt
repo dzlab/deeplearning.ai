@@ -1,0 +1,79 @@
+A frequently used to an agent is search.
+This lesson is going to dive into how agent search is different from standard search,
+and how to use it.
+Let's try it out.
+Alright, so before diving into what an agent search does, let's understand how an agent
+might use it.
+In a zero-shot learning, an agent would receive a prompt and would produce an answer based
+on its static weights of the mod up.
+As powerful as it proven to be, there are many limitations to this process.
+First, the data around us is dynamic, so it couldn't, for instance, ask about the scores
+from the game last night.
+Secondly, in many use cases, we would want to know the sources of the information provided
+in the result.
+This can reduce hallucinations and smooth the friction of this human computer interaction.
+Looking at the slide, we can see the prompt is received by the agent, which then decides
+to call the search tool, then the information found is returned to the agent.
+Now, let me show you what happens inside.
+This is an example of a very basic search tool implementation.
+Let's go over it step by step.
+If the agent decides, it will send a query to the search tool.
+The first step would work on understanding the question and divide it to sub-questions
+it needed.
+This is an important step, because it can handle complex queries.
+And for each sub-query, the search tool will have to find the best source, choosing from
+multiple integrations.
+For example, if an agent would ask, how is the weather in San Francisco, the search tool
+should use a weather API for best results.
+The job doesn't end with finding the correct source.
+The search tool would then have to extract only the relevant information to the sub-query.
+A basic implementation of this can be achieved through a process of chunking the source and
+run a quick vector search to retrieve the top gate chunks.
+After retrieving the data from its source, the search tool would then score the results
+and filter out the last relevant information.
+Okay, so let's test it out.
+Okay, so first let's import some libraries and do the initial connection to the search tool.
+Here we loaded the Tavili API key from the environment variable.
+And then we create the Tavili client, which we imported from the Tavili library.
+All right, so after creating the initial connection, let's test it out.
+Here I'm going to run a search, asking about and videos in your black hole GPU, and let's
+see what's the answer.
+All right, so as you can see there's a pretty simple answer, but very accurate.
+Okay, so let's do a simple example to see the difference between a regular search tool.
+And an agent search tool.
+I'm going to create a simple query about the weather in a certain location.
+Feel free to change the location to your location.
+I'm going to do it with San Francisco.
+So the query is what is the current weather in San Francisco?
+So they traveled there today.
+Now let's try to attempt it with regular search.
+Here I'm going to import the Dr. Go search.
+I'll try to run a regular search and get the links, the links that might lead me to the answer.
+Okay, so as you can see, we did get the results, but it's not what the agent need.
+Now we're going to have to get some answers from these results.
+Let's do that.
+Okay, so now we're going to create a function that can scrape the data from the first URL.
+We're going to use beautiful soup to extract the HTML.
+As you can see, that's a beautiful output.
+And if you want, you can keep scrolling down.
+But let's try to clear it up.
+Okay, to clear it out, I'm going to use some parsing.
+I'm going to extract the headers and some content.
+I'm going to strip it down and use join to get the text.
+As you can see, the output is much, much better, but still not concise enough.
+Okay, after seeing this, let's try to run it using the agent search tool.
+We're going to do the same query and call it a video together as the results.
+As you can see, we got a simple JSON.
+We have a lot of information about the weather in San Francisco.
+Let's clear it out so we can see a parameter JSON.
+Okay, now we'll parse it and highlight the JSON,
+so we can see it clearly.
+As you can see, this is not the answer I would want to see as a human,
+but this is the exact answer an agent would want, a structured data.
+Okay, I'm going to load the sample from Google Search, so you can see the difference.
+Here, I get exactly what I want as a human.
+A nice image showing me the temperature, the humidity, the wind,
+but not unnecessary data.
+That's exactly the difference between what a human need and what an agent need.
+Okay, that was an introduction to agent search.
+In the next lesson, Harrison will discuss persistence and streaming.

@@ -1,0 +1,76 @@
+Welcome to AI Agents in LineDraft, built in partnership with LineChain
+and Tuvelli, taught by Harrison Chase, co-founder and CEO of LineChain,
+as well as Droughton Vice, who is co-founder and CEO of Tuvelli.
+Harrison, it was not quite a year ago that we're working on our first course
+on OM frameworks, and back then, we had an agent example, but, you know,
+it was a little bit of a struggle to get it to work.
+Since then, I've seen many teams successfully built AI Agents, and what was your view on that?
+Yeah, that's exactly right, Andrew.
+We've seen many people successfully building agentic applications now,
+and I think there were a couple of key improvements over the last year.
+First, function calling alums have made tool use much more predictable and stable,
+and also specific tools like search have been adapted for agentic use.
+Yes, if you think about it, when you do a aquarium search engine,
+it will return multiple links that you can then follow to find answers.
+However, what an agent really wants, or answered that you can then reference to the link.
+Also, the agent needs predictable format for its results.
+This is exactly what agentic search provides.
+That makes sense, and by the way, I'm personally a user of LineChain and Langsworth,
+a reason for the excitance of both of you here.
+Let me start by describing agents and agentic workflows.
+Let's say that the fee of us is going to write a paper together.
+Maybe I would start with some planning and try to put together an initial outline of the paper.
+I can take it from there and do some research, maybe run some queries,
+and compile documents related to our topic.
+Okay, I guess that leaves me to write the first draft.
+I hope it's not a long paper.
+Yeah, short paper, hopefully.
+And then after that, I might read over the paper, try to make some constructive suggestions,
+and hand it back to Harrison to see if I was to make some changes,
+a lot of road terms to see if he wants to do some more search, and so on.
+And this would be an example of an agent, or an agent like Workflow,
+in which we iterate to produce the work product.
+And in contrast to how people often use LMS to write essays today,
+which is to write a prompt, and the LMS write the essay from the first word to the last word in one shot,
+this type of iterative workflow gives a much better work product.
+In fact, as a person, I don't write that well.
+If you force me to just write from start to finish with no backspacing allowed.
+So concretely, you can similarly prompt an LMS to tell it to write an outline,
+prompt an LMS to write a draft or revise it, prompt an LMS to do search, and so on.
+But to type a bit deeper, let me share what I think are the key design patterns of agent work folks.
+First, I think this planning, which is thinking through the steps to take like the outline
+and what to do after that.
+Then to use, knowing what tools are available and how to use them, like our search tool.
+Reflection, which refers to iterative, the improving a result possibly with multiple LMS critiquing
+and making useful suggestions to drag that type of editing cycle, multi agent communication.
+So you can think of each of us as playing a role akin to an LMS with a unique prompt to play a unique role in this process.
+And then memory that is tracking the progress and results over the multiple steps.
+Now, some of these capabilities are related to the LMS itself, like function calling for two years.
+But many of these capabilities are actually implemented outside the LMS by the framework that they operate in.
+Exactly. And the lengthening framework has had many of these elements for some time.
+Memory is available in multiple forms.
+Supporting function calling LMS and tool execution are available.
+And we talked about this in the last deep learning class we did functions, tools, and agents course.
+But lengthening has recently updated its support for agentic workflows.
+Here are some examples of agents that we now better support.
+So react agents was an early paradigm for building agents and reactants for reasoning and action.
+Another example that we recently added support for is the example presented in the self-refined paper,
+where it does the iterative refinement that you were talking about.
+And most recently, you can see the alphacodium example, which creates a coding agent using flow engineering.
+And from all these diagrams, you can see that these agents and their behavior is defined by a cyclical graph.
+And so to support directly building agents like this,
+Langchain has extended to support Lang graph.
+In this course, you will start by building an agent from scratch, with just an LLM and Python.
+Then you'll learn about the components of Lang graph by rebuilding that same agent using the Lang graph components directly.
+Since search tools are such an important part of many agent applications,
+you will learn the capabilities of agentic search and how to use it.
+There are two additional capabilities that are helpful in building agents.
+First is being able to receive human input. This allows you to guide an agent at critical points.
+The second is persistence. This is the ability to store the current state of information so that you can return to it later.
+This is great for both debugging agents and for productionizing them.
+We will build a project using Lang graph, but you'll have to reach the last lesson to figure out what it is.
+And at the end, I'll describe some of the cool applications and feature your actions I see for this technology.
+Many people have worked to create this course.
+From Langchain, I'd like to thank Lance Martin and Nuno Compos from Tuvelli, our South Ellovic,
+and from deepland.ai Jeff Ludwig.
+Alright, we don't want to keep those agents waiting. Let's go on to the next video to get started.

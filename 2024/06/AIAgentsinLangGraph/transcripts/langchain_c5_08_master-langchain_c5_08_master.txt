@@ -1,0 +1,28 @@
+Look, we have only covered some of the basics here today.
+I want to point out where you can find some more information to continue your agent journey.
+We've covered a lot of info.
+Here are some of my favorite resources for diving deeper into all that we just talked about.
+The Langtrain documentation is a great place to start.
+Specifically, it provides a great high-level overview of all the packages and services
+in the Langtrain ecosystem.
+So we break down the different Langtrain core packages as well as all the Langtrain community
+packages.
+So we use Tavilia as part of Langtrain community, and then we also use Langtrain OpenAI,
+which is a separate partner package.
+But we have a ton of other integrations, and you can explore those here.
+Langtrain itself is more high-level and covers agents and other chains and different retrieval
+strategies that are good high-level entry points if you just want to get started.
+We also have a bunch of templates that can be deployed easily with Langserve.
+Langserve is just a really easy way to turn your Langtrain application into a web server.
+Helping out with all of this is Langsmith.
+From the beginning, Langsmith can help with debugging, and then it can also help with monitoring
+and production, and it also has a playground, which we saw earlier.
+Looking at a few other sites, the Langtrain GitHub repo has a lot of good resources, a lot
+of good cookbooks, and a lot of templates for getting started.
+The Langgraph repo, of course, has in-depth documentation on Langgraph, everything that
+we just covered, so great reference docs, great tutorials, and great pout two guides.
+We've also done previous courses on Langtrain, with deep learning that I'd highly recommend
+checking out in particular, Functions, Tools, and Agents with Langtrain is a really good
+precursor to this lesson.
+We already saw the prompt hub once, but just to reiterate, this is a great place to go
+to get inspiration and see what other expert prompters are doing.
