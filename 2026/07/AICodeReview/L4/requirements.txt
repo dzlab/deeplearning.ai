@@ -1,0 +1,20 @@
+# Core dependencies
+openai==2.41.1
+chromadb==1.5.9
+fastapi==0.128.8
+uvicorn==0.39.0
+
+# Data processing and analysis
+pandas==2.3.3
+numpy==2.0.2
+
+# Visualization
+plotly==6.8.0
+kaleido==0.2.1  # pinned: 0.2.1 bundles its own Chromium; kaleido>=1.0 requires a separately installed/downloaded Chrome
+
+# Code analysis
+ast-comments==1.3.0
+
+# Utilities
+python-dotenv==1.2.1
+pydantic==2.13.4

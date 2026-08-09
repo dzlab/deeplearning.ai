@@ -92,7 +92,7 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 
 </details>
 
-<details open>
+<details>
 <summary>Courses from 2025</summary>
 
 ## 2025
@@ -126,5 +126,16 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 
 ### 09
 - [Building and Evaluating Data Agents](2025/09/BuildingandEvaluatingDataAgents/)
+
+</details>
+
+
+<details open>
+<summary>Courses from 2026</summary>
+
+## 2026
+
+### 07
+- [AI Code Review](2026/07/AICodeReview/)
 
 </details>
