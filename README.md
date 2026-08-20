@@ -135,6 +135,9 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 
 ## 2026
 
+### 03
+- [Build and Train an LLM with JAX](2026/03/BuildandTrainanLLMwithJAX/)
+
 ### 07
 - [AI Code Review](2026/07/AICodeReview/)
 
