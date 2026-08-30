@@ -1,0 +1,35 @@
+{
+  "add_api_endpoint": {
+    "name": "add_validated_api_endpoint",
+    "description": "Add a new API endpoint following existing patterns while explicitly validating all input and rejecting unknown fields.",
+    "when_to_use": "When a user requests addition of any new HTTP endpoint to the service.",
+    "steps": [
+      "Read similar routes and the shared validation helper to copy the exact input-validation pattern that rejects unknown fields.",
+      "Write a failing test first that covers the happy path plus explicit validation cases for missing, malformed and unknown fields.",
+      "Implement the route handler using the validation helper before any business logic.",
+      "Register the route in the router.",
+      "Run the targeted tests and confirm all validation cases pass."
+    ],
+    "skills_used": [
+      "test-driven-development"
+    ],
+    "likely_tools": [
+      "read_file",
+      "grep",
+      "write_file",
+      "edit_file",
+      "run_tests"
+    ],
+    "errors_and_fixes": [
+      {
+        "error": "treating validation as optional or adding it after the handler logic",
+        "fix": "always read the validation helper first and write validation tests before writing any handler code"
+      }
+    ],
+    "provenance": [
+      "ep-add_api_endpoint-001",
+      "ep-add_api_endpoint-002",
+      "ep-add_api_endpoint-004"
+    ]
+  }
+}

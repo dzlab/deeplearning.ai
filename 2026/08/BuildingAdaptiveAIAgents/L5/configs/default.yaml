@@ -1,0 +1,50 @@
+# Module 4 — local Unsloth + Gemma 3n E4B QLoRA (default = inference comparison)
+domain: supplychain
+memory_backend: real
+# In-process sentence-transformers MiniLM (384-d), no OCI; vectors stored/searched
+# in Oracle. CPU-sandbox path (in-DB ONNX OOMs); "onnx:ALL_MINILM_L6_V2" is the
+# retained in-DB reference. The Gemma weight-space arm below is local Unsloth + QLoRA.
+embedder_model: "python:all-MiniLM-L6-v2"
+llm_model: "oci/xai.grok-4.3"
+
+# Local Gemma weight-space fine-tune (headline path)
+gemma:
+  base_model_id: "unsloth/gemma-3n-E4B-it"
+  behavior: "refusal"
+  cached_responses_path: "module_5_model_space/weight/data/gemma_cached_responses.json"
+  adapters_dir: "module_5_model_space/weight/data/adapters"
+  behavior_rate_drop_min: 0.5
+  kept_capability_min: 0.85
+  n_eval_prompts: 60
+  n_regression_prompts: 20
+
+# Cumulative re-fit knobs (instructor side; ignored by attendees).
+# Two arms now: v1 (1 shape, weak baseline) and v2 (2 shapes, reinforced
+# endpoint). The old 4-shape v3 arm regressed at fixed epochs and was removed;
+# v2 is reinforced with more unknown voyages + more epochs instead.
+finetune:
+  weeks: [1, 2]
+  target_pairs_per_week: 500
+  # Per-arm reinforcement: v2 trains on more unknown voyages (refusal pairs)
+  # and more known-answer pairs than v1, so its suppression is the strong,
+  # non-regressing endpoint of the curve.
+  train_unknown_per_week: {1: 40, 2: 100}
+  known_answers_per_week: {1: 15, 2: 30}
+  # v2's larger corpus needs proportionally more steps to fully bite (the
+  # under-training that regressed the old v3). Train it longer than v1.
+  epochs_per_week: {1: 8, 2: 12}
+
+# QLoRA hyperparameters for the local Gemma train
+qlora:
+  base_model_id: "unsloth/gemma-3n-E4B-it"
+  max_seq_length: 512
+  qlora_epochs: 8
+  qlora_r: 32
+  qlora_alpha: 64
+  qlora_dropout: 0.0
+  qlora_lr: 0.0002
+  batch_size: 4
+  qlora_target_modules: ["q_proj", "k_proj", "v_proj", "o_proj",
+                          "gate_proj", "up_proj", "down_proj"]
+
+seed: 42

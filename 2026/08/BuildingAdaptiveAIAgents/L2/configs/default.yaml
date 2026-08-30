@@ -1,0 +1,29 @@
+domain: supplychain
+memory_backend: real
+# In-process sentence-transformers MiniLM (384-d), no OCI; vectors stored/searched
+# in Oracle. CPU-sandbox path (in-DB ONNX OOMs); "onnx:ALL_MINILM_L6_V2" is the
+# retained in-DB reference.
+embedder_model: "python:all-MiniLM-L6-v2"
+# Expect llm_lift ≈ 0 on grok-4.3. The chapter is about the INDUCTION mechanism,
+# not the headline number — see module_2_token_space/README.md.
+llm_model: "oci/xai.grok-4.3"
+n_traces: 250
+n_skill_candidates: 8
+n_vsql_templates: 6
+n_export_skills: 2
+n_eval_tasks: 10
+seed: 42
+# LLM-in-the-loop lift eval (always-on per spec §3).
+llm_eval_k: 2
+llm_answer_temperature: 0.2
+llm_judge_temperature: 0.0
+# LangChain OracleVS + LangGraph integration.
+#   vsql_oraclevs_table         — Oracle table backing the OracleVS template index.
+#   vsql_coverage_k             — top-k retrieval used to score eval-task coverage.
+#   vsql_coverage_max_distance  — cosine-distance ceiling (≤ 0.70 → covered).
+#   induction_checkpoint_thread_id — LangGraph thread_id; re-running with the
+#                                    same value resumes from the last node.
+vsql_oraclevs_table: "DLAI_VSQL_TEMPLATES"
+vsql_coverage_k: 2
+vsql_coverage_max_distance: 0.70
+induction_checkpoint_thread_id: "module2-default"

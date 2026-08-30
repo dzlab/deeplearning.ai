@@ -141,4 +141,7 @@ Code for [DeepLearning.AI Courses](https://www.deeplearning.ai/courses/):
 ### 07
 - [AI Code Review](2026/07/AICodeReview/)
 
+### 08
+- [Building Adaptive AI Agents](2026/08/BuildingAdaptiveAIAgents/)
+
 </details>

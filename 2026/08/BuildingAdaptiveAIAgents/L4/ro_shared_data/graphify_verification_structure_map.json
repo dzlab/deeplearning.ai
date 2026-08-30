@@ -1,0 +1,404 @@
+{
+  "anchors": [
+    "utils.py",
+    "cli/nested_json.py",
+    "downloads.py",
+    "output/lexers/http.py",
+    "cli/argparser.py"
+  ],
+  "anchors_hit": [
+    "cli/nested_json.py"
+  ],
+  "files": [
+    {
+      "file": "utils.py",
+      "neighbors": {
+        "call": [
+          "cli/argparser.py",
+          "cli/dicts.py",
+          "cli/nested_json.py",
+          "manager/plugins.py"
+        ],
+        "co_edit": [
+          "models.py",
+          "output/__init__.py",
+          "output/formatters/colors.py",
+          "output/formatters/json.py"
+        ],
+        "import": [
+          "cli/argparser.py",
+          "cli/requestitems.py",
+          "client.py",
+          "context.py"
+        ]
+      },
+      "via": "keyword"
+    },
+    {
+      "file": "cli/nested_json.py",
+      "neighbors": {
+        "call": [
+          "manager/plugins.py",
+          "config.py",
+          "sessions.py",
+          "utils.py"
+        ],
+        "co_edit": [
+          "cli/requestitems.py",
+          "core.py",
+          "cli/argtypes.py",
+          "cli/constants.py"
+        ],
+        "import": [
+          "cli/constants.py",
+          "cli/requestitems.py",
+          "core.py"
+        ]
+      },
+      "via": "keyword"
+    },
+    {
+      "file": "downloads.py",
+      "neighbors": {
+        "call": [
+          "models.py",
+          "output/streams.py",
+          "utils.py",
+          "core.py"
+        ],
+        "co_edit": [
+          "models.py",
+          "output/__init__.py",
+          "output/formatters/colors.py",
+          "output/formatters/headers.py"
+        ],
+        "import": [
+          "models.py",
+          "output/streams.py",
+          "utils.py",
+          "core.py"
+        ]
+      },
+      "via": "keyword"
+    },
+    {
+      "file": "output/lexers/http.py",
+      "neighbors": {
+        "call": [
+          "output/formatters/colors.py",
+          "output/lexers/common.py",
+          "downloads.py"
+        ],
+        "co_edit": [
+          "output/lexers/json.py",
+          "output/lexers/metadata.py",
+          "output/processing.py",
+          "output/streams.py"
+        ],
+        "import": [
+          "output/lexers/common.py",
+          "output/formatters/colors.py"
+        ]
+      },
+      "via": "keyword"
+    },
+    {
+      "file": "cli/argparser.py",
+      "neighbors": {
+        "call": [
+          "cli/argtypes.py",
+          "cli/requestitems.py",
+          "models.py",
+          "plugins/manager.py"
+        ],
+        "co_edit": [
+          "cli/argtypes.py",
+          "cli/constants.py",
+          "cli/definition.py",
+          "cli/dicts.py"
+        ],
+        "import": [
+          "cli/argtypes.py",
+          "cli/constants.py",
+          "cli/exceptions.py",
+          "cli/requestitems.py"
+        ]
+      },
+      "via": "keyword"
+    },
+    {
+      "file": "__init__.py",
+      "neighbors": {
+        "co_edit": [
+          "__main__.py",
+          "cli/argparser.py",
+          "cli/definition.py",
+          "cli/requestitems.py"
+        ],
+        "import": [
+          "cli/definition.py",
+          "client.py",
+          "config.py",
+          "core.py"
+        ]
+      },
+      "via": "graph"
+    },
+    {
+      "file": "__main__.py",
+      "neighbors": {
+        "co_edit": [
+          "cli/argparser.py",
+          "cli/argtypes.py",
+          "cli/definition.py",
+          "cli/requestitems.py"
+        ],
+        "import": [
+          "core.py",
+          "status.py"
+        ]
+      },
+      "via": "graph"
+    },
+    {
+      "file": "cli/__init__.py",
+      "neighbors": {
+        "co_edit": [
+          "cli/argparser.py",
+          "cli/argtypes.py",
+          "cli/constants.py",
+          "cli/definition.py"
+        ]
+      },
+      "via": "graph"
+    },
+    {
+      "file": "cli/argtypes.py",
+      "neighbors": {
+        "call": [
+          "cli/argparser.py",
+          "utils.py"
+        ],
+        "co_edit": [
+          "cli/constants.py",
+          "cli/definition.py",
+          "cli/dicts.py",
+          "cli/exceptions.py"
+        ],
+        "import": [
+          "cli/constants.py",
+          "sessions.py",
+          "cli/argparser.py",
+          "cli/definition.py"
+        ]
+      },
+      "via": "graph"
+    },
+    {
+      "file": "cli/constants.py",
+      "neighbors": {
+        "co_edit": [
+          "cli/definition.py",
+          "cli/dicts.py",
+          "cli/exceptions.py",
+          "cli/nested_json.py"
+        ],
+        "import": [
+          "cli/argparser.py",
+          "cli/argtypes.py",
+          "cli/definition.py",
+          "cli/nested_json.py"
+        ]
+      },
+      "via": "graph"
+    },
+    {
+      "file": "cli/definition.py",
+      "neighbors": {
+        "call": [
+          "manager/plugins.py"
+        ],
+        "co_edit": [
+          "cli/dicts.py",
+          "cli/exceptions.py",
+          "cli/requestitems.py",
+          "cli/utils.py"
+        ],
+        "import": [
+          "__init__.py",
+          "cli/argparser.py",
+          "cli/argtypes.py",
+          "cli/constants.py"
+        ]
+      },
+      "via": "graph"
+    },
+    {
+      "file": "cli/dicts.py",
+      "neighbors": {
+        "call": [
+          "adapters.py",
+          "cli/requestitems.py",
+          "client.py",
+          "sessions.py"
+        ],
+        "co_edit": [
+          "cli/exceptions.py",
+          "cli/requestitems.py",
+          "client.py",
+          "context.py"
+        ],
+        "import": [
+          "adapters.py",
+          "cli/requestitems.py",
+          "client.py",
+          "output/writer.py"
+        ]
+      },
+      "via": "graph"
+    },
+    {
+      "file": "cli/exceptions.py",
+      "neighbors": {
+        "call": [
+          "cli/requestitems.py"
+        ],
+        "co_edit": [
+          "cli/requestitems.py",
+          "client.py",
+          "context.py",
+          "core.py"
+        ],
+        "import": [
+          "cli/argparser.py",
+          "cli/requestitems.py"
+        ]
+      },
+      "via": "graph"
+    },
+    {
+      "file": "cli/requestitems.py",
+      "neighbors": {
+        "call": [
+          "cli/dicts.py",
+          "utils.py",
+          "cli/argparser.py",
+          "cli/exceptions.py"
+        ],
+        "co_edit": [
+          "client.py",
+          "config.py",
+          "context.py",
+          "core.py"
+        ],
+        "import": [
+          "cli/argtypes.py",
+          "cli/constants.py",
+          "cli/dicts.py",
+          "cli/exceptions.py"
+        ]
+      },
+      "via": "graph"
+    },
+    {
+      "file": "client.py",
+      "neighbors": {
+        "call": [
+          "cli/dicts.py",
+          "plugins/manager.py",
+          "adapters.py",
+          "plugins/base.py"
+        ],
+        "co_edit": [
+          "compat.py",
+          "config.py",
+          "context.py",
+          "core.py"
+        ],
+        "import": [
+          "__init__.py",
+          "adapters.py",
+          "cli/dicts.py",
+          "context.py"
+        ]
+      },
+      "via": "graph"
+    },
+    {
+      "file": "compat.py",
+      "neighbors": {
+        "call": [
+          "plugins/manager.py",
+          "utils.py",
+          "manager/plugins.py"
+        ],
+        "co_edit": [
+          "config.py",
+          "context.py",
+          "core.py",
+          "downloads.py"
+        ],
+        "import": [
+          "config.py",
+          "context.py",
+          "manager/plugins.py",
+          "models.py"
+        ]
+      },
+      "via": "graph"
+    },
+    {
+      "file": "config.py",
+      "neighbors": {
+        "call": [
+          "client.py",
+          "context.py",
+          "cli/utils.py",
+          "cli/nested_json.py"
+        ],
+        "co_edit": [
+          "context.py",
+          "core.py",
+          "downloads.py",
+          "encoding.py"
+        ],
+        "import": [
+          "__init__.py",
+          "compat.py",
+          "encoding.py",
+          "context.py"
+        ]
+      },
+      "via": "graph"
+    }
+  ],
+  "gold_files": [
+    "cli/constants.py",
+    "cli/dicts.py",
+    "cli/nested_json.py",
+    "client.py"
+  ],
+  "gold_recall": 1.0,
+  "graph_hit": [
+    "cli/constants.py",
+    "cli/dicts.py",
+    "client.py"
+  ],
+  "graph_reach": [
+    "__init__.py",
+    "__main__.py",
+    "cli/__init__.py",
+    "cli/argtypes.py",
+    "cli/constants.py",
+    "cli/definition.py",
+    "cli/dicts.py",
+    "cli/exceptions.py",
+    "cli/requestitems.py",
+    "client.py",
+    "compat.py",
+    "config.py"
+  ],
+  "markdown": "## Structure map (graphify \u2014 structure-aware retrieval)\n\nFor the task \u201cValidate and regulate top-level JSON arrays in request items; reject casting a nested value like key:=[1,2,3] into a top-level array, and error on conflicting top-level access.\n\u201d, the repo's code graph (imports + calls + git co-edits, the same structure Module 3 builds) suggests these files. Keyword-matched files are the entry points; graph-reached files are their dependencies \u2014 the files a keyword search would miss:\n\n**Keyword-matched (entry points):**\n- `utils.py`\n    - imports: `cli/argparser.py`, `cli/requestitems.py`, `client.py`, `context.py`\n    - calls: `cli/argparser.py`, `cli/dicts.py`, `cli/nested_json.py`, `manager/plugins.py`\n    - co-edited with: `models.py`, `output/__init__.py`, `output/formatters/colors.py`, `output/formatters/json.py`\n- `cli/nested_json.py`\n    - imports: `cli/constants.py`, `cli/requestitems.py`, `core.py`\n    - calls: `manager/plugins.py`, `config.py`, `sessions.py`, `utils.py`\n    - co-edited with: `cli/requestitems.py`, `core.py`, `cli/argtypes.py`, `cli/constants.py`\n- `downloads.py`\n    - imports: `models.py`, `output/streams.py`, `utils.py`, `core.py`\n    - calls: `models.py`, `output/streams.py`, `utils.py`, `core.py`\n    - co-edited with: `models.py`, `output/__init__.py`, `output/formatters/colors.py`, `output/formatters/headers.py`\n- `output/lexers/http.py`\n    - imports: `output/lexers/common.py`, `output/formatters/colors.py`\n    - calls: `output/formatters/colors.py`, `output/lexers/common.py`, `downloads.py`\n    - co-edited with: `output/lexers/json.py`, `output/lexers/metadata.py`, `output/processing.py`, `output/streams.py`\n- `cli/argparser.py`\n    - imports: `cli/argtypes.py`, `cli/constants.py`, `cli/exceptions.py`, `cli/requestitems.py`\n    - calls: `cli/argtypes.py`, `cli/requestitems.py`, `models.py`, `plugins/manager.py`\n    - co-edited with: `cli/argtypes.py`, `cli/constants.py`, `cli/definition.py`, `cli/dicts.py`\n\n**Graph-reached (dependencies of the above, found via the code graph \u2014 likely missed by keyword search):**\n- `__init__.py`\n    - imports: `cli/definition.py`, `client.py`, `config.py`, `core.py`\n    - co-edited with: `__main__.py`, `cli/argparser.py`, `cli/definition.py`, `cli/requestitems.py`\n- `__main__.py`\n    - imports: `core.py`, `status.py`\n    - co-edited with: `cli/argparser.py`, `cli/argtypes.py`, `cli/definition.py`, `cli/requestitems.py`\n- `cli/__init__.py`\n    - co-edited with: `cli/argparser.py`, `cli/argtypes.py`, `cli/constants.py`, `cli/definition.py`\n- `cli/argtypes.py`\n    - imports: `cli/constants.py`, `sessions.py`, `cli/argparser.py`, `cli/definition.py`\n    - calls: `cli/argparser.py`, `utils.py`\n    - co-edited with: `cli/constants.py`, `cli/definition.py`, `cli/dicts.py`, `cli/exceptions.py`\n- `cli/constants.py`\n    - imports: `cli/argparser.py`, `cli/argtypes.py`, `cli/definition.py`, `cli/nested_json.py`\n    - co-edited with: `cli/definition.py`, `cli/dicts.py`, `cli/exceptions.py`, `cli/nested_json.py`\n- `cli/definition.py`\n    - imports: `__init__.py`, `cli/argparser.py`, `cli/argtypes.py`, `cli/constants.py`\n    - calls: `manager/plugins.py`\n    - co-edited with: `cli/dicts.py`, `cli/exceptions.py`, `cli/requestitems.py`, `cli/utils.py`\n- `cli/dicts.py`\n    - imports: `adapters.py`, `cli/requestitems.py`, `client.py`, `output/writer.py`\n    - calls: `adapters.py`, `cli/requestitems.py`, `client.py`, `sessions.py`\n    - co-edited with: `cli/exceptions.py`, `cli/requestitems.py`, `client.py`, `context.py`\n- `cli/exceptions.py`\n    - imports: `cli/argparser.py`, `cli/requestitems.py`\n    - calls: `cli/requestitems.py`\n    - co-edited with: `cli/requestitems.py`, `client.py`, `context.py`, `core.py`\n- `cli/requestitems.py`\n    - imports: `cli/argtypes.py`, `cli/constants.py`, `cli/dicts.py`, `cli/exceptions.py`\n    - calls: `cli/dicts.py`, `utils.py`, `cli/argparser.py`, `cli/exceptions.py`\n    - co-edited with: `client.py`, `config.py`, `context.py`, `core.py`\n- `client.py`\n    - imports: `__init__.py`, `adapters.py`, `cli/dicts.py`, `context.py`\n    - calls: `cli/dicts.py`, `plugins/manager.py`, `adapters.py`, `plugins/base.py`\n    - co-edited with: `compat.py`, `config.py`, `context.py`, `core.py`\n- `compat.py`\n    - imports: `config.py`, `context.py`, `manager/plugins.py`, `models.py`\n    - calls: `plugins/manager.py`, `utils.py`, `manager/plugins.py`\n    - co-edited with: `config.py`, `context.py`, `core.py`, `downloads.py`\n- `config.py`\n    - imports: `__init__.py`, `compat.py`, `encoding.py`, `context.py`\n    - calls: `client.py`, `context.py`, `cli/utils.py`, `cli/nested_json.py`\n    - co-edited with: `context.py`, `core.py`, `downloads.py`, `encoding.py`\n\nThis is a navigation hint, not a constraint \u2014 verify against the actual code and edit whatever the change truly requires.",
+  "query": "Validate and regulate top-level JSON arrays in request items; reject casting a nested value like key:=[1,2,3] into a top-level array, and error on conflicting top-level access.\n",
+  "source": "oracle-pgq"
+}

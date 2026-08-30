@@ -1,0 +1,481 @@
+{
+  "n_tasks": 10,
+  "tasks_ok": [],
+  "tasks_failed": [],
+  "per_task": [
+    {
+      "task": "django_admin_formset",
+      "favorability": "favorable",
+      "n_runs": 5,
+      "metrics": {
+        "mean_duration_ms": {
+          "control": 223717.0,
+          "treatment": 240369.0,
+          "pct_improvement": -7.4
+        },
+        "mean_tool_calls_to_first_correct_edit": {
+          "control": 63,
+          "treatment": 55.8,
+          "pct_improvement": 11.4
+        },
+        "mean_total_tokens": {
+          "control": 4130538.6,
+          "treatment": 4315192.8,
+          "pct_improvement": -4.5
+        },
+        "mean_tool_calls": {
+          "control": 94,
+          "treatment": 91.2,
+          "pct_improvement": 3.0
+        },
+        "mean_cost_usd": {
+          "control": 0.7193,
+          "treatment": 0.6963,
+          "pct_improvement": 3.2
+        },
+        "mean_recall": {
+          "control": 0.5,
+          "treatment": 0.7,
+          "pct_improvement": 40.0
+        }
+      }
+    },
+    {
+      "task": "django_admindocs_urls",
+      "favorability": "favorable",
+      "n_runs": 5,
+      "metrics": {
+        "mean_duration_ms": {
+          "control": 106761,
+          "treatment": 117268,
+          "pct_improvement": -9.8
+        },
+        "mean_tool_calls_to_first_correct_edit": {
+          "control": 9.4,
+          "treatment": 14.4,
+          "pct_improvement": -53.2
+        },
+        "mean_total_tokens": {
+          "control": 1305141.6,
+          "treatment": 1751540.8,
+          "pct_improvement": -34.2
+        },
+        "mean_tool_calls": {
+          "control": 29.4,
+          "treatment": 39.8,
+          "pct_improvement": -35.4
+        },
+        "mean_cost_usd": {
+          "control": 0.241,
+          "treatment": 0.3342,
+          "pct_improvement": -38.7
+        },
+        "mean_recall": {
+          "control": 0.867,
+          "treatment": 0.933,
+          "pct_improvement": 7.6
+        }
+      }
+    },
+    {
+      "task": "django_alterfield",
+      "favorability": "favorable",
+      "n_runs": 5,
+      "metrics": {
+        "mean_duration_ms": {
+          "control": 201224.0,
+          "treatment": 170160.0,
+          "pct_improvement": 15.4
+        },
+        "mean_tool_calls_to_first_correct_edit": {
+          "control": 30.6,
+          "treatment": 44,
+          "pct_improvement": -43.8
+        },
+        "mean_total_tokens": {
+          "control": 3445272.4,
+          "treatment": 2791155,
+          "pct_improvement": 19.0
+        },
+        "mean_tool_calls": {
+          "control": 64,
+          "treatment": 69.8,
+          "pct_improvement": -9.1
+        },
+        "mean_cost_usd": {
+          "control": 0.5059,
+          "treatment": 0.5081,
+          "pct_improvement": -0.4
+        },
+        "mean_recall": {
+          "control": 0.9,
+          "treatment": 0.9,
+          "pct_improvement": 0.0
+        }
+      }
+    },
+    {
+      "task": "django_b64_validate",
+      "favorability": "unfavorable",
+      "n_runs": 5,
+      "metrics": {
+        "mean_duration_ms": {
+          "control": 66575.0,
+          "treatment": 45936.0,
+          "pct_improvement": 31.0
+        },
+        "mean_tool_calls_to_first_correct_edit": {
+          "control": 12.8,
+          "treatment": 22.8,
+          "pct_improvement": -78.1
+        },
+        "mean_total_tokens": {
+          "control": 1044609.2,
+          "treatment": 597875.6,
+          "pct_improvement": 42.8
+        },
+        "mean_tool_calls": {
+          "control": 24.6,
+          "treatment": 33.2,
+          "pct_improvement": -35.0
+        },
+        "mean_cost_usd": {
+          "control": 0.1942,
+          "treatment": 0.1538,
+          "pct_improvement": 20.8
+        },
+        "mean_recall": {
+          "control": 1.0,
+          "treatment": 1.0,
+          "pct_improvement": 0.0
+        }
+      }
+    },
+    {
+      "task": "django_cache",
+      "favorability": "favorable",
+      "n_runs": 5,
+      "metrics": {
+        "mean_duration_ms": {
+          "control": 212609.0,
+          "treatment": 174590.0,
+          "pct_improvement": 17.9
+        },
+        "mean_tool_calls_to_first_correct_edit": {
+          "control": 14.4,
+          "treatment": 12,
+          "pct_improvement": 16.7
+        },
+        "mean_total_tokens": {
+          "control": 3024635.8,
+          "treatment": 2532698.8,
+          "pct_improvement": 16.3
+        },
+        "mean_tool_calls": {
+          "control": 57.2,
+          "treatment": 47.6,
+          "pct_improvement": 16.8
+        },
+        "mean_cost_usd": {
+          "control": 0.4829,
+          "treatment": 0.4218,
+          "pct_improvement": 12.7
+        },
+        "mean_recall": {
+          "control": 0.75,
+          "treatment": 0.75,
+          "pct_improvement": 0.0
+        }
+      }
+    },
+    {
+      "task": "django_compound_order",
+      "favorability": "mixed",
+      "n_runs": 5,
+      "metrics": {
+        "mean_duration_ms": {
+          "control": 141141.0,
+          "treatment": 124394.0,
+          "pct_improvement": 11.9
+        },
+        "mean_tool_calls_to_first_correct_edit": {
+          "control": 21.2,
+          "treatment": 20.6,
+          "pct_improvement": 2.8
+        },
+        "mean_total_tokens": {
+          "control": 2278873.8,
+          "treatment": 2123046,
+          "pct_improvement": 6.8
+        },
+        "mean_tool_calls": {
+          "control": 45,
+          "treatment": 40.6,
+          "pct_improvement": 9.8
+        },
+        "mean_cost_usd": {
+          "control": 0.3641,
+          "treatment": 0.3379,
+          "pct_improvement": 7.2
+        },
+        "mean_recall": {
+          "control": 0.5,
+          "treatment": 0.4,
+          "pct_improvement": -20.0
+        }
+      }
+    },
+    {
+      "task": "django_csp_nonce",
+      "favorability": "unfavorable",
+      "n_runs": 5,
+      "metrics": {
+        "mean_duration_ms": {
+          "control": 234313.0,
+          "treatment": 173103,
+          "pct_improvement": 26.1
+        },
+        "mean_tool_calls_to_first_correct_edit": {
+          "control": 30,
+          "treatment": 18.25,
+          "pct_improvement": 39.2
+        },
+        "mean_total_tokens": {
+          "control": 4040254.8,
+          "treatment": 2986608.2,
+          "pct_improvement": 26.1
+        },
+        "mean_tool_calls": {
+          "control": 74,
+          "treatment": 59,
+          "pct_improvement": 20.3
+        },
+        "mean_cost_usd": {
+          "control": 0.5995,
+          "treatment": 0.4533,
+          "pct_improvement": 24.4
+        },
+        "mean_recall": {
+          "control": 0.15,
+          "treatment": 0.2,
+          "pct_improvement": 33.3
+        }
+      }
+    },
+    {
+      "task": "django_headersplit",
+      "favorability": "favorable",
+      "n_runs": 5,
+      "metrics": {
+        "mean_duration_ms": {
+          "control": 144689.0,
+          "treatment": 199666.0,
+          "pct_improvement": -38.0
+        },
+        "mean_tool_calls_to_first_correct_edit": {
+          "control": 14,
+          "treatment": 19.6,
+          "pct_improvement": -40.0
+        },
+        "mean_total_tokens": {
+          "control": 2338596,
+          "treatment": 3586723.6,
+          "pct_improvement": -53.4
+        },
+        "mean_tool_calls": {
+          "control": 45.2,
+          "treatment": 68.6,
+          "pct_improvement": -51.8
+        },
+        "mean_cost_usd": {
+          "control": 0.3789,
+          "treatment": 0.5399,
+          "pct_improvement": -42.5
+        },
+        "mean_recall": {
+          "control": 0.6,
+          "treatment": 0.4,
+          "pct_improvement": -33.3
+        }
+      }
+    },
+    {
+      "task": "django_signing_salt",
+      "favorability": "mixed",
+      "n_runs": 5,
+      "metrics": {
+        "mean_duration_ms": {
+          "control": 190890,
+          "treatment": 186830.0,
+          "pct_improvement": 2.1
+        },
+        "mean_tool_calls_to_first_correct_edit": {
+          "control": 19,
+          "treatment": 14,
+          "pct_improvement": 26.3
+        },
+        "mean_total_tokens": {
+          "control": 2739660.6,
+          "treatment": 2695344.8,
+          "pct_improvement": 1.6
+        },
+        "mean_tool_calls": {
+          "control": 57,
+          "treatment": 55.6,
+          "pct_improvement": 2.5
+        },
+        "mean_cost_usd": {
+          "control": 0.4578,
+          "treatment": 0.4323,
+          "pct_improvement": 5.6
+        },
+        "mean_recall": {
+          "control": 0.9,
+          "treatment": 1.0,
+          "pct_improvement": 11.1
+        }
+      }
+    },
+    {
+      "task": "httpie_1292",
+      "favorability": "favorable",
+      "n_runs": 5,
+      "metrics": {
+        "mean_duration_ms": {
+          "control": 353638.0,
+          "treatment": 317929.0,
+          "pct_improvement": 10.1
+        },
+        "mean_tool_calls_to_first_correct_edit": {
+          "control": 37.6,
+          "treatment": 24.2,
+          "pct_improvement": 35.6
+        },
+        "mean_total_tokens": {
+          "control": 2247857,
+          "treatment": 2189317.8,
+          "pct_improvement": 2.6
+        },
+        "mean_tool_calls": {
+          "control": 61.8,
+          "treatment": 48.2,
+          "pct_improvement": 22.0
+        },
+        "mean_cost_usd": {
+          "control": 1.3792,
+          "treatment": 1.208,
+          "pct_improvement": 12.4
+        },
+        "mean_recall": {
+          "control": 0.5,
+          "treatment": 0.4,
+          "pct_improvement": -20.0
+        }
+      }
+    }
+  ],
+  "pooled": {
+    "mean_duration_ms": {
+      "label": "total time on task",
+      "n_tasks": 10,
+      "wins": 7,
+      "ties": 0,
+      "losses": 3,
+      "pooled_median_pct": 11.0,
+      "pooled_trimmed_pct": 8.3,
+      "pooled_mean_pct": 5.9,
+      "wilcoxon_p_two_sided": 0.2324,
+      "sign_test_p_two_sided": 0.3438,
+      "median_ci95": [
+        -7.4,
+        20.8
+      ]
+    },
+    "mean_tool_calls_to_first_correct_edit": {
+      "label": "steps to first correct edit",
+      "n_tasks": 10,
+      "wins": 6,
+      "ties": 0,
+      "losses": 4,
+      "pooled_median_pct": 7.1,
+      "pooled_trimmed_pct": -5.5,
+      "pooled_mean_pct": -8.3,
+      "wilcoxon_p_two_sided": 0.5566,
+      "sign_test_p_two_sided": 0.7539,
+      "median_ci95": [
+        -46.6,
+        26.3
+      ]
+    },
+    "mean_total_tokens": {
+      "label": "total tokens",
+      "n_tasks": 10,
+      "wins": 7,
+      "ties": 0,
+      "losses": 3,
+      "pooled_median_pct": 4.7,
+      "pooled_trimmed_pct": 4.2,
+      "pooled_mean_pct": 2.3,
+      "wilcoxon_p_two_sided": 0.5566,
+      "sign_test_p_two_sided": 0.3438,
+      "median_ci95": [
+        -16.3,
+        21.2
+      ]
+    },
+    "mean_tool_calls": {
+      "label": "tool calls",
+      "n_tasks": 10,
+      "wins": 6,
+      "ties": 0,
+      "losses": 4,
+      "pooled_median_pct": 2.8,
+      "pooled_trimmed_pct": -3.4,
+      "pooled_mean_pct": -5.7,
+      "wilcoxon_p_two_sided": 0.8457,
+      "sign_test_p_two_sided": 0.7539,
+      "median_ci95": [
+        -35.0,
+        16.8
+      ]
+    },
+    "mean_cost_usd": {
+      "label": "cost (usd)",
+      "n_tasks": 10,
+      "wins": 7,
+      "ties": 1,
+      "losses": 2,
+      "pooled_median_pct": 6.4,
+      "pooled_trimmed_pct": 2.8,
+      "pooled_mean_pct": 0.5,
+      "wilcoxon_p_two_sided": 0.4922,
+      "sign_test_p_two_sided": 0.3438,
+      "median_ci95": [
+        -17.8,
+        14.0
+      ]
+    },
+    "mean_recall": {
+      "label": "gold recall",
+      "n_tasks": 10,
+      "wins": 4,
+      "ties": 3,
+      "losses": 3,
+      "pooled_median_pct": 0.0,
+      "pooled_trimmed_pct": 1.5,
+      "pooled_mean_pct": 1.9,
+      "wilcoxon_p_two_sided": 0.875,
+      "sign_test_p_two_sided": 1.0,
+      "median_ci95": [
+        -20.0,
+        20.4
+      ]
+    }
+  },
+  "preregistration": {
+    "primary_endpoint": "mean_duration_ms per-task % improvement",
+    "primary_estimator": "median across tasks",
+    "primary_test": "exact two-sided Wilcoxon signed-rank, alpha=0.05",
+    "committed": "2026-07-04, before the n=5 top-up / placebo / confirmation / httpie-haiku runs (see course_lab/gv_stats.py)"
+  }
+}

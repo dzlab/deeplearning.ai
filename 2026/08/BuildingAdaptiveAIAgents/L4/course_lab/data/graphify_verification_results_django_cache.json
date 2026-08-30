@@ -1,0 +1,588 @@
+{
+  "task": {
+    "repo": "https://github.com/django/django.git",
+    "base_sha": "2c5e4af3cccd88a7f0ea66a56aff1a49ad274681",
+    "gold_commit": "b461519bf5973d7fc149560d2f99acdba71a437d",
+    "gold_files": [
+      "middleware/cache.py",
+      "middleware/http.py",
+      "utils/cache.py",
+      "utils/http.py"
+    ],
+    "feature": "Cache-Control directive matching is too strict: it does exact token membership, so RFC 9111 \"qualified\" directive forms like `Cache-Control: private=\"Set-Cookie\"` or `no-store=\"x\"` are not recognized as `private` / `no-store`, which can let a response that should never be shared get stored in a shared cache. Fix the directive handling so a directive is recognized by its name regardless of any qualified `=\"...\"` value (strip the qualifier and surrounding whitespace, compare the lowercased name). Apply the same robust matching everywhere a Cache-Control directive name is checked (the response-caching middleware and the conditional GET / ETag path) so they stay consistent, and so malformed input like `no-store=\"x\"` correctly suppresses the ETag instead of being silently ignored."
+  },
+  "n_runs_per_arm": 3,
+  "model": "haiku",
+  "driver": "claude",
+  "aggregate": {
+    "control": {
+      "n": 5,
+      "accept_pass_rate": 1.0,
+      "mean_recall": 0.75,
+      "mean_precision": 0.92,
+      "mean_total_tokens": 3024635.8,
+      "mean_output_tokens": 15723.6,
+      "mean_tool_calls": 57.2,
+      "mean_tool_calls_to_first_correct_edit": 14.4,
+      "found_gold_rate": 1.0,
+      "mean_cost_usd": 0.4829,
+      "mean_duration_ms": 212609.0
+    },
+    "treatment": {
+      "n": 5,
+      "accept_pass_rate": 1.0,
+      "mean_recall": 0.75,
+      "mean_precision": 1.0,
+      "mean_total_tokens": 2532698.8,
+      "mean_output_tokens": 12864.6,
+      "mean_tool_calls": 47.6,
+      "mean_tool_calls_to_first_correct_edit": 12,
+      "found_gold_rate": 1.0,
+      "mean_cost_usd": 0.4218,
+      "mean_duration_ms": 174590.0
+    },
+    "deltas": {
+      "accept_pass_rate": {
+        "control": 1.0,
+        "treatment": 1.0,
+        "pct_change": 0.0,
+        "treatment_better": false
+      },
+      "mean_recall": {
+        "control": 0.75,
+        "treatment": 0.75,
+        "pct_change": 0.0,
+        "treatment_better": false
+      },
+      "mean_total_tokens": {
+        "control": 3024635.8,
+        "treatment": 2532698.8,
+        "pct_change": -16.3,
+        "treatment_better": true
+      },
+      "mean_tool_calls": {
+        "control": 57.2,
+        "treatment": 47.6,
+        "pct_change": -16.8,
+        "treatment_better": true
+      },
+      "mean_tool_calls_to_first_correct_edit": {
+        "control": 14.4,
+        "treatment": 12,
+        "pct_change": -16.7,
+        "treatment_better": true
+      },
+      "mean_cost_usd": {
+        "control": 0.4829,
+        "treatment": 0.4218,
+        "pct_change": -12.7,
+        "treatment_better": true
+      },
+      "mean_duration_ms": {
+        "control": 212609.0,
+        "treatment": 174590.0,
+        "pct_change": -17.9,
+        "treatment_better": true
+      }
+    },
+    "arms": {
+      "anchors_only": {
+        "n": 5,
+        "accept_pass_rate": 1.0,
+        "mean_recall": 0.75,
+        "mean_precision": 0.92,
+        "mean_total_tokens": 2455171.6,
+        "mean_output_tokens": 12839.4,
+        "mean_tool_calls": 48.2,
+        "mean_tool_calls_to_first_correct_edit": 10.8,
+        "found_gold_rate": 1.0,
+        "mean_cost_usd": 0.4015,
+        "mean_duration_ms": 184651.0
+      },
+      "control": {
+        "n": 5,
+        "accept_pass_rate": 1.0,
+        "mean_recall": 0.75,
+        "mean_precision": 0.92,
+        "mean_total_tokens": 3024635.8,
+        "mean_output_tokens": 15723.6,
+        "mean_tool_calls": 57.2,
+        "mean_tool_calls_to_first_correct_edit": 14.4,
+        "found_gold_rate": 1.0,
+        "mean_cost_usd": 0.4829,
+        "mean_duration_ms": 212609.0
+      },
+      "random_files": {
+        "n": 5,
+        "accept_pass_rate": 1.0,
+        "mean_recall": 0.8,
+        "mean_precision": 0.84,
+        "mean_total_tokens": 2961916.8,
+        "mean_output_tokens": 12971,
+        "mean_tool_calls": 63.6,
+        "mean_tool_calls_to_first_correct_edit": 18.6,
+        "found_gold_rate": 1.0,
+        "mean_cost_usd": 0.4962,
+        "mean_duration_ms": 185509.0
+      },
+      "treatment": {
+        "n": 5,
+        "accept_pass_rate": 1.0,
+        "mean_recall": 0.75,
+        "mean_precision": 1.0,
+        "mean_total_tokens": 2532698.8,
+        "mean_output_tokens": 12864.6,
+        "mean_tool_calls": 47.6,
+        "mean_tool_calls_to_first_correct_edit": 12,
+        "found_gold_rate": 1.0,
+        "mean_cost_usd": 0.4218,
+        "mean_duration_ms": 174590.0
+      }
+    },
+    "deltas_vs_control": {
+      "anchors_only": {
+        "accept_pass_rate": {
+          "control": 1.0,
+          "treatment": 1.0,
+          "pct_change": 0.0,
+          "treatment_better": false
+        },
+        "mean_recall": {
+          "control": 0.75,
+          "treatment": 0.75,
+          "pct_change": 0.0,
+          "treatment_better": false
+        },
+        "mean_total_tokens": {
+          "control": 3024635.8,
+          "treatment": 2455171.6,
+          "pct_change": -18.8,
+          "treatment_better": true
+        },
+        "mean_tool_calls": {
+          "control": 57.2,
+          "treatment": 48.2,
+          "pct_change": -15.7,
+          "treatment_better": true
+        },
+        "mean_tool_calls_to_first_correct_edit": {
+          "control": 14.4,
+          "treatment": 10.8,
+          "pct_change": -25.0,
+          "treatment_better": true
+        },
+        "mean_cost_usd": {
+          "control": 0.4829,
+          "treatment": 0.4015,
+          "pct_change": -16.9,
+          "treatment_better": true
+        },
+        "mean_duration_ms": {
+          "control": 212609.0,
+          "treatment": 184651.0,
+          "pct_change": -13.1,
+          "treatment_better": true
+        }
+      },
+      "random_files": {
+        "accept_pass_rate": {
+          "control": 1.0,
+          "treatment": 1.0,
+          "pct_change": 0.0,
+          "treatment_better": false
+        },
+        "mean_recall": {
+          "control": 0.75,
+          "treatment": 0.8,
+          "pct_change": 6.7,
+          "treatment_better": true
+        },
+        "mean_total_tokens": {
+          "control": 3024635.8,
+          "treatment": 2961916.8,
+          "pct_change": -2.1,
+          "treatment_better": true
+        },
+        "mean_tool_calls": {
+          "control": 57.2,
+          "treatment": 63.6,
+          "pct_change": 11.2,
+          "treatment_better": false
+        },
+        "mean_tool_calls_to_first_correct_edit": {
+          "control": 14.4,
+          "treatment": 18.6,
+          "pct_change": 29.2,
+          "treatment_better": false
+        },
+        "mean_cost_usd": {
+          "control": 0.4829,
+          "treatment": 0.4962,
+          "pct_change": 2.8,
+          "treatment_better": false
+        },
+        "mean_duration_ms": {
+          "control": 212609.0,
+          "treatment": 185509.0,
+          "pct_change": -12.7,
+          "treatment_better": true
+        }
+      },
+      "treatment": {
+        "accept_pass_rate": {
+          "control": 1.0,
+          "treatment": 1.0,
+          "pct_change": 0.0,
+          "treatment_better": false
+        },
+        "mean_recall": {
+          "control": 0.75,
+          "treatment": 0.75,
+          "pct_change": 0.0,
+          "treatment_better": false
+        },
+        "mean_total_tokens": {
+          "control": 3024635.8,
+          "treatment": 2532698.8,
+          "pct_change": -16.3,
+          "treatment_better": true
+        },
+        "mean_tool_calls": {
+          "control": 57.2,
+          "treatment": 47.6,
+          "pct_change": -16.8,
+          "treatment_better": true
+        },
+        "mean_tool_calls_to_first_correct_edit": {
+          "control": 14.4,
+          "treatment": 12,
+          "pct_change": -16.7,
+          "treatment_better": true
+        },
+        "mean_cost_usd": {
+          "control": 0.4829,
+          "treatment": 0.4218,
+          "pct_change": -12.7,
+          "treatment_better": true
+        },
+        "mean_duration_ms": {
+          "control": 212609.0,
+          "treatment": 174590.0,
+          "pct_change": -17.9,
+          "treatment_better": true
+        }
+      }
+    }
+  },
+  "runs": [
+    {
+      "arm": "anchors_only",
+      "run_index": 0,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 1.0,
+      "n_tool_calls": 42,
+      "tool_calls_to_first_correct_edit": 7,
+      "total_tokens": 2017439,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/cache.py"
+      ]
+    },
+    {
+      "arm": "anchors_only",
+      "run_index": 1,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 1.0,
+      "n_tool_calls": 34,
+      "tool_calls_to_first_correct_edit": 7,
+      "total_tokens": 1563343,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/cache.py"
+      ]
+    },
+    {
+      "arm": "anchors_only",
+      "run_index": 2,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 1.0,
+      "n_tool_calls": 48,
+      "tool_calls_to_first_correct_edit": 13,
+      "total_tokens": 2480136,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/http.py"
+      ]
+    },
+    {
+      "arm": "anchors_only",
+      "run_index": 3,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 0.6,
+      "n_tool_calls": 64,
+      "tool_calls_to_first_correct_edit": 11,
+      "total_tokens": 3441524,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/cache.py",
+        "tests/cache/tests.py",
+        "tests/middleware/tests.py"
+      ]
+    },
+    {
+      "arm": "anchors_only",
+      "run_index": 4,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 1.0,
+      "n_tool_calls": 53,
+      "tool_calls_to_first_correct_edit": 16,
+      "total_tokens": 2773416,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/cache.py"
+      ]
+    },
+    {
+      "arm": "control",
+      "run_index": 0,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 1.0,
+      "n_tool_calls": 74,
+      "tool_calls_to_first_correct_edit": 17,
+      "total_tokens": 4088779,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/cache.py"
+      ]
+    },
+    {
+      "arm": "control",
+      "run_index": 1,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 1.0,
+      "n_tool_calls": 45,
+      "tool_calls_to_first_correct_edit": 15,
+      "total_tokens": 2326979,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/cache.py"
+      ]
+    },
+    {
+      "arm": "control",
+      "run_index": 2,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 1.0,
+      "n_tool_calls": 57,
+      "tool_calls_to_first_correct_edit": 15,
+      "total_tokens": 2945886,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/http.py"
+      ]
+    },
+    {
+      "arm": "control",
+      "run_index": 3,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 0.6,
+      "n_tool_calls": 64,
+      "tool_calls_to_first_correct_edit": 13,
+      "total_tokens": 3395416,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/http.py",
+        "tests/cache/tests.py",
+        "tests/middleware/tests.py"
+      ]
+    },
+    {
+      "arm": "control",
+      "run_index": 4,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 1.0,
+      "n_tool_calls": 46,
+      "tool_calls_to_first_correct_edit": 12,
+      "total_tokens": 2366119,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/cache.py"
+      ]
+    },
+    {
+      "arm": "random_files",
+      "run_index": 0,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 0.6,
+      "n_tool_calls": 54,
+      "tool_calls_to_first_correct_edit": 18,
+      "total_tokens": 2760415,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/cache.py",
+        "tests/cache/tests.py",
+        "tests/middleware/tests.py"
+      ]
+    },
+    {
+      "arm": "random_files",
+      "run_index": 1,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 1.0,
+      "n_tool_calls": 86,
+      "tool_calls_to_first_correct_edit": 28,
+      "total_tokens": 2126537,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/cache.py"
+      ]
+    },
+    {
+      "arm": "random_files",
+      "run_index": 2,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 0.6,
+      "n_tool_calls": 77,
+      "tool_calls_to_first_correct_edit": 17,
+      "total_tokens": 4686973,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/http.py",
+        "tests/cache/tests.py",
+        "tests/middleware/tests.py"
+      ]
+    },
+    {
+      "arm": "random_files",
+      "run_index": 3,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 1.0,
+      "n_tool_calls": 49,
+      "tool_calls_to_first_correct_edit": 16,
+      "total_tokens": 2555473,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/cache.py"
+      ]
+    },
+    {
+      "arm": "random_files",
+      "run_index": 4,
+      "accept_pass": true,
+      "recall": 1.0,
+      "precision": 1.0,
+      "n_tool_calls": 52,
+      "tool_calls_to_first_correct_edit": 14,
+      "total_tokens": 2680186,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/cache.py",
+        "utils/http.py"
+      ]
+    },
+    {
+      "arm": "treatment",
+      "run_index": 0,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 1.0,
+      "n_tool_calls": 40,
+      "tool_calls_to_first_correct_edit": 11,
+      "total_tokens": 2077557,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/cache.py"
+      ]
+    },
+    {
+      "arm": "treatment",
+      "run_index": 1,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 1.0,
+      "n_tool_calls": 42,
+      "tool_calls_to_first_correct_edit": 9,
+      "total_tokens": 2089728,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/cache.py"
+      ]
+    },
+    {
+      "arm": "treatment",
+      "run_index": 2,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 1.0,
+      "n_tool_calls": 48,
+      "tool_calls_to_first_correct_edit": 12,
+      "total_tokens": 2852291,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/http.py"
+      ]
+    },
+    {
+      "arm": "treatment",
+      "run_index": 3,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 1.0,
+      "n_tool_calls": 47,
+      "tool_calls_to_first_correct_edit": 12,
+      "total_tokens": 2319230,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/cache.py"
+      ]
+    },
+    {
+      "arm": "treatment",
+      "run_index": 4,
+      "accept_pass": true,
+      "recall": 0.75,
+      "precision": 1.0,
+      "n_tool_calls": 61,
+      "tool_calls_to_first_correct_edit": 16,
+      "total_tokens": 3324688,
+      "files_edited": [
+        "middleware/cache.py",
+        "middleware/http.py",
+        "utils/cache.py"
+      ]
+    }
+  ]
+}

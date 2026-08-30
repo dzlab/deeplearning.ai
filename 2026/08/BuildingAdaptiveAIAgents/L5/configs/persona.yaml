@@ -1,0 +1,46 @@
+# module_5_model_space/weight/configs/persona.yaml
+# Module 4 weight-space — angry-persona + partner-competence arms.
+domain: supplychain          # Oracle seed still used for the memory-ready check
+memory_backend: real
+# Embedder matches the voyage default arm (out-of-DB Python MiniLM, 384-d, no
+# OCI) so the shared course DB schema is consistent and the persona arm runs on
+# the Oracle-only/CPU sandbox. The persona TRAIN path doesn't use the memory at
+# all; this only satisfies the notebook's "memory ready" check.
+embedder_model: "python:all-MiniLM-L6-v2"
+llm_model: "oci/xai.grok-4.3"
+seed: 42
+
+gemma:
+  base_model_id: "unsloth/gemma-3n-E4B-it"
+  behavior: "persona"
+  cached_responses_path: "module_5_model_space/weight/data/persona_cached_responses.json"
+  persona_adapters_dir: "module_5_model_space/weight/data/persona_adapters"
+  # NOTE: the persona arm is presented descriptively — run_persona.py does NOT
+  # enforce a regression gate (unlike the refusal arm). These thresholds are
+  # documentation only. competence is an HONEST 0.00 limitation (see README);
+  # it would fail a kept_capability gate, which is exactly why we don't gate.
+  behavior_rate_drop_min: 0.5     # persona behavior lift (measured +1.00); not enforced
+  # v3 trains on the full ~4872-row Opus fixture (course_lab/data/persona_pairs.json),
+  # loaded by build_persona_corpus. n_persona_train large => selects the whole
+  # pool with deterministic wrap. v1/v2 are template-era arms (unaffected).
+  n_persona_train: 5000
+  # v4 trains on the ~14.6k combinatorial-variety fixture
+  # (course_lab/data/persona_pairs_v4.json) at 3 epochs — the register-
+  # collapse fix (2026-06-11 design). Persona-only.
+  n_persona_train_v4: 15000
+  n_competence_train: 80
+  n_partners: 8
+
+qlora:
+  base_model_id: "unsloth/gemma-3n-E4B-it"
+  max_seq_length: 512
+  qlora_epochs: 8
+  qlora_r: 32
+  qlora_alpha: 64
+
+finetune:
+  # v1 = persona(template), v2 = +competence, v3 = 5k Opus persona-only,
+  # v4 = ~14.6k combinatorial-variety persona-only (train with
+  # DLAICL_PERSONA_WEEKS=4 to leave v1-v3 untouched).
+  weeks: [1, 2, 3, 4]
+  epochs_per_week: {1: 8, 2: 10, 3: 10, 4: 3}

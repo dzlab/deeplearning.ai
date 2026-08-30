@@ -1,0 +1,1097 @@
+{
+  "customs/compliance.py::check_import_license": [
+    "where do we confirm the necessary permit for bringing in or sending out goods is still valid?",
+    "how is the required trade authorization checked for currency before shipping?",
+    "verify that the mandatory clearance permit for cross-border movement is in good standing"
+  ],
+  "customs/compliance.py::evaluate_export_control": [
+    "how do we assess whether a shipment falls under restricted-technology rules before sending abroad?",
+    "where is a consignment checked against regulated-goods classifications for outbound trade?",
+    "determine if an outgoing item is subject to controlled-commodity regulations"
+  ],
+  "customs/compliance.py::flag_compliance_hold": [
+    "where do we mark a consignment as stopped for a regulatory review?",
+    "how is a shipment tagged to be held back while conformance is examined?",
+    "set a block on a cargo pending a rule check"
+  ],
+  "customs/compliance.py::record_compliance_audit_trail": [
+    "where do we write a tamper-proof log entry for a regulatory check?",
+    "how do we save an unchangeable log of a conformance event?",
+    "append a permanent, write-once trace of a regulatory action"
+  ],
+  "customs/compliance.py::rescreen_party_on_list_update": [
+    "how do we re-check already-saved contacts after a watchlist gets refreshed?",
+    "where do we run stored business partners again once the restricted registry changes?",
+    "revalidate previously vetted entities following a sanctions roster revision"
+  ],
+  "customs/compliance.py::screen_denied_party": [
+    "where do we check a business contact against blocked and restricted entity registries?",
+    "how is a counterparty matched against watchlists of prohibited organizations?",
+    "vet a trading partner to see if they appear on any banned-entity rosters"
+  ],
+  "customs/compliance.py::submit_customs_filing": [
+    "where do we send the electronic border-entry declaration to the authorities?",
+    "how is a digital import lodgement transmitted to the government office?",
+    "file the online clearance entry with the regulatory agency"
+  ],
+  "customs/compliance.py::verify_document_completeness": [
+    "where do we confirm every paper required at the border has been supplied?",
+    "how do we make sure none of the mandatory clearance paperwork is missing?",
+    "check that the full set of required entry forms is present"
+  ],
+  "customs/duties.py::admit_to_bonded_warehouse": [
+    "where do we move cargo into a secured storage facility before tax is settled?",
+    "how are items placed into a controlled depot where charges are suspended?",
+    "intake of merchandise into a sealed storage area pending payment"
+  ],
+  "customs/duties.py::apply_preferential_origin": [
+    "how do we grant reduced rates when goods qualify under a free-trade pact?",
+    "where is a lower tariff applied because the source country has a treaty in place?",
+    "give an item favorable treatment based on where it was produced under a trade deal"
+  ],
+  "customs/duties.py::calculate_duty_drawback": [
+    "how much tax can be reclaimed on items that were shipped back out of the country?",
+    "where do we work out the refund owed for goods sent abroad again after import?",
+    "compute the reimbursable charge on merchandise that gets re-exported"
+  ],
+  "customs/duties.py::classify_hs_code": [
+    "where do we map a product to its harmonized tariff category?",
+    "how does a good get assigned its standardized trade classification number?",
+    "determine the international tariff schedule label for a given item"
+  ],
+  "customs/duties.py::compute_duty": [
+    "how much import tax is owed on a single invoice line given its tariff classification and declared worth?",
+    "where do we figure out the charge a government levies on an item using its trade category and price?",
+    "calculate the tariff payable for one item from its classification number and stated amount"
+  ],
+  "customs/duties.py::defer_duty_payment": [
+    "where do we postpone settling the tax owed under a delayed-billing arrangement?",
+    "how does a shipment get its charge pushed to a later date through a deferral program?",
+    "hold off on paying the levy by enrolling in a postponement scheme"
+  ],
+  "customs/duties.py::estimate_landed_cost": [
+    "how do we work out the all-in delivered price including tariffs, shipping, and levies?",
+    "where is the full delivered total computed across freight, tariffs, and charges?",
+    "project the complete final expense of an import covering transport and taxes"
+  ],
+  "customs/duties.py::recompute_duty_with_drawback": [
+    "where do we recalculate the tax owed after subtracting any refunds we can reclaim?",
+    "how is the net charge adjusted once eligible reimbursement claims are taken off?",
+    "redo the tariff figure accounting for reclaimable refund entitlements"
+  ],
+  "finance/invoicing.py::approve_invoice": [
+    "where do we route a draft bill through sign-offs based on its amount?",
+    "how does a bill get the right managerial authorizations depending on value and department?",
+    "sending an unposted bill up the approval chain by spend threshold"
+  ],
+  "finance/invoicing.py::compute_invoice_tax": [
+    "where do we calculate the levies owed on a bill by location and product type?",
+    "how are jurisdictional duties figured per line and for the whole document?",
+    "computing the government charges on a billing document using regional codes"
+  ],
+  "finance/invoicing.py::generate_invoice": [
+    "where do we produce the customer's billing document from a finalized deal?",
+    "how is a buyer's bill rendered with line items, taxes, and terms?",
+    "creating the billing paperwork once an order is confirmed"
+  ],
+  "finance/invoicing.py::issue_credit_note": [
+    "where do we raise a refund document against a posted bill for returns or rebates?",
+    "how is a buyer's account adjusted downward after an overcharge or return?",
+    "creating a negative billing memo to offset a finalized charge"
+  ],
+  "finance/invoicing.py::match_invoice_to_po": [
+    "where do we line up a vendor's bill against its purchase order and receiving notes?",
+    "how is a three-way reconciliation done between a supplier bill, the PO, and goods receipts?",
+    "cross-checking a supplier's bill with its order and delivery records within tolerance"
+  ],
+  "finance/invoicing.py::open_invoice_dispute": [
+    "where do we start a contested-charge case when a buyer challenges a bill?",
+    "how is a complaint logged against a bill over amounts or terms?",
+    "starting a grievance record when a client objects to what they were charged"
+  ],
+  "finance/invoicing.py::rematch_invoice_after_credit_note": [
+    "where do we re-run the supplier-bill reconciliation once a refund memo changes the balance?",
+    "how is the three-way verification redone once an adjustment lowers the open amount?",
+    "re-checking a vendor bill against its order following a balance correction"
+  ],
+  "finance/invoicing.py::resolve_invoice_dispute": [
+    "where do we close out a contested-charge case by crediting or denying the claim?",
+    "how is a buyer's billing complaint settled and finalized?",
+    "wrapping up a billing grievance with a full, partial, or rejected outcome"
+  ],
+  "finance/settlement.py::apply_early_payment_discount": [
+    "where do we take the prompt-pay deduction when paying before the cutoff?",
+    "how is a dynamic pay-ahead reduction taken when funds go out before the cutoff?",
+    "deducting the prompt-pay incentive at the time funds are disbursed"
+  ],
+  "finance/settlement.py::convert_settlement_currency": [
+    "where do we translate a payable from the bill's denomination into the disbursement money at the booking rate?",
+    "how is a foreign-denominated payable converted at the booked exchange rate?",
+    "switching a payable's money units for the payout using the recorded rate"
+  ],
+  "finance/settlement.py::execute_settlement": [
+    "where do we actually release the queued funds out to vendors?",
+    "how is a planned disbursement batch run through the banking rails?",
+    "firing off the prepared payout to suppliers"
+  ],
+  "finance/settlement.py::forecast_settlement_cashflow": [
+    "where do we project upcoming cash going out from queued payouts?",
+    "how is near-term outbound liquidity estimated from pending disbursements?",
+    "predicting short-horizon cash drain from planned payment batches"
+  ],
+  "finance/settlement.py::get_payment_status": [
+    "where can I read the current state of a disbursement from queued to cleared?",
+    "how do we look up whether a payout has cleared, returned, or is still pending?",
+    "fetching where a given disbursement sits in its lifecycle"
+  ],
+  "finance/settlement.py::reconcile_remittance": [
+    "where do we match an incoming payment advice against outstanding scheduled disbursements?",
+    "how is a received payment advice tied back to open bills and queued payouts?",
+    "lining up inbound payment notices with the disbursements we planned"
+  ],
+  "finance/settlement.py::reverse_settlement": [
+    "where do we undo a completed payout that was a duplicate or sent wrongly?",
+    "how is a finalized disbursement backed out after a return or error?",
+    "unwinding a payment that already went out by mistake"
+  ],
+  "finance/settlement.py::schedule_payment": [
+    "where do we line up an authorized bill to be paid on its best date?",
+    "how is the ideal disbursement date chosen given terms and cash policy?",
+    "queuing an approved bill for funds release at the optimal moment"
+  ],
+  "ingestion/customs.py::audit_clearance_history": [
+    "where do we pull the complete border-processing log for a trip?",
+    "how do we retrieve every past release event for a voyage?",
+    "return the full historical trail of frontier-processing states for a shipment leg"
+  ],
+  "ingestion/customs.py::fetch_clearance_status": [
+    "where do we look up the most recent border-release state for a trip?",
+    "how do we read back the current customs progress of a voyage?",
+    "retrieve the latest border-processing condition for a shipment leg"
+  ],
+  "ingestion/customs.py::flag_held_shipment": [
+    "where do we mark a consignment as detained at the frontier?",
+    "how is a cargo tagged when it gets stopped during border processing?",
+    "set an indicator that goods are stuck at the port of entry"
+  ],
+  "ingestion/customs.py::persist_clearance_status": [
+    "where do we save the border-release state for a particular trip?",
+    "how is the current customs progress for a voyage written to the store?",
+    "record the latest border-processing condition of a shipment leg"
+  ],
+  "ingestion/customs.py::resolve_customs_hold": [
+    "where do we clear a detention so a stopped shipment can proceed?",
+    "how is a frontier stoppage marked as released?",
+    "close out a border detention once the issue is settled"
+  ],
+  "ingestion/manifest.py::archive_manifest": [
+    "where do we move a finished cargo file into long-term cheap storage?",
+    "how is a completed shipment document pushed to a cold tier for retention?",
+    "stash a done-with cargo listing into deep storage"
+  ],
+  "ingestion/manifest.py::enrich_manifest_metadata": [
+    "where do we attach shipping-line and ship details onto a cargo document?",
+    "how is operator and craft information added to a shipment file?",
+    "augment a cargo listing with the hauler and vessel particulars"
+  ],
+  "ingestion/manifest.py::normalize_manifest_ports": [
+    "where do we translate harbor name variants into the standard location codes?",
+    "how are differing terminal labels reconciled to a canonical code list?",
+    "convert inconsistent dock names to their official standardized identifiers"
+  ],
+  "ingestion/manifest.py::parse_manifest": [
+    "where do we turn a raw EDI cargo document into structured trip entries?",
+    "how is an incoming shipment file decoded into per-voyage records?",
+    "read a raw electronic data file and produce voyage rows"
+  ],
+  "ingestion/manifest.py::validate_manifest": [
+    "where do we check a parsed cargo file conforms to the expected structure?",
+    "how is a decoded shipment document verified against its definition?",
+    "confirm a processed cargo listing matches the required layout"
+  ],
+  "inventory/cycle_count.py::compute_abc_count_frequency": [
+    "where do we derive how often to tally an item based on its A/B/C tier?",
+    "how is counting cadence determined from a product's value classification?",
+    "set how regularly to verify an item according to its ABC ranking"
+  ],
+  "inventory/cycle_count.py::compute_count_accuracy": [
+    "where do we gauge how accurate our records are based on recent stock checks?",
+    "how is record-versus-physical correctness measured from latest counts?",
+    "gauge how well the books match reality from recent tallies"
+  ],
+  "inventory/cycle_count.py::export_count_accuracy_report": [
+    "where do we generate the tally-quality summary broken out by value tier?",
+    "how is a tally-correctness document produced grouped by A/B/C class?",
+    "build the stock-tally correctness summary segmented by classification"
+  ],
+  "inventory/cycle_count.py::freeze_inventory_for_count": [
+    "where do we lock a location so no movements happen while it's being counted?",
+    "how do we block transactions in an area during a physical verification?",
+    "halt activity in a bin so a stock check isn't disrupted"
+  ],
+  "inventory/cycle_count.py::reconcile_count_variance": [
+    "where do we post a counted discrepancy back into the inventory books?",
+    "how is the difference between counted and system quantity settled in the ledger?",
+    "apply a counting gap correction to the stock records"
+  ],
+  "inventory/cycle_count.py::record_count_result": [
+    "where do we capture the actual quantity found during a physical inventory check?",
+    "how is the hand-counted number from a completed verification logged?",
+    "store the observed on-floor tally from a finished stock check"
+  ],
+  "inventory/cycle_count.py::schedule_cycle_count": [
+    "where do we plan the timing of the next physical stock check for an item or bin?",
+    "how is an upcoming inventory verification queued for a product or location?",
+    "set when the next counting pass should occur for an item"
+  ],
+  "inventory/cycle_count.py::unfreeze_inventory_after_count": [
+    "where do we lift the movement block on a location once counting is done?",
+    "how is a location reopened for transactions once its tally is settled?",
+    "remove the activity hold on an area following reconciliation"
+  ],
+  "inventory/forecasting.py::apply_promotion_uplift": [
+    "where do we bump up the demand prediction during a marketing event window?",
+    "how is a sales-event lift applied to projected periods inside a campaign?",
+    "increase forecast values for periods covered by a promo push"
+  ],
+  "inventory/forecasting.py::apply_seasonal_adjustment": [
+    "where do we layer time-of-year multipliers onto a base demand prediction?",
+    "how are period-specific weighting factors layered onto a baseline projection?",
+    "scale a projection by period-specific indices for time-of-year effects"
+  ],
+  "inventory/forecasting.py::compute_forecast_accuracy": [
+    "where do we measure how close our predictions were to what actually happened?",
+    "how is prediction error quantified against realized sales using percentage error?",
+    "evaluate prediction quality as MAPE versus the real outcomes"
+  ],
+  "inventory/forecasting.py::detect_forecast_bias": [
+    "where do we spot a consistent tendency to over- or under-predict demand?",
+    "how do we identify a directional skew in our predictions over time?",
+    "spot a systematic lean in the projection versus actuals"
+  ],
+  "inventory/forecasting.py::export_forecast_to_replenishment": [
+    "where do we hand off the locked projection to the restocking planning step?",
+    "how is the finalized demand projection passed downstream for restocking?",
+    "send the completed projection into the restocking-plan process"
+  ],
+  "inventory/forecasting.py::forecast_demand": [
+    "where do we predict future need for an item over a time window?",
+    "how is the baseline sales projection built for a product across a horizon?",
+    "generate the initial usage prediction for an item over a horizon"
+  ],
+  "inventory/forecasting.py::recompute_forecast_with_market_signals": [
+    "where do we fold external trade indicators into the demand projection?",
+    "how is the projection adjusted using outside economic or competitor cues?",
+    "blend third-party trade data into the demand projection"
+  ],
+  "inventory/forecasting.py::reforecast_on_actuals": [
+    "where do we refit the demand model as fresh real numbers come in?",
+    "how is the prediction updated once new realized data lands?",
+    "regenerate the projection using newly observed sales"
+  ],
+  "inventory/replenishment.py::allocate_supplier_capacity": [
+    "where do we split a buy quantity across our approved vendors?",
+    "how is a replenishment amount divided among qualified suppliers?",
+    "distribute an order's units across the sanctioned vendor pool"
+  ],
+  "inventory/replenishment.py::compute_lead_time_demand": [
+    "where do we estimate how much will be consumed while waiting for a supplier delivery?",
+    "how do we project usage across the procurement wait window?",
+    "estimate expected consumption during the vendor delivery interval"
+  ],
+  "inventory/replenishment.py::compute_min_max_levels": [
+    "where do we set the floor and ceiling stocking targets for a product?",
+    "how are the lower and upper bounds for a min/max replenishment policy derived?",
+    "determine the bottom and top stocking thresholds for an item"
+  ],
+  "inventory/replenishment.py::compute_reorder_point": [
+    "where do we decide the fixed level at which an item should be restocked?",
+    "how is the static trigger threshold for buying more of a product set?",
+    "determine the constant restock trigger for an item without seasonal factors"
+  ],
+  "inventory/replenishment.py::compute_safety_stock": [
+    "where do we work out the buffer needed to cover demand uncertainty at a target service level?",
+    "how is the protective inventory cushion sized from variability and fill-rate goals?",
+    "calculate the extra buffer reserve to guard against demand swings"
+  ],
+  "inventory/replenishment.py::generate_replenishment_order": [
+    "where do we raise a purchase requisition when an item falls below its restock trigger?",
+    "how is a buy request created for a product that's dropped under its threshold?",
+    "produce a procurement requisition to top up a low item"
+  ],
+  "inventory/replenishment.py::reallocate_replenishment_on_shortfall": [
+    "where do we redistribute an order when a vendor can't deliver the full amount?",
+    "how do we shift restock quantities to other suppliers after a vendor can't fulfill?",
+    "re-split a purchase across vendors when one falls short"
+  ],
+  "inventory/replenishment.py::recompute_reorder_point_with_seasonality": [
+    "where do we adjust the restock trigger to account for seasonal demand swings?",
+    "how do we redo the buy threshold so it reflects time-of-year demand patterns?",
+    "recalculate an item's restock trigger factoring in time-of-year demand"
+  ],
+  "inventory/stock.py::adjust_stock_level": [
+    "where do we manually correct an item's balance and log the change?",
+    "how is a hand-entered inventory tweak recorded along with a trail entry?",
+    "apply an operator-entered correction to a product's count and log a movement record"
+  ],
+  "inventory/stock.py::compute_available_to_promise": [
+    "where do we figure out how much we can actually commit to new customer orders?",
+    "how do we calculate the quantity free to sell after existing commitments at a location?",
+    "determine the promisable balance for a product at a facility"
+  ],
+  "inventory/stock.py::flag_negative_stock": [
+    "where do we catch balances that have dropped below zero?",
+    "how do we identify item/location balances showing an impossible below-zero count?",
+    "raise an alert when an on-hand balance turns below zero"
+  ],
+  "inventory/stock.py::get_on_hand_quantity": [
+    "where do we look up how many units of an item are physically sitting in a warehouse?",
+    "how do we fetch the available count of a product at a particular location?",
+    "retrieve the present inventory balance for an item at one facility"
+  ],
+  "inventory/stock.py::release_stock_reservation": [
+    "where do we cancel a hold that was previously placed on inventory?",
+    "how do we free up units that were earmarked but no longer needed?",
+    "undo a prior earmarking of product so it's sellable again"
+  ],
+  "inventory/stock.py::reserve_stock": [
+    "where do we earmark units against a customer order line?",
+    "how do we set aside inventory so it can't be sold to anyone else for an order?",
+    "hold a number of units for a specific demand line"
+  ],
+  "inventory/stock.py::transfer_stock_between_sites": [
+    "where do we shift inventory from one warehouse to another?",
+    "how do we relocate units from a sending location to a receiving one?",
+    "move product out of one facility into a different one"
+  ],
+  "inventory/stock.py::value_inventory_position": [
+    "where do we calculate the dollar worth of what's sitting on the shelves?",
+    "how is the monetary worth of on-hand goods computed?",
+    "determine the dollar amount of the current on-hand holding"
+  ],
+  "ops/alerts.py::clear_alert": [
+    "where do we mark a notification as handled once the issue is fixed?",
+    "how is an open warning dismissed after it's been dealt with?",
+    "what closes out a flag that's no longer relevant?"
+  ],
+  "ops/alerts.py::escalate_alert": [
+    "where do we bump an ignored warning up to a higher support level?",
+    "how is an unanswered notification pushed to the next responder tier?",
+    "what forwards a flag nobody acknowledged to senior staff?"
+  ],
+  "ops/alerts.py::list_active_alerts": [
+    "where do we fetch every open warning tied to a specific voyage?",
+    "how do we enumerate the outstanding warnings currently raised for a given vessel?",
+    "what returns all live notifications associated with one shipment?"
+  ],
+  "ops/alerts.py::raise_customs_alert": [
+    "where do we flag that a shipment is stuck in border clearance?",
+    "how is a notification fired when goods get held at the frontier checkpoint?",
+    "what warns the team that a voyage is blocked by border inspection?"
+  ],
+  "ops/alerts.py::raise_delay_alert": [
+    "where do we notify someone when a shipment will miss its promised arrival window?",
+    "how is a warning triggered when a voyage runs behind the agreed deadline?",
+    "what flags a late vessel to the operations team when ETA breaches the commitment?"
+  ],
+  "ops/inventory.py::allocate_inventory": [
+    "where do we assign dock space to a ship that's coming in?",
+    "how is berth capacity reserved for an incoming vessel?",
+    "what hands over portside storage to a newly arriving voyage?"
+  ],
+  "ops/inventory.py::query_inventory_availability": [
+    "where do we look up how much open dock space a harbor has on a given day?",
+    "how do we check free berth capacity for a terminal on a specific date?",
+    "what returns the spare portside room available at a location for a date?"
+  ],
+  "ops/inventory.py::reconcile_inventory": [
+    "where do we compare the physical count against what the records say we should have?",
+    "how is a discrepancy between actual and booked stock resolved?",
+    "what checks that on-hand figures match the expected ledger?"
+  ],
+  "ops/inventory.py::release_inventory": [
+    "where do we free up the reserved dock slot after a ship leaves?",
+    "how is held berth space given back once a vessel sails away?",
+    "what relinquishes the storage hold when a voyage casts off?"
+  ],
+  "ops/inventory.py::snapshot_inventory_state": [
+    "where do we save a frozen picture of current stock levels at a moment in time?",
+    "how is the present condition of holdings captured for later reference?",
+    "what stores a timestamped capture of where everything stands?"
+  ],
+  "orders/fulfillment.py::check_fulfillment_sla": [
+    "where do we compare a delivery against its promised on-time target?",
+    "how do we test whether an order is meeting its service-level commitment?",
+    "checking a purchase against its delivery-time obligation"
+  ],
+  "orders/fulfillment.py::compute_fulfillment_lead_time": [
+    "where do we measure the actual elapsed days from order placement to delivery?",
+    "how is the real turnaround duration calculated for a dispatched order?",
+    "figuring out how many days a completed delivery actually took"
+  ],
+  "orders/fulfillment.py::confirm_shipment": [
+    "where do we record that the goods have actually left the dock?",
+    "how do we mark that a delivery has physically departed?",
+    "registering that an outbound load has left the building"
+  ],
+  "orders/fulfillment.py::export_fulfillment_metrics": [
+    "where do we dump delivery performance numbers for reporting?",
+    "how are dispatch KPIs extracted for dashboards?",
+    "pulling out the completion-performance figures for analysis"
+  ],
+  "orders/fulfillment.py::fulfill_order": [
+    "where do we drive a reserved deal all the way through to delivery?",
+    "how is an allocated purchase processed completely from start to finish?",
+    "running a request through its full completion flow once stock is reserved"
+  ],
+  "orders/fulfillment.py::fulfill_partial_order": [
+    "where do we ship the in-stock portion now and hold the remainder for later?",
+    "how do we send what's available and put the rest on backorder?",
+    "completing only the deliverable part of a deal and deferring the shortfall"
+  ],
+  "orders/fulfillment.py::handoff_pick_pack_ship": [
+    "where do we pass a deal over to the warehouse picking and shipping process?",
+    "how is a request routed into the retrieve, box, and dispatch pipeline?",
+    "transferring an order to the warehouse outbound workflow"
+  ],
+  "orders/fulfillment.py::track_delivery": [
+    "where do we follow a parcel's journey through the courier network?",
+    "how is a shipment's transit progress monitored with the logistics provider?",
+    "watching a dispatched load move toward the recipient"
+  ],
+  "orders/sales_orders.py::allocate_stock_to_order": [
+    "where do we reserve on-hand inventory against the lines of a confirmed deal?",
+    "how is warehouse availability assigned to each line of a purchase?",
+    "earmarking units in the warehouse for a buyer's requested items"
+  ],
+  "orders/sales_orders.py::amend_order_lines": [
+    "where do we change quantities or products on a deal that is still open?",
+    "how is an active purchase modified after it was placed?",
+    "editing the line entries on an unshipped sales request"
+  ],
+  "orders/sales_orders.py::cancel_sales_order": [
+    "where do we kill an open deal and free up the inventory it was holding?",
+    "how do we abort a purchase and undo its reservations?",
+    "voiding an active customer request and releasing the units it locked"
+  ],
+  "orders/sales_orders.py::create_sales_order": [
+    "where do we open a brand-new purchase request when a buyer places a deal?",
+    "how is an incoming client purchase turned into a tracked record?",
+    "drafting the initial customer-request entry from a buyer's ask"
+  ],
+  "orders/sales_orders.py::get_order_status": [
+    "where can I look up where a purchase currently sits in its lifecycle?",
+    "how do we read back the present state of a buyer's deal?",
+    "fetching the workflow stage a given customer request is in"
+  ],
+  "orders/sales_orders.py::reallocate_stock_on_shortage": [
+    "where do we redistribute reserved units across lines when inventory runs low?",
+    "how is earmarked inventory shuffled between lines when supply can't cover everything?",
+    "rebalancing assigned units among lines after a shortfall"
+  ],
+  "orders/sales_orders.py::split_sales_order": [
+    "where do we break one large deal into separate shipment batches?",
+    "how is a single purchase divided into multiple delivery groups?",
+    "carving a customer request into several dispatch sets"
+  ],
+  "orders/sales_orders.py::validate_customer_credit": [
+    "where do we check whether a buyer can afford their purchase before accepting it?",
+    "how is a client's spending limit enforced at the time of purchase?",
+    "what blocks a deal when the account's outstanding balance is too high?"
+  ],
+  "planning/eta.py::adjust_eta_for_storm": [
+    "where do we revise the projected arrival when bad weather forces a detour?",
+    "how does a diversion around rough seas change the expected docking time?",
+    "shift the predicted arrival timestamp after a vessel is pushed off its planned path by weather"
+  ],
+  "planning/eta.py::compute_eta": [
+    "how do we work out the projected arrival time from where a ship is now and how fast it's going?",
+    "where is the expected docking moment derived from current location and velocity?",
+    "figure the predicted port-arrival timestamp using present coordinates and pace"
+  ],
+  "planning/eta.py::estimate_eta_confidence": [
+    "where do we produce an uncertainty band around the predicted arrival?",
+    "how is a probable range expressed for when a ship will actually dock?",
+    "give the margin of error on the projected port-arrival time"
+  ],
+  "planning/eta.py::publish_eta_update": [
+    "where do we broadcast a revised arrival forecast to subscribing systems?",
+    "how is a changed docking-time prediction pushed out to downstream listeners?",
+    "emit an arrival-forecast change event for other services to consume"
+  ],
+  "planning/eta.py::recompute_eta": [
+    "where do we refresh the projected arrival once a new location reading comes in?",
+    "how is the expected docking time recalculated after the ship's coordinates change?",
+    "update the predicted arrival timestamp following a fresh position fix"
+  ],
+  "planning/routing.py::export_route_geojson": [
+    "where do we serialize a sailing track into a standard geographic JSON line feature?",
+    "how is a path converted to a mappable geospatial-format linestring?",
+    "render a course as a geo-encoded connected-line document"
+  ],
+  "planning/routing.py::optimize_route_fuel": [
+    "where do we redraw a path to burn the least bunker oil?",
+    "how is a sailing course re-planned to cut consumption to a minimum?",
+    "find the most economical track that minimizes energy use"
+  ],
+  "planning/routing.py::plan_route": [
+    "where do we lay out the baseline shortest-distance path between two harbors?",
+    "how is an initial sailing course drawn across the globe from one port to another?",
+    "build the default geodesic track connecting two terminals"
+  ],
+  "planning/routing.py::reroute_around_storm": [
+    "where do we redraw a ship's path to dodge a bad-weather system?",
+    "how is a sailing course altered to skirt a tempest area?",
+    "compute an alternate track that avoids a severe weather cell"
+  ],
+  "planning/routing.py::validate_route_waypoints": [
+    "where do we confirm every turning point of a path sits over navigable sea?",
+    "how do we check that no leg of a course crosses land?",
+    "verify all the marker coordinates of a track lie in sailable water"
+  ],
+  "procurement/contracts.py::create_contract": [
+    "how do we turn a won solicitation into a binding vendor agreement?",
+    "where is a formal deal with a partner generated from a granted bid?",
+    "what produces the legal arrangement after a quote round is decided?"
+  ],
+  "procurement/contracts.py::flag_expired_contracts": [
+    "how do we surface agreements whose window has already ended?",
+    "where are deals that ran out highlighted?",
+    "what identifies arrangements that are now past their validity?"
+  ],
+  "procurement/contracts.py::flag_expiring_contracts": [
+    "how do we surface agreements approaching their cutoff date?",
+    "where are deals about to lapse highlighted for review?",
+    "what identifies arrangements whose window is almost up?"
+  ],
+  "procurement/contracts.py::get_sla_terms": [
+    "where do we read the service-level commitments written into a deal?",
+    "how are the performance guarantees on an agreement retrieved?",
+    "what fetches the uptime and response obligations defined on a deal?"
+  ],
+  "procurement/contracts.py::lookup_price_tier": [
+    "how do we find the agreed per-item cost for a given purchase volume?",
+    "where is the negotiated rate resolved based on how much is being bought?",
+    "what determines the cost bracket that applies to a buying amount?"
+  ],
+  "procurement/contracts.py::renew_contract": [
+    "how do we extend a vendor agreement that is about to lapse for another period?",
+    "where is a soon-to-end deal carried forward into a fresh window?",
+    "what prolongs a partner arrangement nearing its cutoff?"
+  ],
+  "procurement/contracts.py::track_contract_amendment": [
+    "how do we log a change made to an existing agreement?",
+    "where is a revision to a deal recorded for the audit trail?",
+    "what captures a modification entry against an arrangement?"
+  ],
+  "procurement/contracts.py::validate_contract_pricing": [
+    "where do we confirm order line costs match the negotiated rate brackets?",
+    "how are charges on a buy request checked against the agreement's cost levels?",
+    "what verifies that purchase rates comply with the deal's negotiated brackets?"
+  ],
+  "procurement/purchase_orders.py::amend_purchase_order": [
+    "how do I change the counts or delivery dates on a buy request already placed?",
+    "where do we modify line quantities on an existing buy request?",
+    "what revises the schedule or amounts of an open procurement document?"
+  ],
+  "procurement/purchase_orders.py::approve_purchase_order": [
+    "where do we sign off a draft buy request based on authorization thresholds?",
+    "how is a buy document checked against the sign-off hierarchy?",
+    "what grants final go-ahead on a draft requisition per the authority rules?"
+  ],
+  "procurement/purchase_orders.py::cancel_purchase_order": [
+    "where do we void a buy request and free up the reserved funds?",
+    "how is a procurement document terminated so committed money returns to the budget?",
+    "what kills a buy request and unlocks its earmarked spend?"
+  ],
+  "procurement/purchase_orders.py::compute_po_total": [
+    "how is the overall worth of a buy request calculated?",
+    "where do we sum up the line amounts on a procurement document?",
+    "what figures out the grand sum payable for a buy request?"
+  ],
+  "procurement/purchase_orders.py::create_purchase_order": [
+    "how do I start a new draft request to buy goods from a vendor?",
+    "where is an initial buy document opened against a partner?",
+    "what creates a not-yet-submitted buying request for a seller?"
+  ],
+  "procurement/purchase_orders.py::get_po_status": [
+    "how do I check where a buy request currently sits in its lifecycle?",
+    "where do we read the present state of an order?",
+    "what returns the stage an order document has reached?"
+  ],
+  "procurement/purchase_orders.py::handle_po_backorder": [
+    "how do we deal with items still owed on a partially shipped order?",
+    "where are the unfulfilled lines of a half-delivered buy request managed?",
+    "what processes leftover unshipped goods on an order document?"
+  ],
+  "procurement/purchase_orders.py::validate_three_way_match": [
+    "where do we confirm the order, goods receipt, and bill all agree?",
+    "how is the cross-check between buying, delivery, and billing done?",
+    "what verifies that the buy request, what arrived, and what we were charged line up?"
+  ],
+  "procurement/sourcing.py::analyze_category_spend": [
+    "how do we examine past purchasing volume for a buying area?",
+    "where is historical outlay for a product group reviewed?",
+    "what breaks down prior expenditure across a buying family?"
+  ],
+  "procurement/sourcing.py::award_sourcing_event": [
+    "where do we declare the winner of a solicitation and give them the business?",
+    "how is a quote request granted to the chosen vendor?",
+    "what assigns the won deal to the selected partner(s)?"
+  ],
+  "procurement/sourcing.py::create_rfq": [
+    "how do I open a solicitation asking vendors to submit pricing?",
+    "where do we kick off the document that collects competitive quotes from partners?",
+    "what starts the process of inviting sellers to bid on a buying requirement?"
+  ],
+  "procurement/sourcing.py::define_category_strategy": [
+    "how do we lay out the buying plan for a product group?",
+    "where is the approach for handling a particular buying area set?",
+    "what establishes the procurement game-plan for a product family?"
+  ],
+  "procurement/sourcing.py::evaluate_bids": [
+    "how are competing vendor offers scored against weighted factors?",
+    "where do we compare submitted quotes using ranked benchmarks?",
+    "what assesses partner proposals according to a scoring rubric?"
+  ],
+  "procurement/sourcing.py::export_sourcing_report": [
+    "how do I produce a summary file of a bidding outcome?",
+    "where do we generate a downloadable recap of a solicitation result?",
+    "what outputs a document summarizing a quote-collection round?"
+  ],
+  "procurement/sourcing.py::recompute_category_spend": [
+    "where do we refresh a buying area's totals after bills arrive late?",
+    "how is past expenditure for a product group computed again once delayed bills post?",
+    "what updates outlay figures for a buying family after tardy entries?"
+  ],
+  "procurement/sourcing.py::shortlist_suppliers": [
+    "how do we narrow down eligible vendors for a particular product group?",
+    "where is a candidate list of qualified partners built for a buying area?",
+    "what filters sellers down to a short pool for a product family?"
+  ],
+  "procurement/suppliers.py::deactivate_supplier": [
+    "how do we stop a vendor from receiving any further orders?",
+    "where is a partner marked inactive so no new buy requests can go to it?",
+    "what disables a seller and prevents new orders against it?"
+  ],
+  "procurement/suppliers.py::fetch_supplier_by_tax_id": [
+    "where do we pull one vendor record using its government registration code?",
+    "how do I retrieve a single partner from its fiscal identification number?",
+    "what looks up a seller given its registered government number?"
+  ],
+  "procurement/suppliers.py::recompute_supplier_risk": [
+    "where do we refresh a vendor's overall danger grade?",
+    "how is a partner's combined exposure scored again?",
+    "what rolls up the various hazard signals for a seller into one number?"
+  ],
+  "procurement/suppliers.py::register_supplier": [
+    "how do we onboard a new vendor into our master data?",
+    "where does a brand-new trading partner's tax and compliance info first get saved?",
+    "what creates the initial record for a company we buy goods from?"
+  ],
+  "procurement/suppliers.py::run_supplier_kyc": [
+    "where do we check a vendor against watchlists before working with them?",
+    "how is a partner's identity and denied-party verification performed?",
+    "what runs due-diligence checks on a newly added seller?"
+  ],
+  "procurement/suppliers.py::score_supplier_reliability": [
+    "how do we measure whether a vendor ships on schedule?",
+    "where is a partner's punctuality of fulfillment rated?",
+    "what computes a seller's track record for meeting promised dates?"
+  ],
+  "procurement/suppliers.py::search_suppliers": [
+    "how do I find vendors filtered by industry, location, or title?",
+    "where do we query the partner list using region or grouping?",
+    "what lets a user look up sellers matching a keyword?"
+  ],
+  "procurement/suppliers.py::update_supplier_contact": [
+    "where do we change who the main point person is for a vendor?",
+    "how is a partner's primary representative's details edited?",
+    "what modifies the lead liaison tied to a seller?"
+  ],
+  "reporting/dashboards.py::build_kpi_dashboard": [
+    "where do we stitch together the leadership-facing overview from individual metric tiles?",
+    "how is the top-level performance summary view assembled from its panels?",
+    "what composes the executive supply-chain reporting screen out of component widgets?"
+  ],
+  "reporting/dashboards.py::build_supplier_scorecard": [
+    "where do we assemble a vendor rating mixing defect, punctuality, and price-variance signals?",
+    "how is a multi-factor grade for each provider constructed across quality and cost dimensions?",
+    "what creates a blended performance card rating each source of goods?"
+  ],
+  "reporting/dashboards.py::compute_inventory_turns": [
+    "where do we work out how many times stock cycles through given COGS and average holdings?",
+    "how is the rate at which goods sell through versus average held value derived?",
+    "what computes turnover from cost of goods sold against mean stock worth?"
+  ],
+  "reporting/dashboards.py::compute_otif": [
+    "where do we calculate the share of orders delivered both punctually and complete?",
+    "how is the on-time-in-full attainment figured over fulfilled orders in the period?",
+    "what measures perfect-order performance across deliveries for a reporting span?"
+  ],
+  "reporting/dashboards.py::export_dashboard_snapshot": [
+    "where do we save a frozen copy of the reporting view as a file others can open?",
+    "how is a moment-in-time capture of the overview turned into a shareable artifact?",
+    "what writes the executive screen out to a distributable document?"
+  ],
+  "reporting/dashboards.py::recompute_otif_excluding_force_majeure": [
+    "where do we redo the perfect-order score after dropping acts-of-god from the denominator?",
+    "how is on-time-in-full recalculated while ignoring orders flagged as unavoidable events?",
+    "what reworks the punctual-and-complete metric leaving out uncontrollable-disruption cases?"
+  ],
+  "reporting/dashboards.py::refresh_supplier_scorecard": [
+    "where do we update an existing vendor rating with newer numbers without redoing its tiers?",
+    "how is a provider's grade card brought current using the latest period data in place?",
+    "what re-runs the source-of-goods rating on fresh figures while keeping the tier buckets?"
+  ],
+  "reporting/dashboards.py::rollup_freight_spend": [
+    "where do we aggregate shipping costs across routes, transport modes, and haulers for a period?",
+    "how is total transport expense summed up by lane, method, and carrier over a window?",
+    "what consolidates carriage outlay grouped by route and mode for the reporting span?"
+  ],
+  "reporting/metrics.py::compute_customs_clearance_rate": [
+    "where do we find what portion of voyages passed border inspection on the first try?",
+    "how is the share of voyages getting through border control without rework figured out?",
+    "what measures the share of shipments cleared at the frontier in one pass?"
+  ],
+  "reporting/metrics.py::compute_delay_distribution": [
+    "where do we break down how lateness is spread across arrivals?",
+    "how is the spread of how-late vessels were across a fleet tabulated?",
+    "what produces a histogram of how far behind schedule shipments ran?"
+  ],
+  "reporting/metrics.py::compute_dwell_time": [
+    "where do we calculate how long goods sit waiting at border clearance on average?",
+    "how is the typical wait at the customs checkpoint measured?",
+    "what computes the mean holding duration during frontier processing?"
+  ],
+  "reporting/metrics.py::compute_on_time_rate": [
+    "where do we figure out what percentage of vessels reached port punctually?",
+    "how is the share of punctual fleet arrivals calculated?",
+    "what measures how often ships make it to harbor by schedule across the fleet?"
+  ],
+  "reporting/metrics.py::export_kpi_snapshot": [
+    "where do we ship the performance-indicator figures out to the data store?",
+    "how are headline metric numbers written off to the analytics repository?",
+    "what pushes a captured set of performance stats into the warehouse?"
+  ],
+  "risk/disruption.py::assess_disruption_impact": [
+    "where do we gauge how far a detected supply problem ripples into orders and stock?",
+    "how is the downstream fallout of an outage estimated across inventory and service?",
+    "evaluating the knock-on effects of a sourcing breakdown on customers"
+  ],
+  "risk/disruption.py::build_mitigation_plan": [
+    "where do we draw up a ranked action list with owners for an assessed outage?",
+    "how is a prioritized response with assigned responsibilities built after impact is gauged?",
+    "assembling an ordered set of countermeasures and accountable people for a breakdown"
+  ],
+  "risk/disruption.py::detect_supply_disruption": [
+    "where do we spot an emerging sourcing problem from incoming feeds and timing anomalies?",
+    "how is a brewing sourcing outage flagged from signal data and lead-time drift?",
+    "catching an early sourcing breakdown from inbound indicators"
+  ],
+  "risk/disruption.py::expedite_inbound_shipment": [
+    "where do we rush a critical incoming load via premium freight to claw back time?",
+    "how is an urgent arriving load accelerated to shorten recovered timing?",
+    "fast-tracking an arriving delivery with priority carriers to make up lost days"
+  ],
+  "risk/disruption.py::failover_to_alternate_supplier": [
+    "where do we shift open demand to a backup vendor when the main one is down?",
+    "how is sourcing rerouted to a qualified second source during an outage?",
+    "switching unmet need to a qualified backup provider when the primary fails"
+  ],
+  "risk/disruption.py::monitor_weather_and_port_events": [
+    "where do we watch storm systems and dock-strike feeds threatening live routes?",
+    "how are storm systems and harbor-labor disruptions tracked against active shipping lanes?",
+    "keeping an eye on climate and terminal disruptions that endanger current routes"
+  ],
+  "risk/disruption.py::rescore_region_risk_after_event": [
+    "where do we recompute an area's hazard rating once a confirmed incident lands?",
+    "how is a geography's exposure grade refreshed once a real incident occurs?",
+    "updating an area's danger grade to reflect what actually happened"
+  ],
+  "risk/disruption.py::score_region_risk": [
+    "where do we rate a sourcing area's baseline exposure from geopolitics and logistics?",
+    "how is a sourcing area's standing hazard level graded from concentration factors?",
+    "computing a default danger rating for a supply geography"
+  ],
+  "risk/sanctions.py::check_embargo": [
+    "where do we test whether a shipment's parties or route hit an active trade ban?",
+    "how is a load checked against country-level prohibition rules?",
+    "determining if a dispatch's goods or destination fall under a restricted-trade order"
+  ],
+  "risk/sanctions.py::clear_false_positive": [
+    "where do we mark a screening match as harmless and whitelist it going forward?",
+    "how is a mistaken watchlist flag dismissed and exempted from future checks?",
+    "clearing an incorrectly flagged match so it won't trip again"
+  ],
+  "risk/sanctions.py::escalate_sanctions_hit": [
+    "where do we push a confirmed screening match up to compliance for a ruling?",
+    "how is an ambiguous watchlist match raised to the legal team for a decision?",
+    "routing a flagged restricted-party match to adjudicators"
+  ],
+  "risk/sanctions.py::evaluate_license_exception": [
+    "where do we determine if an exemption permits an otherwise barred transaction?",
+    "how is a regulatory carve-out assessed for a blocked deal?",
+    "checking whether a special authorization clears a restricted trade"
+  ],
+  "risk/sanctions.py::rescreen_party": [
+    "where do we re-run a counterparty against the latest restricted lists after an update?",
+    "how is one trading partner re-checked against the watchlists following a refresh or change?",
+    "re-evaluating a single counterparty against the current blocked-entity tables"
+  ],
+  "risk/sanctions.py::rescreen_party_after_list_sync": [
+    "where do we mass re-check every active counterparty once the restricted tables change?",
+    "how are all current trading partners batch re-evaluated following a watchlist refresh?",
+    "bulk re-running screening on all counterparties whose exposure may shift following an update"
+  ],
+  "risk/sanctions.py::sync_sanctions_list": [
+    "where do we refresh our local restricted-party tables from the regulator's latest publications?",
+    "how are the watchlist databases pulled down and updated from the authority's source?",
+    "syncing the in-house blocked-entity records with upstream regulatory releases"
+  ],
+  "risk/sanctions.py::write_sanctions_audit_log": [
+    "where do we append a tamper-proof record of every screening and ruling action?",
+    "how is an immutable trail written for each watchlist check and decision?",
+    "logging an unalterable history entry for compliance screening events"
+  ],
+  "transport/carriers.py::check_carrier_capacity": [
+    "where do we confirm whether a hauler has open room on a path for a given day?",
+    "how do we confirm a freight provider has open space on a route on a date?",
+    "the step that verifies a trucking company can take more freight on a lane for a day"
+  ],
+  "transport/carriers.py::deactivate_carrier": [
+    "where do we shut off a hauler and pause all its routes and pricing?",
+    "how do we retire a freight provider and disable its lanes and price sheets?",
+    "the step that turns off a trucking company along with its routes and rate tables"
+  ],
+  "transport/carriers.py::onboard_carrier": [
+    "where do we set up a new trucking provider in the system?",
+    "how do we add a freight company and record the routes it serves?",
+    "the step that brings a new hauler into our network and lists its service routes"
+  ],
+  "transport/carriers.py::rank_carrier_by_cost": [
+    "where do we order haulers purely by delivered price?",
+    "how do we sort freight haulers on a path by total landed price only?",
+    "the function that ranks providers for a route ignoring speed and using money alone"
+  ],
+  "transport/carriers.py::rank_carriers_for_lane": [
+    "how do we pick the best hauler for a given route by price and speed?",
+    "where do we sort eligible freight providers on a path by both cost and delivery time?",
+    "the logic that orders qualified trucking companies for a route weighing money and duration"
+  ],
+  "transport/carriers.py::register_service_lane": [
+    "where do we record a new origin-to-destination route for a hauler?",
+    "how do we add a point-A-to-point-B path that a trucking company covers?",
+    "the function that defines a shipping route between two cities for a provider"
+  ],
+  "transport/carriers.py::score_carrier_performance": [
+    "where do we calculate a hauler's reliability rating from delivery punctuality and damage records?",
+    "how do we grade a freight provider using on-time history and claim counts?",
+    "the function that produces a quality metric for a trucking company from its on-time and claims track record"
+  ],
+  "transport/carriers.py::upsert_rate_card": [
+    "where do we save pricing tables for a hauler on a route?",
+    "how do we create or change a freight provider's price sheet for a path?",
+    "the step that stores or refreshes negotiated pricing for a route"
+  ],
+  "transport/fleet.py::assign_vehicle": [
+    "where do we attach a company truck to a planned cargo move?",
+    "how do we allocate one of our own vehicles to a scheduled shipping move?",
+    "the function that pairs a fleet truck with a planned haul"
+  ],
+  "transport/fleet.py::dispatch_route": [
+    "where do we send a truck out on a planned multi-stop trip?",
+    "how do we release a vehicle onto its optimized stop itinerary?",
+    "the step that launches a truck on its planned series of stops"
+  ],
+  "transport/fleet.py::log_fuel_transaction": [
+    "where do we record a gas purchase tied to a truck and a trip?",
+    "how do we record a diesel buy against a specific vehicle and journey?",
+    "the step that captures a diesel purchase for a truck on a run"
+  ],
+  "transport/fleet.py::optimize_route_sequence": [
+    "where do we reorder the stops on an already-dispatched trip for efficiency?",
+    "how do we improve the visiting order of waypoints on a truck's active run?",
+    "the step that resequences the stop order of a truck already on the road"
+  ],
+  "transport/fleet.py::reassign_vehicle_on_breakdown": [
+    "where do we move a trip to a spare truck after a failure?",
+    "how do we hand a route to a standby unit when one stops running?",
+    "the function that swaps a disabled truck for a backup on a planned run"
+  ],
+  "transport/fleet.py::report_fleet_utilization": [
+    "where do we summarize how busy the vehicle pool was over a period?",
+    "how do we summarize vehicle usage across a span of dates?",
+    "the step that produces an activity-rate rollup for the vehicle pool over time"
+  ],
+  "transport/fleet.py::schedule_driver": [
+    "where do we set an operator's working roster within legal time limits?",
+    "how do we plan an operator's shifts while respecting duty-hour regulations?",
+    "the function that rosters a person at the wheel under hours-of-service caps"
+  ],
+  "transport/fleet.py::schedule_maintenance_window": [
+    "where do we book a service slot for a company truck?",
+    "how do we reserve a repair time block for a fleet vehicle?",
+    "the function that schedules a servicing period for one of our trucks"
+  ],
+  "transport/freight.py::allocate_consolidated_cost": [
+    "where do we split a combined move's total price back across its member orders?",
+    "how do we distribute the merged shipping expense back to each order?",
+    "the step that apportions pooled freight spend to the individual orders inside it"
+  ],
+  "transport/freight.py::audit_freight_invoice": [
+    "where do we verify a hauler's billing matches the agreed price?",
+    "how do we check a provider's charge document against the reserved rate?",
+    "the step that reconciles a trucking company's bill with the booked price"
+  ],
+  "transport/freight.py::book_freight": [
+    "where do we reserve a cargo move with a chosen provider on a route?",
+    "how do we commit a load to a selected hauler and path?",
+    "the function that confirms a shipping move against a picked provider and lane"
+  ],
+  "transport/freight.py::compute_accessorial_charges": [
+    "where do we figure out add-on fees like waiting time and tailgate service?",
+    "how do we calculate ancillary surcharges such as detention and lift service?",
+    "the function that totals extra service fees beyond the base haul"
+  ],
+  "transport/freight.py::consolidate_shipments": [
+    "where do we combine several orders into one cargo move?",
+    "how do we merge multiple deliveries into a single shipping move?",
+    "the step that pools many orders into one trailer trip"
+  ],
+  "transport/freight.py::plan_load": [
+    "where do we lay out how cargo stacks in the trailer for a merged move?",
+    "how do we arrange the trailer packing for a combined shipping move?",
+    "the function that figures out the trailer arrangement for a pooled move"
+  ],
+  "transport/freight.py::quote_freight_rate": [
+    "where do we generate a total price for a cargo move request?",
+    "how do we produce an all-inclusive cost estimate for a load?",
+    "the step that prices out a shipping request end to end"
+  ],
+  "transport/freight.py::requote_freight_with_accessorials": [
+    "where do we re-price a cargo move adding extra surcharges?",
+    "how do we recompute a shipping cost when add-on fees apply?",
+    "the function that issues a fresh price including ancillary charges"
+  ],
+  "transport/tracking.py::detect_tracking_exception": [
+    "where do we flag problems when checkpoints are missing or running late?",
+    "how do we spot delivery anomalies from waypoint gaps and delays?",
+    "the function that surfaces issues when progress events are absent or behind schedule"
+  ],
+  "transport/tracking.py::estimate_eta_from_tracking": [
+    "where do we predict arrival time using the load's last position and route duration?",
+    "how do we calculate expected arrival using current location and path transit time?",
+    "the function that forecasts when a delivery lands based on where it is and how long the route takes"
+  ],
+  "transport/tracking.py::reconcile_tracking_events": [
+    "where do we clean up duplicate or out-of-sequence progress records?",
+    "how do we fix repeated or mis-ordered waypoint entries?",
+    "the step that deduplicates and re-orders a load's in-transit history"
+  ],
+  "transport/tracking.py::record_proof_of_delivery": [
+    "where do we capture confirmation that goods arrived, with a signature and time?",
+    "how do we save the receipt evidence including who signed and when?",
+    "the step that logs handover confirmation with signature and timestamp"
+  ],
+  "transport/tracking.py::register_geofence_event": [
+    "where do we log when a load crosses a virtual location boundary?",
+    "how do we record entering or leaving a mapped zone for a delivery?",
+    "the function that captures a load tripping a map perimeter, in or out"
+  ],
+  "transport/tracking.py::track_shipment": [
+    "where do we look up where a load is right now?",
+    "how do we get the current status of a delivery in transit?",
+    "the function that returns the present location state of a load"
+  ],
+  "transport/tracking.py::track_shipment_milestone": [
+    "where do we get the most recent checkpoint a load has hit?",
+    "how do we fetch the latest progress event for a delivery?",
+    "the function returning the newest waypoint reached by a load"
+  ],
+  "transport/tracking.py::update_milestone": [
+    "where do we log a new progress event for a load?",
+    "how do we save a fresh checkpoint occurrence for a delivery?",
+    "the step that writes a new in-transit waypoint for a load"
+  ],
+  "warehouse/picking.py::confirm_pick": [
+    "where do we mark a fetch line as done once the item is grabbed?",
+    "how is completion of a single retrieval recorded against its line?",
+    "what acknowledges that an item was successfully gathered for a line?"
+  ],
+  "warehouse/picking.py::generate_pick_list": [
+    "where do we produce the slip telling staff what to gather for an outbound or transfer order?",
+    "how is a fetch sheet created for a customer or movement request?",
+    "what builds the roster of items to retrieve from shelves for an order?"
+  ],
+  "warehouse/picking.py::handle_short_pick": [
+    "where do we deal with a fetch that can't be filled because there isn't enough stock?",
+    "how is an under-supplied retrieval handled when shelves run dry?",
+    "what manages the case where available quantity falls below what was requested?"
+  ],
+  "warehouse/picking.py::handoff_ship_stage": [
+    "where do we pass checked parcels over to the outbound dispatch holding area?",
+    "how are validated boxes moved into the loading queue for shipment?",
+    "what transfers confirmed packages to the dispatch staging zone?"
+  ],
+  "warehouse/picking.py::optimize_pick_path": [
+    "where do we work out the shortest walking route to collect the items?",
+    "how is the most efficient floor route through the gather sheet computed?",
+    "what minimizes travel distance for a worker fetching listed goods?"
+  ],
+  "warehouse/picking.py::plan_pick_wave": [
+    "where do we batch several orders together for a single gathering run?",
+    "how are multiple requests grouped into one retrieval cycle?",
+    "what organizes a set of orders into one combined collection sweep?"
+  ],
+  "warehouse/picking.py::recount_pick_allocation": [
+    "where do we re-tally reserved quantities after a stock audit?",
+    "how are held amounts re-verified following a periodic shelf count?",
+    "what adjusts committed figures once a cycle inventory check completes?"
+  ],
+  "warehouse/picking.py::verify_pack": [
+    "where do we double-check the boxed contents against what was meant to be gathered?",
+    "how is a sealed carton validated against the fetch slip?",
+    "what confirms the packaged items line up with the retrieval sheet?"
+  ],
+  "warehouse/receiving.py::inspect_quality": [
+    "where do we check arriving goods for defects before accepting them?",
+    "how is a conformance examination run on items just delivered?",
+    "what verifies the condition standard of freshly received product?"
+  ],
+  "warehouse/receiving.py::match_asn": [
+    "where do we tie an arriving load to the heads-up notice the supplier sent ahead?",
+    "how is incoming freight reconciled with its pre-shipment notification?",
+    "what links a delivery to the advance dispatch note from the vendor?"
+  ],
+  "warehouse/receiving.py::post_goods_receipt": [
+    "where do we record an intake document into both stock records and the books?",
+    "how is an inbound acceptance committed to holdings and accounting?",
+    "what writes a confirmed delivery through to inventory ledgers and financials?"
+  ],
+  "warehouse/receiving.py::receive_shipment": [
+    "where do we book in arriving stock against a purchase order?",
+    "how is inbound freight logged in and matched to its order document?",
+    "what records goods coming through the door against what was ordered?"
+  ],
+  "warehouse/receiving.py::report_damage": [
+    "where do we log items that turned up broken at the dock?",
+    "how is a record filed for goods found harmed during intake?",
+    "what notes spoiled or dented product discovered while booking in freight?"
+  ],
+  "warehouse/receiving.py::reschedule_dock_appointment": [
+    "where do we move an already-booked bay slot to a different time?",
+    "how is a previously arranged carrier arrival window changed?",
+    "what shifts an existing loading-bay reservation to a new time?"
+  ],
+  "warehouse/receiving.py::schedule_dock_appointment": [
+    "where do we book a time slot for an inbound truck at the loading bay?",
+    "how is a delivery window arranged for an arriving hauler?",
+    "what reserves a bay arrival time for a carrier bringing goods in?"
+  ],
+  "warehouse/receiving.py::trigger_putaway": [
+    "where do we kick off the move-to-shelf tasks once goods pass inspection?",
+    "how are stow jobs started for accepted incoming items?",
+    "what fires off the storage-placement work after intake checks clear?"
+  ]
+}

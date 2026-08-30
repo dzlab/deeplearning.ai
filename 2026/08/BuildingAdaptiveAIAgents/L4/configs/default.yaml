@@ -1,0 +1,30 @@
+mode: structure_aware_retrieval
+domain: coding_agent
+# Arm A parses a REAL source tree (the agent-harness repo) into the codebase
+# graph via AST (import/call) + git (co_edit), instead of the toy seed graph.
+code_graph_source: agent_harness
+memory_backend: real
+# Embeddings are computed in this PROCESS via sentence-transformers MiniLM
+# (all-MiniLM-L6-v2, 384-d) and stored/searched in Oracle — no OCI, no in-DB
+# model. CPU-sandbox path (in-DB ONNX OOMs); "onnx:ALL_MINILM_L6_V2" is the
+# retained in-DB reference.
+embedder_model: "python:all-MiniLM-L6-v2"
+llm_model: "oci/xai.grok-4.3"
+seed: 42
+dup_threshold: 0.90
+ppr_alpha: 0.85
+ppr_iters: 100
+eval_k: 10
+
+# --- agent-memory co-relevance arm (Module 3, arm B) ---
+# Mines the agent's memory layer (skill/tool/pref/proc) from real artifacts,
+# learns weighted co_use edges from cached Grok chats, evaluates held-out
+# co-relevance bundling. Persisted under domain "agent_memory".
+agent_memory_arm: true
+n_chats: 2000
+n_bundles: 18
+bundle_size: 4
+co_use_min_count: 3
+co_use_drop_p: 0.15
+co_use_inject_p: 0.10
+co_use_split_frac: 0.8

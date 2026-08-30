@@ -1,0 +1,154 @@
+[
+  {
+    "name": "Quillstream Analytics",
+    "sector": "freight telemetry",
+    "summary": "Quillstream Analytics is a freight telemetry partner integrating with our platform; built on Kafka, Redis, Python/FastAPI.",
+    "strengths": [
+      "battle-tested webhook delivery",
+      "sub-100ms quote API"
+    ],
+    "weaknesses": [
+      "thin liquidity runway",
+      "slow batch reconciliation"
+    ],
+    "tech_stack": [
+      "Kafka",
+      "Redis",
+      "Python/FastAPI"
+    ],
+    "integration_quirk": "expects timestamps in epoch-millis, not ISO-8601"
+  },
+  {
+    "name": "Halcyon Routeworks",
+    "sector": "fintech-payments",
+    "summary": "Halcyon Routeworks is a fintech-payments partner integrating with our platform; built on Oracle Database, Kafka, TypeScript/Node.",
+    "strengths": [
+      "low customer churn",
+      "first-class GraphQL schema"
+    ],
+    "weaknesses": [
+      "flaky sandbox environment",
+      "single-region deployment"
+    ],
+    "tech_stack": [
+      "Oracle Database",
+      "Kafka",
+      "TypeScript/Node"
+    ],
+    "integration_quirk": "expects timestamps in epoch-millis, not ISO-8601"
+  },
+  {
+    "name": "Vexel Robotics",
+    "sector": "supply-chain analytics",
+    "summary": "Vexel Robotics is a supply-chain analytics partner integrating with our platform; built on Oracle Database, Terraform, gRPC.",
+    "strengths": [
+      "first-class GraphQL schema",
+      "sub-100ms quote API"
+    ],
+    "weaknesses": [
+      "slow batch reconciliation",
+      "brittle legacy SOAP endpoints"
+    ],
+    "tech_stack": [
+      "Oracle Database",
+      "Terraform",
+      "gRPC"
+    ],
+    "integration_quirk": "rate-limits to 5 rps without warning"
+  },
+  {
+    "name": "Drayage Dynamics",
+    "sector": "fintech-payments",
+    "summary": "Drayage Dynamics is a fintech-payments partner integrating with our platform; built on Oracle Database, Go, Terraform.",
+    "strengths": [
+      "first-class GraphQL schema",
+      "deep carrier network"
+    ],
+    "weaknesses": [
+      "thin liquidity runway",
+      "slow batch reconciliation"
+    ],
+    "tech_stack": [
+      "Oracle Database",
+      "Go",
+      "Terraform"
+    ],
+    "integration_quirk": "returns 200 with an error body instead of 4xx"
+  },
+  {
+    "name": "Tessellate Payments",
+    "sector": "freight telemetry",
+    "summary": "Tessellate Payments is a freight telemetry partner integrating with our platform; built on Rust, Go, Oracle Database.",
+    "strengths": [
+      "deep carrier network",
+      "sub-100ms quote API"
+    ],
+    "weaknesses": [
+      "flaky sandbox environment",
+      "sparse API docs"
+    ],
+    "tech_stack": [
+      "Rust",
+      "Go",
+      "Oracle Database"
+    ],
+    "integration_quirk": "requires a custom X-Partner-Token header on every call"
+  },
+  {
+    "name": "Ironwood Telemetry",
+    "sector": "freight telemetry",
+    "summary": "Ironwood Telemetry is a freight telemetry partner integrating with our platform; built on Redis, Kafka, Go.",
+    "strengths": [
+      "deep carrier network",
+      "low customer churn"
+    ],
+    "weaknesses": [
+      "single-region deployment",
+      "no idempotency keys on writes"
+    ],
+    "tech_stack": [
+      "Redis",
+      "Kafka",
+      "Go"
+    ],
+    "integration_quirk": "requires a custom X-Partner-Token header on every call"
+  },
+  {
+    "name": "Surfcast Integrations",
+    "sector": "fintech-payments",
+    "summary": "Surfcast Integrations is a fintech-payments partner integrating with our platform; built on Go, Oracle Database, gRPC.",
+    "strengths": [
+      "first-class GraphQL schema",
+      "deep carrier network"
+    ],
+    "weaknesses": [
+      "thin liquidity runway",
+      "brittle legacy SOAP endpoints"
+    ],
+    "tech_stack": [
+      "Go",
+      "Oracle Database",
+      "gRPC"
+    ],
+    "integration_quirk": "paginates with an opaque cursor that expires in 60s"
+  },
+  {
+    "name": "Pallas Data Foundry",
+    "sector": "supply-chain analytics",
+    "summary": "Pallas Data Foundry is a supply-chain analytics partner integrating with our platform; built on gRPC, Go, Postgres.",
+    "strengths": [
+      "strong gross margins",
+      "deep carrier network"
+    ],
+    "weaknesses": [
+      "no idempotency keys on writes",
+      "brittle legacy SOAP endpoints"
+    ],
+    "tech_stack": [
+      "gRPC",
+      "Go",
+      "Postgres"
+    ],
+    "integration_quirk": "expects timestamps in epoch-millis, not ISO-8601"
+  }
+]

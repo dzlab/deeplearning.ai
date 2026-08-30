@@ -1,0 +1,226 @@
+{
+  "task": {
+    "repo": "https://github.com/httpie/cli.git",
+    "base_sha": "cafa1166",
+    "gold_commit": "225dccb",
+    "gold_files": [
+      "cli/constants.py",
+      "cli/dicts.py",
+      "cli/nested_json.py",
+      "client.py"
+    ],
+    "feature": "Regulate and validate top-level JSON arrays in request items. A request item like `:=[1,2,3]` should produce a top-level JSON array under the empty key, represented by a dedicated regulated array type (not a plain list that can be mis-cast). Mixing a top-level array with conflicting access at the same level (for example a top-level array followed by an append `[]:=`, or an append followed by a top-level array) must raise a clear HTTPie type/syntax error rather than silently overwriting."
+  },
+  "n_runs_per_arm": 5,
+  "model": "sonnet",
+  "aggregate": {
+    "control": {
+      "n": 5,
+      "accept_pass_rate": 0.0,
+      "mean_recall": 0.5,
+      "mean_precision": 0.867,
+      "mean_total_tokens": 2247857,
+      "mean_output_tokens": 15430.6,
+      "mean_tool_calls": 61.8,
+      "mean_tool_calls_to_first_correct_edit": 37.6,
+      "found_gold_rate": 1.0,
+      "mean_cost_usd": 1.3792,
+      "mean_duration_ms": 353638.0
+    },
+    "treatment": {
+      "n": 5,
+      "accept_pass_rate": 0.0,
+      "mean_recall": 0.4,
+      "mean_precision": 0.9,
+      "mean_total_tokens": 2189317.8,
+      "mean_output_tokens": 14259.2,
+      "mean_tool_calls": 48.2,
+      "mean_tool_calls_to_first_correct_edit": 24.2,
+      "found_gold_rate": 1.0,
+      "mean_cost_usd": 1.208,
+      "mean_duration_ms": 317929.0
+    },
+    "deltas": {
+      "accept_pass_rate": null,
+      "mean_recall": {
+        "control": 0.5,
+        "treatment": 0.4,
+        "pct_change": -20.0,
+        "treatment_better": false
+      },
+      "mean_total_tokens": {
+        "control": 2247857,
+        "treatment": 2189317.8,
+        "pct_change": -2.6,
+        "treatment_better": true
+      },
+      "mean_tool_calls": {
+        "control": 61.8,
+        "treatment": 48.2,
+        "pct_change": -22.0,
+        "treatment_better": true
+      },
+      "mean_tool_calls_to_first_correct_edit": {
+        "control": 37.6,
+        "treatment": 24.2,
+        "pct_change": -35.6,
+        "treatment_better": true
+      },
+      "mean_cost_usd": {
+        "control": 1.3792,
+        "treatment": 1.208,
+        "pct_change": -12.4,
+        "treatment_better": true
+      },
+      "mean_duration_ms": {
+        "control": 353638.0,
+        "treatment": 317929.0,
+        "pct_change": -10.1,
+        "treatment_better": true
+      }
+    }
+  },
+  "runs": [
+    {
+      "arm": "control",
+      "run_index": 0,
+      "accept_pass": false,
+      "recall": 0.5,
+      "precision": 1.0,
+      "n_tool_calls": 60,
+      "tool_calls_to_first_correct_edit": 44,
+      "total_tokens": 1369050,
+      "files_edited": [
+        "cli/nested_json.py",
+        "client.py"
+      ]
+    },
+    {
+      "arm": "control",
+      "run_index": 1,
+      "accept_pass": false,
+      "recall": 0.5,
+      "precision": 1.0,
+      "n_tool_calls": 67,
+      "tool_calls_to_first_correct_edit": 41,
+      "total_tokens": 1740654,
+      "files_edited": [
+        "cli/nested_json.py",
+        "client.py"
+      ]
+    },
+    {
+      "arm": "control",
+      "run_index": 2,
+      "accept_pass": false,
+      "recall": 0.5,
+      "precision": 0.667,
+      "n_tool_calls": 50,
+      "tool_calls_to_first_correct_edit": 14,
+      "total_tokens": 2966337,
+      "files_edited": [
+        "cli/nested_json.py",
+        "cli/requestitems.py",
+        "client.py"
+      ]
+    },
+    {
+      "arm": "control",
+      "run_index": 3,
+      "accept_pass": false,
+      "recall": 0.5,
+      "precision": 0.667,
+      "n_tool_calls": 63,
+      "tool_calls_to_first_correct_edit": 30,
+      "total_tokens": 3756731,
+      "files_edited": [
+        "cli/nested_json.py",
+        "cli/requestitems.py",
+        "client.py"
+      ]
+    },
+    {
+      "arm": "control",
+      "run_index": 4,
+      "accept_pass": false,
+      "recall": 0.5,
+      "precision": 1.0,
+      "n_tool_calls": 69,
+      "tool_calls_to_first_correct_edit": 59,
+      "total_tokens": 1406513,
+      "files_edited": [
+        "cli/nested_json.py",
+        "client.py"
+      ]
+    },
+    {
+      "arm": "treatment",
+      "run_index": 0,
+      "accept_pass": false,
+      "recall": 0.5,
+      "precision": 1.0,
+      "n_tool_calls": 27,
+      "tool_calls_to_first_correct_edit": 11,
+      "total_tokens": 1374973,
+      "files_edited": [
+        "cli/nested_json.py",
+        "client.py"
+      ]
+    },
+    {
+      "arm": "treatment",
+      "run_index": 1,
+      "accept_pass": false,
+      "recall": 0.5,
+      "precision": 1.0,
+      "n_tool_calls": 78,
+      "tool_calls_to_first_correct_edit": 40,
+      "total_tokens": 3085273,
+      "files_edited": [
+        "cli/nested_json.py",
+        "client.py"
+      ]
+    },
+    {
+      "arm": "treatment",
+      "run_index": 2,
+      "accept_pass": false,
+      "recall": 0.25,
+      "precision": 0.5,
+      "n_tool_calls": 57,
+      "tool_calls_to_first_correct_edit": 20,
+      "total_tokens": 3355421,
+      "files_edited": [
+        "cli/nested_json.py",
+        "tests/test_json.py"
+      ]
+    },
+    {
+      "arm": "treatment",
+      "run_index": 3,
+      "accept_pass": false,
+      "recall": 0.5,
+      "precision": 1.0,
+      "n_tool_calls": 25,
+      "tool_calls_to_first_correct_edit": 14,
+      "total_tokens": 1226931,
+      "files_edited": [
+        "cli/nested_json.py",
+        "client.py"
+      ]
+    },
+    {
+      "arm": "treatment",
+      "run_index": 4,
+      "accept_pass": false,
+      "recall": 0.25,
+      "precision": 1.0,
+      "n_tool_calls": 54,
+      "tool_calls_to_first_correct_edit": 36,
+      "total_tokens": 1903991,
+      "files_edited": [
+        "cli/nested_json.py"
+      ]
+    }
+  ]
+}

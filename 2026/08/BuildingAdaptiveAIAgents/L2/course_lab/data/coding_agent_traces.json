@@ -1,0 +1,1527 @@
+[
+  {
+    "episode_id": "ep-add_api_endpoint-001",
+    "day": 1,
+    "topic": "add_api_endpoint",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Add a GET /health endpoint that returns service status."
+      },
+      {
+        "role": "assistant",
+        "content": "Following the existing router pattern and adding a test alongside."
+      },
+      {
+        "role": "assistant",
+        "content": "Endpoint added, test passes, returns 200 with a status body."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "grep",
+        "args": "router.get(",
+        "result": "found the existing route definitions",
+        "ok": true
+      },
+      {
+        "tool": "write_file",
+        "args": "app/routes/health.py",
+        "result": "created",
+        "ok": true
+      },
+      {
+        "tool": "edit_file",
+        "args": "app/router.py: register health route",
+        "result": "1 hunk applied",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test -- -k health",
+        "result": "1 passed",
+        "ok": true
+      }
+    ],
+    "skills_used": [
+      "test-driven-development"
+    ],
+    "errors": [],
+    "workflow": [
+      "find the router pattern",
+      "write a failing test for /health",
+      "implement the route",
+      "register it",
+      "run the test"
+    ],
+    "preferences": [
+      "UK English in comments and docs",
+      "no em dashes in prose",
+      "small, frequently committed changes",
+      "table-driven tests where it helps"
+    ]
+  },
+  {
+    "episode_id": "ep-add_api_endpoint-002",
+    "day": 1,
+    "topic": "add_api_endpoint",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Add POST /items to create an item."
+      },
+      {
+        "role": "assistant",
+        "content": "Reusing the request-validation helper the other write routes use."
+      },
+      {
+        "role": "assistant",
+        "content": "Route, validation and test in; suite green."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "read_file",
+        "args": "app/routes/orders.py",
+        "result": "saw the validation helper usage",
+        "ok": true
+      },
+      {
+        "tool": "write_file",
+        "args": "app/routes/items.py",
+        "result": "created",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test -- -k items",
+        "result": "2 passed",
+        "ok": true
+      }
+    ],
+    "skills_used": [],
+    "errors": [],
+    "workflow": [
+      "read a similar route",
+      "write the route",
+      "reuse the validation helper",
+      "test it"
+    ],
+    "preferences": [
+      "UK English in comments and docs",
+      "match the surrounding code style",
+      "no em dashes in prose",
+      "table-driven tests where it helps",
+      "type hints on public functions"
+    ]
+  },
+  {
+    "episode_id": "ep-add_api_endpoint-003",
+    "day": 2,
+    "topic": "add_api_endpoint",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Add DELETE /items/{id}."
+      },
+      {
+        "role": "assistant",
+        "content": "First version returned 200 on a missing id; the project convention is 404, fixing."
+      },
+      {
+        "role": "assistant",
+        "content": "Now returns 404 for unknown ids, matching the other routes. Tests cover both cases."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "write_file",
+        "args": "app/routes/items.py: add delete",
+        "result": "created handler",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test -- -k delete",
+        "result": "1 failed: expected 404 got 200",
+        "ok": false
+      },
+      {
+        "tool": "edit_file",
+        "args": "app/routes/items.py: raise 404 on missing id",
+        "result": "1 hunk applied",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test -- -k delete",
+        "result": "2 passed",
+        "ok": true
+      }
+    ],
+    "skills_used": [
+      "systematic-debugging"
+    ],
+    "errors": [
+      {
+        "error": "delete route returned 200 for a missing id",
+        "fix": "follow the project convention: raise 404 for unknown ids, as the other routes do"
+      }
+    ],
+    "workflow": [
+      "add the delete handler",
+      "run the test",
+      "see the wrong status code",
+      "apply the 404 convention",
+      "re-test"
+    ],
+    "preferences": [
+      "conventional commit messages",
+      "match the surrounding code style",
+      "no em dashes in prose",
+      "small, frequently committed changes",
+      "table-driven tests where it helps"
+    ]
+  },
+  {
+    "episode_id": "ep-add_api_endpoint-004",
+    "day": 1,
+    "topic": "add_api_endpoint",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Add GET /items/{id} to fetch one item."
+      },
+      {
+        "role": "assistant",
+        "content": "Mirroring the list route and adding a not-found test up front."
+      },
+      {
+        "role": "assistant",
+        "content": "Route and tests in; both the found and missing cases pass."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "read_file",
+        "args": "app/routes/items.py",
+        "result": "saw the list handler",
+        "ok": true
+      },
+      {
+        "tool": "edit_file",
+        "args": "app/routes/items.py: add get-by-id",
+        "result": "1 hunk applied",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test -- -k items",
+        "result": "3 passed",
+        "ok": true
+      }
+    ],
+    "skills_used": [
+      "test-driven-development"
+    ],
+    "errors": [],
+    "workflow": [
+      "read the list route",
+      "write the not-found test",
+      "add the handler",
+      "run the test"
+    ],
+    "preferences": [
+      "UK English in comments and docs",
+      "conventional commit messages",
+      "no em dashes in prose",
+      "small, frequently committed changes",
+      "type hints on public functions"
+    ]
+  },
+  {
+    "episode_id": "ep-add_api_endpoint-005",
+    "day": 2,
+    "topic": "add_api_endpoint",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Add PATCH /items/{id} for partial updates."
+      },
+      {
+        "role": "assistant",
+        "content": "First cut let unknown fields through; the convention is to reject them with 422."
+      },
+      {
+        "role": "assistant",
+        "content": "Now rejects unknown fields like the other write routes; tests cover it."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "edit_file",
+        "args": "app/routes/items.py: add patch",
+        "result": "created handler",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test -- -k patch",
+        "result": "1 failed: unknown field accepted",
+        "ok": false
+      },
+      {
+        "tool": "edit_file",
+        "args": "app/routes/items.py: reject unknown fields (422)",
+        "result": "1 hunk applied",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test -- -k patch",
+        "result": "2 passed",
+        "ok": true
+      }
+    ],
+    "skills_used": [
+      "systematic-debugging"
+    ],
+    "errors": [
+      {
+        "error": "patch route accepted unknown fields silently",
+        "fix": "reject unknown fields with 422, matching the project's write-route convention"
+      }
+    ],
+    "workflow": [
+      "add the patch handler",
+      "run the test",
+      "spot the loose validation",
+      "apply the 422 convention",
+      "re-test"
+    ],
+    "preferences": [
+      "conventional commit messages",
+      "match the surrounding code style",
+      "table-driven tests where it helps",
+      "type hints on public functions"
+    ]
+  },
+  {
+    "episode_id": "ep-fix_failing_build-001",
+    "day": 1,
+    "topic": "fix_failing_build",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "The build is red on main, can you fix it?"
+      },
+      {
+        "role": "assistant",
+        "content": "A type error slipped in; the function returns Optional but the caller assumes a value."
+      },
+      {
+        "role": "assistant",
+        "content": "Guarded the None case; typecheck and build are green."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "run_build",
+        "args": "make build",
+        "result": "error: type check failed in service.py",
+        "ok": false
+      },
+      {
+        "tool": "run_typecheck",
+        "args": "make typecheck",
+        "result": "Optional[str] not handled at call site",
+        "ok": true
+      },
+      {
+        "tool": "edit_file",
+        "args": "app/service.py: handle None",
+        "result": "1 hunk applied",
+        "ok": true
+      },
+      {
+        "tool": "run_build",
+        "args": "make build",
+        "result": "ok",
+        "ok": true
+      }
+    ],
+    "skills_used": [
+      "systematic-debugging"
+    ],
+    "errors": [
+      {
+        "error": "type check failed: Optional[str] used without a None guard",
+        "fix": "guard the None case at the call site before use"
+      }
+    ],
+    "workflow": [
+      "run the build",
+      "read the type error",
+      "add the None guard",
+      "rebuild"
+    ],
+    "preferences": [
+      "UK English in comments and docs",
+      "match the surrounding code style",
+      "no em dashes in prose",
+      "small, frequently committed changes"
+    ]
+  },
+  {
+    "episode_id": "ep-fix_failing_build-002",
+    "day": 1,
+    "topic": "fix_failing_build",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Build broke after the dependency bump."
+      },
+      {
+        "role": "assistant",
+        "content": "The bumped library renamed an import; updating the import path."
+      },
+      {
+        "role": "assistant",
+        "content": "Build green again."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "run_build",
+        "args": "make build",
+        "result": "ImportError: cannot import name 'Client'",
+        "ok": false
+      },
+      {
+        "tool": "grep",
+        "args": "from sdk import Client",
+        "result": "one usage",
+        "ok": true
+      },
+      {
+        "tool": "edit_file",
+        "args": "app/client.py: update import path",
+        "result": "1 hunk applied",
+        "ok": true
+      },
+      {
+        "tool": "run_build",
+        "args": "make build",
+        "result": "ok",
+        "ok": true
+      }
+    ],
+    "skills_used": [],
+    "errors": [
+      {
+        "error": "ImportError after a dependency bump: a symbol moved",
+        "fix": "update the import to the new path from the library changelog"
+      }
+    ],
+    "workflow": [
+      "run the build",
+      "read the import error",
+      "check the changelog",
+      "update the import",
+      "rebuild"
+    ],
+    "preferences": [
+      "conventional commit messages",
+      "small, frequently committed changes",
+      "type hints on public functions"
+    ]
+  },
+  {
+    "episode_id": "ep-fix_failing_build-003",
+    "day": 2,
+    "topic": "fix_failing_build",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "CI build fails but it builds fine locally."
+      },
+      {
+        "role": "assistant",
+        "content": "Local picked up a cached artefact; a clean build reproduces the CI failure, a missing generated file."
+      },
+      {
+        "role": "assistant",
+        "content": "Added the codegen step to the build target; clean build passes."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "run_build",
+        "args": "make build",
+        "result": "ok (used cache)",
+        "ok": true
+      },
+      {
+        "tool": "run_build",
+        "args": "make clean build",
+        "result": "error: generated_schema.py not found",
+        "ok": false
+      },
+      {
+        "tool": "edit_file",
+        "args": "Makefile: add codegen before build",
+        "result": "1 hunk applied",
+        "ok": true
+      },
+      {
+        "tool": "run_build",
+        "args": "make clean build",
+        "result": "ok",
+        "ok": true
+      },
+      {
+        "tool": "git_commit",
+        "args": "build: run codegen before build",
+        "result": "committed",
+        "ok": true
+      }
+    ],
+    "skills_used": [
+      "systematic-debugging"
+    ],
+    "errors": [
+      {
+        "error": "build passed locally on a cache but failed clean: a generated file was missing",
+        "fix": "always reproduce with a clean build; wire codegen into the build target"
+      }
+    ],
+    "workflow": [
+      "build locally",
+      "reproduce with a clean build",
+      "find the missing generated file",
+      "add codegen to the build",
+      "commit"
+    ],
+    "preferences": [
+      "pytest, not unittest",
+      "small, frequently committed changes",
+      "type hints on public functions"
+    ]
+  },
+  {
+    "episode_id": "ep-fix_failing_build-004",
+    "day": 1,
+    "topic": "fix_failing_build",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Lint is failing the build on unused imports."
+      },
+      {
+        "role": "assistant",
+        "content": "Removing the dead imports the linter flags."
+      },
+      {
+        "role": "assistant",
+        "content": "Lint clean, build green."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "run_build",
+        "args": "make build",
+        "result": "lint error: 4 unused imports",
+        "ok": false
+      },
+      {
+        "tool": "run_lint",
+        "args": "make lint --fix",
+        "result": "removed 4 unused imports",
+        "ok": true
+      },
+      {
+        "tool": "run_build",
+        "args": "make build",
+        "result": "ok",
+        "ok": true
+      }
+    ],
+    "skills_used": [],
+    "errors": [
+      {
+        "error": "build failed on lint: unused imports",
+        "fix": "run make lint --fix before pushing; remove dead imports"
+      }
+    ],
+    "workflow": [
+      "run the build",
+      "read the lint failure",
+      "auto-fix the imports",
+      "rebuild"
+    ],
+    "preferences": [
+      "match the surrounding code style",
+      "pytest, not unittest",
+      "small, frequently committed changes",
+      "table-driven tests where it helps",
+      "type hints on public functions"
+    ]
+  },
+  {
+    "episode_id": "ep-fix_failing_build-005",
+    "day": 2,
+    "topic": "fix_failing_build",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Build fails intermittently in CI only."
+      },
+      {
+        "role": "assistant",
+        "content": "Tests share state through a module global; order-dependence makes it flaky. Reproduced with a fixed random order."
+      },
+      {
+        "role": "assistant",
+        "content": "Isolated the fixture per test; clean across orderings now."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "run_tests",
+        "args": "make test -- -p no:randomly",
+        "result": "passed",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test -- -p randomly --seed 1",
+        "result": "1 failed: state leaked between tests",
+        "ok": false
+      },
+      {
+        "tool": "edit_file",
+        "args": "tests/conftest.py: isolate fixture per test",
+        "result": "1 hunk applied",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test -- -p randomly --seed 1",
+        "result": "passed",
+        "ok": true
+      }
+    ],
+    "skills_used": [
+      "systematic-debugging"
+    ],
+    "errors": [
+      {
+        "error": "intermittent CI failure: tests leaked state through a shared global (order-dependent)",
+        "fix": "reproduce with randomised order; give each test an isolated fixture"
+      }
+    ],
+    "workflow": [
+      "run tests in default order",
+      "reproduce with randomised order",
+      "find the shared state",
+      "isolate the fixture",
+      "confirm across orderings"
+    ],
+    "preferences": [
+      "match the surrounding code style",
+      "no em dashes in prose",
+      "pytest, not unittest",
+      "table-driven tests where it helps"
+    ]
+  },
+  {
+    "episode_id": "ep-refactor_module-001",
+    "day": 1,
+    "topic": "refactor_module",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Split the giant utils.py into focused modules."
+      },
+      {
+        "role": "assistant",
+        "content": "Grouping by responsibility and keeping a thin re-export so imports do not break."
+      },
+      {
+        "role": "assistant",
+        "content": "Done; the suite passes unchanged, no call sites edited."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "read_file",
+        "args": "app/utils.py",
+        "result": "600 lines, mixed concerns",
+        "ok": true
+      },
+      {
+        "tool": "write_file",
+        "args": "app/utils/text.py",
+        "result": "created",
+        "ok": true
+      },
+      {
+        "tool": "write_file",
+        "args": "app/utils/dates.py",
+        "result": "created",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test",
+        "result": "212 passed",
+        "ok": true
+      }
+    ],
+    "skills_used": [
+      "writing-plan-spec"
+    ],
+    "errors": [],
+    "workflow": [
+      "read the module",
+      "group functions by responsibility",
+      "split into submodules",
+      "keep a re-export shim",
+      "run the suite"
+    ],
+    "preferences": [
+      "conventional commit messages",
+      "match the surrounding code style",
+      "no em dashes in prose",
+      "pytest, not unittest",
+      "type hints on public functions"
+    ]
+  },
+  {
+    "episode_id": "ep-refactor_module-002",
+    "day": 1,
+    "topic": "refactor_module",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Extract the retry logic that is duplicated in three clients."
+      },
+      {
+        "role": "assistant",
+        "content": "Pulling it into one helper and pointing the three clients at it."
+      },
+      {
+        "role": "assistant",
+        "content": "Single helper now; tests green and three copies gone."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "grep",
+        "args": "for attempt in range(",
+        "result": "three near-identical retry loops",
+        "ok": true
+      },
+      {
+        "tool": "write_file",
+        "args": "app/retry.py",
+        "result": "created with_retry helper",
+        "ok": true
+      },
+      {
+        "tool": "edit_file",
+        "args": "three clients use with_retry",
+        "result": "3 hunks applied",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test",
+        "result": "212 passed",
+        "ok": true
+      }
+    ],
+    "skills_used": [
+      "test-driven-development"
+    ],
+    "errors": [],
+    "workflow": [
+      "find the duplication",
+      "write one helper",
+      "repoint the call sites",
+      "run the suite"
+    ],
+    "preferences": [
+      "UK English in comments and docs",
+      "match the surrounding code style",
+      "small, frequently committed changes",
+      "table-driven tests where it helps"
+    ]
+  },
+  {
+    "episode_id": "ep-refactor_module-003",
+    "day": 2,
+    "topic": "refactor_module",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Rename the Account model field 'name' to 'display_name' everywhere."
+      },
+      {
+        "role": "assistant",
+        "content": "The first pass missed a string reference in a serializer; a grep for the old name caught it."
+      },
+      {
+        "role": "assistant",
+        "content": "All references updated, including the serializer; suite green."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "edit_file",
+        "args": "rename field across models and callers",
+        "result": "8 hunks applied",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test",
+        "result": "1 failed: KeyError 'name' in serializer",
+        "ok": false
+      },
+      {
+        "tool": "grep",
+        "args": "\"name\"",
+        "result": "missed serializer string key",
+        "ok": true
+      },
+      {
+        "tool": "edit_file",
+        "args": "serializer: use display_name",
+        "result": "1 hunk applied",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test",
+        "result": "212 passed",
+        "ok": true
+      }
+    ],
+    "skills_used": [
+      "systematic-debugging"
+    ],
+    "errors": [
+      {
+        "error": "rename missed a string reference in a serializer (KeyError 'name')",
+        "fix": "after a rename, grep for the old name as a string, not just as a symbol"
+      }
+    ],
+    "workflow": [
+      "rename the symbol across the code",
+      "run the suite",
+      "see the serializer KeyError",
+      "grep for the old string",
+      "fix the missed reference",
+      "re-test"
+    ],
+    "preferences": [
+      "conventional commit messages",
+      "match the surrounding code style",
+      "small, frequently committed changes",
+      "type hints on public functions"
+    ]
+  },
+  {
+    "episode_id": "ep-refactor_module-004",
+    "day": 1,
+    "topic": "refactor_module",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Pull the validation rules out of the route handlers into one place."
+      },
+      {
+        "role": "assistant",
+        "content": "Moving them into a validators module and importing from the handlers."
+      },
+      {
+        "role": "assistant",
+        "content": "Centralised; handlers are thinner and the suite is green."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "grep",
+        "args": "if not .* raise",
+        "result": "validation scattered across handlers",
+        "ok": true
+      },
+      {
+        "tool": "write_file",
+        "args": "app/validators.py",
+        "result": "created",
+        "ok": true
+      },
+      {
+        "tool": "edit_file",
+        "args": "handlers import from validators",
+        "result": "4 hunks applied",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test",
+        "result": "212 passed",
+        "ok": true
+      }
+    ],
+    "skills_used": [
+      "writing-plan-spec"
+    ],
+    "errors": [],
+    "workflow": [
+      "find the scattered validation",
+      "create a validators module",
+      "repoint the handlers",
+      "run the suite"
+    ],
+    "preferences": [
+      "match the surrounding code style",
+      "pytest, not unittest",
+      "type hints on public functions"
+    ]
+  },
+  {
+    "episode_id": "ep-refactor_module-005",
+    "day": 2,
+    "topic": "refactor_module",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Convert the callback-style db layer to async."
+      },
+      {
+        "role": "assistant",
+        "content": "A first pass deadlocked because one sync call was left inside the event loop; found it by tracing the hang."
+      },
+      {
+        "role": "assistant",
+        "content": "Made that call async too; suite passes and the deadlock is gone."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "edit_file",
+        "args": "app/db.py: convert to async",
+        "result": "12 hunks applied",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test -- -k db",
+        "result": "hung, then timed out",
+        "ok": false
+      },
+      {
+        "tool": "grep",
+        "args": "time.sleep|requests.get",
+        "result": "one blocking call left in the loop",
+        "ok": true
+      },
+      {
+        "tool": "edit_file",
+        "args": "app/db.py: await the last blocking call",
+        "result": "1 hunk applied",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test -- -k db",
+        "result": "9 passed",
+        "ok": true
+      }
+    ],
+    "skills_used": [
+      "systematic-debugging"
+    ],
+    "errors": [
+      {
+        "error": "async conversion deadlocked: a blocking sync call was left inside the event loop",
+        "fix": "after an async migration, grep for blocking calls (sleep, sync http) and await or offload them"
+      }
+    ],
+    "workflow": [
+      "convert the layer to async",
+      "run the tests",
+      "trace the hang",
+      "find the blocking call",
+      "make it async",
+      "re-test"
+    ],
+    "preferences": [
+      "UK English in comments and docs",
+      "conventional commit messages",
+      "pytest, not unittest",
+      "small, frequently committed changes",
+      "table-driven tests where it helps",
+      "type hints on public functions"
+    ]
+  },
+  {
+    "episode_id": "ep-run_test_suite-001",
+    "day": 1,
+    "topic": "run_test_suite",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Run the tests and tell me if main is green."
+      },
+      {
+        "role": "assistant",
+        "content": "Using the project's test command from the Makefile."
+      },
+      {
+        "role": "assistant",
+        "content": "All green: 212 passed."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "read_file",
+        "args": "Makefile",
+        "result": "target: make test",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test",
+        "result": "212 passed in 38s",
+        "ok": true
+      }
+    ],
+    "skills_used": [],
+    "errors": [],
+    "workflow": [
+      "find the project test command",
+      "run make test",
+      "report the result"
+    ],
+    "preferences": [
+      "match the surrounding code style",
+      "small, frequently committed changes",
+      "type hints on public functions"
+    ]
+  },
+  {
+    "episode_id": "ep-run_test_suite-002",
+    "day": 1,
+    "topic": "run_test_suite",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Check the suite before I open the PR."
+      },
+      {
+        "role": "assistant",
+        "content": "Running the documented test command and the linter."
+      },
+      {
+        "role": "assistant",
+        "content": "Suite and lint both clean."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "run_tests",
+        "args": "make test",
+        "result": "212 passed",
+        "ok": true
+      },
+      {
+        "tool": "run_lint",
+        "args": "make lint",
+        "result": "0 issues",
+        "ok": true
+      }
+    ],
+    "skills_used": [
+      "requesting-code-review"
+    ],
+    "errors": [],
+    "workflow": [
+      "run make test",
+      "run make lint",
+      "confirm clean"
+    ],
+    "preferences": [
+      "UK English in comments and docs",
+      "conventional commit messages",
+      "match the surrounding code style",
+      "pytest, not unittest",
+      "table-driven tests where it helps",
+      "type hints on public functions"
+    ]
+  },
+  {
+    "episode_id": "ep-run_test_suite-003",
+    "day": 2,
+    "topic": "run_test_suite",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Tests are failing for me but not in CI, can you look?"
+      },
+      {
+        "role": "assistant",
+        "content": "I ran bare pytest and hit a ModuleNotFoundError; that is the wrong interpreter, the venv is not active."
+      },
+      {
+        "role": "assistant",
+        "content": "Re-ran with the project's command (make test, which uses the project venv) and it passes. The issue was bare pytest, not the code."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "run_tests",
+        "args": "pytest",
+        "result": "ModuleNotFoundError: No module named 'app' (wrong interpreter)",
+        "ok": false
+      },
+      {
+        "tool": "read_file",
+        "args": "Makefile",
+        "result": "test target uses the project venv",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test",
+        "result": "212 passed",
+        "ok": true
+      }
+    ],
+    "skills_used": [
+      "systematic-debugging"
+    ],
+    "errors": [
+      {
+        "error": "ran bare `pytest`, hit ModuleNotFoundError because the wrong interpreter/environment was used",
+        "fix": "do not run bare pytest; use the project's test command (make test), which runs the project venv"
+      }
+    ],
+    "workflow": [
+      "run the tests",
+      "read the import error",
+      "notice the environment is wrong",
+      "switch to the project test command",
+      "confirm green"
+    ],
+    "preferences": [
+      "UK English in comments and docs",
+      "conventional commit messages",
+      "match the surrounding code style",
+      "no em dashes in prose",
+      "small, frequently committed changes",
+      "table-driven tests where it helps"
+    ]
+  },
+  {
+    "episode_id": "ep-run_test_suite-004",
+    "day": 2,
+    "topic": "run_test_suite",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Quick, are the tests passing?"
+      },
+      {
+        "role": "assistant",
+        "content": "First try was bare pytest again and it could not import the package; the environment was not set up."
+      },
+      {
+        "role": "assistant",
+        "content": "Used make test instead: 212 passed. Same lesson as before, bare pytest does not pick up the project environment."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "run_tests",
+        "args": "pytest -q",
+        "result": "ModuleNotFoundError: No module named 'app'",
+        "ok": false
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test",
+        "result": "212 passed",
+        "ok": true
+      }
+    ],
+    "skills_used": [],
+    "errors": [
+      {
+        "error": "bare `pytest` could not import the package: wrong environment",
+        "fix": "use make test (project venv), never bare pytest, for this repo"
+      }
+    ],
+    "workflow": [
+      "run bare pytest",
+      "hit the import error",
+      "use make test",
+      "confirm green"
+    ],
+    "preferences": [
+      "UK English in comments and docs",
+      "conventional commit messages",
+      "match the surrounding code style"
+    ]
+  },
+  {
+    "episode_id": "ep-run_test_suite-005",
+    "day": 1,
+    "topic": "run_test_suite",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Run just the auth tests."
+      },
+      {
+        "role": "assistant",
+        "content": "Passing the filter through the project test command."
+      },
+      {
+        "role": "assistant",
+        "content": "14 passed."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "run_tests",
+        "args": "make test -- -k auth",
+        "result": "14 passed",
+        "ok": true
+      }
+    ],
+    "skills_used": [],
+    "errors": [],
+    "workflow": [
+      "run the filtered suite via make test",
+      "report the result"
+    ],
+    "preferences": [
+      "UK English in comments and docs",
+      "match the surrounding code style",
+      "pytest, not unittest",
+      "small, frequently committed changes",
+      "type hints on public functions"
+    ]
+  },
+  {
+    "episode_id": "ep-run_test_suite-006",
+    "day": 2,
+    "topic": "run_test_suite",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "The flaky test again, can you confirm it on a clean run?"
+      },
+      {
+        "role": "assistant",
+        "content": "Reflex was bare pytest and it failed to import again; I keep doing that on this repo."
+      },
+      {
+        "role": "assistant",
+        "content": "make test is clean, the test is not flaky, it was the environment. Noting it so I stop reaching for bare pytest."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "run_tests",
+        "args": "pytest tests/test_eta.py",
+        "result": "ModuleNotFoundError: No module named 'app'",
+        "ok": false
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test -- -k eta",
+        "result": "3 passed",
+        "ok": true
+      }
+    ],
+    "skills_used": [
+      "systematic-debugging"
+    ],
+    "errors": [
+      {
+        "error": "reached for bare `pytest` again; import failed because the environment was not active",
+        "fix": "this repo needs make test (project venv); stop defaulting to bare pytest"
+      }
+    ],
+    "workflow": [
+      "run bare pytest out of habit",
+      "hit the import error",
+      "switch to make test",
+      "confirm not flaky"
+    ],
+    "preferences": [
+      "conventional commit messages",
+      "match the surrounding code style",
+      "no em dashes in prose",
+      "pytest, not unittest",
+      "small, frequently committed changes",
+      "type hints on public functions"
+    ]
+  },
+  {
+    "episode_id": "ep-setup_dev_env-001",
+    "day": 1,
+    "topic": "setup_dev_env",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Get the project running locally so I can start on the ticket."
+      },
+      {
+        "role": "assistant",
+        "content": "Reading the README and the Makefile to find the documented setup path."
+      },
+      {
+        "role": "assistant",
+        "content": "Created the virtualenv, installed the locked dependencies, and the dev server starts on the default port."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "read_file",
+        "args": "README.md",
+        "result": "found a 'Getting started' section",
+        "ok": true
+      },
+      {
+        "tool": "read_file",
+        "args": "Makefile",
+        "result": "target: make setup, make dev",
+        "ok": true
+      },
+      {
+        "tool": "install_deps",
+        "args": "make setup",
+        "result": "installed 41 packages from the lockfile",
+        "ok": true
+      },
+      {
+        "tool": "run_build",
+        "args": "make dev",
+        "result": "server listening on :8000",
+        "ok": true
+      }
+    ],
+    "skills_used": [
+      "executing-plans"
+    ],
+    "errors": [],
+    "workflow": [
+      "read the README",
+      "read the Makefile",
+      "create the virtualenv",
+      "install locked dependencies",
+      "start the dev server"
+    ],
+    "preferences": [
+      "UK English in comments and docs",
+      "conventional commit messages",
+      "small, frequently committed changes"
+    ]
+  },
+  {
+    "episode_id": "ep-setup_dev_env-002",
+    "day": 1,
+    "topic": "setup_dev_env",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "New laptop, set up the repo from scratch."
+      },
+      {
+        "role": "assistant",
+        "content": "Cloning and following the documented bootstrap."
+      },
+      {
+        "role": "assistant",
+        "content": "Bootstrap done; smoke test passes."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "read_file",
+        "args": "docs/CONTRIBUTING.md",
+        "result": "bootstrap steps listed",
+        "ok": true
+      },
+      {
+        "tool": "install_deps",
+        "args": "make setup",
+        "result": "ok",
+        "ok": true
+      },
+      {
+        "tool": "run_tests",
+        "args": "make test -- -k smoke",
+        "result": "1 passed",
+        "ok": true
+      }
+    ],
+    "skills_used": [],
+    "errors": [],
+    "workflow": [
+      "clone the repo",
+      "read CONTRIBUTING",
+      "run make setup",
+      "run the smoke test"
+    ],
+    "preferences": [
+      "UK English in comments and docs",
+      "no em dashes in prose",
+      "small, frequently committed changes",
+      "type hints on public functions"
+    ]
+  },
+  {
+    "episode_id": "ep-setup_dev_env-003",
+    "day": 2,
+    "topic": "setup_dev_env",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Set up the project on the CI image; it behaves differently there."
+      },
+      {
+        "role": "assistant",
+        "content": "The image is missing a system library the build needs; installing it then re-running setup."
+      },
+      {
+        "role": "assistant",
+        "content": "Added the apt step to the bootstrap docs so the next person does not hit this."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "install_deps",
+        "args": "make setup",
+        "result": "error: pg_config not found",
+        "ok": false
+      },
+      {
+        "tool": "install_deps",
+        "args": "apt-get install libpq-dev",
+        "result": "ok",
+        "ok": true
+      },
+      {
+        "tool": "install_deps",
+        "args": "make setup",
+        "result": "ok",
+        "ok": true
+      },
+      {
+        "tool": "edit_file",
+        "args": "docs/CONTRIBUTING.md: note libpq-dev",
+        "result": "1 hunk applied",
+        "ok": true
+      },
+      {
+        "tool": "git_commit",
+        "args": "docs: note libpq-dev for setup",
+        "result": "committed",
+        "ok": true
+      }
+    ],
+    "skills_used": [
+      "systematic-debugging"
+    ],
+    "errors": [
+      {
+        "error": "make setup failed: pg_config not found (missing system library)",
+        "fix": "install libpq-dev before make setup; documented it in CONTRIBUTING"
+      }
+    ],
+    "workflow": [
+      "run make setup",
+      "read the failure",
+      "install the missing system library",
+      "re-run setup",
+      "document the prerequisite",
+      "commit"
+    ],
+    "preferences": [
+      "UK English in comments and docs",
+      "match the surrounding code style",
+      "table-driven tests where it helps"
+    ]
+  },
+  {
+    "episode_id": "ep-setup_dev_env-004",
+    "day": 2,
+    "topic": "setup_dev_env",
+    "conversation": [
+      {
+        "role": "user",
+        "content": "Setup runs but the app crashes on boot."
+      },
+      {
+        "role": "assistant",
+        "content": "It needs an env var that is not in the example file; the crash is a missing DATABASE_URL."
+      },
+      {
+        "role": "assistant",
+        "content": "Added it to .env.example with a comment; app boots."
+      }
+    ],
+    "tool_calls": [
+      {
+        "tool": "run_build",
+        "args": "make dev",
+        "result": "KeyError: 'DATABASE_URL'",
+        "ok": false
+      },
+      {
+        "tool": "read_file",
+        "args": ".env.example",
+        "result": "DATABASE_URL not listed",
+        "ok": true
+      },
+      {
+        "tool": "edit_file",
+        "args": ".env.example: add DATABASE_URL",
+        "result": "1 hunk applied",
+        "ok": true
+      },
+      {
+        "tool": "run_build",
+        "args": "make dev",
+        "result": "server listening on :8000",
+        "ok": true
+      }
+    ],
+    "skills_used": [],
+    "errors": [
+      {
+        "error": "app crashed on boot: required env var DATABASE_URL was missing and undocumented",
+        "fix": "add required env vars to .env.example with a comment so setup is complete"
+      }
+    ],
+    "workflow": [
+      "start the app",
+      "read the crash",
+      "find the missing env var",
+      "document it",
+      "reboot"
+    ],
+    "preferences": [
+      "no em dashes in prose",
+      "pytest, not unittest",
+      "type hints on public functions"
+    ]
+  }
+]

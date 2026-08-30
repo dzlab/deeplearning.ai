@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LoRA &amp; QLoRA — Interactive Explainer</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #f7f7f5;
+    --white: #ffffff;
+    --border: #e0ddd5;
+    --blue: #3b82f6;
+    --orange: #f59e0b;
+    --green: #10b981;
+    --red: #dc2626;
+    --yellow-bg: #fef3c7;
+    --yellow-border: #fcd34d;
+    --text: #1a1a18;
+    --muted: #6b7280;
+    --shadow: 0 1px 4px rgba(0,0,0,0.07), 0 2px 8px rgba(0,0,0,0.04);
+    --radius: 8px;
+    --mono: "JetBrains Mono", "Menlo", "Consolas", monospace;
+  }
+
+  body {
+    background: var(--cream);
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    padding: 24px 16px 48px;
+  }
+
+  header {
+    max-width: 960px;
+    margin: 0 auto 32px;
+    padding: 24px 0 20px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+
+  header p {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  /* --- section wrapper --- */
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  section > h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    padding-left: 2px;
+  }
+
+  /* --- bento cell --- */
+  .cell {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .cell h3 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  /* --- grid helpers --- */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 800px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    header h1 { font-size: 1.5rem; }
+  }
+
+  /* --- cost callout --- */
+  .cost-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.88rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+
+  .cost-tag.expensive {
+    background: #fee2e2;
+    color: var(--red);
+  }
+
+  .cost-tag.cheap {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  .cost-detail {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 4px;
+    line-height: 1.7;
+  }
+
+  .cost-big {
+    font-size: 1.5rem;
+    font-weight: 800;
+    font-family: var(--mono);
+    margin: 6px 0 4px;
+  }
+
+  .cost-big.red { color: var(--red); }
+  .cost-big.green { color: var(--green); }
+
+  /* --- SVG decomposition --- */
+  .svg-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 0;
+  }
+
+  .svg-wrap svg text {
+    font-family: var(--mono);
+  }
+
+  /* hover tooltips for decomp */
+  .decomp-tooltip {
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-align: center;
+    min-height: 20px;
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  .decomp-group {
+    cursor: pointer;
+  }
+
+  .decomp-group:hover rect {
+    filter: brightness(0.88);
+  }
+
+  /* --- range/slider section --- */
+  .controls-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .control-group label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .control-group input[type=range] {
+    width: 180px;
+    accent-color: var(--orange);
+    cursor: pointer;
+  }
+
+  .control-group .val-display {
+    font-family: var(--mono);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--orange);
+  }
+
+  .rank-stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .stat-pill {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-pill .stat-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .stat-pill .stat-value {
+    font-family: var(--mono);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  /* --- histogram section --- */
+  .hist-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-items: flex-end;
+  }
+
+  .quant-toggle {
+    display: block;
+    margin: 12px auto 0;
+    padding: 8px 22px;
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .quant-toggle:hover { background: #2563eb; }
+
+  .hist-bar {
+    transition: height 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                width 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                background 0.45s ease;
+  }
+
+  .footnote {
+    background: var(--yellow-bg);
+    border: 1px solid var(--yellow-border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 0.83rem;
+    color: #92400e;
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  /* --- VRAM calculator --- */
+  .vram-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .vram-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .vram-field label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .vram-field select,
+  .vram-field input[type=number] {
+    font-size: 0.88rem;
+    font-family: var(--mono);
+    padding: 5px 8px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: white;
+    color: var(--text);
+    width: 130px;
+  }
+
+  .vram-bar-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+
+  .vram-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+  }
+
+  .vram-bar-row .bar-label {
+    width: 130px;
+    text-align: right;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .vram-bar-row .bar-track {
+    flex: 1;
+    height: 18px;
+    background: #f0eee8;
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .vram-bar-row .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.35s ease;
+  }
+
+  .vram-bar-row .bar-gb {
+    width: 60px;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .vram-total {
+    font-family: var(--mono);
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-top: 6px;
+  }
+
+  .vram-total span {
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 400;
+    margin-left: 6px;
+  }
+
+  /* --- comparison columns --- */
+  .compare-col {
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .compare-col h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .compare-col.full-ft { background: #fef2f2; border-color: #fca5a5; }
+  .compare-col.lora    { background: #fff7ed; border-color: #fcd34d; }
+  .compare-col.qlora   { background: #f0fdf4; border-color: #6ee7b7; }
+
+  .compare-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.84rem;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+
+  .compare-row .ckey { color: var(--muted); }
+  .compare-row .cval { font-weight: 600; font-family: var(--mono); }
+
+  /* --- timeline --- */
+  .timeline {
+    display: flex;
+    gap: 0;
+    align-items: stretch;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .tl-step {
+    flex: 1;
+    min-width: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .tl-step:not(:last-child)::after {
+    content: "→";
+    position: absolute;
+    right: -10px;
+    top: 24px;
+    font-size: 1.2rem;
+    color: var(--muted);
+    z-index: 1;
+  }
+
+  .tl-badge {
+    background: var(--blue);
+    color: white;
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  .tl-box {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 0.78rem;
+    text-align: center;
+    width: 90%;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+
+  .tl-box strong {
+    display: block;
+    color: var(--text);
+    font-size: 0.85rem;
+    margin-bottom: 2px;
+  }
+
+  .tl-versions {
+    display: flex;
+    gap: 4px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .tl-v {
+    background: var(--green);
+    color: white;
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-size: 0.72rem;
+    font-family: var(--mono);
+    font-weight: 700;
+  }
+
+  .refit-note {
+    background: #fef3c7;
+    border: 1px solid var(--yellow-border);
+    border-left: 4px solid var(--orange);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 0.84rem;
+    color: #78350f;
+    margin-top: 10px;
+  }
+
+  /* --- receipt cards --- */
+  .receipt-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .receipt-prompt {
+    background: #f3f4f6;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-style: italic;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .receipt-row {
+    padding: 10px 14px;
+    font-size: 0.83rem;
+    line-height: 1.5;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  .receipt-row:last-child { border-bottom: none; }
+
+  .receipt-arm {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .receipt-arm.base { color: var(--red); }
+  .receipt-arm.v2   { color: var(--green); }
+
+  .receipt-text { color: var(--text); }
+  .receipt-text.hallucinated { color: var(--red); }
+  .receipt-text.refused { color: #065f46; }
+
+  .receipt-placeholder {
+    padding: 24px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-style: italic;
+  }
+
+  .receipt-placeholder code {
+    display: block;
+    margin-top: 6px;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    background: #f3f4f6;
+    border-radius: 4px;
+    padding: 4px 8px;
+    color: var(--text);
+  }
+
+  /* inline code */
+  code {
+    font-family: var(--mono);
+    font-size: 0.85em;
+    background: #f3f4f6;
+    border-radius: 3px;
+    padding: 1px 5px;
+    color: var(--text);
+  }
+
+  footer {
+    max-width: 960px;
+    margin: 36px auto 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  footer a {
+    color: var(--blue);
+    text-decoration: none;
+  }
+
+  footer a:hover { text-decoration: underline; }
+
+  /* utility */
+  .mono { font-family: var(--mono); }
+  .small { font-size: 0.82rem; color: var(--muted); margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>LoRA &amp; QLoRA — Interactive Explainer</h1>
+  <p>dl-ai-continual-learning · Module 4: Weight-Space Adaptation</p>
+</header>
+
+<div class="page">
+
+<!-- =========================================================
+     SECTION 1: Why this exists
+     ========================================================= -->
+<section id="sec-why">
+  <h2>Why this exists</h2>
+  <div class="grid-2">
+
+    <div class="cell">
+      <h3>Full fine-tune cost</h3>
+      <div class="cost-tag expensive">Full FT</div>
+      <div class="cost-big red">$$$$</div>
+      <div class="cost-detail">
+        Llama-3.3-70B × FP16<br>
+        Weights alone: <strong>70B × 2 bytes = 140 GB</strong><br>
+        + optimizer (AdamW): ~280 GB (2× fp32 moments)<br>
+        + activations + gradients: ~60–90 GB more<br>
+        <br>
+        3 epochs × 8 A100 hours ≈ <strong>24 A100-hrs</strong><br>
+        Won't even fit on one local A10 (24 GB)<br>
+        Every week of new data → full re-fit again. Not sustainable.
+      </div>
+    </div>
+
+    <div class="cell">
+      <h3>LoRA cost</h3>
+      <div class="cost-tag cheap">LoRA</div>
+      <div class="cost-big green">$</div>
+      <div class="cost-detail">
+        r=8 adapter on 70B (d=8192)<br>
+        Per layer: 2 × 8192 × 8 = 131K params<br>
+        ~32 targeted layers → ~4.2M total trainable params<br>
+        Adapter file: <strong>~0.02 GB</strong> (vs 140 GB base)<br>
+        <br>
+        Trains in minutes on one A10 with Unsloth + 4-bit QLoRA<br>
+        Adapter re-fit is cheap to repeat every week<br>
+        Base frozen in INT4: total VRAM fits the A10 (24 GB).
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 2: The decomposition
+     ========================================================= -->
+<section id="sec-decomp">
+  <h2>The decomposition</h2>
+  <div class="cell">
+    <p class="small" style="margin-bottom:12px;">
+      Hover each block to see what it represents.
+      <span style="color:var(--blue);">Blue = frozen.</span>
+      <span style="color:var(--orange);">Orange = trainable.</span>
+      <span style="color:var(--green);">Green = effective weight.</span>
+    </p>
+    <div class="svg-wrap">
+      <svg id="decomp-svg" width="640" height="200" viewBox="0 0 640 200"
+           role="img" aria-label="LoRA weight decomposition diagram">
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#6b7280"/>
+          </marker>
+        </defs>
+
+        <!-- W (frozen) -->
+        <g class="decomp-group" id="dg-W"
+           data-tip="W — original pretrained weight (frozen, not updated during LoRA training)">
+          <rect x="20" y="40" width="110" height="110" rx="4" fill="#3b82f6" opacity="0.85"/>
+          <text x="75" y="95" text-anchor="middle" fill="white" font-size="28" font-weight="700">W</text>
+          <text x="75" y="118" text-anchor="middle" fill="white" font-size="11" opacity="0.85">d × d</text>
+        </g>
+
+        <!-- + -->
+        <text x="145" y="103" text-anchor="middle" fill="#9ca3af" font-size="28" font-weight="300">+</text>
+
+        <!-- α label -->
+        <text x="191" y="30" text-anchor="middle" fill="var(--orange)" font-size="13" font-weight="600">α /r ×</text>
+
+        <!-- B (tall thin) -->
+        <g class="decomp-group" id="dg-B"
+           data-tip="B — tall thin adapter matrix (d × r). Initialized to zeros, trained from scratch.">
+          <rect x="165" y="40" width="32" height="110" rx="4" fill="#f59e0b" opacity="0.9"/>
+          <text x="181" y="101" text-anchor="middle" fill="white" font-size="14" font-weight="700">B</text>
+          <text x="181" y="120" text-anchor="middle" fill="white" font-size="9" opacity="0.85">d×r</text>
+        </g>
+
+        <!-- · -->
+        <text x="210" y="103" text-anchor="middle" fill="#9ca3af" font-size="24">·</text>
+
+        <!-- A (short wide) -->
+        <g class="decomp-group" id="dg-A"
+           data-tip="A — short wide adapter matrix (r × d). Initialized with random Gaussian, trained from scratch.">
+          <rect x="222" y="80" width="110" height="32" rx="4" fill="#f59e0b" opacity="0.9"/>
+          <text x="277" y="101" text-anchor="middle" fill="white" font-size="14" font-weight="700">A</text>
+          <text x="277" y="116" text-anchor="middle" fill="white" font-size="9" opacity="0.85">r×d</text>
+        </g>
+
+        <!-- = -->
+        <text x="348" y="103" text-anchor="middle" fill="#9ca3af" font-size="28" font-weight="300">=</text>
+
+        <!-- W' (effective) -->
+        <g class="decomp-group" id="dg-Wp"
+           data-tip="W&#39; — effective weight used at inference. Equals W + (α/r)·B·A. Can be merged back into W for zero overhead.">
+          <rect x="365" y="40" width="110" height="110" rx="4" fill="#10b981" opacity="0.85"/>
+          <text x="420" y="92" text-anchor="middle" fill="white" font-size="22" font-weight="700">W&#8242;</text>
+          <text x="420" y="114" text-anchor="middle" fill="white" font-size="11" opacity="0.85">W + (α/r)·BA</text>
+        </g>
+
+        <!-- formula label below -->
+        <text x="320" y="178" text-anchor="middle" fill="#6b7280" font-size="12">
+          W&#8242; = W + (α / r) · B · A
+        </text>
+
+        <!-- dim annotations -->
+        <text x="75" y="168" text-anchor="middle" fill="#3b82f6" font-size="10" font-weight="600">FROZEN</text>
+        <text x="240" y="168" text-anchor="middle" fill="#f59e0b" font-size="10" font-weight="600">TRAINABLE</text>
+        <text x="420" y="168" text-anchor="middle" fill="#10b981" font-size="10" font-weight="600">EFFECTIVE</text>
+      </svg>
+    </div>
+    <div class="decomp-tooltip" id="decomp-tip">Hover a block to learn more</div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 2b: Rudder vs cargo hold (MLP vs LoRA)
+     ========================================================= -->
+<section id="sec-rudder">
+  <h2>Rudder vs. cargo hold — why behavior steers but facts don't</h2>
+  <p class="small" style="margin-bottom:12px;">
+    The same low-rank bottleneck that makes LoRA cheap is why it steers
+    <em>behavior</em> well but can't store <em>facts</em>. Compare its shape to
+    the transformer's own MLP — the layer where facts actually live.
+  </p>
+  <div class="grid-2">
+
+    <div class="cell">
+      <h3>MLP — the cargo hold</h3>
+      <div class="cost-tag expensive">stores facts</div>
+      <div class="cost-detail">
+        <strong>expand → gate → contract.</strong><br>
+        Projects up into a wide hidden layer (several × the model dim),
+        through a <strong>nonlinearity</strong> (GELU / SwiGLU), then back down.<br>
+        <br>
+        The nonlinearity makes each neuron a <strong>light switch</strong> — a
+        real if-then. The wide gated layer acts like a
+        <strong>key-value memory</strong>: keys detect a pattern, values write a
+        fact back into the stream (the reading ROME / MEMIT exploit). This is
+        where pretrained knowledge sits.
+      </div>
+    </div>
+
+    <div class="cell">
+      <h3>LoRA — the rudder</h3>
+      <div class="cost-tag cheap">steers behavior</div>
+      <div class="cost-detail">
+        <strong>contract → expand</strong>, nothing in between.<br>
+        Squeezes through a rank-<code>r</code> bottleneck and back up — pure
+        linear, <strong>no switch</strong>.<br>
+        <br>
+        So it's a <strong>dimmer knob</strong>, not a light switch: <em>a bit
+        more of this in proportion to that.</em> Plenty for behavior — a
+        low-rank <strong>direction</strong> (a tone, a refusal). A rudder can't
+        carry <strong>cargo</strong>: thousands of specific facts are high-rank
+        and don't fit.
+      </div>
+    </div>
+
+  </div>
+  <div class="footnote" style="margin-top:10px;">
+    This is exactly the split the two arms measure: persona behavior installs
+    <strong>0.00 → 1.00</strong> and refusal suppresses <strong>0.80 → 0.12</strong>
+    (steerable), while invented partner facts stay <strong>0.00</strong>
+    (cargo — retrieve them via Module 3 instead). <em>Caveat:</em> "several ×
+    wider" is loose (classic 4×, SwiGLU ≈ 2.67×); key-value memory is a
+    well-supported interpretation, not settled fact; clean single-concept
+    neurons are a teaching fiction (real ones are polysemantic).
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 3: The rank knob (interactive)
+     ========================================================= -->
+<section id="sec-rank">
+  <h2>The rank knob (interactive)</h2>
+  <div class="cell">
+    <div class="controls-row">
+      <div class="control-group">
+        <label>Rank (r)</label>
+        <input type="range" id="rank-slider" min="1" max="64" value="8" step="1">
+        <span class="val-display" id="rank-val">8</span>
+      </div>
+      <div class="control-group">
+        <label>Alpha (α)</label>
+        <input type="range" id="alpha-slider" min="1" max="128" value="16" step="1">
+        <span class="val-display" id="alpha-val">16</span>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;">
+      <!-- mini SVG showing B and A resizing -->
+      <svg id="rank-svg" width="220" height="150" viewBox="0 0 220 150"
+           aria-label="Rank visualizer showing B and A matrix sizes">
+        <!-- W frozen placeholder -->
+        <rect x="5" y="20" width="60" height="110" rx="3" fill="#3b82f6" opacity="0.5"/>
+        <text x="35" y="79" text-anchor="middle" fill="white" font-size="12" font-weight="600">W</text>
+        <text x="35" y="94" text-anchor="middle" fill="white" font-size="9" opacity="0.8">d×d</text>
+        <text x="35" y="142" text-anchor="middle" fill="#3b82f6" font-size="9" font-weight="600">FROZEN</text>
+
+        <!-- B dynamic -->
+        <rect id="rank-B" x="80" y="20" rx="3" fill="#f59e0b" opacity="0.9"/>
+        <text id="rank-B-label" x="0" y="0" text-anchor="middle" fill="white" font-size="10" font-weight="600">B</text>
+        <text id="rank-B-sub" x="0" y="0" text-anchor="middle" fill="white" font-size="8" opacity="0.85">d×r</text>
+
+        <!-- A dynamic -->
+        <rect id="rank-A" x="80" rx="3" fill="#f59e0b" opacity="0.9"/>
+        <text id="rank-A-label" x="0" y="0" text-anchor="middle" fill="white" font-size="10" font-weight="600">A</text>
+        <text id="rank-A-sub" x="0" y="0" text-anchor="middle" fill="white" font-size="8" opacity="0.85">r×d</text>
+      </svg>
+
+      <div class="rank-stats">
+        <div class="stat-pill">
+          <span class="stat-label">Trainable params</span>
+          <span class="stat-value" id="stat-params">—</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">Adapter file size</span>
+          <span class="stat-value" id="stat-size">—</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">Scaling α / r</span>
+          <span class="stat-value" id="stat-scale">—</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">% of d×d</span>
+          <span class="stat-value" id="stat-pct">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footnote" style="margin-top:14px;">
+      <strong>Rule of thumb:</strong> r=8 for efficient adaptation, r=32–64 when task divergence is large.
+      α is usually set to 2× r (α/r = 2) so scaling doesn't dominate. Using r=64 costs ~8× more VRAM than r=8 for adapter layers — but the base is frozen so total VRAM still dominated by the frozen model.
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 4: Quantization — the Q in QLoRA
+     ========================================================= -->
+<section id="sec-quant">
+  <h2>Quantization: the Q in QLoRA</h2>
+  <div class="cell">
+    <p style="margin-bottom:14px;font-size:0.88rem;color:var(--muted);">
+      QLoRA loads the frozen base model in INT4 (4-bit NF4), cutting VRAM 4×. The LoRA adapters (B, A) remain in BF16/FP16. Toggle to see the precision bucket distribution.
+    </p>
+
+    <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;">
+      <div>
+        <div style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:8px;" id="hist-label">FP16 — 32 buckets</div>
+        <svg id="hist-svg" width="340" height="130" viewBox="0 0 340 130"
+             aria-label="Weight distribution histogram">
+          <!-- bars rendered by JS -->
+        </svg>
+      </div>
+      <div>
+        <div style="font-size:0.82rem;color:var(--muted);line-height:1.6;max-width:240px;">
+          <p><strong style="color:var(--text);">FP16</strong> — 16 bits per weight, ~32 effective precision buckets. Full resolution, high memory.</p>
+          <br>
+          <p><strong style="color:var(--text);">INT4</strong> — 4 bits per weight (NF4 variant), ~16 buckets, optimized for normally-distributed weights. 4× memory reduction.</p>
+          <br>
+          <p>Accuracy loss from INT4 quantization of the frozen base is typically &lt;1% on downstream tasks when LoRA adapters are trained on top.</p>
+        </div>
+      </div>
+    </div>
+
+    <button class="quant-toggle" id="quant-btn">Toggle INT4 / FP16</button>
+
+    <div class="footnote">
+      Memory drops ~4× (140 GB → 35 GB for Llama-3.3-70B).
+      LoRA factors B and A stay in FP16 — the tiny adapter gradient math runs in full precision while the frozen body saves memory.
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 5: VRAM calculator (live)
+     ========================================================= -->
+<section id="sec-vram">
+  <h2>VRAM calculator (live)</h2>
+  <div class="cell">
+    <div class="vram-controls">
+      <div class="vram-field">
+        <label>Base model</label>
+        <select id="vram-model">
+          <option value="70">Llama-3.3-70B</option>
+          <option value="13">Llama-2-13B</option>
+          <option value="7">Llama-2-7B</option>
+        </select>
+      </div>
+      <div class="vram-field">
+        <label>Quantization</label>
+        <select id="vram-quant">
+          <option value="2">FP16</option>
+          <option value="1">INT8</option>
+          <option value="0.5" selected>INT4</option>
+        </select>
+      </div>
+      <div class="vram-field">
+        <label>LoRA rank (r)</label>
+        <input type="number" id="vram-r" value="8" min="1" max="128">
+      </div>
+      <div class="vram-field">
+        <label>Batch size</label>
+        <input type="number" id="vram-batch" value="4" min="1" max="64">
+      </div>
+      <div class="vram-field">
+        <label>Seq length</label>
+        <input type="number" id="vram-seq" value="512" min="64" max="4096">
+      </div>
+    </div>
+
+    <div class="vram-bar-wrap" id="vram-bars">
+      <!-- filled by JS -->
+    </div>
+
+    <div class="vram-total" id="vram-total">— GB</div>
+
+    <div class="footnote">
+      Estimates are approximate. Activations scale with batch × seq × hidden. Optimizer (AdamW) only applies to LoRA params (frozen base not updated). Numbers assume standard transformer hidden dim derived from model size.
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 6: LoRA vs QLoRA vs Full FT
+     ========================================================= -->
+<section id="sec-compare">
+  <h2>LoRA vs QLoRA vs Full FT</h2>
+  <div class="grid-3">
+
+    <div class="cell compare-col full-ft">
+      <h4>Full Fine-Tune</h4>
+      <div class="compare-row"><span class="ckey">Cost</span><span class="cval red">$$$$</span></div>
+      <div class="compare-row"><span class="ckey">Trainable %</span><span class="cval">100%</span></div>
+      <div class="compare-row"><span class="ckey">VRAM (70B)</span><span class="cval">~420 GB+</span></div>
+      <div class="compare-row"><span class="ckey">Adapter size</span><span class="cval">140 GB</span></div>
+      <div class="compare-row"><span class="ckey">Re-fit speed</span><span class="cval">Slowest</span></div>
+      <div class="compare-row"><span class="ckey">Serving</span><span class="cval">New full ckpt</span></div>
+    </div>
+
+    <div class="cell compare-col lora">
+      <h4>LoRA (FP16 base)</h4>
+      <div class="compare-row"><span class="ckey">Cost</span><span class="cval" style="color:#d97706;">$$</span></div>
+      <div class="compare-row"><span class="ckey">Trainable %</span><span class="cval">~0.1–1%</span></div>
+      <div class="compare-row"><span class="ckey">VRAM (70B)</span><span class="cval">~140+ GB</span></div>
+      <div class="compare-row"><span class="ckey">Adapter size</span><span class="cval">~0.02 GB</span></div>
+      <div class="compare-row"><span class="ckey">Re-fit speed</span><span class="cval">Fast</span></div>
+      <div class="compare-row"><span class="ckey">Serving</span><span class="cval">Base + adapter</span></div>
+    </div>
+
+    <div class="cell compare-col qlora">
+      <h4>QLoRA (INT4 base)</h4>
+      <div class="compare-row"><span class="ckey">Cost</span><span class="cval" style="color:var(--green);">$</span></div>
+      <div class="compare-row"><span class="ckey">Trainable %</span><span class="cval">~0.1–1%</span></div>
+      <div class="compare-row"><span class="ckey">VRAM (70B)</span><span class="cval">~35–40 GB</span></div>
+      <div class="compare-row"><span class="ckey">Adapter size</span><span class="cval">~0.02 GB</span></div>
+      <div class="compare-row"><span class="ckey">Re-fit speed</span><span class="cval">Fast</span></div>
+      <div class="compare-row"><span class="ckey">Serving</span><span class="cval">Dequant + merge</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 7: Cumulative re-fits (the monotone curve)
+     ========================================================= -->
+<section id="sec-refits">
+  <h2>Cumulative re-fits — the monotone suppression curve</h2>
+  <div class="cell">
+    <p style="font-size:0.86rem;color:var(--muted);margin-bottom:16px;">
+      Two cumulative arms, each trained fresh from the frozen 4-bit base with
+      local Unsloth + QLoRA. The arms are sized so behavior-suppression climbs
+      <strong>monotonically</strong> — <code>behavior_rate</code> is
+      engages-on-unknown (lower is better), measured live on Gemma 3n E4B (A10).
+    </p>
+    <div class="timeline">
+      <div class="tl-step">
+        <div class="tl-badge">base</div>
+        <div class="tl-box">
+          <strong>Stock Gemma 3n</strong>
+          engages &amp; rambles<br>
+          <span style="font-size:0.72rem;">behavior_rate 0.80</span>
+          <div class="tl-versions">
+            <span class="tl-v">base</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-badge">v1 (weak)</div>
+        <div class="tl-box">
+          <strong>1 shape</strong>
+          40 unknowns · 8 epochs<br>
+          <span style="font-size:0.72rem;">behavior_rate 0.62</span>
+          <div class="tl-versions">
+            <span class="tl-v">v1</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-badge">v2 (endpoint)</div>
+        <div class="tl-box">
+          <strong>2 shapes, reinforced</strong>
+          100 unknowns · 12 epochs<br>
+          <span style="font-size:0.72rem;">behavior_rate 0.12</span>
+          <div class="tl-versions">
+            <span class="tl-v">v2</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="refit-note">
+      <strong>⚠ No warm-start — each arm trains from scratch.</strong>
+      Every cumulative re-fit starts from the frozen base model, not from the
+      previous adapter, so each arm re-learns everything from the accumulated
+      corpus. Teaching point: more corpus coverage needs proportionally more
+      training — an earlier 4-shape <code>v3</code> arm under-trained at fixed
+      epochs and <em>regressed</em> suppression to ~0.50, so we removed it and
+      reinforced v2 (more unknowns + more epochs) to keep the curve monotone.
+    </div>
+
+    <div class="footnote" style="margin-top:10px;">
+      The <strong>router</strong> (Module 4 script) picks base vs. the specialised
+      adapter per request; the <strong>regression gate</strong> keys on the best
+      arm (v2): <code>behavior_rate_drop ≥ 0.5</code> AND
+      <code>kept_capability_rate ≥ 0.85</code>.
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SECTION 8: The receipts — base vs v2 on hallucinated voyages
+     ========================================================= -->
+<section id="sec-receipts">
+  <h2>The receipts — base vs v2 on hallucinated voyages</h2>
+  <div class="cell">
+    <p style="font-size:0.86rem;color:var(--muted);margin-bottom:16px;">
+      Prompts about held-out voyages the base model never saw.
+      <strong style="color:var(--red);">Base hallucinates</strong> vessel names and cargo.
+      <strong style="color:var(--green);">v2 (QLoRA-trained) refuses</strong> instead of inventing facts.
+    </p>
+    <div class="grid-3" id="receipts-grid">
+      <!-- filled by JS from receipts-data -->
+    </div>
+  </div>
+</section>
+
+</div><!-- .page -->
+
+<footer>
+  <p>
+    Module 4: Weight-Space Adaptation ·
+    <a href="../../README.md">Back to README</a> ·
+    dl-ai-continual-learning
+  </p>
+</footer>
+
+<!-- ===== RECEIPTS DATA (base/v2 pairs replayed from the committed cache) ===== -->
+<script id="receipts-data" type="application/json">
+[]
+</script>
+
+<script>
+/* =========================================================
+   PURE COMPUTE FUNCTIONS
+   ========================================================= */
+
+/**
+ * Compute number of trainable parameters for one LoRA layer.
+ * @param {{rank: number, dIn: number, dOut: number}} opts
+ */
+function computeLoraParams({ rank, dIn, dOut }) {
+  return rank * (dIn + dOut);
+}
+
+/**
+ * Compute total LoRA adapter trainable params and file size (in MB).
+ * Assumes 32 targeted projection layers (q, v per 16 layers).
+ * @param {{rank: number, dIn: number, dOut: number, numLayers: number}} opts
+ */
+function computeAdapterStats({ rank, dIn, dOut, numLayers }) {
+  const paramsPerLayer = computeLoraParams({ rank, dIn, dOut });
+  const total = paramsPerLayer * numLayers;
+  // BF16 = 2 bytes per param
+  const bytes = total * 2;
+  const mb = bytes / (1024 * 1024);
+  return { totalParams: total, mb };
+}
+
+/**
+ * Estimate VRAM breakdown in GB.
+ * @param {{modelB: number, bytesPerParam: number, rank: number, batch: number, seq: number}} opts
+ */
+function computeVRAM({ modelB, bytesPerParam, rank, batch, seq }) {
+  // hidden dim heuristic (from standard model cards)
+  const hiddenMap = { 70: 8192, 13: 5120, 7: 4096 };
+  const hidden = hiddenMap[modelB] || 4096;
+  const numLayers = modelB >= 65 ? 80 : modelB >= 12 ? 40 : 32;
+  const numTargeted = numLayers * 2; // q+v per layer
+
+  // frozen base
+  const frozenGB = (modelB * 1e9 * bytesPerParam) / 1e9;
+
+  // LoRA adapter (BF16)
+  const adapterParams = rank * (hidden + hidden) * numTargeted;
+  const adapterGB = (adapterParams * 2) / 1e9;
+
+  // optimizer state — only for adapter params (AdamW: 2x fp32 moments)
+  const optimGB = (adapterParams * 2 * 4) / 1e9;
+
+  // activations: batch * seq * hidden * numLayers * 2 bytes (BF16 acts)
+  const actGB = (batch * seq * hidden * numLayers * 2) / 1e9;
+
+  const totalGB = frozenGB + adapterGB + optimGB + actGB;
+
+  return {
+    frozenGB: +frozenGB.toFixed(2),
+    adapterGB: +adapterGB.toFixed(3),
+    optimGB: +optimGB.toFixed(3),
+    actGB: +actGB.toFixed(3),
+    totalGB: +totalGB.toFixed(1),
+  };
+}
+
+/**
+ * Format large numbers: 1_000_000 → "1.0M", 1_000 → "1.0K"
+ */
+function fmtNum(n) {
+  if (n >= 1e9) return (n / 1e9).toFixed(2) + 'B';
+  if (n >= 1e6) return (n / 1e6).toFixed(2) + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
+  return String(n);
+}
+
+/* =========================================================
+   HISTOGRAM DATA GENERATION
+   ========================================================= */
+
+/**
+ * Generate an approximate normal-ish distribution of bucket heights.
+ * Returns an array of heights (0–1 normalized).
+ */
+function bellCurve(buckets) {
+  const h = [];
+  const center = (buckets - 1) / 2;
+  const sigma = buckets / 5;
+  for (let i = 0; i < buckets; i++) {
+    const x = i - center;
+    h.push(Math.exp(-(x * x) / (2 * sigma * sigma)));
+  }
+  return h;
+}
+
+/* =========================================================
+   DOM INITIALIZATION
+   ========================================================= */
+
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* ---- Section 2: Decomposition hover ---- */
+  const tip = document.getElementById('decomp-tip');
+  ['dg-W', 'dg-B', 'dg-A', 'dg-Wp'].forEach(function (id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('mouseenter', function () {
+      tip.textContent = el.dataset.tip || '';
+    });
+    el.addEventListener('mouseleave', function () {
+      tip.textContent = 'Hover a block to learn more';
+    });
+  });
+
+  /* ---- Section 3: Rank knob ---- */
+  const rankSlider  = document.getElementById('rank-slider');
+  const alphaSlider = document.getElementById('alpha-slider');
+  const rankVal     = document.getElementById('rank-val');
+  const alphaVal    = document.getElementById('alpha-val');
+
+  const D_IN = 8192, D_OUT = 8192, NUM_LAYERS = 64; // 70B heuristic
+
+  function updateRank() {
+    const r = parseInt(rankSlider.value, 10);
+    const a = parseInt(alphaSlider.value, 10);
+    rankVal.textContent  = r;
+    alphaVal.textContent = a;
+
+    // SVG resize: B is d_out × r (tall), A is r × d_in (wide)
+    // Canvas: 220×150, B starts at x=80 y=20, max height=110px
+    const maxH = 110, maxW = 115;
+    const rFrac = r / 64; // r/max_r
+    const bW  = Math.max(6, Math.round(rFrac * 22));   // r-wide
+    const bH  = maxH;                                   // d_out-tall (fixed)
+    const aW  = maxW;                                   // d_in-wide (fixed)
+    const aH  = Math.max(6, Math.round(rFrac * 22));   // r-tall
+
+    const bX = 80, bY = 20;
+    const aX = 80 + bW + 4;
+    const aY = bY + bH - aH;
+
+    const svg = document.getElementById('rank-svg');
+    const B = document.getElementById('rank-B');
+    const Bl = document.getElementById('rank-B-label');
+    const Bs = document.getElementById('rank-B-sub');
+    const A = document.getElementById('rank-A');
+    const Al = document.getElementById('rank-A-label');
+    const As = document.getElementById('rank-A-sub');
+
+    B.setAttribute('x', bX); B.setAttribute('y', bY);
+    B.setAttribute('width', bW); B.setAttribute('height', bH);
+    Bl.setAttribute('x', bX + bW/2); Bl.setAttribute('y', bY + bH/2 - 5);
+    Bs.setAttribute('x', bX + bW/2); Bs.setAttribute('y', bY + bH/2 + 9);
+
+    A.setAttribute('x', aX); A.setAttribute('y', aY);
+    A.setAttribute('width', aW); A.setAttribute('height', aH);
+    Al.setAttribute('x', aX + aW/2); Al.setAttribute('y', aY + aH/2 + 3);
+    As.setAttribute('x', aX + aW/2); As.setAttribute('y', aY + aH/2 + 13);
+
+    // Hide sub-labels if too small
+    Bl.style.display = bW < 10 ? 'none' : '';
+    Bs.style.display = bW < 14 ? 'none' : '';
+    Al.style.display = aH < 10 ? 'none' : '';
+    As.style.display = aH < 14 ? 'none' : '';
+
+    // Stats
+    const stats = computeAdapterStats({ rank: r, dIn: D_IN, dOut: D_OUT, numLayers: NUM_LAYERS });
+    document.getElementById('stat-params').textContent = fmtNum(stats.totalParams);
+    const mb = stats.mb;
+    document.getElementById('stat-size').textContent =
+      mb < 1000 ? mb.toFixed(1) + ' MB' : (mb / 1024).toFixed(2) + ' GB';
+    document.getElementById('stat-scale').textContent = (a / r).toFixed(2);
+    const totalBase = D_IN * D_OUT * NUM_LAYERS;
+    const pct = (stats.totalParams / totalBase * 100).toFixed(3);
+    document.getElementById('stat-pct').textContent = pct + '%';
+  }
+
+  rankSlider.addEventListener('input', updateRank);
+  alphaSlider.addEventListener('input', updateRank);
+  updateRank();
+
+  /* ---- Section 4: Histogram / quantization toggle ---- */
+  var histMode = 'fp16'; // 'fp16' | 'int4'
+
+  function drawHistogram(mode) {
+    const svg = document.getElementById('hist-svg');
+    const label = document.getElementById('hist-label');
+    svg.innerHTML = '';
+
+    const buckets = mode === 'fp16' ? 32 : 16;
+    const barW    = mode === 'fp16' ? 8 : 16;
+    const gap     = 2;
+    const color   = mode === 'fp16' ? '#3b82f6' : '#f59e0b';
+    const heights = bellCurve(buckets);
+    const maxH    = 100;
+    const svgW    = buckets * (barW + gap) + gap + 10;
+
+    svg.setAttribute('viewBox', '0 0 ' + svgW + ' 130');
+    svg.setAttribute('width', Math.min(svgW, 340));
+
+    // x-axis
+    const axis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    axis.setAttribute('x1', 0); axis.setAttribute('y1', 115);
+    axis.setAttribute('x2', svgW); axis.setAttribute('y2', 115);
+    axis.setAttribute('stroke', '#d1d5db'); axis.setAttribute('stroke-width', '1');
+    svg.appendChild(axis);
+
+    heights.forEach(function (h, i) {
+      const barH = Math.round(h * maxH);
+      const x = gap + i * (barW + gap);
+      const y = 115 - barH;
+      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      rect.setAttribute('x', x); rect.setAttribute('y', y);
+      rect.setAttribute('width', barW); rect.setAttribute('height', barH);
+      rect.setAttribute('rx', 2);
+      rect.setAttribute('fill', color);
+      rect.setAttribute('opacity', '0.8');
+      rect.classList.add('hist-bar');
+      svg.appendChild(rect);
+    });
+
+    // label
+    const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    txt.setAttribute('x', svgW / 2);
+    txt.setAttribute('y', 128);
+    txt.setAttribute('text-anchor', 'middle');
+    txt.setAttribute('fill', '#9ca3af');
+    txt.setAttribute('font-size', '10');
+    txt.textContent = mode === 'fp16'
+      ? 'Weight magnitude buckets (FP16, 32 bins)'
+      : 'Weight magnitude buckets (INT4, 16 bins)';
+    svg.appendChild(txt);
+
+    label.textContent = mode === 'fp16'
+      ? 'FP16 — 32 buckets'
+      : 'INT4 (NF4) — 16 buckets';
+  }
+
+  document.getElementById('quant-btn').addEventListener('click', function () {
+    histMode = histMode === 'fp16' ? 'int4' : 'fp16';
+    drawHistogram(histMode);
+  });
+
+  drawHistogram('fp16');
+
+  /* ---- Section 5: VRAM calculator ---- */
+  var QUANT_LABELS = { '2': 'FP16', '1': 'INT8', '0.5': 'INT4' };
+  var BAR_COLORS = {
+    'Frozen base':      '#3b82f6',
+    'LoRA adapters':    '#f59e0b',
+    'Optimizer state':  '#8b5cf6',
+    'Activations':      '#10b981',
+  };
+
+  function updateVRAM() {
+    const modelB    = parseInt(document.getElementById('vram-model').value, 10);
+    const bppStr    = document.getElementById('vram-quant').value;
+    const bytesPerParam = parseFloat(bppStr);
+    const r         = parseInt(document.getElementById('vram-r').value, 10) || 8;
+    const batch     = parseInt(document.getElementById('vram-batch').value, 10) || 4;
+    const seq       = parseInt(document.getElementById('vram-seq').value, 10) || 512;
+
+    const v = computeVRAM({ modelB, bytesPerParam, rank: r, batch, seq });
+    const segments = {
+      'Frozen base':     v.frozenGB,
+      'LoRA adapters':   v.adapterGB,
+      'Optimizer state': v.optimGB,
+      'Activations':     v.actGB,
+    };
+    const maxGB = Math.max(v.totalGB, 1);
+
+    const barsEl = document.getElementById('vram-bars');
+    barsEl.innerHTML = '';
+
+    Object.entries(segments).forEach(function ([name, gb]) {
+      const row = document.createElement('div');
+      row.className = 'vram-bar-row';
+
+      const lbl = document.createElement('div');
+      lbl.className = 'bar-label';
+      lbl.textContent = name;
+
+      const track = document.createElement('div');
+      track.className = 'bar-track';
+
+      const fill = document.createElement('div');
+      fill.className = 'bar-fill';
+      fill.style.width = ((gb / maxGB) * 100).toFixed(1) + '%';
+      fill.style.background = BAR_COLORS[name] || '#6b7280';
+
+      track.appendChild(fill);
+
+      const gbLabel = document.createElement('div');
+      gbLabel.className = 'bar-gb';
+      gbLabel.textContent = gb < 0.01 ? '<0.01 GB' : gb.toFixed(2) + ' GB';
+
+      row.appendChild(lbl);
+      row.appendChild(track);
+      row.appendChild(gbLabel);
+      barsEl.appendChild(row);
+    });
+
+    document.getElementById('vram-total').innerHTML =
+      v.totalGB + ' GB <span>estimated total VRAM</span>';
+  }
+
+  ['vram-model', 'vram-quant', 'vram-r', 'vram-batch', 'vram-seq'].forEach(function (id) {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('change', updateVRAM);
+    if (el) el.addEventListener('input', updateVRAM);
+  });
+
+  updateVRAM();
+
+  /* ---- Section 8: Receipts ---- */
+  function renderReceipts(pairs) {
+    const grid = document.getElementById('receipts-grid');
+    grid.innerHTML = '';
+
+    if (!pairs || pairs.length === 0) {
+      // render 3 placeholder cards
+      for (var i = 0; i < 3; i++) {
+        const card = document.createElement('div');
+        card.className = 'receipt-card';
+        card.innerHTML =
+          '<div class="receipt-placeholder">' +
+          'receipts replay from the committed cache — see the base-vs-v2 cells in <code>module_5_model_space/weight/notebook.ipynb</code>' +
+          '</div>';
+        grid.appendChild(card);
+      }
+      return;
+    }
+
+    pairs.forEach(function (pair) {
+      const card = document.createElement('div');
+      card.className = 'receipt-card';
+
+      const prompt = document.createElement('div');
+      prompt.className = 'receipt-prompt';
+      prompt.textContent = pair.prompt || '(no prompt)';
+      card.appendChild(prompt);
+
+      const baseRow = document.createElement('div');
+      baseRow.className = 'receipt-row';
+      baseRow.innerHTML =
+        '<div class="receipt-arm base">Base (hallucinated)</div>' +
+        '<div class="receipt-text hallucinated">' +
+          escapeHtml(pair.base || '') +
+        '</div>';
+      card.appendChild(baseRow);
+
+      const v2Row = document.createElement('div');
+      v2Row.className = 'receipt-row';
+      v2Row.innerHTML =
+        '<div class="receipt-arm v2">v2 QLoRA (refused)</div>' +
+        '<div class="receipt-text refused">' +
+          escapeHtml(pair.v2 || '') +
+        '</div>';
+      card.appendChild(v2Row);
+
+      grid.appendChild(card);
+    });
+  }
+
+  function escapeHtml(s) {
+    return s
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  var receiptsEl = document.getElementById('receipts-data');
+  var receiptsData = [];
+  try {
+    receiptsData = JSON.parse(receiptsEl.textContent.trim() || '[]');
+  } catch (e) {
+    console.warn('receipts-data JSON parse error:', e);
+    receiptsData = [];
+  }
+  renderReceipts(receiptsData);
+
+}); // end DOMContentLoaded
+</script>
+
+</body>
+</html>

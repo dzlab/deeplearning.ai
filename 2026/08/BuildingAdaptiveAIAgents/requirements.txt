@@ -1,0 +1,48 @@
+# python package requirements file
+# Note to our Learners: Our courses are created at a specific point in time. The models and libraries used will naturally change over time.
+# If you download and run the notebooks locally, you should create a Python virtual environment
+# with the Python version matching the one used in the course and use this requirements.txt file to install the required Python packages.
+# Due to the wide diversity of platforms and environments, DeepLearning does not explicitly support running locally. However, if you encounter
+# issues, the course support channel is a good place to ask questions.
+# Python 3.12
+#
+# This is the union of L1/requirements.txt .. L5/requirements.txt — install it
+# once and every lesson (L1-L5) runs end-to-end against the committed fixtures
+# in ro_shared_data/. Each lesson also keeps its own self-contained
+# requirements.txt; the pins here match those files exactly.
+# --- shared by all lessons (L1-L5) ---
+python-dotenv==1.2.2
+pyyaml==6.0.3
+numpy==2.4.6
+pydantic==2.12.5
+typing_extensions>=4.15
+oracledb==3.4.2
+oracleagentmemory==26.4.0
+sentence-transformers==3.4.1
+matplotlib==3.10.9
+networkx==3.6.1
+netgraph==4.13.2
+litellm==1.83.14
+# --- L2: graph orchestration + the Gradio chat UI ---
+langgraph==1.2.2
+langgraph-oracledb==1.0.1
+langchain-oci==0.2.6
+langchain-oracledb==1.4.0
+gradio>=4.44,<5
+# Gradio 4.44 still calls Starlette's pre-0.39 TemplateResponse API.
+fastapi>=0.115,<0.116
+starlette==0.38.6
+# --- L4, L5: model space (QLoRA adapters, local inference) ---
+torch==2.6.0
+transformers==4.57.6
+peft==0.19.1
+accelerate==1.0.1
+safetensors==0.4.5
+datasets==3.2.0
+bitsandbytes==0.45.0
+# --- optional: L4/L5 live GPU training path ---
+# The lessons run CPU-only from the committed caches without these. Install
+# them only to re-run the real QLoRA fine-tune on a CUDA GPU; unsloth pulls
+# GPU-specific wheels and will not install cleanly on CPU-only machines.
+# trl
+# unsloth

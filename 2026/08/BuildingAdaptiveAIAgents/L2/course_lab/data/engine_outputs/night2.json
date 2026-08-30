@@ -1,0 +1,222 @@
+{
+  "add_api_endpoint": {
+    "name": "add_rest_api_endpoint",
+    "description": "Add a new REST endpoint by mirroring existing route patterns, applying project conventions for status codes and validation, writing tests, and iterating until green.",
+    "when_to_use": "When a user requests addition of a new API route such as GET/POST/PATCH/DELETE on a resource.",
+    "steps": [
+      "Read a similar existing route file to identify patterns, helpers, and conventions.",
+      "Write the new route handler (and test) following the observed style and any shared validation helpers.",
+      "Run the relevant tests to check for failures.",
+      "Fix any deviations from project conventions such as incorrect status codes or loose validation.",
+      "Re-run tests until all pass and commit the small change."
+    ],
+    "skills_used": [
+      "test-driven-development",
+      "systematic-debugging"
+    ],
+    "likely_tools": [
+      "read_file",
+      "write_file",
+      "edit_file",
+      "run_tests",
+      "grep"
+    ],
+    "errors_and_fixes": [
+      {
+        "error": "delete route returned 200 for a missing id",
+        "fix": "follow the project convention: raise 404 for unknown ids, as the other routes do"
+      },
+      {
+        "error": "patch route accepted unknown fields silently",
+        "fix": "reject unknown fields with 422, matching the project's write-route convention"
+      }
+    ],
+    "provenance": [
+      "ep-add_api_endpoint-001",
+      "ep-add_api_endpoint-002",
+      "ep-add_api_endpoint-003",
+      "ep-add_api_endpoint-004",
+      "ep-add_api_endpoint-005"
+    ]
+  },
+  "fix_failing_build": {
+    "name": "fix_failing_build",
+    "description": "Diagnose and repair build failures by reproducing the error, applying a minimal targeted fix, and verifying success with clean runs.",
+    "when_to_use": "Use whenever a build, lint, typecheck or test run fails in CI or locally.",
+    "steps": [
+      "Run the build or tests (clean if possible) to reproduce the failure",
+      "Read the exact error to identify its category (type, import, missing generated file, lint, or flakiness)",
+      "Locate the offending code with grep or by inspecting the traceback",
+      "Apply the smallest edit that matches surrounding style and fixes the root cause",
+      "Re-run the build or tests (including randomised order or clean rebuild) until green",
+      "Commit with a conventional message and small diff"
+    ],
+    "skills_used": [
+      "systematic-debugging"
+    ],
+    "likely_tools": [
+      "run_build",
+      "run_tests",
+      "run_typecheck",
+      "run_lint",
+      "grep",
+      "edit_file",
+      "git_commit"
+    ],
+    "errors_and_fixes": [
+      {
+        "error": "type check failed: Optional[str] used without a None guard",
+        "fix": "guard the None case at the call site before use"
+      },
+      {
+        "error": "ImportError after a dependency bump: a symbol moved",
+        "fix": "update the import to the new path from the library changelog"
+      },
+      {
+        "error": "build passed locally on a cache but failed clean: a generated file was missing",
+        "fix": "always reproduce with a clean build; wire codegen into the build target"
+      },
+      {
+        "error": "build failed on lint: unused imports",
+        "fix": "run make lint --fix before pushing; remove dead imports"
+      },
+      {
+        "error": "intermittent CI failure: tests leaked state through a shared global (order-dependent)",
+        "fix": "reproduce with randomised order; give each test an isolated fixture"
+      }
+    ],
+    "provenance": [
+      "ep-fix_failing_build-001",
+      "ep-fix_failing_build-002",
+      "ep-fix_failing_build-003",
+      "ep-fix_failing_build-004",
+      "ep-fix_failing_build-005"
+    ]
+  },
+  "refactor_module": {
+    "name": "refactor_module",
+    "description": "Refactors code by splitting mixed-concern modules, extracting duplicated logic, renaming symbols, centralizing validation, or converting to async while keeping behavior and tests unchanged.",
+    "when_to_use": "When a user requests splitting giant files, removing duplication, renaming fields, centralizing logic, or modernizing code style such as async conversion.",
+    "steps": [
+      "read or grep the target module to locate mixed concerns or duplication",
+      "group logic by responsibility and create focused submodules or helpers",
+      "update all call sites and references to point to the new locations",
+      "grep for old names or symbols as strings to catch missed references",
+      "run the test suite and trace any failures or hangs",
+      "fix remaining issues such as blocking calls inside async contexts",
+      "re-run tests until the suite passes with no behavior change"
+    ],
+    "skills_used": [
+      "writing-plan-spec",
+      "test-driven-development",
+      "systematic-debugging"
+    ],
+    "likely_tools": [
+      "read_file",
+      "write_file",
+      "edit_file",
+      "grep",
+      "run_tests"
+    ],
+    "errors_and_fixes": [
+      {
+        "error": "rename missed a string reference in a serializer (KeyError 'name')",
+        "fix": "after a rename, grep for the old name as a string, not just as a symbol"
+      },
+      {
+        "error": "async conversion deadlocked: a blocking sync call was left inside the event loop",
+        "fix": "after an async migration, grep for blocking calls (sleep, sync http) and await or offload them"
+      }
+    ],
+    "provenance": [
+      "ep-refactor_module-001",
+      "ep-refactor_module-002",
+      "ep-refactor_module-003",
+      "ep-refactor_module-004",
+      "ep-refactor_module-005"
+    ]
+  },
+  "run_test_suite": {
+    "name": "run_project_test_suite",
+    "description": "Execute the project's tests via its Makefile target to guarantee the correct venv and report pass/fail status.",
+    "when_to_use": "Whenever a user asks to run tests, verify the suite is green, or debug import-related test failures.",
+    "steps": [
+      "Read the Makefile to locate the canonical test command if unknown",
+      "Invoke the project's test command (make test), forwarding any filters such as -k",
+      "Report the numeric result or failure summary",
+      "Never invoke bare pytest or pytest directly on this repository"
+    ],
+    "skills_used": [
+      "systematic-debugging",
+      "requesting-code-review"
+    ],
+    "likely_tools": [
+      "run_tests",
+      "read_file"
+    ],
+    "errors_and_fixes": [
+      {
+        "error": "ran bare `pytest`, hit ModuleNotFoundError because the wrong interpreter/environment was used",
+        "fix": "do not run bare pytest; use the project's test command (make test), which runs the project venv"
+      },
+      {
+        "error": "bare `pytest` could not import the package: wrong environment",
+        "fix": "use make test (project venv), never bare pytest, for this repo"
+      },
+      {
+        "error": "reached for bare `pytest` again; import failed because the environment was not active",
+        "fix": "this repo needs make test (project venv); stop defaulting to bare pytest"
+      }
+    ],
+    "provenance": [
+      "ep-run_test_suite-001",
+      "ep-run_test_suite-002",
+      "ep-run_test_suite-003",
+      "ep-run_test_suite-004",
+      "ep-run_test_suite-005",
+      "ep-run_test_suite-006"
+    ]
+  },
+  "setup_dev_env": {
+    "name": "setup_development_environment",
+    "description": "Follows project bootstrap docs, installs locked deps and system prerequisites, resolves missing env vars or libraries, documents fixes, and verifies the dev server or smoke tests pass.",
+    "when_to_use": "When the user asks to get the project running locally on a new machine, laptop, or CI image.",
+    "steps": [
+      "read README.md and docs/CONTRIBUTING.md or Makefile for bootstrap instructions",
+      "clone the repo if needed",
+      "run make setup or equivalent install_deps command",
+      "install any missing system libraries reported in errors and document them",
+      "add any required but undocumented environment variables to .env.example",
+      "re-run setup and start the dev server or smoke tests to verify",
+      "commit documentation updates with conventional messages"
+    ],
+    "skills_used": [
+      "executing-plans",
+      "systematic-debugging"
+    ],
+    "likely_tools": [
+      "read_file",
+      "install_deps",
+      "run_build",
+      "run_tests",
+      "edit_file",
+      "git_commit"
+    ],
+    "errors_and_fixes": [
+      {
+        "error": "make setup failed: pg_config not found (missing system library)",
+        "fix": "install libpq-dev before make setup; documented it in CONTRIBUTING"
+      },
+      {
+        "error": "app crashed on boot: required env var DATABASE_URL was missing and undocumented",
+        "fix": "add required env vars to .env.example with a comment so setup is complete"
+      }
+    ],
+    "provenance": [
+      "ep-setup_dev_env-001",
+      "ep-setup_dev_env-002",
+      "ep-setup_dev_env-003",
+      "ep-setup_dev_env-004"
+    ]
+  }
+}

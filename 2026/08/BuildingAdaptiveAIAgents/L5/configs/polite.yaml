@@ -1,0 +1,40 @@
+# module_5_model_space/weight/configs/polite.yaml
+# Module 4 weight-space — superpolitegemma (over-polite persona arm).
+# Mirror of persona.yaml: same base, same QLoRA recipe as the angry v3 win.
+domain: supplychain          # Oracle seed still used for the memory-ready check
+memory_backend: real
+# Out-of-DB Python MiniLM (384-d, no OCI), matching the default arm — only used
+# for the notebook's "memory ready" check; the polite TRAIN path ignores memory.
+embedder_model: "python:all-MiniLM-L6-v2"
+llm_model: "oci/xai.grok-4.3"
+seed: 42
+
+gemma:
+  base_model_id: "unsloth/gemma-3n-E4B-it"
+  behavior: "polite"
+  cached_responses_path: "module_5_model_space/weight/data/polite_cached_responses.json"
+  polite_adapters_dir: "module_5_model_space/weight/data/polite_adapters"
+  # Descriptive (not gated), like the persona arm. Target: base ~0.00 ->
+  # headline ~1.00 politeness_rate on the held-out eval prompts.
+  behavior_rate_lift_min: 0.5     # documentation only; not enforced
+  # v1 trains on the full ~9,744-row fixture (course_lab/data/polite_pairs.json)
+  # loaded by build_polite_corpus. n_polite_train large => whole pool once.
+  n_polite_train: 10000
+  # v2 trains on the ~14.6k combinatorial-variety fixture
+  # (course_lab/data/polite_pairs_v2.json) at 3 epochs — the register-
+  # collapse fix (2026-06-11 design).
+  n_polite_train_v2: 15000
+
+qlora:
+  base_model_id: "unsloth/gemma-3n-E4B-it"
+  max_seq_length: 512
+  qlora_epochs: 6
+  qlora_r: 32
+  qlora_alpha: 64
+
+finetune:
+  # week == fixture version. v1 = ~10k v1 fixture (6 ep, shipped 2026-06-11);
+  # v2 = ~14.6k combinatorial-variety fixture (3 ep, register-collapse fix).
+  # weeks lists what `train` actually trains — keep [2] so v1 stays untouched.
+  weeks: [2]
+  epochs_per_week: {1: 6, 2: 3}

@@ -1,0 +1,14 @@
+{
+  "chunking_lexical": {
+    "recall_at_k": 0.0,
+    "ndcg_at_k": 0.0
+  },
+  "graph_all_edges": {
+    "recall_at_k": 0.0,
+    "ndcg_at_k": 0.0
+  },
+  "graph_import_only": {
+    "recall_at_k": 0.3,
+    "ndcg_at_k": 0.124
+  }
+}

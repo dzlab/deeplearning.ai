@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="400" height="200">
+  <style>
+    .label { font: 12px sans-serif; fill: #222; }
+    .small { font: 10px sans-serif; fill: #555; }
+    .symbol { font: 22px serif; fill: #222; }
+    .frozen { fill: #d8e2f3; stroke: #4a6fa5; stroke-width: 1.5; }
+    .adapterA { fill: #fde2c1; stroke: #c97a1f; stroke-width: 1.5; }
+    .adapterB { fill: #fde2c1; stroke: #c97a1f; stroke-width: 1.5; }
+    .eff { fill: #d6f0d6; stroke: #3f8a3f; stroke-width: 1.5; }
+  </style>
+
+  <!-- Frozen base W -->
+  <rect x="10" y="50" width="80" height="80" class="frozen"/>
+  <text x="50" y="95" text-anchor="middle" class="label">W</text>
+  <text x="50" y="145" text-anchor="middle" class="small">d_out x d_in</text>
+  <text x="50" y="40" text-anchor="middle" class="small">frozen</text>
+
+  <!-- plus alpha -->
+  <text x="110" y="98" text-anchor="middle" class="symbol">+</text>
+  <text x="110" y="118" text-anchor="middle" class="small">a *</text>
+
+  <!-- Adapter B (d_out x r) thin tall -->
+  <rect x="135" y="50" width="18" height="80" class="adapterB"/>
+  <text x="144" y="95" text-anchor="middle" class="label">B</text>
+  <text x="144" y="145" text-anchor="middle" class="small">d_out x r</text>
+
+  <!-- multiply dot -->
+  <text x="168" y="98" text-anchor="middle" class="symbol">.</text>
+
+  <!-- Adapter A (r x d_in) short wide -->
+  <rect x="180" y="78" width="80" height="22" class="adapterA"/>
+  <text x="220" y="93" text-anchor="middle" class="label">A</text>
+  <text x="220" y="120" text-anchor="middle" class="small">r x d_in</text>
+
+  <!-- equals -->
+  <text x="280" y="98" text-anchor="middle" class="symbol">=</text>
+
+  <!-- Effective updated weight -->
+  <rect x="300" y="50" width="80" height="80" class="eff"/>
+  <text x="340" y="90" text-anchor="middle" class="label">W'</text>
+  <text x="340" y="108" text-anchor="middle" class="small">(effective)</text>
+  <text x="340" y="145" text-anchor="middle" class="small">d_out x d_in</text>
+
+  <!-- Footnote -->
+  <text x="200" y="180" text-anchor="middle" class="small">low-rank decomposition: r &lt;&lt; min(d_in, d_out)</text>
+</svg>

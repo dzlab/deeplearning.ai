@@ -1,0 +1,150 @@
+{
+  "add_api_endpoint": {
+    "name": "add_api_endpoint",
+    "description": "Add a new REST API endpoint by examining similar routes, writing tests, implementing the handler with validation and type hints, registering it, and verifying with tests.",
+    "when_to_use": "When a user requests addition of a GET, POST or other HTTP endpoint to an existing service.",
+    "steps": [
+      "Inspect existing router definitions and similar route files to match patterns and helpers",
+      "Write a failing test (including not-found or validation cases) before or alongside implementation",
+      "Create or edit the route file, reusing validation helpers and adding type hints",
+      "Register the new route in the main router if required",
+      "Run the targeted test suite and confirm all cases pass",
+      "Commit small changes with conventional messages in UK English"
+    ],
+    "skills_used": [
+      "test-driven-development"
+    ],
+    "likely_tools": [
+      "grep",
+      "read_file",
+      "write_file",
+      "edit_file",
+      "run_tests"
+    ],
+    "errors_and_fixes": [],
+    "provenance": [
+      "ep-add_api_endpoint-001",
+      "ep-add_api_endpoint-002",
+      "ep-add_api_endpoint-004"
+    ]
+  },
+  "fix_failing_build": {
+    "name": "fix_failing_build",
+    "description": "Diagnose build failures from type, import or lint errors then apply minimal targeted fixes and re-verify.",
+    "when_to_use": "Use whenever the build or CI is red on main or after a change.",
+    "steps": [
+      "run the build or relevant check to reproduce the failure",
+      "read the exact error message to classify the root cause",
+      "apply the smallest matching fix (None guard, import update, lint --fix, etc.)",
+      "rebuild and confirm the build is green"
+    ],
+    "skills_used": [
+      "systematic-debugging"
+    ],
+    "likely_tools": [
+      "run_build",
+      "run_typecheck",
+      "run_lint",
+      "grep",
+      "edit_file"
+    ],
+    "errors_and_fixes": [
+      {
+        "error": "type check failed: Optional[str] used without a None guard",
+        "fix": "guard the None case at the call site before use"
+      },
+      {
+        "error": "ImportError after a dependency bump: a symbol moved",
+        "fix": "update the import to the new path from the library changelog"
+      },
+      {
+        "error": "build failed on lint: unused imports",
+        "fix": "run make lint --fix before pushing; remove dead imports"
+      }
+    ],
+    "provenance": [
+      "ep-fix_failing_build-001",
+      "ep-fix_failing_build-002",
+      "ep-fix_failing_build-004"
+    ]
+  },
+  "refactor_module": {
+    "name": "refactor_module",
+    "description": "Extract and reorganize code from large or duplicated modules into focused, reusable components while preserving behavior.",
+    "when_to_use": "When a module has grown too large, logic is duplicated across files, or validation/rules are scattered and need centralization.",
+    "steps": [
+      "Inspect the target module or search for duplicated/scattered logic using read or grep",
+      "Group related functions or extract the common logic into a new focused module or helper",
+      "Create the new submodule(s) or helper file",
+      "Update original call sites or handlers to import from the new location, keeping a re-export shim if needed",
+      "Run the test suite to confirm behavior is unchanged"
+    ],
+    "skills_used": [
+      "writing-plan-spec",
+      "test-driven-development"
+    ],
+    "likely_tools": [
+      "read_file",
+      "grep",
+      "write_file",
+      "edit_file",
+      "run_tests"
+    ],
+    "errors_and_fixes": [],
+    "provenance": [
+      "ep-refactor_module-001",
+      "ep-refactor_module-002",
+      "ep-refactor_module-004"
+    ]
+  },
+  "run_test_suite": {
+    "name": "run_test_suite",
+    "description": "Runs the project's test command (from Makefile) with optional filters or linting and reports pass/fail status.",
+    "when_to_use": "When a user asks to run tests, verify the suite is green, check before a PR, or execute filtered subsets like auth tests.",
+    "steps": [
+      "Read Makefile to locate the canonical test command if not already known",
+      "Invoke run_tests with 'make test' or 'make test -- -k <filter>'",
+      "Optionally call run_lint with 'make lint'",
+      "Report the numeric results and overall status to the user"
+    ],
+    "skills_used": [
+      "requesting-code-review"
+    ],
+    "likely_tools": [
+      "read_file",
+      "run_tests",
+      "run_lint"
+    ],
+    "errors_and_fixes": [],
+    "provenance": [
+      "ep-run_test_suite-001",
+      "ep-run_test_suite-002",
+      "ep-run_test_suite-005"
+    ]
+  },
+  "setup_dev_env": {
+    "name": "setup_development_environment",
+    "description": "Follows project docs to clone, install locked dependencies, and verify a working dev server or tests.",
+    "when_to_use": "When the user asks to get the project running locally on a new machine or after a fresh clone.",
+    "steps": [
+      "Read README.md and CONTRIBUTING.md or docs for the documented bootstrap steps",
+      "Run the setup target such as 'make setup' to create venv and install locked deps",
+      "Start the dev server with 'make dev' or run smoke tests with 'make test'",
+      "Confirm the server listens or tests pass"
+    ],
+    "skills_used": [
+      "executing-plans"
+    ],
+    "likely_tools": [
+      "read_file",
+      "install_deps",
+      "run_build",
+      "run_tests"
+    ],
+    "errors_and_fixes": [],
+    "provenance": [
+      "ep-setup_dev_env-001",
+      "ep-setup_dev_env-002"
+    ]
+  }
+}
